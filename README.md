@@ -5,7 +5,7 @@ v2.0.1
 
 need help? open index.html inside the docs directory,
 or view the documentaion online at:
-<https://thomasthespacefox.github.io/SBTCVM-Mark-2/index.html>
+<https://sbtcvm.github.io/SBTCVM-Mark-2/>
 
 (c)2016-2017 Thomas Leathers and Contributors
 
