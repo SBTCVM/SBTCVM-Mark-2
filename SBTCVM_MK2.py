@@ -2020,7 +2020,7 @@ if KIOSKMODE==0:
 	while evhappenflg3==0:
 			time.sleep(.1)
 			for event in pygame.event.get():
-				if event.type == pygame.KEYDOWN:
+				if event.type == pygame.KEYDOWN and event.key == K_RETURN:
 					evhappenflg3=1
 					break
 else:
