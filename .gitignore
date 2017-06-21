@@ -8,3 +8,5 @@ VMUSER/*
 
 *.pyc
 *.pyo
+
+.~lock*

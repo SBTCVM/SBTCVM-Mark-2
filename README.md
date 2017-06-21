@@ -9,6 +9,10 @@ or view the documentaion online at:
 
 (c)2016-2017 Thomas Leathers and Contributors
 
+Notice: The user manual, (SBTCVM-user-manual.odt) is under a diffrent license:
+the GNU Free Documentation License. See said manual for more information.
+
+
   SBTCVM Mark 2 is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
