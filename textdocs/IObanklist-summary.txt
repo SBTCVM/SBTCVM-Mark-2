@@ -8,7 +8,7 @@ End:
 ---++++++ [729] <-9113>
 
 random 9-trit integer port (updated per clock cycle)
---0------ [130] <-9112>
+--0------ [730] <-9112>
  use this to get psudo-random integers.
  
  
