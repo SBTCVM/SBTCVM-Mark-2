@@ -1,0 +1,19 @@
+(Copied from a github gist)
+
+registers needed:
+memory pointer register. "mempoint"
+mempoint, for consistency, should default to "---------", as the exec pointer does.
+(we will need to add it to the thread object class and the thread switching code)
+
+
+operations:
+                                                                         | (tasm instruction)
+-read to reg 1 using memory pointer                                      | ptread      -0-0+0
+-write to memory location using memory pointer and reg1                  | ptwri       -0-0++
+-write to memory location using memory pointer and data portion of word. | ptwridat    -0-+--
+-memory pointer control.                                                               -0-0+-
+  (mode)                      | (control code)| (tasm instrucion.)
+  -mode to add a +            | --???????     | ptinc
+  -mode to add a -            | -0???????     | ptdec
+  -mode to set with reg1      | -+???????     | ptset
+-mode to add reg1 to pointer| 0-??????? | ptadd

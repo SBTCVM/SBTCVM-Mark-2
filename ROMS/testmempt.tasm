@@ -1,0 +1,46 @@
+null||testset1
+#here we use setreg1's gotoref support to get an address in reg1
+setreg1|>test1
+
+#set pointer with reg1
+ptset
+ptread
+dumpreg1
+
+#increment pointer
+ptinc
+ptread
+dumpreg1
+
+#deincrememnt pointer
+ptdec
+ptread
+dumpreg1
+
+#add reg1 to pointer
+setreg1|0000000+-
+ptadd
+ptread
+dumpreg1
+
+#test pointer reg write
+setreg1|----++++0
+ptwri
+ptread
+dumpreg1
+
+#test pointer data word write
+ptwridat|--00--0-+
+ptread
+dumpreg1
+
+#test pointer data word write gotoref support.
+ptwridat|>testset1
+ptread
+dumpreg1
+stop
+
+#testdata
+null|+++++++++|test1
+null|++++++++0
+null|++++++++-

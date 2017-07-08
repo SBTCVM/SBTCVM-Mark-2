@@ -341,6 +341,20 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instcnt += 1
 		elif instword=="threadkill":
 			instcnt += 1
+		elif instword=="ptread":
+			instcnt += 1
+		elif instword=="ptwri":
+			instcnt += 1
+		elif instword=="ptwridat":
+			instcnt += 1
+		elif instword=="ptinc":
+			instcnt += 1
+		elif instword=="ptdec":
+			instcnt += 1
+		elif instword=="ptset":
+			instcnt += 1
+		elif instword=="ptadd":
+			instcnt += 1
 		else:
 			gtflag=0
 		if gtflag==1 and (txtblk==0 or linenraw=="textstart"):
@@ -545,11 +559,47 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			outn.write("---00+" + instdat + "\n")
 			instcnt += 1
 		elif instword=="setreg1":
-			outn.write("---0+-" + instdat + "\n")
-			instcnt += 1
+			#outn.write("---0+-" + instdat + "\n")
+			#instcnt += 1
+			instgpe=instdat.split(">")
+			if (len(instgpe))==1:
+				outn.write("---0+-" + instdat + "\n")#
+				instcnt += 1
+				autostpflg=1
+			else:
+				gtpoint=instgpe[1]
+				gtmatch=0
+				instcnt += 1
+				for fx in gotoreflist:
+					if fx.gtname==gtpoint:
+						outn.write("---0+-" + fx.tline + "\n")
+						gtmatch=1
+				if gtmatch==0:
+					#print "ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP"
+					complog("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP \n")
+					sys.exit("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP")
+
 		elif instword=="setreg2":
-			outn.write("---0+0" + instdat + "\n")
-			instcnt += 1
+		#	outn.write("---0+0" + instdat + "\n")
+			#instcnt += 1
+			instgpe=instdat.split(">")
+			if (len(instgpe))==1:
+				outn.write("---0+0" + instdat + "\n")#
+				instcnt += 1
+				autostpflg=1
+			else:
+				gtpoint=instgpe[1]
+				gtmatch=0
+				instcnt += 1
+				for fx in gotoreflist:
+					if fx.gtname==gtpoint:
+						outn.write("---0+0" + fx.tline + "\n")
+						gtmatch=1
+				if gtmatch==0:
+					#print "ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP"
+					complog("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP \n")
+					sys.exit("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP")
+
 		elif instword=="setinst":
 			instgpe=instdat.split(">")
 			if (len(instgpe))==1:
@@ -970,6 +1020,44 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		elif instword=="threadkill":
 			instcnt += 1		
 			outn.write("--+0+-" + instdat + "\n")
+		#thread pointer
+		elif instword=="ptread":
+			instcnt += 1
+			outn.write("-0-0+0" + instdat + "\n")
+		elif instword=="ptwri":
+			instcnt += 1
+			outn.write("-0-0++" + instdat + "\n")
+		elif instword=="ptwridat":
+			#instcnt += 1
+			instgpe=instdat.split(">")
+			if (len(instgpe))==1:
+				outn.write("-0-+--" + instdat + "\n")#
+				instcnt += 1
+				autostpflg=1
+			else:
+				gtpoint=instgpe[1]
+				gtmatch=0
+				instcnt += 1
+				for fx in gotoreflist:
+					if fx.gtname==gtpoint:
+						outn.write("-0-+--" + fx.tline + "\n")
+						gtmatch=1
+				if gtmatch==0:
+					#print "ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP"
+					complog("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP \n")
+					sys.exit("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP")
+		elif instword=="ptinc":
+			instcnt += 1
+			outn.write("-0-0+-" + "--0000000" + "\n")
+		elif instword=="ptdec":
+			instcnt += 1
+			outn.write("-0-0+-" + "-00000000" + "\n")
+		elif instword=="ptset":
+			instcnt += 1
+			outn.write("-0-0+-" + "-+0000000" + "\n")
+		elif instword=="ptadd":
+			instcnt += 1
+			outn.write("-0-0+-" + "0-0000000" + "\n")
 
 		else:
 			gtflag=0

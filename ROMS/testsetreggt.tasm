@@ -1,0 +1,8 @@
+null||ref1
+null||ref2
+setreg1|>ref1
+setreg2|>ref2
+dumpreg1
+dumpreg2
+setreg1|0-0-0-0-0
+dumpreg1
