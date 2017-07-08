@@ -11,6 +11,8 @@ or view the documentaion online at:
 
 Notice: The user manual, (SBTCVM-user-manual.odt) is under a diffrent license:
 the GNU Free Documentation License. See said manual for more information.
+A pdf export of SBTCVM-user-manual.odt, is provided and should be considered
+an Opaque copy. See the Gnu FDL in the manual istelf for more information.
 
   SBTCVM Mark 2 is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
