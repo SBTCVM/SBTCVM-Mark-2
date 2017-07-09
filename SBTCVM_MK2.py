@@ -977,13 +977,21 @@ while stopflag==0:
 		#print mempoint
 		mode=(curdata[0] + curdata[1])
 		if mode=="--":
-			mempoint=libSBTCVM.trunkto6math(libbaltcalc.btadd(mempoint, "+"))
+			mempoint=libbaltcalc.btadd(mempoint, "+")
 		elif mode=="-0":
-			mempoint=libSBTCVM.trunkto6math(libbaltcalc.btadd(mempoint, "-"))
+			mempoint=libbaltcalc.btadd(mempoint, "-")
 		elif mode=="-+":
 			mempoint=REG1
+		elif mode=="00":
+			REG1=mempoint
 		else:
-			mempoint=libSBTCVM.trunkto6math(libbaltcalc.btadd(mempoint, REG1))
+			mempoint=libbaltcalc.btadd(mempoint, REG1)
+		if len(mempoint) > 9:
+			stopflag=1
+			abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+			abt=libSBTCVM.abtslackline(abt, "MEMORY POINTER OVERFLOW!")
+			vmexeclog("VMSYSHALT: MEMORY POINTER OVERFLOW!")
+			
 		#print mempoint
 		#print 'memctl'
 	elif curinst=="-0-0+0":

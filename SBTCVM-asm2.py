@@ -355,6 +355,8 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instcnt += 1
 		elif instword=="ptadd":
 			instcnt += 1
+		elif instword=="ptget":
+			instcnt += 1
 		else:
 			gtflag=0
 		if gtflag==1 and (txtblk==0 or linenraw=="textstart"):
@@ -1058,7 +1060,9 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		elif instword=="ptadd":
 			instcnt += 1
 			outn.write("-0-0+-" + "0-0000000" + "\n")
-
+		elif instword=="ptget":
+			instcnt += 1
+			outn.write("-0-0+-" + "000000000" + "\n")
 		else:
 			gtflag=0
 		

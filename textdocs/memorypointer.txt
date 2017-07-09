@@ -12,8 +12,9 @@ operations:
 -write to memory location using memory pointer and reg1                  | ptwri       -0-0++
 -write to memory location using memory pointer and data portion of word. | ptwridat    -0-+--
 -memory pointer control.                                                               -0-0+-
-  (mode)                      | (control code)| (tasm instrucion.)
-  -mode to add a +            | --???????     | ptinc
-  -mode to add a -            | -0???????     | ptdec
-  -mode to set with reg1      | -+???????     | ptset
--mode to add reg1 to pointer| 0-??????? | ptadd
+  (mode)                       | (control code)| (tasm instrucion.)
+  -mode to add a +             | --???????     | ptinc
+  -mode to add a -             | -0???????     | ptdec
+  -mode to set with reg1       | -+???????     | ptset
+  -mode to add reg1 to pointer | 0-???????     | ptadd
+  -mode to copy pointer to reg1| 00???????     | ptget

@@ -6,39 +6,78 @@ setreg1|>test1
 ptset
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #increment pointer
 ptinc
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #deincrememnt pointer
 ptdec
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #add reg1 to pointer
 setreg1|0000000+-
 ptadd
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #test pointer reg write
 setreg1|----++++0
 ptwri
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #test pointer data word write
 ptwridat|--00--0-+
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
 
 #test pointer data word write gotoref support.
 ptwridat|>testset1
 ptread
 dumpreg1
+ptget
+dumpreg1
+gotodata|>divbar
+
+textstart
+ 
+This program will now trigger a memory pointer overflow for testing...
+textstop
+
+setreg1|+++++++++
+ptset
+ptinc
+
 stop
+
+null||divbar
+textstart
+
+------------
+textstop
+continue
+
 
 #testdata
 null|+++++++++|test1
