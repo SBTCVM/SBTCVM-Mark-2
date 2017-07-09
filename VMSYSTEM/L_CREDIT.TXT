@@ -36,6 +36,11 @@ Thomas Leathers
 
 -<HBAR>-
 
+Webmaster:
+Wyatt Huckaby
+
+-<HBAR>-
+
 Utilities and systems programming:
 Thomas Leathers
 
