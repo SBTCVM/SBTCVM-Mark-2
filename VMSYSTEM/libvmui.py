@@ -129,12 +129,14 @@ def pausemenu():
 		#menu line count variable. should be set to 1 here.
 		indlcnt=1
 		screensurf.blit(vmlaunchbg, (0, 0))
+		datdict={}
 		for indx in curmenulst:
 			if indlcnt==menuhighnum:
 				textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
 			else:
 				textit=simplefontB.render(indx, True, (0, 0, 0))
-			screensurf.blit(textit, (650, texhigcnt))
+			gx=screensurf.blit(textit, (650, texhigcnt))
+			datdict[indlcnt]=gx
 			texhigcnt += texhigjump
 			indlcnt += 1
 		menulabel=simplefontC.render(menudesc, True, (0, 0, 0), (255, 255, 255))
@@ -150,6 +152,31 @@ def pausemenu():
 		while evhappenflg==0:
 			time.sleep(.1)
 			for event in pygame.event.get():
+				texhigcnt=2
+				#separation between each line of text's origin
+				texhigjump=22
+				#menu line count variable. should be set to 1 here.
+				indlcnt=1
+				pos = pygame.mouse.get_pos()
+				for indx in curmenulst:
+					if indlcnt==menuhighnum:
+						if datdict[indlcnt].collidepoint(pos)==1:
+							textit=simplefontB.render(indx, True, (0, 0, 150), (255, 255, 255))
+							gx=screensurf.blit(textit, (650, texhigcnt))
+						else:
+							textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
+							gx=screensurf.blit(textit, (650, texhigcnt))
+					else:
+						
+						if datdict[indlcnt].collidepoint(pos)==1:
+							textit=simplefontB.render(indx, True, (0, 0, 150), (129, 173, 219))
+							gx=screensurf.blit(textit, (650, texhigcnt))
+						else:
+							textit=simplefontB.render(indx, True, (0, 0, 0), (129, 173, 219))
+							gx=screensurf.blit(textit, (650, texhigcnt))
+					pygame.display.update([gx])
+					texhigcnt += texhigjump
+					indlcnt += 1
 				if event.type == KEYDOWN and event.key == K_UP:
 					menuhighnum -= 1
 					evhappenflg=1
@@ -174,6 +201,16 @@ def pausemenu():
 					ixreturn=1
 					evhappenflg=1
 					#menusound2.play()
+					break
+				if event.type == MOUSEBUTTONDOWN:
+					mousexcnt=1
+					for fxd in curmenulst:
+						if datdict[mousexcnt].collidepoint(event.pos)==1 and event.button==1:
+							menuhighnum=mousexcnt
+							ixreturn=1
+							evhappenflg=1
+							break
+						mousexcnt += 1
 					break
 				if event.type == KEYDOWN and event.key == K_ESCAPE:
 					screensurf.blit(scbak, (0, 0))
@@ -302,7 +339,7 @@ def textsciter_internal(flookup):
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-PAUSE.png')))
 					break
-				elif event.type == KEYDOWN:
+				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 					evhappenflg2=1
 					#menusound2.play()
 					break
@@ -332,7 +369,7 @@ def textsciter(flookup):
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-OTHER.png')))
 					break
-				elif event.type == KEYDOWN:
+				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 					evhappenflg2=1
 					#menusound2.play()
 					break
@@ -361,7 +398,7 @@ def textsciter_main(flookup):
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
 					break
-				elif event.type == KEYDOWN:
+				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 					evhappenflg2=1
 					#menusound2.play()
 					break
@@ -382,12 +419,12 @@ def BTCLOCKDATE():
 	while loopend==0:
 		
 		#screensurf.fill((127, 127, 127))
-		time.sleep(0.2)
+		time.sleep(0.1)
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
 				break
-			elif event.type == KEYDOWN:
+			elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 				loopend=1
 			if event.type == QUIT:
 				loopend=1
@@ -489,7 +526,7 @@ def creditsscroll():
 			for event in pygame.event.get():
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
-				elif event.type == KEYDOWN:
+				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 					return()
 
 

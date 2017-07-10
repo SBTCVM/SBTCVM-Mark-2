@@ -473,7 +473,7 @@ while stopflag==0:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
 		vmexeclog("data: " + curdata + " |Inst: " + curinst + " |adr: " + EXECADDR + " |thread: " + btcurthread + " |exec bank: " + ROMLAMPFLG + " |reg1: " + REG1 + " |reg2: " + REG2 + " |tic #: " + str(exlogclockticnum) + " |secs: " + format((exlogcurtime), '.11f'))
-	if fskipcnt == fskip:
+	if fskipcnt == fskip or stepbystep==1:
 		if disablereadouts==0 or stepbystep==1:
 			#screensurf.blit(vmbg, (0, 0))
 			#these show the instruction and data in the instruction/data box :)

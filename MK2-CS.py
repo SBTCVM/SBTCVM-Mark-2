@@ -1,9 +1,13 @@
 #!/usr/bin/env python
-
-#import VMSYSTEM.libSBTCVM as libSBTCVM
 import VMSYSTEM.libbaltcalc as libbaltcalc
 from VMSYSTEM.libbaltcalc import btint
 import VMSYSTEM.libvmcmdshell as cmdshell
+
+try:
+	import readline
+except ImportError:
+	print "failed to load readline."
+
 import sys
 import os
 from subprocess import call
@@ -33,11 +37,11 @@ elif cmd==None:
 		usercalllst=userinp.split(" ", 1)
 		if (usercalllst[0]).lower()=="help":
 			print cmdshell.helptext
-		if (usercalllst[0]).lower()=="about":
+		elif (usercalllst[0]).lower()=="about":
 			print cmdshell.abouttext
-		if (usercalllst[0]).lower()=="version":
+		elif (usercalllst[0]).lower()=="version":
 			print cmdshell.versiontext
-		if (usercalllst[0]).lower()=="list":
+		elif (usercalllst[0]).lower()=="list":
 			try:
 				if (usercalllst[1]).lower()=="types":
 					for typename in cmdshell.keyftypes:
@@ -63,7 +67,7 @@ elif cmd==None:
 							if fnamelo.endswith("." + dittype):
 								print(os.path.join(diter, fname))
 		#these simply call another python process altogether to re-use the command line syntax of these utilities:
-		if (usercalllst[0]).lower()=="asm":
+		elif (usercalllst[0]).lower()=="asm":
 			try:
 				arglst=list((usercalllst[1]).split(" "))
 				arglst2=list(["python", "SBTCVM-asm2.py"])
@@ -72,7 +76,7 @@ elif cmd==None:
 			except IndexError:
 				call(["python", "SBTCVM-asm2.py"])
 			
-		if (usercalllst[0]).lower()=="run":
+		elif (usercalllst[0]).lower()=="run":
 			try:
 				arglst=list((usercalllst[1]).split(" "))
 				arglst2=list(["python", "MK2-RUN.py"])
@@ -80,7 +84,7 @@ elif cmd==None:
 				call(arglst2)
 			except IndexError:
 				call(["python", "MK2-RUN.py"])
-		if (usercalllst[0]).lower()=="gfx":
+		elif (usercalllst[0]).lower()=="gfx":
 			try:
 				arglst=list((usercalllst[1]).split(" "))
 				arglst2=list(["python", "MK2-GFX.py"])
@@ -88,7 +92,7 @@ elif cmd==None:
 				call(arglst2)
 			except IndexError:
 				call(["python", "MK2-GFX.py"])
-		if (usercalllst[0]).lower()=="t" or (usercalllst[0]).lower()=="tools":
+		elif (usercalllst[0]).lower()=="t" or (usercalllst[0]).lower()=="tools":
 			try:
 				arglst=list((usercalllst[1]).split(" "))
 				arglst2=list(["python", "MK2-TOOLS.py"])
@@ -96,23 +100,23 @@ elif cmd==None:
 				call(arglst2)
 			except IndexError:
 				call(["python", "MK2-TOOLS.py"])
-		if (usercalllst[0]).lower()=="mainmenu":
+		elif (usercalllst[0]).lower()=="mainmenu":
 				call(["python", "MK2-MENU.py"])
-		if (usercalllst[0]).lower()=="quit":
+		elif (usercalllst[0]).lower()=="quit":
 			qflg=1
-		if (usercalllst[0]).lower()=="btdec":
+		elif (usercalllst[0]).lower()=="btdec":
 			try:
 				arg=usercalllst[1]
 				print btint(arg).dec()
 			except IndexError:
 				print "please specify one balanced ternary integer"
-		if (usercalllst[0]).lower()=="invert":
+		elif (usercalllst[0]).lower()=="invert":
 			try:
 				arg=usercalllst[1]
 				print btint(arg).invert()
 			except IndexError:
 				print "please specify one balanced ternary integer"
-		if (usercalllst[0]).lower()=="decbt":
+		elif (usercalllst[0]).lower()=="decbt":
 			try:
 				arg=usercalllst[1]
 				#print libbaltcalc.DECTOBT(int(arg))
@@ -123,7 +127,7 @@ elif cmd==None:
 				print "Please specify one decimal integer."
 			except ValueError:
 				print "Please specify one decimal integer."
-		if (usercalllst[0]).lower()=="mpi":
+		elif (usercalllst[0]).lower()=="mpi":
 			try:
 				arg=usercalllst[1]
 				#calculate the MPI of the user-specifed number of trits
@@ -134,7 +138,7 @@ elif cmd==None:
 				print "Please specify one decimal integer."
 			except ValueError:
 				print "Please specify one decimal integer."
-		if (usercalllst[0]).lower()=="mni":
+		elif (usercalllst[0]).lower()=="mni":
 			try:
 				arg=usercalllst[1]
 				#calculate the MPI of the user-specifed number of trits
@@ -145,7 +149,7 @@ elif cmd==None:
 				print "Please specify one decimal integer."
 			except ValueError:
 				print "Please specify one decimal integer."
-		if (usercalllst[0]).lower()=="mcv":
+		elif (usercalllst[0]).lower()=="mcv":
 			try:
 				arg=usercalllst[1]
 				print libbaltcalc.mcv(int(arg))
@@ -155,7 +159,7 @@ elif cmd==None:
 				print "Please specify one decimal integer."
 			except ValueError:
 				print "Please specify one decimal integer."
-		if (usercalllst[0]).lower()=="add":
+		elif (usercalllst[0]).lower()=="add":
 			try:
 				arg=usercalllst[1]
 				arglst=arg.split(" ")
@@ -165,7 +169,7 @@ elif cmd==None:
 				print (btint(arg1) + btint(arg2))
 			except IndexError:
 				print "please specify two balanced ternary integers separated by a space."
-		if (usercalllst[0]).lower()=="mul":
+		elif (usercalllst[0]).lower()=="mul":
 			try:
 				arg=usercalllst[1]
 				arglst=arg.split(" ")
@@ -175,7 +179,7 @@ elif cmd==None:
 				print (btint(arg1) * btint(arg2))
 			except IndexError:
 				print "please specify two balanced ternary integers separated by a space."
-		if (usercalllst[0]).lower()=="sub":
+		elif (usercalllst[0]).lower()=="sub":
 			try:
 				arg=usercalllst[1]
 				arglst=arg.split(" ")
@@ -185,7 +189,7 @@ elif cmd==None:
 				print (btint(arg1) - btint(arg2))
 			except IndexError:
 				print "please specify two balanced ternary integers separated by a space."
-		if (usercalllst[0]).lower()=="div":
+		elif (usercalllst[0]).lower()=="div":
 			try:
 				arg=usercalllst[1]
 				arglst=arg.split(" ")
@@ -197,6 +201,8 @@ elif cmd==None:
 				print "ERROR: DIVISION BY ZERO"
 			except IndexError:
 				print "please specify two balanced ternary integers separated by a space."
+		elif (usercalllst[0]).lower()!="":
+			print "Unknown Command. Type \"help\" for help."
 		
 		
 		

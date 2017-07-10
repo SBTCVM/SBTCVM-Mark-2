@@ -4,8 +4,8 @@ import os
 import sys
 import pygame
 from pygame.locals import *
-import VMSYSTEM.libSBTCVM as libSBTCVM
-import VMSYSTEM.libbaltcalc as libbaltcalc
+#import VMSYSTEM.libSBTCVM as libSBTCVM
+#import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 
 
@@ -69,15 +69,6 @@ mainmenudesc=["Get started with SBTCVM", "A selection of various demo programs."
 #number of menu items:
 mainmenucnt=6
 menudesc="Main Menu"
-#these use the same squarewave generator as SBTCVM's buzzer.
-
-#sound A
-menusound1=pygame.mixer.Sound(libSBTCVM.autosquare(300, 0.1))
-#menu select sound
-menusound2=pygame.mixer.Sound(libSBTCVM.autosquare(250, 0.1))
-#clock widget second sound
-menusound3=pygame.mixer.Sound(libSBTCVM.autosquare(280, 0.1))
-#menusound2.play()
 
 #demomenu
 demomenulst=["Main Menu", "6-trit Color map", "Fibonacci", "Flower", "Dazzle", "Pixel Patterns", "Ray Burst"]
@@ -136,15 +127,17 @@ while qflg!=1:
 	indlcnt=1
 	
 	screensurf.blit(vmlaunchbg, (0, 0))
-	
+	datdict={}
 	for indx in curmenulst:
 		if indlcnt==menuhighnum:
 			textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
 		else:
 			textit=simplefontB.render(indx, True, (0, 0, 0))
-		screensurf.blit(textit, (650, texhigcnt))
+		gx=screensurf.blit(textit, (650, texhigcnt))
+		datdict[indlcnt]=gx
 		texhigcnt += texhigjump
 		indlcnt += 1
+		
 	menulabel=simplefontC.render(menudesc, True, (0, 0, 0), (255, 255, 255))
 	screensurf.blit(menulabel, (158, 4))
 	itemlabel=simplefontB.render(curmenudesc[(menuhighnum - 1)], True, (0, 0, 0), (255, 255, 255))
@@ -158,6 +151,31 @@ while qflg!=1:
 	while evhappenflg==0:
 		time.sleep(.1)
 		for event in pygame.event.get():
+			texhigcnt=2
+			#separation between each line of text's origin
+			texhigjump=22
+			#menu line count variable. should be set to 1 here.
+			indlcnt=1
+			pos = pygame.mouse.get_pos()
+			for indx in curmenulst:
+				if indlcnt==menuhighnum:
+					if datdict[indlcnt].collidepoint(pos)==1:
+						textit=simplefontB.render(indx, True, (0, 0, 150), (255, 255, 255))
+						gx=screensurf.blit(textit, (650, texhigcnt))
+					else:
+						textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
+						gx=screensurf.blit(textit, (650, texhigcnt))
+				else:
+					
+					if datdict[indlcnt].collidepoint(pos)==1:
+						textit=simplefontB.render(indx, True, (0, 0, 150), (129, 173, 219))
+						gx=screensurf.blit(textit, (650, texhigcnt))
+					else:
+						textit=simplefontB.render(indx, True, (0, 0, 0), (129, 173, 219))
+						gx=screensurf.blit(textit, (650, texhigcnt))
+				pygame.display.update([gx])
+				texhigcnt += texhigjump
+				indlcnt += 1
 			if event.type == KEYDOWN and event.key == K_UP:
 				menuhighnum -= 1
 				evhappenflg=1
@@ -185,6 +203,16 @@ while qflg!=1:
 				break
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
+				break
+			if event.type == MOUSEBUTTONDOWN:
+				mousexcnt=1
+				for fxd in curmenulst:
+					if datdict[mousexcnt].collidepoint(event.pos)==1 and event.button==1:
+						menuhighnum=mousexcnt
+						ixreturn=1
+						evhappenflg=1
+						break
+					mousexcnt += 1
 				break
 			if event.type == QUIT:
 				sys.exit()
