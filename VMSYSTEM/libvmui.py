@@ -296,6 +296,7 @@ def initui(scsurf, kiomode):
 	global vmtoolsbg
 	global vmtoolsbgfull
 	global vmbg
+	global sbtccat
 	KIOSKMODE=kiomode
 	vmtoolsbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS.png')).convert_alpha()
 	vmtoolsbgfull=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS_FULL.png')).convert()
@@ -304,7 +305,7 @@ def initui(scsurf, kiomode):
 	GNDlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampGND.png')).convert()
 	POSlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampPOS.png')).convert()
 	NEGlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampNEG.png')).convert()
-	GFXLOGO=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'GFXLOGO.png')).convert()
+	GFXLOGO=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'GFXLOGO-CAT.png')).convert()
 	CREDITHBAR=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'CREDITHBAR.png')).convert()
 	#indicator lamps
 	#GREEN
@@ -313,6 +314,7 @@ def initui(scsurf, kiomode):
 	#CPU
 	#CPULEDACT=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-BLUE.png')).convert()
 	CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
+	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
 
 	
 
@@ -506,6 +508,11 @@ def creditsscroll():
 					abttextbox.centerx=scrollsurf.get_rect().centerx
 					abttextbox.y=pixcnt1
 					scrollsurf.blit(CREDITHBAR, abttextbox)
+				elif qlid=="-<SBTCCAT>-":
+					abttextbox=sbtccat.get_rect()
+					abttextbox.centerx=scrollsurf.get_rect().centerx
+					abttextbox.y=pixcnt1
+					scrollsurf.blit(sbtccat, abttextbox)
 				elif qlid!="":
 					abttext=simplefont.render(qlid, True, (0,0,0), (255, 255, 255))
 					abttextbox=abttext.get_rect()
