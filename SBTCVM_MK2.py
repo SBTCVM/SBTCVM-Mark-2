@@ -341,11 +341,11 @@ def tritlen(srcdata, destdata):
 	return destdataout
 		
 #def stactdebug1():
-	
-if KIOSKMODE==1:
-	disablereadouts=0
-	ttystyle=0
-	print "Kiosk mode active... enabling readouts and TTY mode 0..."
+if 'GLOBKIOSK' in globals():	
+	if KIOSKMODE==1:
+		disablereadouts=0
+		ttystyle=0
+		print "Kiosk mode active... enabling readouts and TTY mode 0..."
 
 
 
@@ -428,6 +428,7 @@ print "Prep threading system..."
 threadref="00"
 #vmexeclog("Preping threading system...")
 
+ttyredrawfull=1
 
 BTSTACK={"--": BTTHREAD(1, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint)}
 for cur_id in ["-0","-+","0-","00","0+","+-","+0","++"]:
@@ -440,6 +441,9 @@ curthrtex=lgdispfont.render(btcurthread, True, (127, 0, 255), (0, 0, 0)).convert
 upt=screensurf.blit(curthrtex, (170, 522))
 updtblits.extend([upt])
 
+ttyblitsprev=list()
+ttyblits=list()
+
 exlogclockticnum=0
 
 #for f in BTSTACK:
@@ -449,6 +453,7 @@ exlogclockticnum=0
 print "SBTCVM Mark 2 Ready. the VM will now begin."
 #vmexeclog("SBTCVM Mark 2 Ready. the VM will now begin.")
 initaltime=time.time()
+
 
 while stopflag==0:
 	#curinst=(libtrom.tromreadinst(EXECADDR,ROMFILE))
@@ -549,14 +554,26 @@ while stopflag==0:
 							charq=libSBTCVM.charlookupdict.get(qlin)
 							#print charq
 							if TTYSIZE==1:
-								libSBTCVM.charblit2(libSBTCVMsurf, colq, lineq, charq)
+								xq=libSBTCVM.charblit2(libSBTCVMsurf, colq, lineq, charq)
 							else:
-								libSBTCVM.charblit(libSBTCVMsurf, colq, lineq, charq)
+								xq=libSBTCVM.charblit(libSBTCVMsurf, colq, lineq, charq)
+							ttyblits.extend([xq[1]])
 							colq +=1
 						lineq +=1
 					linexq +=1		
 				upt=screensurf.blit(libSBTCVMsurf, (0, 0))
-				updtblits.extend([upt])
+				if ttyredrawfull==1:
+					updtblits.extend([upt])
+					ttyredrawfull=0
+				else:
+					updtblits = updtblits + ttyblits + ttyblitsprev
+				#updtblits.extend([upt])
+				#updtblits.append(ttyblits)
+				#updtblits.append(ttyblitsprev)
+				
+				#print updtblits
+				ttyblitsprev=ttyblits
+				ttyblits=list()
 			lineq=0
 			linexq=0
 			#if ttystyle==1:
@@ -967,6 +984,7 @@ while stopflag==0:
 			TTYBGCOLREG=(curdata[3] + curdata[4] + curdata[5] + curdata[6] + curdata[7] + curdata[8])
 			TTYBGCOL=libSBTCVM.colorfind(TTYBGCOLREG)
 			ttyredraw=1
+			ttyredrawfull=1
 			#print "test2"
 		elif regsetpoint=='--------0':
 			TTYrenderflg=curdata[8]
