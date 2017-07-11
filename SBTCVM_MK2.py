@@ -342,6 +342,12 @@ def tritlen(srcdata, destdata):
 		
 #def stactdebug1():
 	
+if KIOSKMODE==1:
+	disablereadouts=0
+	ttystyle=0
+	print "Kiosk mode active... enabling readouts and TTY mode 0..."
+
+
 
 TTYBGCOL=libSBTCVM.colorfind("------")
 TTYBGCOLREG="------"
@@ -815,12 +821,14 @@ while stopflag==0:
 	#asks user if goto to adress is desired
 	elif curinst=="--0+--":
 		abt=libSBTCVM.abtslackline(abt, ("GOTO: (" + curdata + ") Y or N?"))
+		abt=libSBTCVM.abtslackline(abt, "")
 		ttyredraw=1
 		USRYN=1
 		extradraw=1	
 	#user wait
 	elif curinst=="--0+-0":
 		abt=libSBTCVM.abtslackline(abt, ("Press enter to continue."))
+		abt=libSBTCVM.abtslackline(abt, "")
 		ttyredraw=1
 		USRWAIT=1
 		extradraw=1	
@@ -1941,6 +1949,7 @@ while stopflag==0:
 		#print EXECADDR
 	if stopflag==1:
 		abt=libSBTCVM.abtslackline(abt, "Press enter to exit.")
+		abt=libSBTCVM.abtslackline(abt, "")
 		#screensurf.fill((0,127,255))
 		#screensurf.blit(vmbg, (0, 0))
 	

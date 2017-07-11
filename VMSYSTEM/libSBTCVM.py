@@ -319,7 +319,8 @@ def abtslackline(receveabt, linetext):
 	if linetext=="":
 		print ("TTY|" + receveabt[53])
 	else:
-		print ("TTY|" + linetext)
+		#print ("TTYL|" + linetext)
+		print ("TTY|" + receveabt[53])
 	return interx
 newl=1
 def abtcharblit(receveabtb, charblit):

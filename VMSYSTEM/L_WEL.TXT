@@ -1,18 +1,6 @@
-A message from SBTCVM developer: Thomas Leathers
+Welcome To SBTCVM!
 
-Ever wonder about things?
-
-I do.
-
-It was around the start of June, 2016.
-
-I was wondering about balanced ternary. I had just gotten my
-Balanced ternary integer mathematics python library, 
-libbaltcalc, up and working,  and a thought crossed my mind:
-"I wonder what a balanced ternary Computer would be like?"
-Failing my Internet Search skills, I decided to try to write my own.
-and today, SBTCVM is already more capable than I could have ever hoped.
-Complete with a suite of utility programs, a graphical menu launcher,
-and its own assembly language, threading support, and other advanced features, 
-SBTCVM Mark 2 has come a long way from a simple idea, 
-but still has a long way to go.
+It seems you have found your way to SBTCVM's main menu program!
+Perhaps you might try the "intro" program in this submenu, or perhaps
+play a few rounds of guess that trit in the games menu? Or how about 
+watch some of the demo programs in the demo menu? The choice is yours! 
