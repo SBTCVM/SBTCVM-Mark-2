@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<pageconf BGimg="1" BGM="0" pagekeys="1">
+		<title>Welcome To SBTCVM!</title>
+		<BG>tutorialscreen1.jpg</BG>
+		<BGM>BGM1.ogg</BGM>
+	</pageconf>
+	<pagekeys>
+	</pagekeys>
+	<forks>
+	</forks>
+	<core>
+		<img x="0" y="0">
+			<con>screen1.png</con>
+			<act type="none"/>
+		</img>
+		<img x="0" y="400" hovpic="1">
+			<con>mainbtn.png</con>
+			<altcon>mainbtnh.png</altcon>
+			<act type="iref" ref="main.xml"/>
+		</img>
+		<img x="55" y="400" hovpic="0">
+			<con>backbtng.png</con>
+			<altcon>backbtnh.png</altcon>
+			<act type="none" ref="intro.xml"/>
+		</img>
+		<img x="110" y="400" hovpic="1">
+			<con>nextbtn.png</con>
+			<altcon>nextbtnh.png</altcon>
+			<act type="iref" ref="intro2.xml"/>
+		</img>
+		<!--Text body-->
+		<text x="170" y="400" size="24" transp="1" FGCOLOR="#000000">Hello, And welcome to SBTCVM's tutorial!
+I'm the SBTCVM mascot, and I'll be your guide!
+Lets start with what SBTCVM is.  You see, SBTCVM simulates 
+a balanced ternary computer.  Its a far cry from the binary computer
+you are viewing this on...</text>
+	</core>
+</main>

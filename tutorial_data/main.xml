@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<pageconf BGimg="1" BGM="0" pagekeys="1">
+		<title>Index</title>
+		<BG>normalbg1.jpg</BG>
+		<BGM>BGM1.ogg</BGM>
+	</pageconf>
+	<pagekeys>
+		<k keyid="menupop"/>
+	</pagekeys>
+	<forks>
+		<uimenu keyid="menupop">
+			<item con="Main Menu" noact="1"/>
+			<item con="-------------------" noact="1"/>
+			<item con="Getting Started" keyid="getstartpop" stay="0"/>
+			<item con="About" keyid="abtflg" stay="0"/>
+			<item con="Quit" keyid="quitpop" stay="1"/>
+		</uimenu>
+		<uimenu keyid="getstartpop">
+			<item con="Getting Started" noact="1"/>
+			<item con="-------------------" noact="1"/>
+			<item con="Introduction" keyid="gtlesson1" stay="0"/>
+			<item con="-------------------" noact="1"/>
+			<item con="Main Menu" keyid="menupop" stay="0"/>
+		</uimenu>
+		<quit keyid="quitpop"/>
+		<pagejump keyid="gtlesson1" page="intro.xml"/>
+	</forks>
+	<core>
+		<label x="155" y="10" size="30" transp="1" FGCOLOR="#000000">
+			<con>Welcome To SBTCVM!</con>
+			<act type="none"/>
+		</label>
+		<!--About screen-->
+		<img x="700" y="460" hovpic="1" onkey="abtflg" takekey="abtflg" keyid="menupop" >
+			<con>mainbtn.png</con>
+			<altcon>mainbtnh.png</altcon>
+			<act type="key" ref="main.xml"/>
+		</img>
+		<text x="0" y="62" size="24" transp="1" onkey="abtflg" FGCOLOR="#FFFFFF">   SBTCVM Tutorial
+v1.0
+(c) 2015-2017 Thomas Leathers and Contributors       
+
+Based on Desutezeoid v1.5.1
+
+SBTCVM Tutorial is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+      
+SBTCVM Tutorial is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+       
+SBTCVM Tutorial have received a copy of the GNU General Public License
+along with Desutezeoid.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</text>
+	</core>
+</main>

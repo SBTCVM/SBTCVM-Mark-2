@@ -3,9 +3,8 @@ Simple Balanced Ternary Computer Virtual Machine
 
 v2.0.1
 
-need help? open index.html inside the docs directory,
-or view the documentaion online at:
-<https://sbtcvm.github.io/SBTCVM-Mark-2/>
+If you need help, see the SBTCVM users manual located in
+the "manual" directory.
 
 (c)2016-2017 Thomas Leathers and Contributors
 

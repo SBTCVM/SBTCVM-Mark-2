@@ -102,6 +102,8 @@ elif cmd==None:
 				call(["python", "MK2-TOOLS.py"])
 		elif (usercalllst[0]).lower()=="mainmenu":
 				call(["python", "MK2-MENU.py"])
+		elif (usercalllst[0]).lower()=="tutorial":
+				call(["python", "SBTCVM_tutorial.py"])
 		elif (usercalllst[0]).lower()=="quit":
 			qflg=1
 		elif (usercalllst[0]).lower()=="btdec":
