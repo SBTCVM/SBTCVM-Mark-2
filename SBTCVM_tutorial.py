@@ -13,6 +13,7 @@ import tutorial_data.dzulib1 as dzulib
 
 #THIS COPY OF DESUTEZEOID HAS BEEN MODIFIED.
 #Data is hardcoded to subdirectory "tutorial_data"
+#plus other changes.
 #
 #
 

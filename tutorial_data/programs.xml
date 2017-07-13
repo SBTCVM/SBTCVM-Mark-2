@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<pageconf BGimg="1" BGM="0" pagekeys="1">
+		<title>List of Programs</title>
+		<BG>normalbg2.jpg</BG>
+		<BGM>BGM1.ogg</BGM>
+	</pageconf>
+	<pagekeys>
+	</pagekeys>
+	<forks>
+	</forks>
+	<core>
+		<img x="700" y="460" hovpic="1">
+			<con>mainbtn.png</con>
+			<altcon>mainbtnh.png</altcon>
+			<act type="iref" ref="main.xml"/>
+		</img>
+		<!--Text body-->
+		<text x="0" y="62" size="24" transp="1" FGCOLOR="#000000">List Of programs. A quick refrence:
+
+MK2-CS.py : This is the SBTCVM command shell. The tutoral
+system has a section on this.
+MK2-RUN.py : this is the command shell command "run".
+It starts SBTCVM with much more control than the menu.
+MK2-GFX.py : This is a graphics conversion tool.
+MK2-TOOLS.py : This is a tools launcher/debugging tool.
+MK2-MENU.py : This is SBTCVM's graphical main menu.
+SBTCVM_MK2.py : This is the VM itself. though to run the VM,
+please use MK2-MENU.py and MK2-RUN.py or "run" in
+the command shell.
+SBTCVM-asm2.py : This is SBTCVM's assembler.
+currently the best way to write SBTCVM programs.
+Unless of course you like Machine code.
+SBTCVM_tutorial.py : The tutorial system you are
+running right now.
+</text>
+	</core>
+</main>

@@ -14,5 +14,5 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
        
-SBTCVM Tutorial have received a copy of the GNU General Public License
-along with Desutezeoid.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with SBTCVM Tutorial.  If not, see <http://www.gnu.org/licenses/>.

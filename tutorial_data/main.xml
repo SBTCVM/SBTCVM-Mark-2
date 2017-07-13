@@ -13,6 +13,7 @@
 			<item con="Main Menu" noact="1"/>
 			<item con="-------------------" noact="1"/>
 			<item con="Getting Started" keyid="getstartpop" stay="0"/>
+			<item con="Command Shell" keyid="comshellpop" stay="0"/>
 			<item con="About" keyid="abtflg" stay="0"/>
 			<item con="Quit" keyid="quitpop" stay="1"/>
 		</uimenu>
@@ -20,11 +21,24 @@
 			<item con="Getting Started" noact="1"/>
 			<item con="-------------------" noact="1"/>
 			<item con="Introduction" keyid="gtlesson1" stay="0"/>
+			<item con="List Of programs" keyid="gtlesson3" stay="0"/>
+			<item con="User Interface" keyid="gtlesson2" stay="0"/>
 			<item con="-------------------" noact="1"/>
 			<item con="Main Menu" keyid="menupop" stay="0"/>
 		</uimenu>
+		<uimenu keyid="comshellpop">
+			<item con="Command Shell" noact="1"/>
+			<item con="-------------------" noact="1"/>
+			<item con="Overview" keyid="cslesson1" stay="0"/>
+			<item con="-------------------" noact="1"/>
+			<item con="Main Menu" keyid="menupop" stay="0"/>
+		</uimenu>
+		<!--SBTCVM addition: quits program when triggered.-->
 		<quit keyid="quitpop"/>
 		<pagejump keyid="gtlesson1" page="intro.xml"/>
+		<pagejump keyid="gtlesson2" page="ui.xml"/>
+		<pagejump keyid="gtlesson3" page="programs.xml"/>
+		<pagejump keyid="cslesson1" page="csintro.xml"/>
 	</forks>
 	<core>
 		<label x="155" y="10" size="30" transp="1" FGCOLOR="#000000">
@@ -32,12 +46,16 @@
 			<act type="none"/>
 		</label>
 		<!--About screen-->
+		<img x="0" y="0" onkey="abtflg">
+			<con>coolglassbg2.jpg</con>
+			<act type="none"/>
+		</img>
 		<img x="700" y="460" hovpic="1" onkey="abtflg" takekey="abtflg" keyid="menupop" >
 			<con>mainbtn.png</con>
 			<altcon>mainbtnh.png</altcon>
 			<act type="key" ref="main.xml"/>
 		</img>
-		<text x="0" y="62" size="24" transp="1" onkey="abtflg" FGCOLOR="#FFFFFF">   SBTCVM Tutorial
+		<text x="0" y="0" size="24" transp="0" onkey="abtflg" FGCOLOR="#FFFFFF" BGCOLOR="#000000">SBTCVM Tutorial
 v1.0
 (c) 2015-2017 Thomas Leathers and Contributors       
 
@@ -53,7 +71,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
        
-SBTCVM Tutorial have received a copy of the GNU General Public License
-along with Desutezeoid.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</text>
+You should have received a copy of the GNU General Public License
+along with SBTCVM Tutorial.   If not, see &lt;http://www.gnu.org/licenses/&gt;.</text>
 	</core>
 </main>
