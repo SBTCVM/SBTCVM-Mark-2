@@ -71,6 +71,12 @@ def toolsscreen(mode):
 	if mode==3:
 		screensurf.blit(vmbg, (0, 0))
 		dummyreadouts()
+	if mode==4:
+		screensurf.blit(vmbg, (0, 0))
+		screensurf.blit(vmlaunchbg, (0, 0))
+		dummyreadouts()
+		menulabel=simplefontC.render("Credits", True, (0, 0, 0), (255, 255, 255))
+		screensurf.blit(menulabel, (158, 4))
 
 #used to show placeholder readouts.
 def dummyreadouts():

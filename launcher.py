@@ -571,7 +571,7 @@ while quitflag==0:
 		masterkey=fork.attrib.get("keyid")
 		if masterkey in keylist:
 			keylist.remove(masterkey)
-			subprocess.Popen(["python", "MK2-TOOLS.py", "about"])
+			subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
 	for fork in forktag.findall("sound"):
 		masterkey=fork.attrib.get("keyid")
 		soundname=fork.attrib.get("sound")

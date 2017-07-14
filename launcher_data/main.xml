@@ -17,36 +17,65 @@
 		<creditslaunch keyid="creditslaunch"/>
 	</forks>
 	<core>
-		<img x="0" y="70" keyid="menulaunch" offkey="abtflg">
+		<img x="5" y="70" keyid="menulaunch" hoverkey="hov1" offkey="abtflg">
 			<con>menu.png</con>
 			<act type="key"/>
 		</img>
-		<img x="66" y="70" keyid="tutlaunch" offkey="abtflg">
+		<img x="68" y="70" keyid="tutlaunch" hoverkey="hov2" offkey="abtflg">
 			<con>tutorial.png</con>
 			<act type="key"/>
 		</img>
-		<img x="140" y="70" keyid="gttlaunch" offkey="abtflg">
+		<img x="145" y="70" keyid="gttlaunch" hoverkey="hov3" offkey="abtflg">
 			<con>gtt.png</con>
 			<act type="key"/>
 		</img>
-		<img x="210" y="70" keyid="introlaunch" offkey="abtflg">
+		<img x="215" y="70" keyid="introlaunch" hoverkey="hov4" offkey="abtflg">
 			<con>intro.png</con>
 			<act type="key"/>
 		</img>
-		<img x="280" y="70" keyid="creditslaunch" offkey="abtflg">
+		<img x="282" y="70" keyid="creditslaunch" hoverkey="hov5" offkey="abtflg">
 			<con>credits.png</con>
 			<act type="key"/>
 		</img>
-		<img x="350" y="70" keyid="abtflg" offkey="abtflg">
+		<img x="355" y="70" keyid="abtflg" hoverkey="hov6" offkey="abtflg">
 			<con>about.png</con>
 			<act type="key"/>
 		</img>
-		<img x="420" y="70" keyid="quitpop" offkey="abtflg">
+		<img x="425" y="70" keyid="quitpop" hoverkey="hov7" offkey="abtflg">
 			<con>exit.png</con>
 			<act type="key"/>
 		</img>
 		<label x="155" y="10" size="30" transp="1" FGCOLOR="#000000">
 			<con>SBTCVM Launcher</con>
+			<act type="none"/>
+		</label>
+		<!--Hover hints-->
+		<label x="155" y="34" size="22" transp="1" onkey="hov1" FGCOLOR="#000000">
+			<con>Explore the Main Menu.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov2" FGCOLOR="#000000">
+			<con>Learn about SBTCVM in the tutorials.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov3" FGCOLOR="#000000">
+			<con>Run a trit guessing game.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov4" FGCOLOR="#000000">
+			<con>Run the intruduction program.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov5" FGCOLOR="#000000">
+			<con>The who's who of SBTCVM.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov6" FGCOLOR="#000000">
+			<con>About the launcher.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov7" FGCOLOR="#000000">
+			<con>Quit the launcher.</con>
 			<act type="none"/>
 		</label>
 		<!--About screen-->

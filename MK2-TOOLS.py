@@ -66,24 +66,34 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits":
 	print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
 	pygame.mixer.init()
-	pygame.display.set_caption("SBTCVM Mark 2 | Tools", "SBTCVM Mark 2 | Tools")
+	if cmd=="uicredits":
+		pygame.display.set_caption("SBTCVM Credits", "SBTCVM Credits")
+	else:
+		pygame.display.set_caption("SBTCVM Mark 2 | Tools", "SBTCVM Mark 2 | Tools")
 	GLOBKIOSK=1
 	windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon64.png'))
 	pygame.display.set_icon(windowicon)
 	#screen fonts
-	screensurf=pygame.display.set_mode((800, 600))
+	if cmd=="uicredits":
+		screensurf=pygame.display.set_mode((648, 486))
+	else:
+		screensurf=pygame.display.set_mode((800, 600))
+	
 	#init VMUI library.
 	vmui.initui(screensurf, 1)
 	
 	if cmd=="about":
 		vmui.toolsscreen(1)
 		vmui.creditsscroll()
-	
+	#uicredits is the special creditsscroll wrapper mode used by launcher.py
+	if cmd=="uicredits":
+		vmui.toolsscreen(4)
+		vmui.creditsscroll()
 	if cmd=="btclock":
 		vmui.toolsscreen(1)
 		vmui.BTCLOCKDATE()
