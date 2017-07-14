@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<pageconf BGimg="1" BGM="0" pagekeys="1">
+		<title>Index</title>
+		<BG>normalbg1.jpg</BG>
+		<BGM>BGM1.ogg</BGM>
+	</pageconf>
+	<pagekeys>
+		<k keyid="menupop"/>
+	</pagekeys>
+	<forks>
+		<quit keyid="quitpop"/>
+		<menulaunch keyid="menulaunch"/>
+		<tutlaunch keyid="tutlaunch"/>
+		<gttlaunch keyid="gttlaunch"/>
+		<introlaunch keyid="introlaunch"/>
+		<creditslaunch keyid="creditslaunch"/>
+	</forks>
+	<core>
+		<img x="0" y="70" keyid="menulaunch" offkey="abtflg">
+			<con>menu.png</con>
+			<act type="key"/>
+		</img>
+		<img x="66" y="70" keyid="tutlaunch" offkey="abtflg">
+			<con>tutorial.png</con>
+			<act type="key"/>
+		</img>
+		<img x="140" y="70" keyid="gttlaunch" offkey="abtflg">
+			<con>gtt.png</con>
+			<act type="key"/>
+		</img>
+		<img x="210" y="70" keyid="introlaunch" offkey="abtflg">
+			<con>intro.png</con>
+			<act type="key"/>
+		</img>
+		<img x="280" y="70" keyid="creditslaunch" offkey="abtflg">
+			<con>credits.png</con>
+			<act type="key"/>
+		</img>
+		<img x="350" y="70" keyid="abtflg" offkey="abtflg">
+			<con>about.png</con>
+			<act type="key"/>
+		</img>
+		<img x="420" y="70" keyid="quitpop" offkey="abtflg">
+			<con>exit.png</con>
+			<act type="key"/>
+		</img>
+		<label x="155" y="10" size="30" transp="1" FGCOLOR="#000000">
+			<con>SBTCVM Launcher</con>
+			<act type="none"/>
+		</label>
+		<!--About screen-->
+		<img x="0" y="0" onkey="abtflg">
+			<con>coolglassbg2.jpg</con>
+			<act type="none"/>
+		</img>
+		<img x="700" y="460" hovpic="1" onkey="abtflg" takekey="abtflg" keyid="menupop" >
+			<con>mainbtn.png</con>
+			<altcon>mainbtnh.png</altcon>
+			<act type="key" ref="main.xml"/>
+		</img>
+		<text x="0" y="0" size="24" transp="0" onkey="abtflg" FGCOLOR="#FFFFFF" BGCOLOR="#000000">SBTCVM Launcher
+v1.0
+(c) 2015-2017 Thomas Leathers and Contributors       
+
+Based on Desutezeoid v1.5.1
+
+SBTCVM Launcher is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+      
+SBTCVM Launcher is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+       
+You should have received a copy of the GNU General Public License
+along with SBTCVM Launcher.   If not, see &lt;http://www.gnu.org/licenses/&gt;.</text>
+	</core>
+</main>

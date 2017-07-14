@@ -22,7 +22,7 @@ savtree='''<?xml version="1.0" encoding="UTF-8"?>
 #main.sav init.
 def initmainsave():
 	print ('Initalize main.sav')
-	mainsavfile = open(os.path.join("tutorial_data" ,'main.sav'), 'w')
+	mainsavfile = open(os.path.join("launcher_data" ,'main.sav'), 'w')
 	mainsavfile.write(savtree)
 	mainsavfile.close()
 

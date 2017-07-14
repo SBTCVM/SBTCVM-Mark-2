@@ -1,0 +1,5 @@
+starting off:
+-single tasking
+-barebones
+-no frills CLI
+-extendable

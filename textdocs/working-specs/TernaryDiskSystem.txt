@@ -1,0 +1,8 @@
+Needs:
+-Should be extendable.
+-Should offer 2 or 3 "removable disk drives"
+-not overcomplicated.
+-filenames need to be realistic.
+-technical concepts need also be realistic.
+-mark2 and even the future 12-trit mark3 will only have so much memory.
+-we need to fit SBTC-OS's runtime in mark 3's memory too.
