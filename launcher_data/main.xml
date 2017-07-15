@@ -15,6 +15,7 @@
 		<gttlaunch keyid="gttlaunch"/>
 		<introlaunch keyid="introlaunch"/>
 		<creditslaunch keyid="creditslaunch"/>
+		<fileviewlaunch keyid="fileviewlaunch"/>
 	</forks>
 	<core>
 		<img x="5" y="70" keyid="menulaunch" hoverkey="hov1" offkey="abtflg">
@@ -37,11 +38,15 @@
 			<con>credits.png</con>
 			<act type="key"/>
 		</img>
-		<img x="355" y="70" keyid="abtflg" hoverkey="hov6" offkey="abtflg">
+		<img x="348" y="70" keyid="fileviewlaunch" hoverkey="hov8" offkey="abtflg">
+			<con>fileview.png</con>
+			<act type="key"/>
+		</img>
+		<img x="425" y="70" keyid="abtflg" hoverkey="hov6" offkey="abtflg">
 			<con>about.png</con>
 			<act type="key"/>
 		</img>
-		<img x="425" y="70" keyid="quitpop" hoverkey="hov7" offkey="abtflg">
+		<img x="495" y="70" keyid="quitpop" hoverkey="hov7" offkey="abtflg">
 			<con>exit.png</con>
 			<act type="key"/>
 		</img>
@@ -76,6 +81,10 @@
 		</label>
 		<label x="155" y="34" size="22" transp="1" onkey="hov7" FGCOLOR="#000000">
 			<con>Quit the launcher.</con>
+			<act type="none"/>
+		</label>
+		<label x="155" y="34" size="22" transp="1" onkey="hov8" FGCOLOR="#000000">
+			<con>Browse SBTCVM's directories.</con>
 			<act type="none"/>
 		</label>
 		<!--About screen-->

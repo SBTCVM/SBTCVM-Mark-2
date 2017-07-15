@@ -6,9 +6,9 @@ import pygame.image
 import pygame.mixer
 import pygame
 import time
-import os
 import copy
 import sys
+import os
 import subprocess
 # load dzulib1 Desutezeoid support library
 import launcher_data.dzulib1 as dzulib
@@ -18,6 +18,7 @@ import launcher_data.dzulib1 as dzulib
 #plus other changes.
 #
 #
+
 
 from pygame.locals import *
 import xml.etree.ElementTree as ET
@@ -572,6 +573,11 @@ while quitflag==0:
 		if masterkey in keylist:
 			keylist.remove(masterkey)
 			subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
+	for fork in forktag.findall("fileviewlaunch"):
+		masterkey=fork.attrib.get("keyid")
+		if masterkey in keylist:
+			keylist.remove(masterkey)
+			subprocess.Popen(["python", "fileview.py"])
 	for fork in forktag.findall("sound"):
 		masterkey=fork.attrib.get("keyid")
 		soundname=fork.attrib.get("sound")
