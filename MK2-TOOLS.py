@@ -66,20 +66,29 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview":
 	print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
 	pygame.mixer.init()
 	if cmd=="uicredits":
 		pygame.display.set_caption("SBTCVM Credits", "SBTCVM Credits")
-	if cmd=="imgview":
+	elif cmd=="imgview":
 		pygame.display.set_caption("imgview", "imgview")
+	elif cmd=="textview":
+		pygame.display.set_caption("textview", "textview")
 	else:
 		pygame.display.set_caption("SBTCVM Mark 2 | Tools", "SBTCVM Mark 2 | Tools")
 	GLOBKIOSK=1
-	windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon64.png'))
-	pygame.display.set_icon(windowicon)
+	if cmd=="imgview":
+		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'imgview64.png'))
+		pygame.display.set_icon(windowicon)
+	elif cmd=="textview":
+		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'textview64.png'))
+		pygame.display.set_icon(windowicon)
+	else:
+		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon64.png'))
+		pygame.display.set_icon(windowicon)
 	#screen fonts
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((648, 486))
@@ -104,6 +113,12 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 			vmui.imgview(sys.argv[2])
 		except IndexError:
 			print "MUST SPECIFY IMAGE FILENAME."
+	if cmd=="textview":
+		vmui.toolsscreen(1)
+		try:
+			vmui.textview(sys.argv[2])
+		except IndexError:
+			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="btclock":
 		vmui.toolsscreen(1)
 		vmui.BTCLOCKDATE()

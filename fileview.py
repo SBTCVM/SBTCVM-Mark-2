@@ -31,11 +31,14 @@ screensurf=pygame.display.set_mode((800, 600))
 
 filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fileview.jpg')).convert()
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'exit.png'))
-fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg.png'))
-fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png'))
-fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png'))
-fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvup.png'))
-fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvimg.png'))
+fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg.png')).convert()
+fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png')).convert()
+fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png')).convert()
+fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvup.png')).convert()
+fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvimg.png')).convert()
+fvtext=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtext.png')).convert()
+fvtasm=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtasm.png')).convert()
+fvall=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvall.png')).convert()
 quitflag=0
 simplefontC = pygame.font.SysFont(None, 22)
 simplefontB = pygame.font.SysFont(None, 19)
@@ -44,9 +47,19 @@ listx=41
 iconx=0
 labelx=48
 maskx=0
+filterflg=0
+filtertext="All"
 yjump=42
 iterfiles='.'
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
+quitx=filebg.blit(exitbtn, (430, 520))
+fil0=filebg.blit(fvall, (430, 107))
+fil1=filebg.blit(fvtrom, (471, 107))
+fil2=filebg.blit(fvimg, (512, 107))
+fil3=filebg.blit(fvstreg, (553, 107))
+fil4=filebg.blit(fvtasm, (594, 107))
+fil5=filebg.blit(fvtext, (635, 107))
+fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
 while quitflag==0:
 	screensurf.blit(filebg, (0, 0))
 	listy=listyoff
@@ -59,6 +72,7 @@ while quitflag==0:
 	gxmask.blit(fvdir, (iconx, 0))
 	gxmask.blit(textit, (labelx, 0))
 	#gx=screensurf.blit(gxmask, (maskx, listy))
+	mpos=pygame.mouse.get_pos()
 	flist=list()
 	#qx=fileclick(gx, ".", "dir")
 	#flist.extend([qx])
@@ -89,7 +103,7 @@ while quitflag==0:
 				gx=screensurf.blit(gxmask, (maskx, listy))
 				qx=fileclick(gx, fname, "dir")
 				fileval=1
-		elif fnamelo.endswith(("." + "trom")): 
+		elif fnamelo.endswith(("." + "trom")) and (filterflg==0 or filterflg==1): 
 			#print(os.path.join(iterfiles, fname))
 			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
 			gxmask=pygame.Surface((410, 40))
@@ -99,7 +113,7 @@ while quitflag==0:
 			gx=screensurf.blit(gxmask, (maskx, listy))
 			qx=fileclick(gx, fname, "trom")
 			fileval=1
-		elif fnamelo.endswith(("." + "png")) or fnamelo.endswith(("." + "jpg")) or fnamelo.endswith(("." + "jpeg")) or fnamelo.endswith(("." + "gif")): 
+		elif (fnamelo.endswith(("." + "png")) or fnamelo.endswith(("." + "jpg")) or fnamelo.endswith(("." + "jpeg")) or fnamelo.endswith(("." + "gif"))) and (filterflg==0 or filterflg==2):
 			#print(os.path.join(iterfiles, fname))
 			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
 			gxmask=pygame.Surface((410, 40))
@@ -115,7 +129,7 @@ while quitflag==0:
 		#	gx=screensurf.blit(textit, (listx, listy))
 		#	qx=fileclick(gx, fname, "tasm")
 		#	fileval=1
-		elif fnamelo.endswith(("." + "streg")): 
+		elif fnamelo.endswith(("." + "streg")) and (filterflg==0 or filterflg==3) : 
 			#print(os.path.join(iterfiles, fname))
 			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
 			gxmask=pygame.Surface((410, 40))
@@ -124,6 +138,26 @@ while quitflag==0:
 			gxmask.blit(textit, (labelx, 0))
 			gx=screensurf.blit(gxmask, (maskx, listy))
 			qx=fileclick(gx, fname, "streg")
+			fileval=1
+		elif fnamelo.endswith(("." + "tasm")) and (filterflg==0 or filterflg==4) : 
+			#print(os.path.join(iterfiles, fname))
+			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+			gxmask=pygame.Surface((410, 40))
+			gxmask.fill((255, 255, 255))
+			gxmask.blit(fvtasm, (iconx, 0))
+			gxmask.blit(textit, (labelx, 0))
+			gx=screensurf.blit(gxmask, (maskx, listy))
+			qx=fileclick(gx, fname, "tasm")
+			fileval=1
+		elif (fnamelo.endswith(("." + "txt")) or fnamelo.endswith(("." + "md"))) and (filterflg==0 or filterflg==5) : 
+			#print(os.path.join(iterfiles, fname))
+			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+			gxmask=pygame.Surface((410, 40))
+			gxmask.fill((255, 255, 255))
+			gxmask.blit(fvtext, (iconx, 0))
+			gxmask.blit(textit, (labelx, 0))
+			gx=screensurf.blit(gxmask, (maskx, listy))
+			qx=fileclick(gx, fname, "text")
 			fileval=1
 		#else:
 		#	if not fname.startswith('.'):
@@ -134,10 +168,16 @@ while quitflag==0:
 			flist.extend([qx])
 			listy += yjump
 	#time.sleep(0.1)
-	time.sleep(0.01)
-	quitx=screensurf.blit(exitbtn, (430, 520))
+	time.sleep(0.03)
+	
 	menulabel=simplefontC.render(("path: " + iterfiles), True, (255, 255, 255))
 	screensurf.blit(menulabel, (430, 70))
+	
+	screensurf.blit(fillabel, (430, 88))
+	
+	#for hig in flist:
+	#	if hig.box.collidepoint(mpos):
+	#		pygame.draw.rect(screensurf, (41, 74, 185), hig.box, 1)
 	pygame.display.update()
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -148,15 +188,42 @@ while quitflag==0:
 				if quitx.collidepoint(event.pos)==1 and event.button==1:
 					quitflag=1
 					break
+				if fil0.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=0
+					filtertext="All"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					
+				if fil1.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=1
+					filtertext="TROM"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+				if fil2.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=2
+					filtertext="Image"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+				if fil3.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=3
+					filtertext="STREG"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+				if fil4.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=4
+					filtertext="TASM"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+				if fil5.collidepoint(event.pos)==1 and event.button==1:
+					filterflg=5
+					filtertext="Text"
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
 				if f.box.collidepoint(event.pos)==1 and event.button==1:
 					if f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="tasm":
-						print "run tasm"
+						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="streg":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="img":
 						subprocess.Popen(["python", "MK2-TOOLS.py", "imgview", (os.path.join(iterfiles, f.filename))])
+					if f.ftype=="text":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="dir":
 						listyoff=0
 						if f.filename=='.':

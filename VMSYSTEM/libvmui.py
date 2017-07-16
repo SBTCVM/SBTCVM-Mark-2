@@ -18,6 +18,7 @@ pygame.mixer.init()
 simplefont = pygame.font.SysFont(None, 16)
 simplefontA = pygame.font.SysFont(None, 20)
 simplefontB = pygame.font.SysFont(None, 22)
+
 simplefontC = pygame.font.SysFont(None, 32)
 smldispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
@@ -484,7 +485,58 @@ def BTCLOCKDATE():
 		pygame.display.update()
 
 #image viewer called by fileview through MK2-TOOLS.py
+simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 
+def textview(textfile):
+	pygame.display.set_caption(("textview - " + textfile), ("textview - " + textfile))
+	
+	textoff=0
+	yjump=22
+	yoff=0
+	textx=0
+	ptexty=1
+	qflg=0
+	pygame.key.set_repeat(300, 50)
+	while qflg==0:
+		texty=yoff
+		time.sleep(0.05)
+		if texty!=ptexty:
+			ptexty=texty
+			abt = open(textfile)
+			screensurf.fill((255, 255, 255))
+			for f in abt:
+				abttext=simplefontmono.render(f.replace("\n", ""), True, (0,0,0), (255, 255, 255))
+				screensurf.blit(abttext, (textx, texty))
+				texty += yjump
+			pygame.display.update()
+			qtexty=texty
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				qflg=1
+				break
+			if event.type == KEYDOWN and event.key == K_DOWN:
+				if qtexty>(yjump + yjump):
+					yoff -= yjump
+			if event.type == KEYDOWN and event.key == K_UP:
+				yoff += yjump
+				if yoff>0:
+					yoff=0
+			if event.type == KEYDOWN and event.key == K_ESCAPE:
+				qflg=1
+				break
+			if event.type==MOUSEBUTTONDOWN:
+				if event.button==5:
+					if qtexty>(yjump + yjump):
+						yoff -= yjump
+				if event.button==4:
+					yoff += yjump
+					if yoff>0:
+						yoff=0
+				if event.button==3:
+					yoff=0
+				
+		
+	
 def imgview(imgfile):
 	global screensurf
 	#load image
@@ -520,7 +572,7 @@ def imgview(imgfile):
 			xoff=(screensurf.get_rect().centerx)
 			yoff=(screensurf.get_rect().centery)
 			resizeflg=0	
-		screensurf.fill((0, 100, 200))
+		screensurf.fill((151, 178, 208))
 		#imgsc=pygame.transform.rotozoom(img, 0.0, scalefact)
 		#if scale factor is different from the previous scale factor, rescale image.
 		if scalefact!=pscalefact:
@@ -532,7 +584,7 @@ def imgview(imgfile):
 		imgbox.centery = yoff
 		screensurf.blit(imgsc, imgbox)
 		pygame.display.update()
-		time.sleep(0.1)
+		time.sleep(0.05)
 		#move image in relation to mouse when followmouse is set to 1 (see event handler below)
 		if followmouse==1:
 			ppos=mpos
@@ -542,6 +594,15 @@ def imgview(imgfile):
 		
 		for event in pygame.event.get():
 			if event.type == QUIT:
+				qflg=1
+				break
+			if event.type == KEYDOWN and event.key == K_DOWN:
+				scalefact -= roto
+				if scalefact<=0:
+					scalefact=0.1
+			if event.type == KEYDOWN and event.key == K_UP:
+				scalefact += roto
+			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
 				break
 			if event.type==MOUSEBUTTONDOWN:
