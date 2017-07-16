@@ -30,23 +30,50 @@ screensurf=pygame.display.set_mode((800, 600))
 
 filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fileview.jpg')).convert()
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'exit.png'))
+fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg.png'))
+fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png'))
+fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png'))
+fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvup.png'))
 quitflag=0
 simplefontC = pygame.font.SysFont(None, 22)
-simplefontB = pygame.font.SysFont("monospace", 19)
+simplefontB = pygame.font.SysFont(None, 19)
 listyoff=0
-listx=0
-yjump=22
+listx=41
+iconx=0
+labelx=48
+maskx=0
+yjump=42
 iterfiles='.'
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 while quitflag==0:
 	screensurf.blit(filebg, (0, 0))
 	listy=listyoff
-	textit=simplefontB.render("{:<30}".format("."), True, (0, 0, 0), (200, 200, 255))
-	gx=screensurf.blit(textit, (listx, listy))
+	textit=simplefontB.render(".", True, (0, 0, 0), (255, 255, 255))
+	
+	#ix=screensurf.blit(fvdir, (iconx, listy))
+	#gx=screensurf.blit(textit, (listx, listy))
+	gxmask=pygame.Surface((410, 40))
+	gxmask.fill((255, 255, 255))
+	gxmask.blit(fvdir, (iconx, 0))
+	gxmask.blit(textit, (labelx, 0))
+	#gx=screensurf.blit(gxmask, (maskx, listy))
 	flist=list()
-	qx=fileclick(gx, ".", "dir")
-	flist.extend([qx])
-	listy += yjump
+	#qx=fileclick(gx, ".", "dir")
+	#flist.extend([qx])
+	#listy += yjump
+	if pathlist!=list():
+		textit=simplefontB.render("..", True, (0, 0, 0), (255, 255, 255))
+		
+		#ix=screensurf.blit(fvdir, (iconx, listy))
+		#gx=screensurf.blit(textit, (listx, listy))
+		gxmask=pygame.Surface((410, 40))
+		gxmask.fill((255, 255, 255))
+		gxmask.blit(fvup, (iconx, 0))
+		gxmask.blit(textit, (labelx, 0))
+		gx=screensurf.blit(gxmask, (maskx, listy))
+		qx=fileclick(gx, "..", "dir")
+		flist.extend([qx])
+		listy += yjump
 	for fname in os.listdir(iterfiles):
 		fnamelo=fname.lower()
 		fileval=0
@@ -54,14 +81,22 @@ while quitflag==0:
 			#if not os.path.basename(fname).startswith('.'):
 			if not fname.endswith(".git"):
 				#print fname
-				textit=simplefontB.render("{:<30}".format(fname), True, (0, 0, 0), (200, 200, 255))
-				gx=screensurf.blit(textit, (listx, listy))
+				textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+				gxmask=pygame.Surface((410, 40))
+				gxmask.fill((255, 255, 255))
+				gxmask.blit(fvdir, (iconx, 0))
+				gxmask.blit(textit, (labelx, 0))
+				gx=screensurf.blit(gxmask, (maskx, listy))
 				qx=fileclick(gx, fname, "dir")
 				fileval=1
 		elif fnamelo.endswith(("." + "trom")): 
 			#print(os.path.join(iterfiles, fname))
-			textit=simplefontB.render("{:<30}".format(fname), True, (0, 0, 0), (200, 255, 200))
-			gx=screensurf.blit(textit, (listx, listy))
+			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+			gxmask=pygame.Surface((410, 40))
+			gxmask.fill((255, 255, 255))
+			gxmask.blit(fvtrom, (iconx, 0))
+			gxmask.blit(textit, (labelx, 0))
+			gx=screensurf.blit(gxmask, (maskx, listy))
 			qx=fileclick(gx, fname, "trom")
 			fileval=1
 		#elif fnamelo.endswith(("." + "tasm")): 
@@ -72,8 +107,12 @@ while quitflag==0:
 		#	fileval=1
 		elif fnamelo.endswith(("." + "streg")): 
 			#print(os.path.join(iterfiles, fname))
-			textit=simplefontB.render("{:<30}".format(fname), True, (0, 0, 0), (200, 255, 200))
-			gx=screensurf.blit(textit, (listx, listy))
+			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+			gxmask=pygame.Surface((410, 40))
+			gxmask.fill((255, 255, 255))
+			gxmask.blit(fvstreg, (iconx, 0))
+			gxmask.blit(textit, (labelx, 0))
+			gx=screensurf.blit(gxmask, (maskx, listy))
 			qx=fileclick(gx, fname, "streg")
 			fileval=1
 		#else:
@@ -110,6 +149,14 @@ while quitflag==0:
 						if f.filename=='.':
 							pathlist=list()
 							iterfiles='.'
+						if f.filename=='..':
+							print pathlist
+							pathlist.remove(pathlist[(len(pathlist) -1)])
+							print pathlist
+							if pathlist==list():
+								iterfiles='.'
+							else:
+								iterfiles=os.path.join(*pathlist)
 						else:
 							pathlist.extend([f.filename])
 							iterfiles=os.path.join(*pathlist)
