@@ -638,10 +638,21 @@ def imgview(imgfile):
 	imgx=img.get_width()
 	imgy=img.get_height()
 	#some basic intelegent inital scale logic
-	if imgx<400 and imgy<300:
+	if imgx<=400 and imgy<=300:
 		scalefact=float(2.0)
-	if imgx<200 and imgy<150:
+	if imgx<=266 and imgy<=200:
+		scalefact=float(3.0)	
+	if imgx<=200 and imgy<=150:
 		scalefact=float(4.0)
+	if imgx<=133 and imgy<=100:
+		scalefact=float(6.0)
+	if imgx<=50 and imgy<=75:
+		scalefact=float(8.0)
+	if imgx<=66 and imgy<=50:
+		scalefact=float(12.0)
+	if imgx<=25 and imgy<=38:
+		scalefact=float(16.0)
+	defscale=scalefact
 	#main loop
 	while qflg==0:
 		#resize logic. (the extra loop before resizing is to keep resizing smooth on certain window managers that "stop" resizing operations when set_mode is called.
@@ -697,7 +708,7 @@ def imgview(imgfile):
 				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "imgview.txt"])
 			if event.type == KEYDOWN and event.key == K_SPACE:
 				roto = 0.1
-				scalefact = 1.0
+				scalefact = defscale
 				xoff=(screensurf.get_rect().centerx)
 				yoff=(screensurf.get_rect().centery)
 			if event.type==MOUSEBUTTONDOWN:
@@ -717,7 +728,7 @@ def imgview(imgfile):
 				#this resets the offset & scale factor
 				if event.button==3:
 					roto = 0.1
-					scalefact = 1.0
+					scalefact = defscale
 					xoff=(screensurf.get_rect().centerx)
 					yoff=(screensurf.get_rect().centery)
 				#sets followmouse to 1 for image moving

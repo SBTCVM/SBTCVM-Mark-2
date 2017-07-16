@@ -67,7 +67,7 @@ elif cmd=="namecrunch":
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
 elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview":
-	print "SBTCVM Graphical Tools launcher starting..."
+	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
 	pygame.mixer.init()
