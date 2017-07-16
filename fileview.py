@@ -74,7 +74,7 @@ while quitflag==0:
 		qx=fileclick(gx, "..", "dir")
 		flist.extend([qx])
 		listy += yjump
-	for fname in os.listdir(iterfiles):
+	for fname in sorted(os.listdir(iterfiles), key=str.lower):
 		fnamelo=fname.lower()
 		fileval=0
 		if os.path.isdir(os.path.join(iterfiles, fname)):
