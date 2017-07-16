@@ -59,7 +59,7 @@ fil2=filebg.blit(fvimg, (512, 107))
 fil3=filebg.blit(fvstreg, (553, 107))
 fil4=filebg.blit(fvtasm, (594, 107))
 fil5=filebg.blit(fvtext, (635, 107))
-fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 while quitflag==0:
 	screensurf.blit(filebg, (0, 0))
 	listy=listyoff
@@ -170,7 +170,7 @@ while quitflag==0:
 	#time.sleep(0.1)
 	time.sleep(0.03)
 	
-	menulabel=simplefontC.render(("path: " + iterfiles), True, (255, 255, 255))
+	menulabel=simplefontC.render(("path: " + iterfiles), True, (0, 0, 0))
 	screensurf.blit(menulabel, (430, 70))
 	
 	screensurf.blit(fillabel, (430, 88))
@@ -193,28 +193,28 @@ while quitflag==0:
 				if fil0.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=0
 					filtertext="All"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 					
 				if fil1.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=1
 					filtertext="TROM"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if fil2.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=2
 					filtertext="Image"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if fil3.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=3
 					filtertext="STREG"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if fil4.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=4
 					filtertext="TASM"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if fil5.collidepoint(event.pos)==1 and event.button==1:
 					filterflg=5
 					filtertext="Text"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (255, 255, 255))
+					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if f.box.collidepoint(event.pos)==1 and event.button==1:
 					if f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
