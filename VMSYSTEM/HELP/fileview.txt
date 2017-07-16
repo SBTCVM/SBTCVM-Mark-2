@@ -6,4 +6,4 @@ click on a list item to start a related utility/change directory.
 
 click the filetype icons on the right to set the filter.
 
-click on the icon labeled "exit" to quit.
+click on the icon labeled "quit" to quit.

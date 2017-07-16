@@ -30,7 +30,8 @@ class fileclick:
 screensurf=pygame.display.set_mode((800, 600))
 
 filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fileview.jpg')).convert()
-exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'exit.png'))
+exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvquit.png')).convert()
+helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvhelp.png')).convert()
 fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg.png')).convert()
 fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png')).convert()
 fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png')).convert()
@@ -52,7 +53,8 @@ filtertext="All"
 yjump=42
 iterfiles='.'
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
-quitx=filebg.blit(exitbtn, (430, 520))
+quitx=filebg.blit(exitbtn, (708, 107))
+ghelpx=filebg.blit(helpbtn, (749, 107))
 fil0=filebg.blit(fvall, (430, 107))
 fil1=filebg.blit(fvtrom, (471, 107))
 fil2=filebg.blit(fvimg, (512, 107))
@@ -186,35 +188,37 @@ while quitflag==0:
 		if event.type == KEYDOWN and event.key == K_F1:
 			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
 		if event.type==MOUSEBUTTONDOWN:
+			if quitx.collidepoint(event.pos)==1 and event.button==1:
+				quitflag=1
+				break
+			if ghelpx.collidepoint(event.pos)==1 and event.button==1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
+			if fil0.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=0
+				filtertext="All"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
+				
+			if fil1.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=1
+				filtertext="TROM"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
+			if fil2.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=2
+				filtertext="Image"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
+			if fil3.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=3
+				filtertext="STREG"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
+			if fil4.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=4
+				filtertext="TASM"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
+			if fil5.collidepoint(event.pos)==1 and event.button==1:
+				filterflg=5
+				filtertext="Text"
+				fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 			for f in flist:
-				if quitx.collidepoint(event.pos)==1 and event.button==1:
-					quitflag=1
-					break
-				if fil0.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=0
-					filtertext="All"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
-					
-				if fil1.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=1
-					filtertext="TROM"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
-				if fil2.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=2
-					filtertext="Image"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
-				if fil3.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=3
-					filtertext="STREG"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
-				if fil4.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=4
-					filtertext="TASM"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
-				if fil5.collidepoint(event.pos)==1 and event.button==1:
-					filterflg=5
-					filtertext="Text"
-					fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 				if f.box.collidepoint(event.pos)==1 and event.button==1:
 					if f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
