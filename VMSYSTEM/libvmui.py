@@ -483,6 +483,104 @@ def BTCLOCKDATE():
 			secX += 9
 		pygame.display.update()
 
+#image viewer called by fileview through MK2-TOOLS.py
+
+def imgview(imgfile):
+	global screensurf
+	#load image
+	img=pygame.image.load(imgfile).convert_alpha()
+	#set window caption
+	pygame.display.set_caption(("imgview - " + imgfile), ("imgview - " + imgfile))
+	#set inital scale factor
+	scalefact=float(1.0)
+	#0.9 IS CORRECT
+	pscalefact=float(0.9)
+	qflg=0
+	#set inital offset
+	xoff=(screensurf.get_rect().centerx)
+	yoff=(screensurf.get_rect().centery)
+	roto=0.1
+	resizeflg=0
+	followmouse=0
+	#get size of image
+	imgx=img.get_width()
+	imgy=img.get_height()
+	#some basic intelegent inital scale logic
+	if imgx<400 and imgy<300:
+		scalefact=float(2.0)
+	if imgx<200 and imgy<150:
+		scalefact=float(4.0)
+	#main loop
+	while qflg==0:
+		#resize logic. (the extra loop before resizing is to keep resizing smooth on certain window managers that "stop" resizing operations when set_mode is called.
+		if resizeflg==1:
+			resizeflg=2	
+		elif resizeflg==2:
+			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
+			xoff=(screensurf.get_rect().centerx)
+			yoff=(screensurf.get_rect().centery)
+			resizeflg=0	
+		screensurf.fill((0, 100, 200))
+		#imgsc=pygame.transform.rotozoom(img, 0.0, scalefact)
+		#if scale factor is different from the previous scale factor, rescale image.
+		if scalefact!=pscalefact:
+			imgsc=pygame.transform.scale(img, ((int(imgx * scalefact)), (int(imgy * scalefact))))
+			pscalefact=scalefact
+		#create draw box and draw image
+		imgbox = imgsc.get_rect()
+		imgbox.centerx = xoff
+		imgbox.centery = yoff
+		screensurf.blit(imgsc, imgbox)
+		pygame.display.update()
+		time.sleep(0.1)
+		#move image in relation to mouse when followmouse is set to 1 (see event handler below)
+		if followmouse==1:
+			ppos=mpos
+			mpos=pygame.mouse.get_pos()
+			xoff -=(ppos[0] - mpos[0])
+			yoff -=(ppos[1] - mpos[1])
+		
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				qflg=1
+				break
+			if event.type==MOUSEBUTTONDOWN:
+				if event.button==5:
+					#roto -= 0.1
+					#if roto<=0:
+					#	roto=0.1
+					scalefact -= roto
+					if scalefact<=0:
+						scalefact=0.1
+					
+				if event.button==4:
+				#	roto += 0.1
+				#	if roto>1:
+				#		roto=1.0
+					scalefact += roto
+				#this resets the offset & scale factor
+				if event.button==3:
+					roto = 0.1
+					scalefact = 1.0
+					xoff=(screensurf.get_rect().centerx)
+					yoff=(screensurf.get_rect().centery)
+				#sets followmouse to 1 for image moving
+				if event.button==1:
+					followmouse=1
+					mpos=pygame.mouse.get_pos()
+			if event.type==MOUSEBUTTONUP:
+				#sets followmouse to 0 to stop image moving
+				if event.button==1:
+					followmouse=0
+			#sets resizeflg to 1 to start screen resizing process.
+			if event.type==VIDEORESIZE:
+				resizeflg=1
+				resw=event.w
+				resh=event.h
+				
+				
+
+
 def creditsscroll():
 	pixcnt1=0
 	pixjmp=14

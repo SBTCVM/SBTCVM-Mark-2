@@ -12,6 +12,7 @@ import os
 import subprocess
 from pygame.locals import *
 
+print "SBTCVM FileView file browser. v1.2"
 pygame.display.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -34,6 +35,7 @@ fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg
 fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png'))
 fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png'))
 fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvup.png'))
+fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvimg.png'))
 quitflag=0
 simplefontC = pygame.font.SysFont(None, 22)
 simplefontB = pygame.font.SysFont(None, 19)
@@ -61,11 +63,9 @@ while quitflag==0:
 	#qx=fileclick(gx, ".", "dir")
 	#flist.extend([qx])
 	#listy += yjump
-	if pathlist!=list():
+	if iterfiles!='.':
+		#print iterfiles
 		textit=simplefontB.render("..", True, (0, 0, 0), (255, 255, 255))
-		
-		#ix=screensurf.blit(fvdir, (iconx, listy))
-		#gx=screensurf.blit(textit, (listx, listy))
 		gxmask=pygame.Surface((410, 40))
 		gxmask.fill((255, 255, 255))
 		gxmask.blit(fvup, (iconx, 0))
@@ -98,6 +98,16 @@ while quitflag==0:
 			gxmask.blit(textit, (labelx, 0))
 			gx=screensurf.blit(gxmask, (maskx, listy))
 			qx=fileclick(gx, fname, "trom")
+			fileval=1
+		elif fnamelo.endswith(("." + "png")) or fnamelo.endswith(("." + "jpg")) or fnamelo.endswith(("." + "jpeg")) or fnamelo.endswith(("." + "gif")): 
+			#print(os.path.join(iterfiles, fname))
+			textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+			gxmask=pygame.Surface((410, 40))
+			gxmask.fill((255, 255, 255))
+			gxmask.blit(fvimg, (iconx, 0))
+			gxmask.blit(textit, (labelx, 0))
+			gx=screensurf.blit(gxmask, (maskx, listy))
+			qx=fileclick(gx, fname, "img")
 			fileval=1
 		#elif fnamelo.endswith(("." + "tasm")): 
 		##	print(os.path.join(iterfiles, fname))
@@ -145,14 +155,17 @@ while quitflag==0:
 						print "run tasm"
 					if f.ftype=="streg":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
+					if f.ftype=="img":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "imgview", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="dir":
+						listyoff=0
 						if f.filename=='.':
 							pathlist=list()
 							iterfiles='.'
 						if f.filename=='..':
-							print pathlist
+							#print pathlist
 							pathlist.remove(pathlist[(len(pathlist) -1)])
-							print pathlist
+							#print pathlist
 							if pathlist==list():
 								iterfiles='.'
 							else:
