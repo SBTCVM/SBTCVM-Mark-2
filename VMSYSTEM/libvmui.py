@@ -485,23 +485,35 @@ def BTCLOCKDATE():
 		pygame.display.update()
 
 #image viewer called by fileview through MK2-TOOLS.py
-simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
+
 
 def textview(textfile):
+	global screensurf
 	pygame.display.set_caption(("textview - " + textfile), ("textview - " + textfile))
-	
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 	textoff=0
 	yjump=22
 	yoff=0
 	textx=0
+	fontsize=15
 	ptexty=1
+	redraw=0
 	qflg=0
+	resizeflg=0
 	pygame.key.set_repeat(300, 50)
 	while qflg==0:
 		texty=yoff
 		time.sleep(0.05)
-		if texty!=ptexty:
+		if resizeflg==1:
+			resizeflg=2	
+		elif resizeflg==2:
+			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
+			redraw=1
+			resizeflg=0	
+		if texty!=ptexty or redraw==1:
 			ptexty=texty
+			if redraw==1:
+				redraw=0
 			abt = open(textfile)
 			screensurf.fill((255, 255, 255))
 			for f in abt:
@@ -521,6 +533,26 @@ def textview(textfile):
 				yoff += yjump
 				if yoff>0:
 					yoff=0
+			if event.type == KEYDOWN and event.key == K_LEFT:
+				textx -= 10
+				redraw=1
+			if event.type == KEYDOWN and event.key == K_RIGHT:
+				textx += 10
+				redraw=1
+			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
+				yjump += 1
+				fontsize += 1
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				redraw=1
+			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
+				yjump -= 1
+				fontsize -= 1
+				if yjump<=0:
+					yjump=1
+				if fontsize<=0:
+					fontsize=1
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				redraw=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
 				break
@@ -534,6 +566,10 @@ def textview(textfile):
 						yoff=0
 				if event.button==3:
 					yoff=0
+			if event.type==VIDEORESIZE:
+				resizeflg=1
+				resw=event.w
+				resh=event.h
 				
 		
 	

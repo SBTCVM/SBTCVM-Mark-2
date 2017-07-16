@@ -92,7 +92,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#screen fonts
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((648, 486))
-	if cmd=="imgview":
+	if cmd=="imgview" or cmd=="textview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	else:
 		screensurf=pygame.display.set_mode((800, 600))
