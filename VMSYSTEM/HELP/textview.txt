@@ -1,0 +1,7 @@
+textview help
+
+scroll text: up/down keys or mouse wheel.
+move text left/right: left/right keys
+change font size: -/+ keys
+Escape: quit
+space: return to top-left of text file.

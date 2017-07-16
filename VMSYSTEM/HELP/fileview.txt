@@ -1,0 +1,7 @@
+fileview help
+
+use mouse wheel to scroll
+
+click on a list item to start a related utility
+
+click the filetype icons on the right to set the filter.

@@ -22,6 +22,7 @@
 			<item con="-------------------" noact="1"/>
 			<item con="Introduction" keyid="gtlesson1" stay="0"/>
 			<item con="List Of programs" keyid="gtlesson3" stay="0"/>
+			<item con="Quick Help" keyid="gtlesson4" stay="0"/>
 			<item con="User Interface" keyid="gtlesson2" stay="0"/>
 			<item con="-------------------" noact="1"/>
 			<item con="Main Menu" keyid="menupop" stay="0"/>
@@ -38,6 +39,7 @@
 		<pagejump keyid="gtlesson1" page="intro.xml"/>
 		<pagejump keyid="gtlesson2" page="ui.xml"/>
 		<pagejump keyid="gtlesson3" page="programs.xml"/>
+		<pagejump keyid="gtlesson4" page="quickhelp.xml"/>
 		<pagejump keyid="cslesson1" page="csintro.xml"/>
 	</forks>
 	<core>

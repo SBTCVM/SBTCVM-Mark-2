@@ -54,7 +54,7 @@ except IOError:
 	
 print "main.sav loaded"
 
-pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN])
+pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 
 filedict={}
 textdict={}
@@ -891,6 +891,8 @@ while quitflag==0:
 		if event.type == QUIT:
 			uiquit=1
 			break
+		if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "launcher.txt"])
 		if event.type==MOUSEBUTTONDOWN:
 			#print "nominal2"
 			for f in clicklist:

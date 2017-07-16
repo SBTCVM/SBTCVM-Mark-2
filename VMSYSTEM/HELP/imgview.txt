@@ -1,0 +1,6 @@
+imageview help
+
+move image: arrow keys or click and hold left mouse buttom
+zoom: -/+ keys or mouse wheel
+space: reset image zoom and placement
+Escape: quit.

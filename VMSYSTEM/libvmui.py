@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 import libSBTCVM
 import libbaltcalc
+import subprocess
 pygame.font.init()
 pygame.mixer.init()
 
@@ -77,6 +78,12 @@ def toolsscreen(mode):
 		screensurf.blit(vmlaunchbg, (0, 0))
 		dummyreadouts()
 		menulabel=simplefontC.render("Credits", True, (0, 0, 0), (255, 255, 255))
+		screensurf.blit(menulabel, (158, 4))
+	if mode==5:
+		screensurf.blit(vmbg, (0, 0))
+		screensurf.blit(vmlaunchbg, (0, 0))
+		dummyreadouts()
+		menulabel=simplefontC.render("Help", True, (0, 0, 0), (255, 255, 255))
 		screensurf.blit(menulabel, (158, 4))
 
 #used to show placeholder readouts.
@@ -353,6 +360,34 @@ def textsciter_internal(flookup):
 					#menusound2.play()
 					break
 
+def helpscreen(flookup):
+	abt = open(flookup)
+	pixcnt1=70
+	pixjmp=16
+	
+	for fnx in abt:
+		fnx=fnx.replace('\n', '')
+		abttextB=simplefontB.render(fnx, True, (255, 255, 255))
+		screensurf.blit(abttextB, (9, pixcnt1))
+		pixcnt1 += pixjmp
+	pixcnt1 += pixjmp
+	fnx="Press any key or click to close"
+	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
+	screensurf.blit(abttextB, (9, pixcnt1))
+	pygame.display.update()
+	evhappenflg2=0
+	while evhappenflg2==0:
+			time.sleep(.1)
+			for event in pygame.event.get():
+				if event.type == KEYDOWN and event.key == K_F8:
+					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-PAUSE.png')))
+					break
+				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+					evhappenflg2=1
+					#menusound2.play()
+					break
+
+
 def textsciter(flookup):
 	global screensurf
 	scbak=screensurf.copy()
@@ -500,7 +535,7 @@ def textview(textfile):
 	redraw=0
 	qflg=0
 	resizeflg=0
-	pygame.key.set_repeat(300, 50)
+	pygame.key.set_repeat(250, 50)
 	while qflg==0:
 		texty=yoff
 		time.sleep(0.05)
@@ -534,11 +569,13 @@ def textview(textfile):
 				if yoff>0:
 					yoff=0
 			if event.type == KEYDOWN and event.key == K_LEFT:
-				textx -= 10
+				textx += yjump
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_RIGHT:
-				textx += 10
+				textx -= yjump
 				redraw=1
+			if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "textview.txt"])
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
@@ -556,6 +593,10 @@ def textview(textfile):
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
 				break
+			if event.type == KEYDOWN and event.key == K_SPACE:
+				yoff=0
+				textx=0
+				redraw=1
 			if event.type==MOUSEBUTTONDOWN:
 				if event.button==5:
 					if qtexty>(yjump + yjump):
@@ -566,6 +607,8 @@ def textview(textfile):
 						yoff=0
 				if event.button==3:
 					yoff=0
+					textx=0
+					redraw=1
 			if event.type==VIDEORESIZE:
 				resizeflg=1
 				resw=event.w
@@ -590,6 +633,7 @@ def imgview(imgfile):
 	roto=0.1
 	resizeflg=0
 	followmouse=0
+	pygame.key.set_repeat(250, 50)
 	#get size of image
 	imgx=img.get_width()
 	imgy=img.get_height()
@@ -632,15 +676,30 @@ def imgview(imgfile):
 			if event.type == QUIT:
 				qflg=1
 				break
-			if event.type == KEYDOWN and event.key == K_DOWN:
+			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
 				scalefact -= roto
 				if scalefact<=0:
 					scalefact=0.1
-			if event.type == KEYDOWN and event.key == K_UP:
+			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				scalefact += roto
+			if event.type == KEYDOWN and event.key == K_DOWN:
+				yoff -= 10
+			if event.type == KEYDOWN and event.key == K_UP:
+				yoff += 10
+			if event.type == KEYDOWN and event.key == K_LEFT:
+				xoff += 10
+			if event.type == KEYDOWN and event.key == K_RIGHT:
+				xoff -= 10
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
 				break
+			if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "imgview.txt"])
+			if event.type == KEYDOWN and event.key == K_SPACE:
+				roto = 0.1
+				scalefact = 1.0
+				xoff=(screensurf.get_rect().centerx)
+				yoff=(screensurf.get_rect().centery)
 			if event.type==MOUSEBUTTONDOWN:
 				if event.button==5:
 					#roto -= 0.1

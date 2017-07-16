@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<pageconf BGimg="1" BGM="0" pagekeys="1">
+		<title>Quick Help</title>
+		<BG>normalbg2.jpg</BG>
+		<BGM>BGM1.ogg</BGM>
+	</pageconf>
+	<pagekeys>
+	</pagekeys>
+	<forks>
+	</forks>
+	<core>
+		<img x="700" y="460" hovpic="1">
+			<con>mainbtn.png</con>
+			<altcon>mainbtnh.png</altcon>
+			<act type="iref" ref="main.xml"/>
+		</img>
+		<!--Text body-->
+		<text x="0" y="62" size="24" transp="1" FGCOLOR="#000000">1: If its not obvious what to do, try pressing F1.
+2: If F1 does nothing, look for somthing that says "help" and
+click on it.
+3: Look for any context clues or perhaps check any text on the
+screen again.
+4: Check out any tutroials related to the utility in question.
+5: check SBTCVM's users manual. (found in the manual directory)
+6: Get help from SBTCVM's online community.
+</text>
+	</core>
+</main>

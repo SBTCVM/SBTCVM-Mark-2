@@ -66,7 +66,7 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview":
 	print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -77,6 +77,8 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		pygame.display.set_caption("imgview", "imgview")
 	elif cmd=="textview":
 		pygame.display.set_caption("textview", "textview")
+	elif cmd=="helpview":
+		pygame.display.set_caption("SBTCVM help", "SBTCVM help")
 	else:
 		pygame.display.set_caption("SBTCVM Mark 2 | Tools", "SBTCVM Mark 2 | Tools")
 	GLOBKIOSK=1
@@ -92,7 +94,9 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#screen fonts
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((648, 486))
-	if cmd=="imgview" or cmd=="textview":
+	elif cmd=="helpview":
+		screensurf=pygame.display.set_mode((648, 486))
+	elif cmd=="imgview" or cmd=="textview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	else:
 		screensurf=pygame.display.set_mode((800, 600))
@@ -107,6 +111,12 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	if cmd=="uicredits":
 		vmui.toolsscreen(4)
 		vmui.creditsscroll()
+	if cmd=="helpview":
+		vmui.toolsscreen(5)
+		try:
+			vmui.helpscreen(os.path.join("VMSYSTEM", "HELP", sys.argv[2]))
+		except IndexError:
+			print "MUST SPECIFY HELP FILENAME."
 	if cmd=="imgview":
 		vmui.toolsscreen(1)
 		try:

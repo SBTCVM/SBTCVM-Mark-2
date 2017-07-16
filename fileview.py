@@ -183,6 +183,8 @@ while quitflag==0:
 		if event.type == QUIT:
 			quitflag=1
 			break
+		if event.type == KEYDOWN and event.key == K_F1:
+			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
 		if event.type==MOUSEBUTTONDOWN:
 			for f in flist:
 				if quitx.collidepoint(event.pos)==1 and event.button==1:

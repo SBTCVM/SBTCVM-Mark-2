@@ -33,6 +33,8 @@ currently the best way to write SBTCVM programs.
 Unless of course you like Machine code.
 SBTCVM_tutorial.py : The tutorial system you are
 running right now.
+launcher.py : SBTCVM's central launcher
+fileview.py : SBTCVM's integrated file browser.
 </text>
 	</core>
 </main>
