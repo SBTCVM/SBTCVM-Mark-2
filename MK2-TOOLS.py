@@ -4,8 +4,8 @@ import os
 import sys
 import pygame
 from pygame.locals import *
-import VMSYSTEM.libSBTCVM as libSBTCVM
-import VMSYSTEM.libbaltcalc as libbaltcalc
+
+#import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 #SBTCVM MK2 Graphical Tools launcher
 
@@ -60,6 +60,7 @@ elif cmd==None:
 	print "tip: use MK2-TOOLS.py -h for help."
 elif cmd=="namecrunch":
 	if cmd=="namecrunch":
+		import VMSYSTEM.libSBTCVM as libSBTCVM
 		try:
 			ncruncharg=sys.argv[2]
 		except IndexError:
@@ -130,8 +131,10 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		except IndexError:
 			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="btclock":
+		import VMSYSTEM.libbttools as bttool
 		vmui.toolsscreen(1)
-		vmui.BTCLOCKDATE()
+		bttool.initui(screensurf, 1)
+		bttool.BTCLOCKDATE()
 	if cmd=="pause":
 		print "launching SBTCVM VM pause menu."
 		#pause menu needs readouts area to be drawn.

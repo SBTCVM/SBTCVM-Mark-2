@@ -7,7 +7,7 @@ from pygame.locals import *
 #import VMSYSTEM.libSBTCVM as libSBTCVM
 #import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
-
+import VMSYSTEM.libbttools as bttool
 
 print "SBTCVM menu system v2.0.1"
 
@@ -59,6 +59,8 @@ screensurf=pygame.display.set_mode((800, 600))
 #SBTCVM_MK2.py also does this.
 #libvmui is where the menu support logic and menu extras functions are located.
 vmui.initui(screensurf, 1)
+bttool.initui(screensurf, 1)
+
 #
 evhappenflg=0
 #visual menu item names:
@@ -307,7 +309,8 @@ while qflg!=1:
 		if curmenucode[menuhighnum - 1]=="CREDIT":
 			vmui.creditsscroll()
 		if curmenucode[menuhighnum - 1]=="CLOCK":
-			vmui.BTCLOCKDATE()
+			#vmui.BTCLOCKDATE()
+			bttool.BTCLOCKDATE()
 		if curmenucode[menuhighnum - 1]=="HLPOVER":
 			vmui.textsciter_main("L_HELP.TXT")
 		if curmenucode[menuhighnum - 1]=="WELCOME":
