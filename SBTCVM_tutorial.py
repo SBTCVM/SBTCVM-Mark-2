@@ -8,6 +8,7 @@ import pygame
 import time
 import os
 import copy
+import subprocess
 # load dzulib1 Desutezeoid support library
 import tutorial_data.dzulib1 as dzulib
 
@@ -51,7 +52,7 @@ except IOError:
 	
 print "main.sav loaded"
 
-pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN])
+pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 
 filedict={}
 textdict={}
@@ -857,6 +858,11 @@ while quitflag==0:
 		eventhappen=1
 		if event.type == QUIT:
 			uiquit=1
+			break
+		if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "tutorial.txt"])
+		if event.type == KEYDOWN and event.key == K_F8:
+			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-tutorial.png')))
 			break
 		if event.type==MOUSEBUTTONDOWN:
 			#print "nominal2"

@@ -893,6 +893,9 @@ while quitflag==0:
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
 				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "launcher.txt"])
+		if event.type == KEYDOWN and event.key == K_F8:
+			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
+			break
 		if event.type==MOUSEBUTTONDOWN:
 			#print "nominal2"
 			for f in clicklist:

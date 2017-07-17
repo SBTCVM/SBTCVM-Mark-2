@@ -494,6 +494,9 @@ def textview(textfile):
 			if event.type == QUIT:
 				qflg=1
 				break
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-textview.png')))
+				break
 			if event.type == KEYDOWN and event.key == K_DOWN:
 				if qtexty>(yjump + yjump):
 					yoff -= yjump
@@ -547,7 +550,126 @@ def textview(textfile):
 				resw=event.w
 				resh=event.h
 				
-		
+
+
+def codeview(textfile):
+	global screensurf
+	pygame.display.set_caption(("codeview - " + textfile), ("codeview - " + textfile))
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
+	textoff=0
+	yjump=22
+	yoff=0
+	textx=0
+	fontsize=15
+	ptexty=1
+	redraw=0
+	qflg=0
+	resizeflg=0
+	pygame.key.set_repeat(250, 50)
+	while qflg==0:
+		texty=yoff
+		time.sleep(0.05)
+		if resizeflg==1:
+			resizeflg=2	
+		elif resizeflg==2:
+			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
+			redraw=1
+			resizeflg=0	
+		if texty!=ptexty or redraw==1:
+			ptexty=texty
+			if redraw==1:
+				redraw=0
+			abt = open(textfile)
+			screensurf.fill((255, 255, 255))
+			linecnt=1
+			textblk=0
+			for f in abt:
+				
+				if f.startswith("textstop"):
+					textblk=0
+				if textblk==1:
+					
+					abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,150), (230, 230, 230))
+				else:
+					if f.startswith("#"):
+						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (150,0,0), (230, 230, 230))
+					elif "|>" in f:
+						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 255, 230))
+					elif f.count("|")==2:
+						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 230, 255))
+
+					else:
+						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
+				if f.startswith("textstart"):
+					textblk=1
+				
+				screensurf.blit(abttext, (textx, texty))
+				texty += yjump
+				linecnt += 1
+			pygame.display.update()
+			qtexty=texty
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				qflg=1
+				break
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-codeview.png')))
+				break
+			if event.type == KEYDOWN and event.key == K_DOWN:
+				if qtexty>(yjump + yjump):
+					yoff -= yjump
+			if event.type == KEYDOWN and event.key == K_UP:
+				yoff += yjump
+				if yoff>0:
+					yoff=0
+			if event.type == KEYDOWN and event.key == K_LEFT:
+				textx += yjump
+				redraw=1
+			if event.type == KEYDOWN and event.key == K_RIGHT:
+				textx -= yjump
+				redraw=1
+			if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "codeview.txt"])
+			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
+				yjump += 1
+				fontsize += 1
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				redraw=1
+			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
+				yjump -= 1
+				fontsize -= 1
+				if yjump<=0:
+					yjump=1
+				if fontsize<=0:
+					fontsize=1
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				redraw=1
+			if event.type == KEYDOWN and event.key == K_ESCAPE:
+				qflg=1
+				break
+			if event.type == KEYDOWN and event.key == K_SPACE:
+				yoff=0
+				textx=0
+				redraw=1
+			if event.type==MOUSEBUTTONDOWN:
+				if event.button==5:
+					if qtexty>(yjump + yjump):
+						yoff -= yjump
+				if event.button==4:
+					yoff += yjump
+					if yoff>0:
+						yoff=0
+				if event.button==3:
+					yoff=0
+					textx=0
+					redraw=1
+			if event.type==VIDEORESIZE:
+				resizeflg=1
+				resw=event.w
+				resh=event.h
+
+
+
 	
 def imgview(imgfile):
 	global screensurf
@@ -636,6 +758,9 @@ def imgview(imgfile):
 			if event.type == KEYDOWN and event.key == K_DOWN:
 				yoff -= 10
 				scupdate=1
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-imgview.png')))
+				break
 			if event.type == KEYDOWN and event.key == K_UP:
 				yoff += 10
 				scupdate=1

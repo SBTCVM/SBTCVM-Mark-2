@@ -1,1 +1,2 @@
 click on an icon to begin.
+F8: save screenshot in "CAP" directory.

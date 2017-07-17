@@ -67,7 +67,7 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -78,6 +78,8 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		pygame.display.set_caption("imgview", "imgview")
 	elif cmd=="textview":
 		pygame.display.set_caption("textview", "textview")
+	elif cmd=="codeview":
+		pygame.display.set_caption("codeview", "codeview")
 	elif cmd=="helpview":
 		pygame.display.set_caption("SBTCVM help", "SBTCVM help")
 	else:
@@ -86,7 +88,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	if cmd=="imgview":
 		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'imgview64.png'))
 		pygame.display.set_icon(windowicon)
-	elif cmd=="textview":
+	elif cmd=="textview" or cmd=="codeview":
 		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'textview64.png'))
 		pygame.display.set_icon(windowicon)
 	else:
@@ -97,7 +99,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		screensurf=pygame.display.set_mode((648, 486))
 	elif cmd=="helpview":
 		screensurf=pygame.display.set_mode((648, 486))
-	elif cmd=="imgview" or cmd=="textview":
+	elif cmd=="imgview" or cmd=="textview" or cmd=="codeview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	else:
 		screensurf=pygame.display.set_mode((800, 600))
@@ -128,6 +130,12 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		vmui.toolsscreen(1)
 		try:
 			vmui.textview(sys.argv[2])
+		except IndexError:
+			print "MUST SPECIFY TEXT FILENAME."
+	if cmd=="codeview":
+		vmui.toolsscreen(1)
+		try:
+			vmui.codeview(sys.argv[2])
 		except IndexError:
 			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="btclock":

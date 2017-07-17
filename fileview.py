@@ -191,6 +191,9 @@ while quitflag==0:
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
 			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
+		if event.type == KEYDOWN and event.key == K_F8:
+			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-fileview.png')))
+			break
 		if event.type==MOUSEBUTTONDOWN:
 			if quitx.collidepoint(event.pos)==1 and event.button==1:
 				quitflag=1
@@ -232,7 +235,7 @@ while quitflag==0:
 					if f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="tasm":
-						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(iterfiles, f.filename))])
+						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="streg":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfiles, f.filename))])
 					if f.ftype=="img":

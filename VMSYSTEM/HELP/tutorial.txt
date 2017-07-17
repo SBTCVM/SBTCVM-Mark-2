@@ -1,0 +1,3 @@
+click on a category to begin, Then click on a tutorial.
+Press F1 in other SBTCVM graphical programs for similar context help.
+F8: save screenshot in "CAP" directory.
