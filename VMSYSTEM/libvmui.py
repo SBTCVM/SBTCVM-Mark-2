@@ -654,6 +654,7 @@ def imgview(imgfile):
 		scalefact=float(16.0)
 	defscale=scalefact
 	#main loop
+	scupdate=1
 	while qflg==0:
 		#resize logic. (the extra loop before resizing is to keep resizing smooth on certain window managers that "stop" resizing operations when set_mode is called.
 		if resizeflg==1:
@@ -662,19 +663,22 @@ def imgview(imgfile):
 			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 			xoff=(screensurf.get_rect().centerx)
 			yoff=(screensurf.get_rect().centery)
-			resizeflg=0	
-		screensurf.fill((151, 178, 208))
-		#imgsc=pygame.transform.rotozoom(img, 0.0, scalefact)
-		#if scale factor is different from the previous scale factor, rescale image.
-		if scalefact!=pscalefact:
-			imgsc=pygame.transform.scale(img, ((int(imgx * scalefact)), (int(imgy * scalefact))))
-			pscalefact=scalefact
-		#create draw box and draw image
-		imgbox = imgsc.get_rect()
-		imgbox.centerx = xoff
-		imgbox.centery = yoff
-		screensurf.blit(imgsc, imgbox)
-		pygame.display.update()
+			resizeflg=0
+			scupdate=1
+		if scupdate==1:
+			scupdate=0
+			screensurf.fill((151, 178, 208))
+			#imgsc=pygame.transform.rotozoom(img, 0.0, scalefact)
+			#if scale factor is different from the previous scale factor, rescale image.
+			if scalefact!=pscalefact:
+				imgsc=pygame.transform.scale(img, ((int(imgx * scalefact)), (int(imgy * scalefact))))
+				pscalefact=scalefact
+			#create draw box and draw image
+			imgbox = imgsc.get_rect()
+			imgbox.centerx = xoff
+			imgbox.centery = yoff
+			screensurf.blit(imgsc, imgbox)
+			pygame.display.update()
 		time.sleep(0.05)
 		#move image in relation to mouse when followmouse is set to 1 (see event handler below)
 		if followmouse==1:
@@ -682,6 +686,7 @@ def imgview(imgfile):
 			mpos=pygame.mouse.get_pos()
 			xoff -=(ppos[0] - mpos[0])
 			yoff -=(ppos[1] - mpos[1])
+			scupdate=1
 		
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -691,16 +696,22 @@ def imgview(imgfile):
 				scalefact -= roto
 				if scalefact<=0:
 					scalefact=0.1
+				scupdate=1
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				scalefact += roto
+				scupdate=1
 			if event.type == KEYDOWN and event.key == K_DOWN:
 				yoff -= 10
+				scupdate=1
 			if event.type == KEYDOWN and event.key == K_UP:
 				yoff += 10
+				scupdate=1
 			if event.type == KEYDOWN and event.key == K_LEFT:
 				xoff += 10
+				scupdate=1
 			if event.type == KEYDOWN and event.key == K_RIGHT:
 				xoff -= 10
+				scupdate=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
 				break
@@ -711,6 +722,7 @@ def imgview(imgfile):
 				scalefact = defscale
 				xoff=(screensurf.get_rect().centerx)
 				yoff=(screensurf.get_rect().centery)
+				scupdate=1
 			if event.type==MOUSEBUTTONDOWN:
 				if event.button==5:
 					#roto -= 0.1
@@ -719,18 +731,20 @@ def imgview(imgfile):
 					scalefact -= roto
 					if scalefact<=0:
 						scalefact=0.1
-					
+					scupdate=1
 				if event.button==4:
 				#	roto += 0.1
 				#	if roto>1:
 				#		roto=1.0
 					scalefact += roto
+					scupdate=1
 				#this resets the offset & scale factor
 				if event.button==3:
 					roto = 0.1
 					scalefact = defscale
 					xoff=(screensurf.get_rect().centerx)
 					yoff=(screensurf.get_rect().centery)
+					scupdate=1
 				#sets followmouse to 1 for image moving
 				if event.button==1:
 					followmouse=1
