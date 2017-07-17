@@ -504,6 +504,15 @@ def textview(textfile):
 				yoff += yjump
 				if yoff>0:
 					yoff=0
+			if event.type == KEYDOWN and event.key == K_PAGEUP:
+				yoff += (yjump * 20)
+				if yoff>0:
+					yoff=0
+			if event.type == KEYDOWN and event.key == K_PAGEDOWN:
+				if qtexty>(yjump + yjump):
+					yoff -= (yjump * 20)
+				#if qtexty<0:
+				#	yoff=0
 			if event.type == KEYDOWN and event.key == K_LEFT:
 				textx += yjump
 				redraw=1
@@ -622,6 +631,15 @@ def codeview(textfile):
 				yoff += yjump
 				if yoff>0:
 					yoff=0
+			if event.type == KEYDOWN and event.key == K_PAGEUP:
+				yoff += (yjump * 20)
+				if yoff>0:
+					yoff=0
+			if event.type == KEYDOWN and event.key == K_PAGEDOWN:
+				if qtexty>(yjump + yjump):
+					yoff -= (yjump * 20)
+				#if qtexty<0:
+				#	yoff=0
 			if event.type == KEYDOWN and event.key == K_LEFT:
 				textx += yjump
 				redraw=1

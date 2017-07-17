@@ -6,3 +6,5 @@ change font size: -/+ keys
 Escape: quit
 space: return to top-left of text file.
 F8: save screenshot in "CAP" directory.
+Pageup: jump up 20 lines.
+Pagedown: jump down 20 lines.
