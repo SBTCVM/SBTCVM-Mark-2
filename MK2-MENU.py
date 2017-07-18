@@ -8,22 +8,18 @@ from pygame.locals import *
 #import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libbttools as bttool
+import subprocess
 
-print "SBTCVM menu system v2.0.1"
+print "SBTCVM menu system v2.0.2"
 
 pygame.display.init()
 pygame.font.init()
 pygame.mixer.init()
 pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
-#put SBTCVM in kiosk mode.
-#this adjusts how SBTCVM works in certain cases to better mesh with the menu system.
-#such as disabling the wait-on-exit feature.
-GLOBKIOSK=1
-
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine
 #
-#v2.0.1
+#v2.0.2
 #
 #(c)2016-2017 Thomas Leathers and Contributors
 #
@@ -64,12 +60,12 @@ bttool.initui(screensurf, 1)
 #
 evhappenflg=0
 #visual menu item names:
-mainmenulst=["Get Started", "Demo Menu", "Help Menu", "Games Menu", "Extras Menu", "Quit"]
+mainmenulst=["Get Started", "Launcher", "Fileview","Tutorials",  "Demo Menu", "Games Menu", "Extras Menu", "Quit"]
 #selection codes:
-mainmenucode=["GETSTART", "DEMO", "HELP", "GAMES", "EXTRAS", "QUIT"]
-mainmenudesc=["Get started with SBTCVM", "A selection of various demo programs.", "Get Help", "Play some balanced ternary computer games.", "A selection of various extras.", "Quit."]
+mainmenucode=["GETSTART", "LAUNCH", "FILEVIEW", "HELP", "DEMO", "GAMES", "EXTRAS", "QUIT"]
+mainmenudesc=["Get started with SBTCVM", "SBTCVM's main launcher", "Browse SBTCVM's files.", "Lean how to use SBTCVM.", "A selection of various demo programs.", "Play some balanced ternary computer games.", "A selection of various extras.", "Quit."]
 #number of menu items:
-mainmenucnt=6
+mainmenucnt=8
 menudesc="Main Menu"
 
 #demomenu
@@ -114,13 +110,13 @@ screensurf.blit(vmbg, (0, 0))
 vmui.dummyreadouts()
 while qflg!=1:
 	if retfromexec==1:
-		print "----------------"
-		print "return from VM execution."
-		print "----------------"
+		#print "----------------"
+		#print "return from VM execution."
+		#print "----------------"
 		retfromexec=0
-		pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
-		screensurf.blit(vmbg, (0, 0))
-		vmui.dummyreadouts()
+		#pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
+		#screensurf.blit(vmbg, (0, 0))
+		#vmui.dummyreadouts()
 	#starting point for menu
 	texhigcnt=2
 	#separation between each line of text's origin
@@ -232,75 +228,35 @@ while qflg!=1:
 		#launcher operations.
 		if curmenucode[(menuhighnum - 1)]=="STINTRO":
 			GLOBSTREG="intro.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="FIB":
 			GLOBSTREG="fib.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="COLMAP":
 			GLOBSTREG="colmap3.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="FLOWER":
 			GLOBSTREG="flower.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="DEMODAZ":
 			GLOBSTREG="dazzle.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="DEMOPIXPAT":
 			GLOBSTREG="pixelpat.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="DEMORAYBURST":
 			GLOBSTREG="rayburst.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		if curmenucode[(menuhighnum - 1)]=="GAMEGTT":
 			GLOBSTREG="gtt.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
 			retfromexec=1
 		#quit item
 		if curmenucode[menuhighnum - 1]=="QUIT":
@@ -311,6 +267,7 @@ while qflg!=1:
 		if curmenucode[menuhighnum - 1]=="CLOCK":
 			#vmui.BTCLOCKDATE()
 			bttool.BTCLOCKDATE()
+			#subprocess.Popen(["python", "MK2-TOOLS.py", "btclock"])
 		if curmenucode[menuhighnum - 1]=="HLPOVER":
 			vmui.textsciter_main("L_HELP.TXT")
 		if curmenucode[menuhighnum - 1]=="WELCOME":
@@ -319,12 +276,8 @@ while qflg!=1:
 		if curmenucode[menuhighnum - 1]=="DEMOMODE":
 			#vmui.textsciter_main("L_WEL.TXT")
 			GLOBSTREG="colmap3.streg"
-			VMFILE=open('SBTCVM_MK2.py', 'r')
-			EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
-			print "----------------"
-			print "starting VM..."
-			print "----------------"
-			exec(EXECVM)
+			subprocess.Popen(["python", "MK2-RUN.py", "-k", GLOBSTREG])
+			#exec(EXECVM)
 			retfromexec=1
 		#Menu Swapping items
 		#this is how the menu system is able to run many menus with one instance of code.
@@ -350,12 +303,17 @@ while qflg!=1:
 			curmenudesc=stmenudesc
 			menudesc="Get Started"
 		elif curmenucode[menuhighnum - 1]=="HELP":
-			menuhighnum=1
-			curmenulst=hlpmenulst
-			curmenucnt=hlpmenucnt
-			curmenucode=hlpmenucode
-			curmenudesc=hlpmenudesc
-			menudesc="Help Menu"
+			#menuhighnum=1
+			#curmenulst=hlpmenulst
+			#curmenucnt=hlpmenucnt
+			#curmenucode=hlpmenucode
+			#curmenudesc=hlpmenudesc
+			#menudesc="Help Menu"
+			subprocess.Popen(["python", "SBTCVM_tutorial.py"])
+		elif curmenucode[menuhighnum - 1]=="LAUNCH":
+			subprocess.Popen(["python", "launcher.py"])
+		elif curmenucode[menuhighnum - 1]=="FILEVIEW":
+			subprocess.Popen(["python", "fileview.py"])
 		elif curmenucode[menuhighnum - 1]=="EXTRAS":
 			menuhighnum=1
 			curmenulst=exmenulst

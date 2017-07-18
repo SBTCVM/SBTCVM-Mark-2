@@ -363,6 +363,7 @@ def textsciter_internal(flookup):
 					#menusound2.play()
 					break
 
+#basic context help screen. called by programs through MK2-TOOLS.py
 def helpscreen(flookup):
 	abt = open(flookup)
 	pixcnt1=70
@@ -452,8 +453,8 @@ def textsciter_main(flookup):
 
 #
 
-#image viewer called by fileview through MK2-TOOLS.py
 
+#text viewer
 
 def textview(textfile):
 	global screensurf
@@ -467,28 +468,44 @@ def textview(textfile):
 	ptexty=1
 	redraw=0
 	qflg=0
+	#get screen width and height
+	screenw=screensurf.get_width()
+	screenh=screensurf.get_height()
+	#resizeflg is set to 1 upon a window resize event.
 	resizeflg=0
+	#set key repeat.
 	pygame.key.set_repeat(250, 50)
 	while qflg==0:
+		#set texty to yoff offset
 		texty=yoff
 		time.sleep(0.05)
+		#resize operations
 		if resizeflg==1:
 			resizeflg=2	
 		elif resizeflg==2:
 			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 			redraw=1
 			resizeflg=0	
+			screenh=resh
+			screenw=resw
+		#only redraw when needed.
 		if texty!=ptexty or redraw==1:
 			ptexty=texty
 			if redraw==1:
 				redraw=0
+			#open file
 			abt = open(textfile)
+			#fill screen
 			screensurf.fill((255, 255, 255))
+			#text iterator
 			for f in abt:
 				abttext=simplefontmono.render(f.replace("\n", ""), True, (0,0,0), (255, 255, 255))
 				screensurf.blit(abttext, (textx, texty))
 				texty += yjump
+				if texty>screenh:
+					break
 			pygame.display.update()
+			#store a copy of texty for use in scrolling handling.
 			qtexty=texty
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -559,7 +576,7 @@ def textview(textfile):
 				resw=event.w
 				resh=event.h
 				
-
+#code viewer
 
 def codeview(textfile):
 	global screensurf
@@ -573,6 +590,8 @@ def codeview(textfile):
 	ptexty=1
 	redraw=0
 	qflg=0
+	screenw=screensurf.get_width()
+	screenh=screensurf.get_height()
 	resizeflg=0
 	pygame.key.set_repeat(250, 50)
 	while qflg==0:
@@ -584,6 +603,8 @@ def codeview(textfile):
 			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 			redraw=1
 			resizeflg=0	
+			screenh=resh
+			screenw=resw
 		if texty!=ptexty or redraw==1:
 			ptexty=texty
 			if redraw==1:
@@ -611,10 +632,11 @@ def codeview(textfile):
 						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
 				if f.startswith("textstart"):
 					textblk=1
-				
 				screensurf.blit(abttext, (textx, texty))
 				texty += yjump
 				linecnt += 1
+				if texty>screenh:
+					break
 			pygame.display.update()
 			qtexty=texty
 		for event in pygame.event.get():
@@ -687,7 +709,7 @@ def codeview(textfile):
 				resh=event.h
 
 
-
+#image viewer
 	
 def imgview(imgfile):
 	global screensurf
@@ -836,7 +858,7 @@ def imgview(imgfile):
 				resh=event.h
 				
 				
-
+#credits scroller
 
 def creditsscroll():
 	pixcnt1=0

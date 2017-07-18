@@ -30,12 +30,12 @@ trying to run "example" wopuld match "example.streg" and "example.trom"
 also the subdirectories: "VMUSER", "VMSYSTEM", and "ROMS" are searched as well.
 '''
 elif cmd=="-v" or cmd=="--version":
-	print "SBTCVM MK2-RUN launcher v2.0.1"
+	print "SBTCVM MK2-RUN launcher v2.0.2"
 elif cmd=="-a" or cmd=="--about":
 	print '''#SBTCVM Mark 2 commandline launcher
 
 
-v2.0.1
+v2.0.2
 
 (c)2016-2017 Thomas Leathers and Contributors
 
@@ -54,7 +54,7 @@ v2.0.1
 '''
 elif cmd==None:
 	print "tip: use MK2-RUN.py -h for help."
-elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-le" or cmd=="--log_exec" or cmd=="-tos":
+elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-k" or cmd=="-le" or cmd=="--log_exec" or cmd=="-tos":
 	if cmd[0]!="-":
 		arg=sys.argv[1]
 	else:
@@ -64,6 +64,8 @@ elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-le" or cmd=="--log_exec"
 		GLOBLOGEXEC=1
 	if cmd=="-tos":
 		GLOBOPSEC=1
+	if cmd=="-k":
+		GLOBKIOSK=1
 	lowarg=arg.lower()
 	argisfile=0
 	qfilewasvalid=0

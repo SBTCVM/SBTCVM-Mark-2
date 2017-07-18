@@ -16,7 +16,7 @@ print "SBTCVM Mark 2 Starting up..."
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine
 #
-#v2.0.1
+#v2.0.2
 #
 #(c)2016-2017 Thomas Leathers and Contributors
 #
@@ -112,7 +112,7 @@ MONODISP.fill((127, 127, 127))
 
 #this list is what is displayed on the TTY on VM boot.
 #the header text is so far in this list so it appears correct in 27 line mode
-abt=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "SBTCVM", "Mark 2", "v2.0.1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "ready", ""]
+abt=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "SBTCVM", "Mark 2", "v2.0.2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "ready", ""]
 abtpref=["This is different", "Mark 2", "v2.0.0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "ready"]
 abtclear=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
 #abt54clear=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
@@ -2075,16 +2075,14 @@ if trackopsec==1:
 #if vmexeclogflg==1:
 	#exlogclockticnum += 1
 	#exlogcurtime=time.time()
-	
-if KIOSKMODE==0:
-	evhappenflg3=0
-	while evhappenflg3==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				if event.type == pygame.KEYDOWN and event.key == K_RETURN:
-					evhappenflg3=1
-					break
-else:
-	print "KIOSK MODE ACTIVE, SKIP WAIT ON EXIT."
+
+evhappenflg3=0
+while evhappenflg3==0:
+		time.sleep(.1)
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN and event.key == K_RETURN:
+				evhappenflg3=1
+				break
+
 
 

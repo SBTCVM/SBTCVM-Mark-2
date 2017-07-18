@@ -304,11 +304,12 @@ print "done. begin mainloop."
 uiquit=0
 qpopflg=0
 qmenuflg=0
+dxtime=0
 while quitflag==0:
 	huris=0
 	clicklist=list()
 	#Engine Speed
-	time.sleep(0.05)
+	time.sleep(0.1)
 	pos = pygame.mouse.get_pos()
 	#print "tic"
 	if curpage!=prevpage:
@@ -940,8 +941,11 @@ while quitflag==0:
 	#if eventhappen==0:
 	#	time.sleep(0.01)
 
-		
-	pygame.display.flip()
+	if dxtime==0:
+		dxtime=1
+	elif dxtime==1:
+		dxtime=0
+		pygame.display.flip()	
 	pygame.event.pump()
 
 print "updating main.sav Please Wait."
