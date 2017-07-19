@@ -4,6 +4,7 @@ DEVmakettext-output.txt
 CAP/*
 !CAP/dummy.txt
 VMUSER/*
+!VMUSER/CFG
 !VMUSER/info.txt
 !VMUSER/CFG/info.txt
 *.pyc
