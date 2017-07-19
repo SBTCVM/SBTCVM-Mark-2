@@ -89,6 +89,9 @@ def redefA(filenameq):
 		linecnt += 1
 	TROMAfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROMA:" + TROMA + "\n")
 
 def redefB(filenameq):
 	global BROM
@@ -104,6 +107,9 @@ def redefB(filenameq):
 		linecnt += 1
 	TROMBfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROMB:" + TROMB + "\n")
 
 def redefC(filenameq):
 	global CROM
@@ -119,6 +125,9 @@ def redefC(filenameq):
 		linecnt += 1
 	TROMCfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROMC:" + TROMC + "\n")
 
 def redefD(filenameq):
 	global DROM
@@ -134,6 +143,9 @@ def redefD(filenameq):
 		linecnt += 1
 	TROMDfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROMD:" + TROMD + "\n")
 
 
 def redefE(filenameq):
@@ -150,6 +162,9 @@ def redefE(filenameq):
 		linecnt += 1
 	TROMEfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROME:" + TROME + "\n")
 
 
 def redefF(filenameq):
@@ -166,6 +181,9 @@ def redefF(filenameq):
 		linecnt += 1
 	TROMFfile.close()
 	ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}
+	if tromlogging==1:
+		tromlog1.write("Change in TROM files.  Logging TROM filename again:\n")
+		tromlog1.write("TROMF:" + TROMF + "\n")
 
 #load TROMS from TROM files to respective dictionaries
 print "libtrom: parsing TROMs into dictionaries..."

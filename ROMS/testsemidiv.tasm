@@ -1,0 +1,9 @@
+#this is a test of semicolons as alternate dividers...
+null;00+++0---;d
+null;00++--+-0
+gotodata;>end
+null
+null;;end
+textstart
+;|test|;
+textstop

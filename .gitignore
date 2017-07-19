@@ -5,7 +5,7 @@ CAP/*
 !CAP/dummy.txt
 VMUSER/*
 !VMUSER/info.txt
-
+!VMUSER/CFG/info.txt
 *.pyc
 *.pyo
 

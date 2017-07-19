@@ -356,7 +356,7 @@ while quitflag==0:
 			BG=pygame.image.load(os.path.join("tutorial_data", BGfile)).convert()
 		screensurf.fill((170, 170, 170))
 		print "done. begin mainloop"
-	if BGon==1:
+	if BGon==1 and dxtime==1:
 		screensurf.blit(BG, (0, 0))
 	for fork in forktag.findall("ortrig"):
 		#print "batchtrig"

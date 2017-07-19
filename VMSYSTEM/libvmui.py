@@ -384,7 +384,7 @@ def helpscreen(flookup):
 			time.sleep(.1)
 			for event in pygame.event.get():
 				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-PAUSE.png')))
+					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
 					break
 				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
 					evhappenflg2=1
@@ -473,6 +473,9 @@ def textview(textfile):
 	screenh=screensurf.get_height()
 	#resizeflg is set to 1 upon a window resize event.
 	resizeflg=0
+	
+	#open file
+	abt = open(textfile)
 	#set key repeat.
 	pygame.key.set_repeat(250, 50)
 	while qflg==0:
@@ -493,14 +496,15 @@ def textview(textfile):
 			ptexty=texty
 			if redraw==1:
 				redraw=0
-			#open file
-			abt = open(textfile)
+			#seek 0
+			abt.seek(0)
 			#fill screen
 			screensurf.fill((255, 255, 255))
 			#text iterator
 			for f in abt:
-				abttext=simplefontmono.render(f.replace("\n", ""), True, (0,0,0), (255, 255, 255))
-				screensurf.blit(abttext, (textx, texty))
+				if (texty+yjump)>0:
+					abttext=simplefontmono.render(f.replace("\n", ""), True, (0,0,0), (255, 255, 255))
+					screensurf.blit(abttext, (textx, texty))
 				texty += yjump
 				if texty>screenh:
 					break
@@ -590,9 +594,14 @@ def codeview(textfile):
 	ptexty=1
 	redraw=0
 	qflg=0
+	if (textfile.lower()).endswith(".tasm"):
+		tasmflg=1
+	else:
+		tasmflg=0
 	screenw=screensurf.get_width()
 	screenh=screensurf.get_height()
 	resizeflg=0
+	abt = open(textfile)
 	pygame.key.set_repeat(250, 50)
 	while qflg==0:
 		texty=yoff
@@ -609,7 +618,7 @@ def codeview(textfile):
 			ptexty=texty
 			if redraw==1:
 				redraw=0
-			abt = open(textfile)
+			abt.seek(0)
 			screensurf.fill((255, 255, 255))
 			linecnt=1
 			textblk=0
@@ -617,22 +626,27 @@ def codeview(textfile):
 				
 				if f.startswith("textstop"):
 					textblk=0
-				if textblk==1:
-					
-					abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,150), (230, 230, 230))
-				else:
-					if f.startswith("#"):
-						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (150,0,0), (230, 230, 230))
-					elif "|>" in f:
-						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 255, 230))
-					elif f.count("|")==2:
-						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 230, 255))
+				if (texty+yjump)>0:
+					if tasmflg==1:
+						if textblk==1:
+							
+							abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,150), (230, 230, 230))
+						else:
+							if f.startswith("#"):
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (150,0,0), (230, 230, 230))
+							elif "|>" in (f.replace(";", "|")):
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 255, 230))
+							elif (f.replace(";", "|")).count("|")==2:
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 230, 255))
 
+							else:
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
 					else:
 						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
-				if f.startswith("textstart"):
+					screensurf.blit(abttext, (textx, texty))
+				if f.startswith("textstart") and tasmflg==1:
 					textblk=1
-				screensurf.blit(abttext, (textx, texty))
+				
 				texty += yjump
 				linecnt += 1
 				if texty>screenh:

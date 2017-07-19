@@ -257,11 +257,11 @@ elif 'GLOBSTREG' in globals():
 	scstreg.close()
 	print ("streg program title:" + streg_subtitle)
 	libtrom.redefA(TROMA)
-	libtrom.redefB(TROMA)
-	libtrom.redefC(TROMA)
-	libtrom.redefD(TROMA)
-	libtrom.redefE(TROMA)
-	libtrom.redefF(TROMA)
+	libtrom.redefB(TROMB)
+	libtrom.redefC(TROMC)
+	libtrom.redefD(TROMD)
+	libtrom.redefE(TROME)
+	libtrom.redefF(TROMF)
 	runtype=1
 	LOGBASE=GLOBSTREG
 	pygame.display.set_caption("SBTCVM Mark 2 | " + streg_subtitle, "SBTCVM Mark 2 | " + streg_subtitle)
@@ -376,12 +376,17 @@ RAMbank = {}
 
 
 #build IObus dictionary.
+IOdumplist=list()
 IOgen="---------"
 RAMbank["---------"] = "000000000"
+#IOdumplist.extend([IOgen])
 while IOgen!="+++++++++":
+	IOdumplist.extend([IOgen])
 	IOgen=libSBTCVM.trunkto6(libbaltcalc.btadd(IOgen, "+"))
 	RAMbank[IOgen] = "000000000"
+	
 RAMbank["+++++++++"] = "000000000"
+IOdumplist.extend([IOgen])
 #set Random integer port with an inital random integer
 RAMbank["--0------"]=libSBTCVM.trunkto6(libbaltcalc.DECTOBT(randint(-9841,9841)))
 
@@ -483,7 +488,7 @@ while stopflag==0:
 	elif vmexeclogflg==1:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
-		vmexeclog("data: " + curdata + " |Inst: " + curinst + " |adr: " + EXECADDR + " |thread: " + btcurthread + " |exec bank: " + ROMLAMPFLG + " |reg1: " + REG1 + " |reg2: " + REG2 + " |tic #: " + str(exlogclockticnum) + " |secs: " + format((exlogcurtime), '.11f'))
+		vmexeclog("data: " + curdata + " |Inst: " + curinst + " |adr: " + EXECADDR +  " |Mem point: " + mempoint +" |thread: " + btcurthread + " |exec bank: " + ROMLAMPFLG + " |reg1: " + REG1 + " |reg2: " + REG2 + " |tic #: " + str(exlogclockticnum) + " |secs: " + format((exlogcurtime), '.11f'))
 	if fskipcnt == fskip or stepbystep==1:
 		if disablereadouts==0 or stepbystep==1:
 			#screensurf.blit(vmbg, (0, 0))
@@ -1508,8 +1513,8 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
-					for IOitm in RAMbank:
-						ramdmp.write("A:" + str(IOitm) + " D:" + RAMbank[IOitm] + "\n")
+					for IOitm in IOdumplist:
+						ramdmp.write(RAMbank[IOitm] + "\n")
 					ramdmp.close()
 					
 					for threaddex in BTSTACK:
@@ -1568,8 +1573,8 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
-					for IOitm in RAMbank:
-						ramdmp.write("A:" + str(IOitm) + " D:" + RAMbank[IOitm] + "\n")
+					for IOitm in IOdumplist:
+						ramdmp.write(RAMbank[IOitm] + "\n")
 					ramdmp.close()
 					for threaddex in BTSTACK:
 						print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
@@ -1632,8 +1637,8 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
-					for IOitm in RAMbank:
-						ramdmp.write("A:" + str(IOitm) + " D:" + RAMbank[IOitm] + "\n")
+					for IOitm in IOdumplist:
+						ramdmp.write(RAMbank[IOitm] + "\n")
 					for threaddex in BTSTACK:
 						print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
 					ramdmp.close()
@@ -1665,8 +1670,8 @@ while stopflag==0:
 				break
 			if event.type == KEYDOWN and event.key == K_F10:
 				ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
-				for IOitm in RAMbank:
-					ramdmp.write("A:" + str(IOitm) + " D:" + RAMbank[IOitm] + "\n")
+				for IOitm in IOdumplist:
+					ramdmp.write(RAMbank[IOitm] + "\n")
 				ramdmp.close()
 				for threaddex in BTSTACK:
 					print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
@@ -2060,8 +2065,8 @@ if logromexit==1:
 if logIOexit==1:
 	print "logging final IObus state into CAP dir..."
 	ramdmp=open((os.path.join('CAP', 'IOBUS.dmp')),  'w')
-	for IOitm in RAMbank:
-		ramdmp.write("A:" + str(IOitm) + " D:" + RAMbank[IOitm] + "\n")
+	for IOitm in IOdumplist:
+		ramdmp.write(RAMbank[IOitm] + "\n")
 	ramdmp.close()
 #"exitloop"
 if vmexeclogflg==1:

@@ -11,7 +11,7 @@ txtblk=0
 VMSYSROMS=os.path.join("VMSYSTEM", "ROMS")
 critcomperr=0
 
-compvers="v2.2.0"
+compvers="v2.3.0"
 
 outfile="assmout.trom"
 #define IOmaps
@@ -174,6 +174,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		linen=linen.replace("	", "")
 		linenraw=linen
 		linen=(linen.split("#"))[0]
+		linen=linen.replace(";", "|")
 		linelist=linen.split("|")
 		
 		if (len(linelist))==2:
@@ -398,7 +399,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		linen=linen.replace("	", "")
 		linenraw=linen
 		linen=(linen.split("#"))[0]
-		
+		linen=linen.replace(";", "|")
 		linelist=linen.split("|")
 		autostpflg=0
 		gtflag=1
