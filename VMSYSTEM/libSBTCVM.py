@@ -5,6 +5,9 @@ import array
 import math
 import time
 import os
+import libvmconf
+
+mixrate=int(libvmconf.getconf("audio", "mixrate"))
 
 #SBTCVM common function library.
 
@@ -301,7 +304,7 @@ def foobsin(num):
 
 
 def autosquare(freq, lenth):
-	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / 22050)) for t in xrange(0, int(lenth * 22050))])
+	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(lenth * mixrate))])
 	return temparray
 
 #SBTC Graphics operations (currently just TUI routines, future plans include actual graphics modes.

@@ -8,6 +8,7 @@ import VMSYSTEM.libSBTCVM as libSBTCVM
 import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 import sys
+import VMSYSTEM.libvmconf as libvmconf
 from random import randint
 pygame.display.init()
 
@@ -122,7 +123,8 @@ abtclear=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
 
 TTYMODE=0
 TTYSIZE=1
-pygame.mixer.init()
+mixrate=int(libvmconf.getconf("audio", "mixrate"))
+pygame.mixer.init(frequency=mixrate , size=-16)
 
 extradraw=0
 
@@ -140,20 +142,6 @@ TROME=("DEFAULT.TROM")
 TROMF=("DEFAULT.TROM")
 CPUWAIT=(0.0005)
 stepbystep=0
-scconf=open(os.path.join("VMSYSTEM", 'BOOTUP.CFG'), 'r')
-exconf=compile(scconf.read(), os.path.join("VMSYSTEM", 'BOOTUP.CFG'), 'exec')
-
-if os.path.isfile(os.path.join("VMUSER", "USERBOOT.CFG")):
-	userscconf=open(os.path.join("VMUSER", "USERBOOT.CFG"), "r")
-	userexconf=compile(userscconf.read(), os.path.join("VMUSER", 'USERBOOT.CFG'), 'exec')
-	runuserconf=1
-	print "user config found."
-else:
-	print "user config not found... creating user config in VMUSER..."
-	userscconfcreate=open(os.path.join("VMUSER", "USERBOOT.CFG"), "w")
-	userscconfcreate.write(libSBTCVM.USERCONFTEMP)
-	userscconfcreate.close()
-	runuserconf=0
 DEFAULTSTREG="intro.streg"
 tuibig=1
 logromexit=0
@@ -165,16 +153,20 @@ fskip=1
 #set this to 1 as SBTCVM now runs too fast with default setting for these to be useful in normal execution.
 #user can overide this in USERBOOT.CFG and toggle it using F4 key.
 disablereadouts=1
-exec(exconf)
 
-scconf.close()
-if runuserconf==1:
-	#print "arg"
-	exec(userexconf)
-	userscconf.close()
+
+
+CPUWAIT=float(libvmconf.getconf("cpu", "cpuwait"))
+stepbystep=int(libvmconf.getconf("cpu", "stepbystep"))
+vmexeclogflg=int(libvmconf.getconf("log", "vmexec"))
+logromexit=int(libvmconf.getconf("log", "romexit"))
+logIOexit=int(libvmconf.getconf("log", "ioexit"))
+disablereadouts=int(libvmconf.getconf("video", "disablereadouts"))
+fskip=int(libvmconf.getconf("video", "fskip"))
+ttystyle=int(libvmconf.getconf("video", "ttystyle"))
+DEFAULTSTREG=libvmconf.getconf("bootup", "DEFAULTSTREG")
 
 fskipcnt=fskip
-
 def vmexeclog(texttolog):
 	if vmexeclogflg==1:
 		vmexlogf.write(texttolog + "\n")

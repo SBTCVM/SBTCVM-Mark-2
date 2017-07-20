@@ -459,7 +459,7 @@ def textsciter_main(flookup):
 def textview(textfile):
 	global screensurf
 	pygame.display.set_caption(("textview - " + textfile), ("textview - " + textfile))
-	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=False)
 	textoff=0
 	yjump=22
 	yoff=0
@@ -545,7 +545,7 @@ def textview(textfile):
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
 				redraw=1
 			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
 				yjump -= 1
@@ -554,7 +554,7 @@ def textview(textfile):
 					yjump=1
 				if fontsize<=0:
 					fontsize=1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
@@ -585,7 +585,7 @@ def textview(textfile):
 def codeview(textfile):
 	global screensurf
 	pygame.display.set_caption(("codeview - " + textfile), ("codeview - " + textfile))
-	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=False)
 	textoff=0
 	yjump=22
 	yoff=0
@@ -687,7 +687,7 @@ def codeview(textfile):
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
 				redraw=1
 			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
 				yjump -= 1
@@ -696,7 +696,7 @@ def codeview(textfile):
 					yjump=1
 				if fontsize<=0:
 					fontsize=1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1

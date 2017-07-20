@@ -88,8 +88,11 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	if cmd=="imgview":
 		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'imgview64.png'))
 		pygame.display.set_icon(windowicon)
-	elif cmd=="textview" or cmd=="codeview":
+	elif cmd=="textview":
 		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'textview64.png'))
+		pygame.display.set_icon(windowicon)
+	elif cmd=="codeview":
+		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'codeview64.png'))
 		pygame.display.set_icon(windowicon)
 	else:
 		windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon64.png'))

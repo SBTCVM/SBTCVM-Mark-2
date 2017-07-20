@@ -2,6 +2,7 @@
 import libSBTCVM
 import os
 import sys
+import libvmconf
 TROMA="intro.trom"
 TROMB=("DEFAULT.TROM")
 TROMC=("DEFAULT.TROM")
@@ -12,6 +13,8 @@ TROMF=("DEFAULT.TROM")
 libtromready=0
 tromlogging=0
 logreads=0
+
+
 
 VMSYSROMS=os.path.join("VMSYSTEM", "ROMS")
 def loadtrom(filenameg):
@@ -51,24 +54,10 @@ def loadtrom(filenameg):
 #  along with SBTCVM Mark 2. If not, see <http://www.gnu.org/licenses/>
 
 
-scconf=open(os.path.join("VMSYSTEM", 'BOOTUP.CFG'), 'r')
-exconf=compile(scconf.read(), os.path.join("VMSYSTEM", 'BOOTUP.CFG'), 'exec')
-exec(exconf)
 
-if os.path.isfile(os.path.join("VMUSER", "USERBOOT.CFG")):
-	userscconf=open(os.path.join("VMUSER", "USERBOOT.CFG"), "r")
-	userexconf=compile(userscconf.read(), os.path.join("VMUSER", 'USERBOOT.CFG'), 'exec')
-	runuserconf=1
-	print "libtrom: user config found."
-else:
-	print "libtrom: user config not found..."
-	runuserconf=0
-
-if runuserconf==1:
-	#print "arg"
-	exec(userexconf)
-	userscconf.close()
-
+tromlogging=int(libvmconf.getconf("log", "tromlogging"))
+logreads=int(libvmconf.getconf("log", "logreads"))
+logwrites=int(libvmconf.getconf("log", "logwrites"))
 if tromlogging==0:
 	logreads=0
 

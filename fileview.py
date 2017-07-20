@@ -19,7 +19,7 @@ pygame.mixer.init()
 
 pathlist=list()
 
-windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fileview64.png'))
+windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileview64.png'))
 pygame.display.set_icon(windowicon)
 
 class fileclick:
@@ -29,24 +29,24 @@ class fileclick:
 		self.ftype=ftype
 screensurf=pygame.display.set_mode((800, 600))
 #image data loading
-filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fileview.jpg')).convert()
-exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvquit.png')).convert()
-helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvhelp.png')).convert()
-fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvstreg.png')).convert()
-fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtrom.png')).convert()
-fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdir.png')).convert()
-fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvup.png')).convert()
-fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvimg.png')).convert()
-fvtext=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtext.png')).convert()
-fvtasm=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvtasm.png')).convert()
-fvall=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvall.png')).convert()
-fvlog=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvlog.png')).convert()
-fvdmp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdmp.png')).convert()
-fvdummy=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvdummy.png')).convert()
-fvrun=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvrun.png')).convert()
-fvview=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvview.png')).convert()
-fvswon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvsw-on.png')).convert_alpha()
-fvswoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'fvsw-off.png')).convert_alpha()
+filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileview.jpg')).convert()
+exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
+helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvhelp.png')).convert()
+fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvstreg.png')).convert()
+fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtrom.png')).convert()
+fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdir.png')).convert()
+fvup=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvup.png')).convert()
+fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvimg.png')).convert()
+fvtext=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtext.png')).convert()
+fvtasm=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtasm.png')).convert()
+fvall=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvall.png')).convert()
+fvlog=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvlog.png')).convert()
+fvdmp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdmp.png')).convert()
+fvdummy=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdummy.png')).convert()
+fvrun=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvrun.png')).convert()
+fvview=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvview.png')).convert()
+fvswon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-on.png')).convert_alpha()
+fvswoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-off.png')).convert_alpha()
 #flag set to 1 when the program should quit.
 quitflag=0
 #fonts

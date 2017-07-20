@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+	<audio mixrate="22050"/>
+	<cpu cpuwait="0.0005" stepbystep="0"/>
+	<log vmexec="0" romexit="0" ioexit="0" tromlogging="0" logreads="0" logwrites="0"/>
+	<video disablereadouts="1" fskip="0" ttystyle="0"/>
+	<bootup DEFAULTSTREG="intro.streg"/>
+</conf>
