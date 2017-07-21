@@ -1,6 +1,6 @@
 #   SBTCVM Tutorial
 v1.0
-(c) 2015-2017 Thomas Leathers and Contributors       
+Copyright (c) 2015-2017 Thomas Leathers and Contributors       
 
 Based on Desutezeoid v1.5.1
 
@@ -16,3 +16,6 @@ GNU General Public License for more details.
        
 You should have received a copy of the GNU General Public License
 along with SBTCVM Tutorial.  If not, see <http://www.gnu.org/licenses/>.
+
+
+For Licensing on Images and other media content please see README.md
