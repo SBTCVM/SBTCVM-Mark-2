@@ -37,6 +37,7 @@ gtticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'gtt.png')).c
 introicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'intro.png')).convert_alpha()
 menuicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'menu.png')).convert_alpha()
 tutorialicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'tutorial.png')).convert_alpha()
+settingsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'settings.png')).convert_alpha()
 
 icn1=bg.blit(menuicn, (5, 70))
 icn2=bg.blit(tutorialicn, (68, 70))
@@ -45,7 +46,8 @@ icn4=bg.blit(introicn, (215, 70))
 icn5=bg.blit(creditsicn, (282, 70))
 icn6=bg.blit(fvicn, (348, 70))
 icn7=bg.blit(abticn, (425, 70))
-icn8=bg.blit(exiticn, (495, 70))
+icn8=bg.blit(exiticn, (565, 70))
+icn9=bg.blit(settingsicn, (490, 70))
 
 menulabel=simplefontC.render("SBTCVM launcher", True, (0, 0, 0), (255, 255, 255))
 bg.blit(menulabel, (158, 4))
@@ -86,3 +88,5 @@ while qflg==0:
 			if icn8.collidepoint(event.pos)==1 and event.button==1:
 				qflg=1
 				break
+			if icn9.collidepoint(event.pos)==1 and event.button==1:
+				subprocess.Popen(["python", "settings.py"])

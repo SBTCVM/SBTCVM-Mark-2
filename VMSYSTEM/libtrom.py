@@ -13,6 +13,7 @@ TROMF=("DEFAULT.TROM")
 libtromready=0
 tromlogging=0
 logreads=0
+logwrites=0
 
 
 
@@ -56,11 +57,12 @@ def loadtrom(filenameg):
 
 
 tromlogging=int(libvmconf.getconf("log", "tromlogging"))
-logreads=int(libvmconf.getconf("log", "logreads"))
-logwrites=int(libvmconf.getconf("log", "logwrites"))
 if tromlogging==0:
 	logreads=0
-
+	logwrites=0
+if tromlogging==1:
+	logreads=1
+	logwrites=1
 if tromlogging==1:
 	tromlog1=open(os.path.join('CAP', "libtrom.log"), "w")
 

@@ -6,8 +6,10 @@ import pygame
 from pygame.locals import *
 import libSBTCVM
 import libbaltcalc
+import libvmconf
+mixrate=int(libvmconf.getconf("audio", "mixrate"))
 pygame.font.init()
-pygame.mixer.init()
+pygame.mixer.init(frequency=mixrate , size=-16)
 #libvmui
 #this library handles many graphical tasks, as well as containing
 #functions for many tools and features found in the menus and in MK2-TOOLS

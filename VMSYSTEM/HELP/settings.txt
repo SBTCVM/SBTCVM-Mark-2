@@ -1,0 +1,15 @@
+SBTCVM Settings
+
+To toggle an on/off setting, click the switch button
+
+To toggle a arrow selector setting, click either the left or right
+arrows to cycle through the available options.
+
+To change the CPU speed preset, click on the desired option.
+
+To reset settings to standard defaults, click "reset". (you must
+save for this to take effect!)
+
+To save settings, click "save"
+To quit, click "quit"
+To cancel changes, click "quit", WITHOUT clicking "save".

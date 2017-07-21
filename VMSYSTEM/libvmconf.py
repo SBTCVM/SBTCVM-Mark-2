@@ -25,5 +25,14 @@ def getconf(category, attrib):
 	return cattag.attrib.get(attrib)
 def setconf(category, attrib, value):
 	cattag=confroot.find(category)
-	cattag.attrib.set(attrib, value)
-	conftree.write(os.path.join("VMUSER", "CFG" "common.xml"))
+	cattag.set(attrib, value)
+def saveconf():
+	conftree.write(os.path.join("VMUSER", "CFG", "common.xml"))
+def resetconf():
+	if os.path.isfile(os.path.join("VMSYSTEM", "CFG", "common.xml")):
+		global conftree
+		global confroot
+		conftree = ET.parse(os.path.join("VMSYSTEM", "CFG", "common.xml"))
+		confroot = conftree.getroot()
+	else:
+		sys.exit("ERROR: libvmconf: UNABLE TO LOAD: common.xml")

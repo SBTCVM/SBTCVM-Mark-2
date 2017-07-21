@@ -4,11 +4,12 @@ import os
 import sys
 import pygame
 from pygame.locals import *
+import VMSYSTEM.libvmconf as libvmconf
 
 #import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 #SBTCVM MK2 Graphical Tools launcher
-
+mixrate=int(libvmconf.getconf("audio", "mixrate"))
 
 
 try:
@@ -71,7 +72,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
-	pygame.mixer.init()
+	pygame.mixer.init(frequency=mixrate , size=-16)
 	if cmd=="uicredits":
 		pygame.display.set_caption("SBTCVM Credits", "SBTCVM Credits")
 	elif cmd=="imgview":
