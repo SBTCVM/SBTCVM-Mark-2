@@ -38,11 +38,11 @@ lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 #Pause menu
 #visual menu item names:
 paumenulst=["Continue VM", "Quick Help", "About", "Extras Menu", "Stop VM"]
-paumenulstKIOSK=["Continue VM", "Quick Help", "About", "Extras Menu", "Exit to Main Menu"]
+paumenulstKIOSK=["Continue VM", "Quick Help", "About", "Extras Menu", "Stop VM"]
 #selection codes:
 paumenucode=["CONTINUE", "QHELP", "CREDIT", "EXTRAS", "VMSTOP"]
 paumenudesc=["Continue running VM", "Get Quick Help", "About SBTCVM Mark 2", "Extra stuff", "Stop VM"]
-paumenudescKIOSK=["Continue running VM", "Get Quick Help", "About SBTCVM Mark 2", "Extras", "Exit to the Main Menu."]
+paumenudescKIOSK=["Continue running VM", "Get Quick Help", "About SBTCVM Mark 2", "Extras", "Stop VM"]
 #number of menu items:
 paumenucnt=5
 pmenudesc="Pause Menu"
@@ -375,7 +375,7 @@ def helpscreen(flookup):
 		screensurf.blit(abttextB, (9, pixcnt1))
 		pixcnt1 += pixjmp
 	pixcnt1 += pixjmp
-	fnx="Press any key or click to close"
+	fnx="Press enter or click to close"
 	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
 	screensurf.blit(abttextB, (9, pixcnt1))
 	pygame.display.update()
@@ -386,11 +386,12 @@ def helpscreen(flookup):
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
 					break
-				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+				elif event.type == KEYDOWN and event.key == K_RETURN:
 					evhappenflg2=1
-					#menusound2.play()
 					break
-
+				elif event.type == MOUSEBUTTONDOWN and event.button==1:
+					evhappenflg2=1
+					break
 
 def textsciter(flookup):
 	global screensurf
@@ -459,7 +460,7 @@ def textsciter_main(flookup):
 def textview(textfile):
 	global screensurf
 	pygame.display.set_caption(("textview - " + textfile), ("textview - " + textfile))
-	simplefontmono = pygame.font.SysFont("monospace", 15, bold=False)
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 	textoff=0
 	yjump=22
 	yoff=0
@@ -545,7 +546,7 @@ def textview(textfile):
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
 				redraw=1
 			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
 				yjump -= 1
@@ -554,7 +555,7 @@ def textview(textfile):
 					yjump=1
 				if fontsize<=0:
 					fontsize=1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1
@@ -585,7 +586,7 @@ def textview(textfile):
 def codeview(textfile):
 	global screensurf
 	pygame.display.set_caption(("codeview - " + textfile), ("codeview - " + textfile))
-	simplefontmono = pygame.font.SysFont("monospace", 15, bold=False)
+	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 	textoff=0
 	yjump=22
 	yoff=0
@@ -687,7 +688,7 @@ def codeview(textfile):
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
 				redraw=1
 			if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
 				yjump -= 1
@@ -696,7 +697,7 @@ def codeview(textfile):
 					yjump=1
 				if fontsize<=0:
 					fontsize=1
-				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=False)
+				simplefontmono = pygame.font.SysFont("monospace", fontsize, bold=True)
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_ESCAPE:
 				qflg=1

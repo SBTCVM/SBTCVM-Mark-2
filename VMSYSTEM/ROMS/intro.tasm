@@ -254,8 +254,8 @@ textstart
 > Includes a custom assembler.
 > Features a buzzer and various status displays and indicators.
 > Keyboard interrupt system and threading support.
-> Features a menu launcher and a pause menu (try it: press escape)
-  and various other utilities.
+> Features a launcher, tutorials, command shell, and a pause menu
+(try it: press escape) and various other utilities.
 ------------------------------------------------------------------------
 textstop
 userwait
@@ -299,14 +299,14 @@ null||q
 TTYclear
 textstart
 SBTCVM introduction program
-(c)2016-2017 Thomas Leathers
+(c) 2016-2017 Thomas Leathers
 
 this program is part of 
 SBTCVM Mark 2
 
 Simple Balanced Ternary Computer Virtual Machine
 
-(c)2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
   SBTCVM Mark 2 is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

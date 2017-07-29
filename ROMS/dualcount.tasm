@@ -1,0 +1,30 @@
+#dualadd
+#example of using scratch memory to run multiple counters on a thread.
+
+#set inital values in scratch memory
+setreg1|---------
+IOwrite1|>mem1
+setreg1|+++++++++
+IOwrite1|>mem2
+
+#start of loop.
+null||goback
+#routine 1
+IOread1|>mem1
+setreg2|00000000+
+add
+dumpreg1
+setreg2|+++++++++
+gotodataif|>end
+IOwrite1|>mem1
+
+#routine 2
+setreg1|0000000-+
+IOread2|>mem2
+add
+regswap
+dumpreg2
+IOwrite2|>mem2
+gotodata|>goback
+null||end
+stop

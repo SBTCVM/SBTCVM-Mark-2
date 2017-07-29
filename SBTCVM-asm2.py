@@ -75,7 +75,7 @@ elif cmd=="-a" or cmd=="--about":
 
 ''' + compvers + '''
 
-(c)2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
   SBTCVM Assembler 2 is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -105,6 +105,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	lowarg=arg.lower()
 	argisfile=0
 	argistasm=0
+	#file search operation
 	for extq in ["", ".tasm", ".TASM"]:
 		qarg=(arg + extq)
 		qlowarg=(lowarg + extq.lower())
@@ -164,16 +165,22 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	sourcefileB=open(arg, 'r')
 	#open(arg, 'r') as sourcefile
 	gotoreflist=list()
+	#first pass (detects goto refrence labels and preps them to be used by second pass)
 	print "preforming prescan & prep pass"
 	complog("preforming prescan & prep pass\n")
 	srcline=0
 	for linen in sourcefile:
 		srcline += 1
 		lined=linen
+		#removes newlines from line
 		linen=linen.replace("\n", "")
+		#removes tabs from line
 		linen=linen.replace("	", "")
+		#stores an unsplit line for text blocks.
 		linenraw=linen
+		#causes comments to be ignored
 		linen=(linen.split("#"))[0]
+		#makes semicolon a stand-in for vertical bars. (offered as an easier to type option)
 		linen=linen.replace(";", "|")
 		linelist=linen.split("|")
 		
@@ -364,6 +371,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			complog("pass 1: srcline:" + str(srcline) + " instcnt:" + str(instcnt) + " inst:" + instword + " instdat:" +  instdat + "\n")
 		elif gtflag==1 and txtblk==1:
 			complog("TEXTBLOCK: pass 1 : srcline:" + str(srcline) + " instcnt:" + str(instcnt) + " textline: \"" + linenraw + "\"\n")
+		#gotoref label processing. (populates gotoreflist (used by gotoref pointers in second pass))
 		if (len(linelist))==3 and gtflag==1 and txtblk==0 and instword[0]!="#":
 			if instword=="textstart":
 				instcnt += 1
@@ -375,6 +383,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			complog("found gotoref: \"" + linelist[2] + "\", at instruction:\"" + str((instcnt - 1)) + "\", Source line:\"" + str(srcline) + "\"\n")
 			if instword=="textstart":
 				instcnt -= 1
+	#Second Pass (Primary pass)
 	#print gotoreflist
 	instcnt=0
 	firstloop=1

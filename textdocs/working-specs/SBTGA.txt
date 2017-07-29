@@ -1,0 +1,45 @@
+SBTCVM SBTGA
+Simple Balanced Ternary Graphics Adapter
+
+
+
+
+Color modes and resolutions:
+
+mark 2.x possibility:
+114x81, 3-trit RGB
+114x81, 3-trit Greyscale
+
+mark 3.x plans:
+324x243, 3-trit RGB
+324x243, 3-trit Greyscale
+
+
+
+
+draft mode chart for Mark 2.x series:
+text modes -xxx range should be text modes, 0xxx & +xxx ranges should be graphics.
+ID|code|details
+T0|----|648x486 9x9 font
+T1|---0|648x486 9x18 font
+G0|0---|114x81, 3-trit RGB
+G1|0--0|114x81, 3-trit Greyscale
+
+
+Issues to be resolved:
+
+Where should the Video Memory Be located? 
+  -on a special VRAM bus?
+  -mapped directly to the IObus?
+  -or otherwise?
+How will the text modes be integerated into the SBTGA code?
+
+How will the text modes be made more intelegent?
+  -what kinds of control characters should be added to SBTCVM-BTT-6?
+  -When Should multi-tryte character codes be introduced?
+  -Should The text be stored as Balanced Ternary data?
+  -how would a more intelegent text mode system affect SBTCVM Assembly?
+
+When SBTGA is introduced, should we depreciate or remove the 27x27 and 9x9 graphics test areas?
+
+Should The text modes get dedicated memory space for easy modification?

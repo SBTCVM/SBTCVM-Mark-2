@@ -1,0 +1,20 @@
+SBTCVM IObus System & multi-process Overhaul
+
+goals: 
+  -move ALL pygame-related operations out of CPU engine.
+  -Move all IObus Operations out of CPU engine.
+  -move user Interface and IO out of CPU engine.
+
+
+Basic Structure:
+  -The CPU engine and IObus Engine should be separate processes.
+  -The IObus Engine should have control over the CPU engine, given that it will
+  handle UI-related events such as user input.
+
+
+Issues yet to be resolved:
+
+What are the details of the cross-process communication's layout and scheme?
+
+
+Perhaps Multiple Interfaces might be possible? I.e. Pygame, SDL, GTK, etc.

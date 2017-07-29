@@ -9,6 +9,7 @@ import VMSYSTEM.libvmconf as libvmconf
 #import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 #SBTCVM MK2 Graphical Tools launcher
+#needeed by btclock
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
 
 
@@ -34,6 +35,10 @@ elif cmd=="-l" or cmd=="--list":
 about       :  show about screen shown in menus
 btclock     :  show a balanced ternary clock
 pause       :  test VM pause menu
+imgview [image] : fileview's image viewer
+textview [file] : fileview's text viewer
+codeview [file] : fileview's code viewer
+helpview [file in HELP dir] : SBTCVM's (F1) context help viewer.
 namecrunch [string] : test namecrunch function'''
 
 elif cmd=="-a" or cmd=="--about":
@@ -42,7 +47,7 @@ elif cmd=="-a" or cmd=="--about":
 
 v2.0.2
 
-(c)2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
   SBTCVM Mark 2 tool launcher is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -72,7 +77,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
-	pygame.mixer.init(frequency=mixrate , size=-16)
+	
 	if cmd=="uicredits":
 		pygame.display.set_caption("SBTCVM Credits", "SBTCVM Credits")
 	elif cmd=="imgview":
@@ -143,11 +148,13 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		except IndexError:
 			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="btclock":
+		pygame.mixer.init(frequency=mixrate , size=-16)
 		import VMSYSTEM.libbttools as bttool
 		vmui.toolsscreen(1)
 		bttool.initui(screensurf, 1)
 		bttool.BTCLOCKDATE()
 	if cmd=="pause":
+		pygame.mixer.init(frequency=mixrate , size=-16)
 		print "launching SBTCVM VM pause menu."
 		#pause menu needs readouts area to be drawn.
 		vmui.toolsscreen(3)

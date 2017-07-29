@@ -15,7 +15,6 @@ from pygame.locals import *
 print "SBTCVM FileView file browser. v1.3"
 pygame.display.init()
 pygame.font.init()
-pygame.mixer.init()
 
 pathlist=list()
 

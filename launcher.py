@@ -17,7 +17,6 @@ from pygame.locals import *
 print "SBTCVM Launcher v2.0"
 pygame.display.init()
 pygame.font.init()
-pygame.mixer.init()
 
 simplefontC = pygame.font.SysFont(None, 28)
 simplefontB = pygame.font.SysFont(None, 19)
@@ -84,7 +83,8 @@ while qflg==0:
 			if icn6.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "fileview.py"])
 			if icn7.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join("VMSYSTEM", "launcherabout.txt"))])
+				#subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join("VMSYSTEM", "launcherabout.txt"))])
+				subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 			if icn8.collidepoint(event.pos)==1 and event.button==1:
 				qflg=1
 				break

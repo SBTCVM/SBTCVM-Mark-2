@@ -21,7 +21,7 @@ pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
 #
 #v2.0.2
 #
-# Copyright (c)2016-2017 Thomas Leathers and Contributors
+# Copyright (c) 2016-2017 Thomas Leathers and Contributors
 #
 #  SBTCVM Mark 2 is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -60,12 +60,12 @@ bttool.initui(screensurf, 1)
 #
 evhappenflg=0
 #visual menu item names:
-mainmenulst=["Get Started", "Launcher", "Fileview","Tutorials",  "Demo Menu", "Games Menu", "Extras Menu", "Quit"]
+mainmenulst=["Get Started", "Launcher", "Fileview","Tutorials",  "Demo Menu", "Games Menu", "Extras Menu", "About", "Quit"]
 #selection codes:
-mainmenucode=["GETSTART", "LAUNCH", "FILEVIEW", "HELP", "DEMO", "GAMES", "EXTRAS", "QUIT"]
-mainmenudesc=["Get started with SBTCVM", "SBTCVM's main launcher", "Browse SBTCVM's files.", "Lean how to use SBTCVM.", "A selection of various demo programs.", "Play some balanced ternary computer games.", "A selection of various extras.", "Quit."]
+mainmenucode=["GETSTART", "LAUNCH", "FILEVIEW", "HELP", "DEMO", "GAMES", "EXTRAS", "CREDITS", "QUIT"]
+mainmenudesc=["Get started with SBTCVM", "SBTCVM's main launcher", "Browse SBTCVM's files.", "Lean how to use SBTCVM.", "A selection of various demo programs.", "Play some balanced ternary computer games.", "A selection of various extras.", "About SBTCVM", "Quit."]
 #number of menu items:
-mainmenucnt=8
+mainmenucnt=9
 menudesc="Main Menu"
 
 #demomenu
@@ -262,7 +262,7 @@ while qflg!=1:
 		if curmenucode[menuhighnum - 1]=="QUIT":
 			qflg=1
 		#text screens
-		if curmenucode[menuhighnum - 1]=="CREDIT":
+		if curmenucode[menuhighnum - 1]=="CREDITS":
 			vmui.creditsscroll()
 		if curmenucode[menuhighnum - 1]=="CLOCK":
 			#vmui.BTCLOCKDATE()
