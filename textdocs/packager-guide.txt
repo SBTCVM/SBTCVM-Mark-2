@@ -1,0 +1,23 @@
+Basic Overview for packaging SBTCVM Mark 2
+
+Key Programs:
+
+launcher.py is the central hub for the graphical utilities.
+
+MK2-CS.py is the central hub for the command line utilities.
+(its a command shell, so remember to launch it in a terminal or equivalent!)
+
+SBTCVM_MK2.py (the Main VM engine) is not meant to be launched by itself.
+
+icons can be found in VMSYSTEM/GFX
+
+SBTCVM is a balanced ternary virtual machine.
+
+SBTCVM currently requires python and pygame.
+
+NOTE THAT DUE TO THE CURRENT PORTABLE NATURE OF SBTCVM:
+ALL OF SBTCVM'S UTILITIES MUST BE EXECUTED IN THE REPOSITORY'S BASE DIRECTORY.
+
+Also, note that users will need to access the base directory as well,
+so don't hide it in some obscure location, and perhaps provide some
+kind of shortcut to it perhaps?
