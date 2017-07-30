@@ -312,9 +312,10 @@ def autosquare(freq, lenth):
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 16)
 
-
-fondir=os.path.join("VMSYSTEM", "FONT0")
-fondir2=os.path.join("VMSYSTEM", "FONT1")
+font0=libvmconf.getconf("font", "font0")
+font1=libvmconf.getconf("font", "font1")
+fondir=os.path.join("VMSYSTEM", font0)
+fondir2=os.path.join("VMSYSTEM", font1)
 
 
 def abtslackline(receveabt, linetext):
