@@ -15,6 +15,7 @@ from pygame.locals import *
 print "SBTCVM FileView file browser. v1.3"
 pygame.display.init()
 pygame.font.init()
+pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 
 pathlist=list()
 

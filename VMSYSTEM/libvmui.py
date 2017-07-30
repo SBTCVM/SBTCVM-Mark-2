@@ -392,6 +392,9 @@ def helpscreen(flookup):
 				elif event.type == MOUSEBUTTONDOWN and event.button==1:
 					evhappenflg2=1
 					break
+				elif event.type == QUIT:
+					evhappenflg2=1
+					break
 
 def textsciter(flookup):
 	global screensurf
@@ -931,7 +934,11 @@ def creditsscroll():
 			for event in pygame.event.get():
 				if event.type == KEYDOWN and event.key == K_F8:
 					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
-				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+				elif event.type == KEYDOWN and event.key == K_RETURN:
+					return()
+				elif event.type == MOUSEBUTTONDOWN and event.button==1:
+					return()
+				elif event.type == QUIT:
 					return()
 
 
