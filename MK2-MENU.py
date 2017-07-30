@@ -10,7 +10,7 @@ import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libbttools as bttool
 import subprocess
 
-print "SBTCVM menu system v2.0.2"
+print "SBTCVM menu system v2.0.3"
 
 pygame.display.init()
 pygame.font.init()
@@ -19,7 +19,7 @@ pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine
 #
-#v2.0.2
+#v2.0.3
 #
 # Copyright (c) 2016-2017 Thomas Leathers and Contributors
 #

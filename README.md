@@ -1,7 +1,7 @@
 #SBTCVM Mark 2
 Simple Balanced Ternary Computer Virtual Machine
 
-v2.0.2
+v2.0.3
 
 If you need help, see the SBTCVM users manual located in
 the "manual" directory.

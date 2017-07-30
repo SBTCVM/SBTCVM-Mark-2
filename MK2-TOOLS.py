@@ -27,7 +27,7 @@ MK2-RUN.py -l (--list)       : list all tools and their toolnames.
 MK2-RUN.py [toolname]        : run tool
 '''
 elif cmd=="-v" or cmd=="--version":
-	print "SBTCVM MK2-TOOLS tool launcher v2.0.2"
+	print "SBTCVM MK2-TOOLS tool launcher v2.0.3"
 elif cmd=="-l" or cmd=="--list":
 	print '''List of tools:
 [Toolname]  |  [Tool description]
@@ -45,7 +45,7 @@ elif cmd=="-a" or cmd=="--about":
 	print '''#SBTCVM Mark 2 tool launcher
 
 
-v2.0.2
+v2.0.3
 
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 

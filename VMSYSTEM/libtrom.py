@@ -37,7 +37,7 @@ def loadtrom(filenameg):
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine
 #
-#v2.0.2
+#v2.0.3
 #
 # Copyright (c) 2016-2017 Thomas Leathers and Contributors
 #

@@ -41,7 +41,7 @@ abouttext='''SBTCVM MK2-CS command shell
 This program uses a combination of short names for SBTCVM command line
 utilities and special commands to aid in SBTCVM usage.
 
-v2.0.2
+v2.0.3
 
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
@@ -59,4 +59,4 @@ Copyright (c) 2016-2017 Thomas Leathers and Contributors
   along with SBTCVM MK2-CS command shell. If not, see <http://www.gnu.org/licenses/>
 '''
 
-versiontext="SBTCVM MK2-CS Command Shell v2.0.2"
+versiontext="SBTCVM MK2-CS Command Shell v2.0.3"

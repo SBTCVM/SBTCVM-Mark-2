@@ -30,12 +30,12 @@ trying to run "example" wopuld match "example.streg" and "example.trom"
 also the subdirectories: "VMUSER", "VMSYSTEM", and "ROMS" are searched as well.
 '''
 elif cmd=="-v" or cmd=="--version":
-	print "SBTCVM MK2-RUN launcher v2.0.2"
+	print "SBTCVM MK2-RUN launcher v2.0.3"
 elif cmd=="-a" or cmd=="--about":
 	print '''#SBTCVM Mark 2 commandline launcher
 
 
-v2.0.2
+v2.0.3
 
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
