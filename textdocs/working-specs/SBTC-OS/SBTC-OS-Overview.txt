@@ -1,0 +1,24 @@
+starting off:
+-single tasking
+-barebones
+-no frills CLI
+-extendable
+
+
+
+
+path structure:
+main utilities:
+/bin
+/mnt
+  /mnt/rda0
+  /mnt/rdb0
+  /mnt/rdc0
+/root
+/home
+/sys
+
+
+file extentions:
+
+*.btx: SBTC-OS Balanced ternary executable

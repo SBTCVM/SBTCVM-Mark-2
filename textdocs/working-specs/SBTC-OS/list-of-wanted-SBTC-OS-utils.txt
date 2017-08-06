@@ -1,0 +1,4 @@
+Graphics:
+desk: -graphical desktop.
+image viewer: -image viewer
+TUI:

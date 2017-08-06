@@ -24,6 +24,7 @@ T0|----|648x486 9x9 font
 T1|---0|648x486 9x18 font
 G0|0---|114x81, 3-trit RGB
 G1|0--0|114x81, 3-trit Greyscale
+V0|+000|648x486 plotter array 6-trit RGB
 
 
 Issues to be resolved:

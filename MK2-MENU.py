@@ -14,7 +14,7 @@ print "SBTCVM menu system v2.0.3"
 
 pygame.display.init()
 pygame.font.init()
-pygame.mixer.init()
+#pygame.mixer.init()
 pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine

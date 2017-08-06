@@ -1,0 +1,16 @@
+Mark 2 variant:
+9-trit file width.
+
+
+
+standard header:
+aa
+???YYYYYY
+???ZZZZZZ
+
+aa= 2-trit format code: 
+  (--)=Mark 2 9-trit
+  (-0)=Mark 3 12-trit
+  
+  
+Y,Z= 2-tryte filetype code.
