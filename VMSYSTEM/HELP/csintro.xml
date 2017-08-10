@@ -31,7 +31,7 @@ Commands:
 run [arguments]   : SBTCVM command line launcher. use "run help" for help.
 asm [arguments]   : SBTCVM assembler. "asm help" for help.</text>
 <text>
-	
+
 Now that you are at the SBTCVM Command Shell, try typing "help".
 Long list? well. lets start with a benchmark. at the command shell, type "run 
 -tos benchmark1" Just press enter when SBTCVM tells you to "press enter to exit".
