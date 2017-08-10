@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<head title="SBTCVM Help test page"/>
+	<text>SBTCVM Help Index</text>
+	<lnk label="Return to Index">helpindex.xml</lnk>
+	<text>This is a test of
+multiline text</text>
+</main>

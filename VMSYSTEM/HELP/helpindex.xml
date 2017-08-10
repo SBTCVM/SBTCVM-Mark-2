@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<img>GFXLOGO-CAT.png</img>
+	<head title="index"/>
+	<!--the rest can appear-->
+	<text>SBTCVM Help Index</text>
+	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
+</main>

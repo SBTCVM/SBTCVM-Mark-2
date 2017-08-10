@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Help On SBTCVM's Help viewer"/>
+	<!--the rest can appear-->
+	<text>Overview: SBTCVM's integrated help viewer.</text>
+	<lnk label="index">helpindex.xml</lnk>
+</main>
