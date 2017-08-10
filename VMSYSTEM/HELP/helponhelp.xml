@@ -3,6 +3,21 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Help On SBTCVM's Help viewer"/>
 	<!--the rest can appear-->
-	<text>Overview: SBTCVM's integrated help viewer.</text>
+	<text>Overview: SBTCVM's integrated help viewer.
+
+controls:
+
+scroll page: up/down keys or mouse wheel.
+    You can click and drag non-link areas of the help viewer's window to scroll as well.
+scroll left/right: left/right keys
+change font size: -/+ keys
+Escape: quit
+F8: save screenshot in "CAP" directory.
+Pageup: jump up 20 lines.
+Pagedown: jump down 20 lines.
+
+Links:
+Links are in blue. and they point to other help pages.
+Much like a link on the web, they are activated via clicking on them.</text>
 	<lnk label="index">helpindex.xml</lnk>
 </main>

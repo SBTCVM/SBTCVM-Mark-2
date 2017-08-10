@@ -77,6 +77,9 @@ class clicktab:
 	def __init__(self, box, link):
 		self.box=box
 		self.link=link
+
+windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpicon.png'))
+pygame.display.set_icon(windowicon)
 screensurf=pygame.display.set_mode((648, 486), pygame.RESIZABLE)
 
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
@@ -168,6 +171,9 @@ while qflg==0:
 	time.sleep(0.05)
 	for event in pygame.event.get():
 		if event.type == QUIT:
+			qflg=1
+			break
+		if event.type == KEYDOWN and event.key == K_ESCAPE:
 			qflg=1
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
