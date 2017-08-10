@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Imageview"/>
+	<!--the rest can appear-->
+	<text>imageview help
+
+move image: arrow keys or click and hold left mouse buttom
+zoom: -/+ keys or mouse wheel
+space: reset image zoom and placement
+Escape: quit.
+F8: save screenshot in "CAP" directory.</text>
+	<lnk label="index">helpindex.xml</lnk>
+</main>

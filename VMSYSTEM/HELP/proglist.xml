@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="List Of programs"/>
+	<!--the rest can appear-->
+	<text>List Of programs. A quick refrence:
+
+MK2-CS.py : This is the SBTCVM command shell. The tutoral
+system has a section on this.
+MK2-RUN.py : this is the command shell command "run".
+It starts SBTCVM with much more control than the menu.
+MK2-GFX.py : This is a graphics conversion tool.
+MK2-TOOLS.py : This is a tools launcher/debugging tool.
+MK2-MENU.py : This is SBTCVM's graphical main menu.
+SBTCVM_MK2.py : This is the VM itself. though to run the VM,
+please use MK2-MENU.py and MK2-RUN.py or "run" in
+the command shell.
+SBTCVM-asm2.py : This is SBTCVM's assembler.
+currently the best way to write SBTCVM programs.
+Unless of course you like Machine code.
+launcher.py : SBTCVM's central launcher
+fileview.py : SBTCVM's integrated file browser.
+settings.py : SBTCVM's Configuration Utility.
+helpview.py : SBTCVM's Integrated Help sysem (this program)</text>
+	<lnk label="index">helpindex.xml</lnk>
+</main>

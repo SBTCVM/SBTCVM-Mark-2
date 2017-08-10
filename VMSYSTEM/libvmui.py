@@ -545,7 +545,7 @@ def textview(textfile):
 				textx -= yjump
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_F1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "textview.txt"])
+				subprocess.Popen(["python", "helpview.py", "textview.xml"])
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
@@ -687,7 +687,7 @@ def codeview(textfile):
 				textx -= yjump
 				redraw=1
 			if event.type == KEYDOWN and event.key == K_F1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "codeview.txt"])
+				subprocess.Popen(["python", "helpview.py", "codeview.xml"])
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
 				yjump += 1
 				fontsize += 1
@@ -832,7 +832,7 @@ def imgview(imgfile):
 				qflg=1
 				break
 			if event.type == KEYDOWN and event.key == K_F1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "imgview.txt"])
+				subprocess.Popen(["python", "helpview.py", "imgview.xml"])
 			if event.type == KEYDOWN and event.key == K_SPACE:
 				roto = 0.1
 				scalefact = defscale

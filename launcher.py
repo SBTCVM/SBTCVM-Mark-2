@@ -65,7 +65,7 @@ while qflg==0:
 			qflg=1
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
-			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "launcher.txt"])
+			subprocess.Popen(["python", "helpview.py", "launcher.xml"])
 		if event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 			break

@@ -258,7 +258,7 @@ while quitflag==0:
 			quitflag=1
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
-			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
+			subprocess.Popen(["python", "helpview.py", "fileview.xml"])
 		if event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-fileview.png')))
 			break
@@ -269,7 +269,7 @@ while quitflag==0:
 				break
 			#help button
 			if ghelpx.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "fileview.txt"])
+				subprocess.Popen(["python", "helpview.py", "fileview.xml"])
 			if runx.collidepoint(event.pos)==1 and event.button==1:
 				runexec=0
 				scupdate=1

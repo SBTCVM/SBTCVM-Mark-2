@@ -5,5 +5,14 @@
 	<head title="index"/>
 	<!--the rest can appear-->
 	<text>SBTCVM Help Index</text>
+	<lnk label="List Of SBTCVM Utilities">proglist.xml</lnk>
+	<lnk label="Overview Of VM User Interface">uiov.xml</lnk>
+	<text>Context Help (F1)</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
+	<lnk label="Launcher">launcher.xml</lnk>
+	<lnk label="Fileview">fileview.xml</lnk>
+	<lnk label="Settings">settings.xml</lnk>
+	<lnk label="imageview">imgview.xml</lnk>
+	<lnk label="codeview">codeview.xml</lnk>
+	<lnk label="textview">textview.xml</lnk>
 </main>

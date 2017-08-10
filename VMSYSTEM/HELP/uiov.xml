@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Overview Of the VM's user interface"/>
+	<!--the rest can appear-->
+	<text>The following covers the basic User interface of the VM.</text>
+	<img>UI1.jpg</img>
+	<text>The largest and most obvious part is the TTY.  It uses SBTCVM's SBTCVM-BTT-6
+encoding, and offers both 9x9 and 9x18 fonts. Another important function of
+the TTY is printing Status messages such as when somthing goes ary.
+The Users manual lists these messages in detail.</text>
+	<img>UI2.jpg</img>
+	<text>SBTCVM's prototype introduced two "plotter-like" graphics displays.
+The greatest limitation they have is they lack any sort of framebuffer.
+These displays still remain in SBTCVM Mark 2, and remain unchanged despite the
+jump from 6 to 9 trits. the top one is 27x27 pixels and can display 729 colors
+(6-trit RGB). the lower one is only 9x9 pixels, and is 2-trit greyscale.
+Yes, their usefulness varies... But they remain nonetheless, and likely will
+remain for the duration of the Mark 2 series. </text>
+	<img>UI3.jpg</img>
+	<text>And finally we have the status area. when enabled, the status readouts display
+the state of various registers. By color: cyan: instruction, green: data,
+red violet: ram bank (A-F), blue violet: thread, pink: register 1,
+orange: register 2, blue: execution address.
+These are disabled by default outside the main menu, but can be toggled with 
+F4 and enabled in the USERBOOT.CFG file in the VMUSER directory.
+also you will see the CPU status LED; cyan=on, orange=standby, and the step-by-
+step mode LED. Again, The users manual goes into more detail.</text>
+	<lnk label="index">helpindex.xml</lnk>
+</main>

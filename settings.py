@@ -182,7 +182,7 @@ while qflg==0:
 			qflg=1
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
-			subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "settings.txt"])
+			subprocess.Popen(["python", "helpview.py", "settings.xml"])
 		if event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-settings.png')))
 			break
@@ -191,7 +191,7 @@ while qflg==0:
 				qflg=1
 				break
 			if helpx.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "MK2-TOOLS.py", "helpview", "settings.txt"])
+				subprocess.Popen(["python", "helpview.py", "settings.xml"])
 			if savex.collidepoint(event.pos)==1 and event.button==1:
 				libvmconf.saveconf()
 			if resetx.collidepoint(event.pos)==1 and event.button==1:
