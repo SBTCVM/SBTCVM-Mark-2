@@ -81,6 +81,10 @@ class clicktab:
 windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpicon.png'))
 pygame.display.set_icon(windowicon)
 screensurf=pygame.display.set_mode((648, 486), pygame.RESIZABLE)
+logooverlay=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpbgover.png')).convert_alpha()
+iconhelp=pygame.image.load(os.path.join(datapath, 'iconhelp.png')).convert()
+iconindex=pygame.image.load(os.path.join(datapath, 'iconindex.png')).convert()
+iconquit=pygame.image.load(os.path.join(datapath, 'iconquit.png')).convert()
 
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
 
@@ -156,7 +160,12 @@ while qflg==0:
 				imgdat=filelookup(imgfile)
 				screensurf.blit(imgdat, (xoff, yval))
 				yval += imgdat.get_height()
-				
+		#if screenw>=640 and screenh>=480:
+			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
+		screensurf.blit(logooverlay, (((screenw - 250), (screenh - 250))))
+		helpq=screensurf.blit(iconhelp, (((screenw - 44), (0))))
+		quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
+		indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
 		pygame.display.update()
 		qtexty=yval
 	#handles "click and drag" scrolling
@@ -225,6 +234,17 @@ while qflg==0:
 			simplefont = pygame.font.SysFont(None, fontsize)
 			scupdate=1
 		if event.type==MOUSEBUTTONDOWN:
+			if helpq.collidepoint(event.pos)==1 and event.button==1:
+				pageref="helponhelp.xml"
+				yoff=0
+				break
+			if indexq.collidepoint(event.pos)==1 and event.button==1:
+				pageref="helpindex.xml"
+				yoff=0
+				break
+			if quitq.collidepoint(event.pos)==1 and event.button==1:
+				qflg=1
+				break
 			#mouse wheel scrolling
 			if event.button==5:
 				if qtexty>(yjump + yjump):
