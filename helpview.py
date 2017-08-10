@@ -89,7 +89,7 @@ iconquit=pygame.image.load(os.path.join(datapath, 'iconquit.png')).convert()
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
 
 textcol=(0, 0, 0)
-bgcol=(220, 220, 255)
+bgcol=(210, 230, 255)
 linkcol=(0, 0, 255)
 screenh=486
 screenw=648
@@ -133,6 +133,8 @@ while qflg==0:
 		yval=yoff
 		screensurf.fill(bgcol)
 		clicklist=list()
+		#draw logo overlay first so as not to be over images
+		screensurf.blit(logooverlay, (((screenw - 250), (screenh - 250))))
 		for itmtype in root.findall("*"):
 			#print "foo0"
 			if itmtype.tag=="text":
@@ -162,7 +164,7 @@ while qflg==0:
 				yval += imgdat.get_height()
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
-		screensurf.blit(logooverlay, (((screenw - 250), (screenh - 250))))
+		
 		helpq=screensurf.blit(iconhelp, (((screenw - 44), (0))))
 		quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
 		indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
