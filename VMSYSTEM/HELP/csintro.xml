@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="SBTCVM Command Shell Overview"/>
+	<!--the rest can appear-->
+	<text>SBTCVM MK2-CS Command Shell v2.?.?
+ready.
+:</text>
+	<text>
+
+The SBTCVM Command Shell is an important part of SBTCVM.
+Though it can be daunting for new users to get a grasp on. In this tutorial,
+You will be guided through the most key parts of the command shell.
+The Command shell, when properly run from a terminal, will print out some text like
+above.
+Now. lets get you stared. To run the command shell. simply run MK2-CS.py in
+a terminal.  This will vary depending on your operating system. So check the
+internet for information on how to do this in your operating system.
+
+
+
+</text>
+	<text>:list streg
+VMSYSTEM/ROMS/pixelpat.streg
+VMSYSTEM/ROMS/fib.streg
+VMSYSTEM/ROMS/gtt.streg
+...
+
+:help
+Commands: 
+run [arguments]   : SBTCVM command line launcher. use "run help" for help.
+asm [arguments]   : SBTCVM assembler. "asm help" for help.</text>
+<text>
+	
+Now that you are at the SBTCVM Command Shell, try typing "help".
+Long list? well. lets start with a benchmark. at the command shell, type "run 
+-tos benchmark1" Just press enter when SBTCVM tells you to "press enter to exit".
+Now, note the operations/second rating. higher is better.
+Oh? benchmarks are boring? well. perhaps type "run gtt" to play Guess That Trit.
+also... try "list trom" and "list streg". this will show you what programs SBTCVM sees.
+Tip: say for VMSYSTEM/ROMS/gtt.streg, just type "run gtt" SBTCVM is 
+smart enough to find it.</text>
+	<lnk label="index">helpindex.xml</lnk>
+</main>

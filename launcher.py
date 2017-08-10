@@ -35,11 +35,11 @@ fvicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fileview.png'
 gtticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'gtt.png')).convert_alpha()
 introicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'intro.png')).convert_alpha()
 menuicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'menu.png')).convert_alpha()
-tutorialicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'tutorial.png')).convert_alpha()
+helpicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'help.png')).convert_alpha()
 settingsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'settings.png')).convert_alpha()
 
 icn1=bg.blit(menuicn, (5, 70))
-icn2=bg.blit(tutorialicn, (68, 70))
+icn2=bg.blit(helpicn, (60, 70))
 icn3=bg.blit(gtticn, (145, 70))
 icn4=bg.blit(introicn, (215, 70))
 icn5=bg.blit(creditsicn, (282, 70))
@@ -73,7 +73,7 @@ while qflg==0:
 			if icn1.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "MK2-MENU.py"])
 			if icn2.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "SBTCVM_tutorial.py"])
+				subprocess.Popen(["python", "helpview.py"])
 			if icn3.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "MK2-RUN.py", "gtt.streg"])
 			if icn4.collidepoint(event.pos)==1 and event.button==1:

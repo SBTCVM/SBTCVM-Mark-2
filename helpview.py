@@ -18,7 +18,7 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print '''This is MK2-TOOLS.py, a command line tools launcher for SBTCVM Mark 2
+	print '''This is helpview.py, SBTCVM's integrated help system
 commands:
 MK2-RUN.py -h (--help) (help): this text
 MK2-RUN.py -v (--version)    : version information.

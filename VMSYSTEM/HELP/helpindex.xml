@@ -6,7 +6,10 @@
 	<!--the rest can appear-->
 	<text>SBTCVM Help Index</text>
 	<lnk label="List Of SBTCVM Utilities">proglist.xml</lnk>
+	<text>SBTCVM Mark 2 Virtual Machine</text>
 	<lnk label="Overview Of VM User Interface">uiov.xml</lnk>
+	<text>Command Shell</text>
+	<lnk label="Overview">csintro.xml</lnk>
 	<text>Context Help (F1)</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
 	<lnk label="Launcher">launcher.xml</lnk>
