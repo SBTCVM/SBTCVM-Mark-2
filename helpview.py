@@ -152,7 +152,9 @@ while qflg==0:
 						textchunk=(textchunk + texch)
 			if itmtype.tag=="lnk":
 				lnkref=itmtype.text
+				simplefont.set_underline(1)
 				texgfx=simplefont.render(itmtype.attrib.get("label"), True, linkcol, bgcol)
+				simplefont.set_underline(0)
 				lnkbx=screensurf.blit(texgfx, (xoff, yval))
 				yval += yjump
 				clickobj=clicktab(lnkbx, lnkref)
