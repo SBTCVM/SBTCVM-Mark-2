@@ -8,7 +8,6 @@ import VMSYSTEM.libvmconf as libvmconf
 import xml.etree.ElementTree as ET
 
 
-
 clicklist=list()
 
 datapath=os.path.join("VMSYSTEM", "HELP")
@@ -26,8 +25,10 @@ MK2-RUN.py -v (--version)    : version information.
 MK2-RUN.py -a (--about)      : about MK2-RUN.py
 MK2-RUN.py [pagexml]         : xml page to view (for use with context help)
 '''
+	sys.exit()
 elif cmd=="-v" or cmd=="--version":
 	print "SBTCVM MK2-TOOLS tool launcher v2.0.3"
+	sys.exit()
 
 elif cmd=="-a" or cmd=="--about":
 	print '''#SBTCVM Mark 2 helpview
@@ -50,6 +51,7 @@ Copyright (c) 2016-2017 Thomas Leathers and Contributors
   You should have received a copy of the GNU General Public License
   along with SBTCVM Mark 2 helpview. If not, see <http://www.gnu.org/licenses/>
 '''
+	sys.exit()
 elif cmd!=None:
 	pageref=cmd
 
