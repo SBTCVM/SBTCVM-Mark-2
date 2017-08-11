@@ -5,5 +5,4 @@
 	<!--the rest can appear-->
 	<text>click on an icon to begin.
 F8: save screenshot in "CAP" directory.</text>
-	<lnk label="index">helpindex.xml</lnk>
 </main>

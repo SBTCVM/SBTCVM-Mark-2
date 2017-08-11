@@ -40,5 +40,5 @@ Oh? benchmarks are boring? well. perhaps type "run gtt" to play Guess That Trit.
 also... try "list trom" and "list streg". this will show you what programs SBTCVM sees.
 Tip: say for VMSYSTEM/ROMS/gtt.streg, just type "run gtt" SBTCVM is 
 smart enough to find it.</text>
-	<lnk label="index">helpindex.xml</lnk>
+	
 </main>

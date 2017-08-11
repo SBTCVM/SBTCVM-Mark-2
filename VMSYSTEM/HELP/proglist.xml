@@ -22,5 +22,4 @@ launcher.py : SBTCVM's central launcher
 fileview.py : SBTCVM's integrated file browser.
 settings.py : SBTCVM's Configuration Utility.
 helpview.py : SBTCVM's Integrated Help sysem (this program)</text>
-	<lnk label="index">helpindex.xml</lnk>
 </main>

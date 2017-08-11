@@ -8,14 +8,22 @@
 use mouse wheel to scroll
 
 click on a list item to start a related utility/change directory.
-
+</text>
+	<img>fvitemlist.jpg</img>
+	<text>
 click the filetype icons on the right to set the filter.
 The filetype icon with the active light shows the current state of the filter.
+</text>
+	<img>fvtypebtns.jpg</img>
+	<text>
 
 The View and Run icons on the far right control whether to run troms and stregs,
 or view them.
-
+</text>
+	<img>fvrunview.jpg</img>
+	<text>
 click on the icon labeled "quit" to quit.
 F8: save screenshot in "CAP" directory.</text>
-	<lnk label="index">helpindex.xml</lnk>
+	<lnk label="File types">ftype.xml</lnk>
+	
 </main>

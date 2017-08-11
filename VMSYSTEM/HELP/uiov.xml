@@ -26,5 +26,4 @@ These are disabled by default outside the main menu, but can be toggled with
 F4 and enabled in the USERBOOT.CFG file in the VMUSER directory.
 also you will see the CPU status LED; cyan=on, orange=standby, and the step-by-
 step mode LED. Again, The users manual goes into more detail.</text>
-	<lnk label="index">helpindex.xml</lnk>
 </main>

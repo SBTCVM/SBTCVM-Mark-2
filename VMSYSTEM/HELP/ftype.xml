@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="File types"/>
+	<!--the rest can appear-->
+	<text>File types:
+TROM: SBTCVM Balanced ternary ROM image. (loaded into virtual RAM when run)</text>
+	<img>fvtrom.png</img>
+	<text>STREG: loads SBTCVM TROMS as sets with more flexibility.</text>
+	<img>fvstreg.png</img>
+	<text>TASM: SBTCVM assembly source file.</text>
+	<img>fvtasm.png</img>
+	<text>DMP: SBTCVM Memory dump.</text>
+	<img>fvdmp.png</img>
+	<text>LOG: Log file. such as assembler and vm execution logs...</text>
+	<img>fvlog.png</img>
+	<text>
+general types:</text>
+	<text>text: general text file</text>
+	<img>fvtext.png</img>
+	<text>image: general image file (fileview detects png/jpeg/gif images)</text>
+	<img>fvimg.png</img>
+	<lnk label="Fileview Quickhelp">fileview.xml</lnk>
+</main>
