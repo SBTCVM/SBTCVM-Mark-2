@@ -20,14 +20,14 @@ except:
 if cmd=="-h" or cmd=="--help" or cmd=="help":
 	print '''This is helpview.py, SBTCVM's integrated help system
 commands:
-MK2-RUN.py -h (--help) (help): this text
-MK2-RUN.py -v (--version)    : version information.
-MK2-RUN.py -a (--about)      : about MK2-RUN.py
-MK2-RUN.py [pagexml]         : xml page to view (for use with context help)
+helpview.py -h (--help) (help): this text
+helpview.py -v (--version)    : version information.
+helpview.py -a (--about)      : about helpview.py
+helpview.py [pagexml]         : xml page to view (for use with context help)
 '''
 	sys.exit()
 elif cmd=="-v" or cmd=="--version":
-	print "SBTCVM MK2-TOOLS tool launcher v2.0.3"
+	print "SBTCVM Helpview help system v2.0.3"
 	sys.exit()
 
 elif cmd=="-a" or cmd=="--about":
