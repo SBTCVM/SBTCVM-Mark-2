@@ -202,7 +202,9 @@ while qflg==0:
 		ppos=mpos
 		mpos=pygame.mouse.get_pos()
 		#xoff -=(ppos[0] - mpos[0])
-		yoff -=(ppos[1] - mpos[1])
+		fmoffset=(ppos[1] - mpos[1])
+		if fmoffset<0 or (qtexty + 30)>screenh:
+			yoff -=fmoffset
 		if yoff>0:
 			yoff=0
 		scupdate=1
@@ -223,7 +225,7 @@ while qflg==0:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
 			break
 		if event.type == KEYDOWN and event.key == K_DOWN:
-			if qtexty>(yjump + yjump):
+			if (qtexty + 30)>screenh:
 				yoff -= yjump
 			scupdate=1
 		if event.type == KEYDOWN and event.key == K_UP:
@@ -237,7 +239,7 @@ while qflg==0:
 				yoff=0
 			scupdate=1
 		if event.type == KEYDOWN and event.key == K_PAGEDOWN:
-			if qtexty>(yjump + yjump):
+			if (qtexty + 30)>screenh:
 				yoff -= (yjump * 20)
 			#if qtexty<0:
 			#	yoff=0
@@ -279,7 +281,7 @@ while qflg==0:
 				break
 			#mouse wheel scrolling
 			if event.button==5:
-				if qtexty>(yjump + yjump):
+				if (qtexty + 30)>screenh:
 					yoff -= yjump
 					scupdate=1
 					#break
