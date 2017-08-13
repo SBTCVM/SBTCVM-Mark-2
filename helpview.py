@@ -111,7 +111,7 @@ pygame.key.set_repeat(250, 50)
 while qflg==0:
 	#handles resize operations when videoresize events are detected.
 	if resizeflg==1:
-		resizeflg=2	
+		resizeflg=2
 	elif resizeflg==2:
 		screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 		scupdate=1
@@ -310,4 +310,6 @@ while qflg==0:
 			resizeflg=1
 			resw=event.w
 			resh=event.h
+			time.sleep(0.1)
+			break
 					

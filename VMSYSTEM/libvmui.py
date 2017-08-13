@@ -583,6 +583,8 @@ def textview(textfile):
 				resizeflg=1
 				resw=event.w
 				resh=event.h
+				time.sleep(0.1)
+				break
 				
 #code viewer
 
@@ -725,6 +727,8 @@ def codeview(textfile):
 				resizeflg=1
 				resw=event.w
 				resh=event.h
+				time.sleep(0.1)
+				break
 
 
 #image viewer
@@ -874,6 +878,8 @@ def imgview(imgfile):
 				resizeflg=1
 				resw=event.w
 				resh=event.h
+				time.sleep(0.1)
+				break
 				
 				
 #credits scroller
