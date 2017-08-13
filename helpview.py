@@ -99,6 +99,7 @@ xoff=5
 yjump=22
 fontsize=21
 simplefont = pygame.font.SysFont(None, fontsize)
+titlefont = pygame.font.SysFont(None, (fontsize + 10))
 qflg=0
 resizeflg=0
 prevpage=None
@@ -151,6 +152,20 @@ while qflg==0:
 					else:
 						#if not at a newline yet, keep building textchunk.
 						textchunk=(textchunk + texch)
+			#text parser for "title" text
+			if itmtype.tag=="title":
+				textcont=(itmtype.text + "\n")
+				textchunk=""
+				#this draws the text body line-per-line
+				for texch in textcont:
+					if texch=="\n":
+						texgfx=titlefont.render(textchunk, True, textcol, bgcol)
+						screensurf.blit(texgfx, (xoff, yval))
+						yval += (yjump + 10)
+						textchunk=""
+					else:
+						#if not at a newline yet, keep building textchunk.
+						textchunk=(textchunk + texch)
 			#link parser
 			if itmtype.tag=="lnk":
 				lnkref=itmtype.text
@@ -168,6 +183,10 @@ while qflg==0:
 				imgdat=filelookup(imgfile)
 				screensurf.blit(imgdat, (xoff, yval))
 				yval += imgdat.get_height()
+			if itmtype.tag=="div":
+				yval += 8
+				pygame.draw.line(screensurf, textcol, (2, yval), (int(screenw * 0.5), yval), 2)
+				yval += 10
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
 		#draw floating buttons
@@ -231,6 +250,7 @@ while qflg==0:
 			yjump += 1
 			fontsize += 1
 			simplefont = pygame.font.SysFont(None, fontsize)
+			titlefont = pygame.font.SysFont(None, (fontsize + 10))
 			
 			scupdate=1
 		if event.type == KEYDOWN and (event.key == K_MINUS or event.key == K_KP_MINUS):
@@ -241,6 +261,7 @@ while qflg==0:
 			if fontsize<=0:
 				fontsize=1
 			simplefont = pygame.font.SysFont(None, fontsize)
+			titlefont = pygame.font.SysFont(None, (fontsize + 10))
 			scupdate=1
 		if event.type==MOUSEBUTTONDOWN:
 			if helpq.collidepoint(event.pos)==1 and event.button==1:

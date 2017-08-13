@@ -4,13 +4,16 @@
 	<img>GFXLOGO-CAT.png</img>
 	<head title="index"/>
 	<!--the rest can appear-->
-	<text>SBTCVM Help Index</text>
+	<title>SBTCVM Help Index</title>
 	<lnk label="List Of SBTCVM Utilities">proglist.xml</lnk>
 	<lnk label="File types">ftype.xml</lnk>
+	<div/>
 	<text>SBTCVM Mark 2 Virtual Machine</text>
 	<lnk label="Overview Of VM User Interface">uiov.xml</lnk>
+	<div/>
 	<text>Command Shell</text>
 	<lnk label="Overview">csintro.xml</lnk>
+	<div/>
 	<text>Context Help (F1)</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
 	<lnk label="Launcher">launcher.xml</lnk>
