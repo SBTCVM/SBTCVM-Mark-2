@@ -3,12 +3,15 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Overview Of the VM's user interface"/>
 	<!--the rest can appear-->
+	<title>VM User Interface Overview</title>
 	<text>The following covers the basic User interface of the VM.</text>
+	<title>The TTY</title>
 	<img>UI1.jpg</img>
 	<text>The largest and most obvious part is the TTY.  It uses SBTCVM's SBTCVM-BTT-6
 encoding, and offers both 9x9 and 9x18 fonts. Another important function of
 the TTY is printing Status messages such as when somthing goes ary.
 The Users manual lists these messages in detail.</text>
+	<title>Plotters</title>
 	<img>UI2.jpg</img>
 	<text>SBTCVM's prototype introduced two "plotter-like" graphics displays.
 The greatest limitation they have is they lack any sort of framebuffer.
@@ -17,6 +20,7 @@ jump from 6 to 9 trits. the top one is 27x27 pixels and can display 729 colors
 (6-trit RGB). the lower one is only 9x9 pixels, and is 2-trit greyscale.
 Yes, their usefulness varies... But they remain nonetheless, and likely will
 remain for the duration of the Mark 2 series. </text>
+	<title>Status Area</title>
 	<img>UI3.jpg</img>
 	<text>And finally we have the status area. when enabled, the status readouts display
 the state of various registers. By color: cyan: instruction, green: data,

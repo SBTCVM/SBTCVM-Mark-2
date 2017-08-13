@@ -3,9 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="SBTCVM Command Shell Overview"/>
 	<!--the rest can appear-->
-	<text>SBTCVM MK2-CS Command Shell v2.?.?
-ready.
-:</text>
+	<title>SBTCVM Command Shell: Overview</title>
+	<img>csint.png</img>
 	<text>
 
 The SBTCVM Command Shell is an important part of SBTCVM.
@@ -20,17 +19,8 @@ internet for information on how to do this in your operating system.
 
 
 </text>
-	<text>:list streg
-VMSYSTEM/ROMS/pixelpat.streg
-VMSYSTEM/ROMS/fib.streg
-VMSYSTEM/ROMS/gtt.streg
-...
-
-:help
-Commands: 
-run [arguments]   : SBTCVM command line launcher. use "run help" for help.
-asm [arguments]   : SBTCVM assembler. "asm help" for help.</text>
-<text>
+	<img>csint2.png</img>
+	<text>
 
 Now that you are at the SBTCVM Command Shell, try typing "help".
 Long list? well. lets start with a benchmark. at the command shell, type "run 

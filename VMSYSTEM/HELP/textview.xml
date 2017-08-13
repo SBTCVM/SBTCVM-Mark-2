@@ -3,8 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Textview"/>
 	<!--the rest can appear-->
-	<text>textview help
-
+	<title>textview help</title>
+	<text>
 scroll text: up/down keys or mouse wheel.
 move text left/right: left/right keys
 change font size: -/+ keys

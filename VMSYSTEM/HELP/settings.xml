@@ -3,9 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Settings"/>
 	<!--the rest can appear-->
-	<text>SBTCVM Settings
-
-To toggle an on/off setting, click the switch button
+	<title>SBTCVM Settings</title>
+	<text>To toggle an on/off setting, click the switch button
 </text>
 	<img>setswitch.jpg</img>
 	<text>

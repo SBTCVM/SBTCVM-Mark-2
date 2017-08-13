@@ -3,8 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Help On SBTCVM's Help viewer"/>
 	<!--the rest can appear-->
-	<text>Overview: SBTCVM's integrated help viewer.
-
+	<title>Overview: SBTCVM's integrated help viewer.</title>
+	<text>
 controls:
 
 scroll page: up/down keys or mouse wheel.

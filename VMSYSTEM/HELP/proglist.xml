@@ -3,8 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="List Of programs"/>
 	<!--the rest can appear-->
-	<text>List Of programs. A quick refrence:
-
+	<title>List Of programs. A quick refrence:</title>
+	<text>
 MK2-CS.py : This is the SBTCVM command shell. The tutoral
 system has a section on this.
 MK2-RUN.py : this is the command shell command "run".

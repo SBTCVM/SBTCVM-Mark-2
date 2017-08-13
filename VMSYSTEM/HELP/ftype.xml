@@ -3,8 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="File types"/>
 	<!--the rest can appear-->
-	<text>File types:
-TROM: SBTCVM Balanced ternary ROM image. (loaded into virtual RAM when run)</text>
+	<title>File types:</title>
+	<text>TROM: SBTCVM Balanced ternary ROM image. (loaded into virtual RAM when run)</text>
 	<img>fvtrom.png</img>
 	<text>STREG: loads SBTCVM TROMS as sets with more flexibility.</text>
 	<img>fvstreg.png</img>
@@ -14,8 +14,7 @@ TROM: SBTCVM Balanced ternary ROM image. (loaded into virtual RAM when run)</tex
 	<img>fvdmp.png</img>
 	<text>LOG: Log file. such as assembler and vm execution logs...</text>
 	<img>fvlog.png</img>
-	<text>
-general types:</text>
+	<title>general types:</title>
 	<text>text: general text file</text>
 	<img>fvtext.png</img>
 	<text>image: general image file (fileview detects png/jpeg/gif images)</text>

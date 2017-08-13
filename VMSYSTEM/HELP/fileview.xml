@@ -3,8 +3,8 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="Fileview"/>
 	<!--the rest can appear-->
-	<text>fileview help
-
+	<title>Fileview Help</title>
+	<text>
 use mouse wheel to scroll
 
 click on a list item to start a related utility/change directory.
