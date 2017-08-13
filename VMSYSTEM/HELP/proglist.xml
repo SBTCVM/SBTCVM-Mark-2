@@ -3,9 +3,9 @@
 	<!--Head should appear only once, and at the top-->
 	<head title="List Of programs"/>
 	<!--the rest can appear-->
-	<title>List Of programs. A quick refrence:</title>
+	<title>List Of programs. A quick reference:</title>
 	<text>
-MK2-CS.py : This is the SBTCVM command shell. The tutoral
+MK2-CS.py : This is the SBTCVM command shell. The tutorial
 system has a section on this.
 MK2-RUN.py : this is the command shell command "run".
 It starts SBTCVM with much more control than the menu.
@@ -21,5 +21,5 @@ Unless of course you like Machine code.
 launcher.py : SBTCVM's central launcher
 fileview.py : SBTCVM's integrated file browser.
 settings.py : SBTCVM's Configuration Utility.
-helpview.py : SBTCVM's Integrated Help sysem (this program)</text>
+helpview.py : SBTCVM's Integrated Help system (this program) </text>
 </main>

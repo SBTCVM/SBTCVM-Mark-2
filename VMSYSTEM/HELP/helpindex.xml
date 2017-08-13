@@ -22,4 +22,9 @@
 	<lnk label="imageview">imgview.xml</lnk>
 	<lnk label="codeview">codeview.xml</lnk>
 	<lnk label="textview">textview.xml</lnk>
+	<div/>
+	<text>
+SBTCVM Mark 2 v2.0.3 help index.
+See users manual for formal documentation.
+See readme.md for licensing information.</text>
 </main>

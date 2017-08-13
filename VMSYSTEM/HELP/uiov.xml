@@ -9,7 +9,7 @@
 	<img>UI1.jpg</img>
 	<text>The largest and most obvious part is the TTY.  It uses SBTCVM's SBTCVM-BTT-6
 encoding, and offers both 9x9 and 9x18 fonts. Another important function of
-the TTY is printing Status messages such as when somthing goes ary.
+the TTY is printing Status messages such as when something goes awry.
 The Users manual lists these messages in detail.</text>
 	<title>Plotters</title>
 	<img>UI2.jpg</img>
