@@ -60,6 +60,7 @@ pygame.display.init()
 pygame.font.init()
 filedict={}
 
+#image lookup routine. (caches images in filedict once loaded to save on cpu time)
 def filelookup(filename):
 	global filedict
 	if filename in filedict:
@@ -72,7 +73,7 @@ def filelookup(filename):
 		filedict[filename]=imgret
 		return imgret
 
-
+#class used by link parser to define links for event parser.
 class clicktab:
 	def __init__(self, box, link):
 		self.box=box
@@ -136,7 +137,7 @@ while qflg==0:
 		#draw logo overlay first so as not to be over images
 		screensurf.blit(logooverlay, (((screenw - 250), (screenh - 250))))
 		for itmtype in root.findall("*"):
-			#print "foo0"
+			#Text parser
 			if itmtype.tag=="text":
 				textcont=(itmtype.text + "\n")
 				textchunk=""
@@ -150,6 +151,7 @@ while qflg==0:
 					else:
 						#if not at a newline yet, keep building textchunk.
 						textchunk=(textchunk + texch)
+			#link parser
 			if itmtype.tag=="lnk":
 				lnkref=itmtype.text
 				simplefont.set_underline(1)
@@ -157,8 +159,10 @@ while qflg==0:
 				simplefont.set_underline(0)
 				lnkbx=screensurf.blit(texgfx, (xoff, yval))
 				yval += yjump
+				#create clicktab instance and add it to clicklist
 				clickobj=clicktab(lnkbx, lnkref)
 				clicklist.extend([clickobj])
+			#image parser
 			if itmtype.tag=="img":
 				imgfile=itmtype.text
 				imgdat=filelookup(imgfile)
@@ -166,7 +170,7 @@ while qflg==0:
 				yval += imgdat.get_height()
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
-		
+		#draw floating buttons
 		helpq=screensurf.blit(iconhelp, (((screenw - 44), (0))))
 		quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
 		indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
@@ -182,6 +186,7 @@ while qflg==0:
 			yoff=0
 		scupdate=1
 	time.sleep(0.05)
+	#event parser
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			qflg=1
