@@ -185,8 +185,10 @@ while qflg==0:
 				yval += imgdat.get_height()
 			if itmtype.tag=="div":
 				yval += 8
-				pygame.draw.line(screensurf, textcol, (2, yval), (int(screenw * 0.5), yval), 2)
+				pygame.draw.line(screensurf, textcol, ((2 + xoff), yval), ((int(screenw * 0.5) + xoff), yval), 2)
 				yval += 10
+			#add a 4-pixel margin between elements.
+			yval += 4
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
 		#draw floating buttons
