@@ -19,7 +19,8 @@ These displays still remain in SBTCVM Mark 2, and remain unchanged despite the
 jump from 6 to 9 trits. the top one is 27x27 pixels and can display 729 colors
 (6-trit RGB). the lower one is only 9x9 pixels, and is 2-trit greyscale.
 Yes, their usefulness varies... But they remain nonetheless, and likely will
-remain for the duration of the Mark 2 series. </text>
+remain for the duration of the Mark 2.0.x series. A much larger plotter mode is
+Planned for SBTCVM's in-planning graphics adapter, (SBTGA)</text>
 	<title>Status Area</title>
 	<img>UI3.jpg</img>
 	<text>And finally we have the status area. when enabled, the status readouts display
@@ -27,7 +28,7 @@ the state of various registers. By color: cyan: instruction, green: data,
 red violet: ram bank (A-F), blue violet: thread, pink: register 1,
 orange: register 2, blue: execution address.
 These are disabled by default outside the main menu, but can be toggled with 
-F4 and enabled in the USERBOOT.CFG file in the VMUSER directory.
+F4 and fully enabled using settings.py.
 also you will see the CPU status LED; cyan=on, orange=standby, and the step-by-
 step mode LED. Again, The users manual goes into more detail.</text>
 </main>
