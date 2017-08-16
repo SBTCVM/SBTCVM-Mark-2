@@ -75,9 +75,9 @@ while qflg==0:
 			if icn2.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "helpview.py"])
 			if icn3.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "MK2-RUN.py", "gtt.streg"])
+				subprocess.Popen(["python", "MK2-RUN.py", "-k", "gtt.streg"])
 			if icn4.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "MK2-RUN.py", "intro.streg"])
+				subprocess.Popen(["python", "MK2-RUN.py", "-k", "intro.streg"])
 			if icn5.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
 			if icn6.collidepoint(event.pos)==1 and event.button==1:
