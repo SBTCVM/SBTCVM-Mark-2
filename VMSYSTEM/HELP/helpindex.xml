@@ -16,6 +16,7 @@
 	<div/>
 	<text>Context Help (F1)</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
+	<lnk label="Calculator">calc.xml</lnk>
 	<lnk label="Launcher">launcher.xml</lnk>
 	<lnk label="Fileview">fileview.xml</lnk>
 	<lnk label="Settings">settings.xml</lnk>

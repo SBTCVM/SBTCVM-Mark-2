@@ -73,7 +73,7 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -123,6 +123,11 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	if cmd=="uicredits":
 		vmui.toolsscreen(4)
 		vmui.creditsscroll()
+	if cmd=="textinput":
+		vmui.toolsscreen(1)
+		textinpout=vmui.textinput(4, 210)
+		print "Input has returned:"
+		print textinpout
 	if cmd=="helpview":
 		vmui.toolsscreen(5)
 		try:

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Textview"/>
+	<!--the rest can appear-->
+	<title>SBTCVM Ternary Calculator help</title>
+	<text>SBTCVM's Ternary calculator provides a specialized tool
+for common Ternary Calculations.
+</text>
+	<img>calcsc.jpg</img>
+	<text>
+</text>
+	<title>Input A:</title>
+	<text>Input A is the primary input. 
+</text>
+	<title>Input B:</title>
+	<text>Input A is the primary input. 
+</text>
+	
+	<title>Inputs Explained:</title>
+	<img>calcinput.png</img>
+	<text>click on the decimal portion (D)to enter a decimal integer.
+Click on the balanced ternary portion (T) to enter a balanced ternary integer.
+cross conversion is preformed.
+
+Note: if you want the result (RES) in one of the inputs, the "RES>A" and "RES>B"
+buttons can be used.
+</text>
+	
+	<title>Result and Status area:</title>
+	<img>calcstat.png</img>
+	<text>The result readouts look similar to the inputs, but you will see an
+addition part labeled "s." This is the Status readout.
+This will generally show information on Errors and
+results of calculations.</text>
+	<title>Buttons Explained:</title>
+	<img>calcbtn.jpg</img>
+	<text>"add":    add A and B
+"sub":    subtract A and B
+"div":    divide A by B
+"mul":    multiply A by B
+"copy A>B":    Copy A to B
+"invert A":    Invert A "tritwise" (replace + with - and vice versa)
+"mpi":    Calculate The Max positive integer of an integer (Decimal A) trits long.
+"mcv":    Calculate The Max combinations value of an integer (Decimal A) trits long.
+"res>A":    Copy Result to A (This is NOT done automatically!)
+"res>B":    Copy Result to B (This is NOT done automatically!)
+"copy B>A":    Copy B to A
+"invert B":    Invert B "tritwise" (replace + with - and vice versa)
+"mni":    Calculate The Max Negative integer of an integer (Decimal A) trits long.
+"swap":    Swap A with B
+"help":    SBTCVM help
+"quit":    quit the calculator.
+</text>
+
+</main>

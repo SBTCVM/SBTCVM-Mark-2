@@ -396,6 +396,53 @@ def helpscreen(flookup):
 					evhappenflg2=1
 					break
 
+#textinput can be used to input text graphically.
+#use the acceptchars argument to specify a string of permitted chars. ex "abc" would only allow a, b, and c
+#specify textstring to have the input prepopulated with an existing string.
+#i.e. the user's previous input or a default input.
+#the textcol, bgcol, and fontsize do what one may expect.
+#set bgcol to None for transparent text background.
+#upon mousebutton 1 press down event, it should return, and have placed said event back into pygame event queue
+
+def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20, textstring="", acceptchars=""):
+	global screensurf
+	scbak=screensurf.copy()
+	textfnt = pygame.font.SysFont(None, fontsize)
+	while True:
+		time.sleep(.03)
+		screensurf.blit(scbak, (0, 0))
+		if bgcol!=None:
+			abttextB=textfnt.render(textstring, True, textcol, bgcol)
+		else:
+			abttextB=textfnt.render(textstring, True, textcol)
+		screensurf.blit(abttextB, (xpos, ypos))
+		pygame.display.update()
+		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
+				break
+			elif event.type == KEYDOWN and event.key == K_RETURN:
+				return textstring
+			elif event.type == KEYDOWN and event.key == K_ESCAPE:
+				return textstring
+			elif event.type == KEYDOWN and event.key == K_BACKSPACE:
+				if len(textstring)!=0:
+					textstring=textstring[:-1]
+				break
+			elif event.type == KEYDOWN and event.key != K_TAB:
+				if str(event.unicode) in acceptchars or len(acceptchars)==0:
+					textstring=textstring + str(event.unicode)
+				break
+			elif event.type == MOUSEBUTTONDOWN and event.button==1:
+				#Place event back into queue, so the calling program can use it.
+				#this should let the program act more seamless.
+				pygame.event.clear()
+				pygame.event.post(event)
+				return textstring
+			elif event.type == QUIT:
+				return textstring
+
+
 def textsciter(flookup):
 	global screensurf
 	scbak=screensurf.copy()
