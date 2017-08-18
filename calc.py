@@ -261,13 +261,13 @@ while qflg==0:
 				scupdate=1
 				TA=libbaltcalc.DECTOBT(DA)
 			if tritbbx.collidepoint(event.pos)==1 and event.button==1:
-				texgfx=simplefont.render(TA, True, (255, 255, 255), (255, 255, 255))
+				texgfx=simplefont.render(TB, True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 161))
 				TB=vmui.textinput(22, 161, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=TB, acceptchars="-0+")
 				scupdate=1
 				DB=libbaltcalc.BTTODEC(TB)
 			if decbbx.collidepoint(event.pos)==1 and event.button==1:
-				texgfx=simplefont.render(str(DA), True, (255, 255, 255), (255, 255, 255))
+				texgfx=simplefont.render(str(DB), True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 186))
 				try:
 					DB=int(vmui.textinput(22, 186, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=str(DB), acceptchars="0987654321-"))
