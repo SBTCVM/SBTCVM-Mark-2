@@ -27,26 +27,28 @@ screensurf=pygame.display.set_mode((450, 500))
 
 vmui.initui(screensurf, 1)
 
-bg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'bg.jpg'))
+bg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'bg.jpg')).convert()
+lockon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockon.png')).convert_alpha()
+lockoff=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockoff.png')).convert_alpha()
 #row 1 gfx
-add=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'add.png'))
-sub=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'sub.png'))
-div=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'div.png'))
-mul=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mul.png'))
-copyab=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyab.png'))
-inverta=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'inverta.png'))
+add=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'add.png')).convert()
+sub=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'sub.png')).convert()
+div=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'div.png')).convert()
+mul=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mul.png')).convert()
+copyab=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyab.png')).convert()
+inverta=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'inverta.png')).convert()
 #row 2 gfx
-mpi=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mpi.png'))
-mcv=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mcv.png'))
-resa=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resa.png'))
-resb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resb.png'))
-copyba=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyba.png'))
-invertb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'invertb.png'))
+mpi=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mpi.png')).convert()
+mcv=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mcv.png')).convert()
+resa=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resa.png')).convert()
+resb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resb.png')).convert()
+copyba=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyba.png')).convert()
+invertb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'invertb.png')).convert()
 #row 3 gfx
-swap=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'swap.png'))
-mni=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mni.png'))
-quitg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'quit.png'))
-helpg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'help.png'))
+swap=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'swap.png')).convert()
+mni=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mni.png')).convert()
+quitg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'quit.png')).convert()
+helpg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'help.png')).convert()
 
 scupdate=1
 qflg=0
@@ -74,8 +76,12 @@ padx += 60
 mcvx=bg.blit(mcv, (padx, pady))
 padx += 60
 resa=bg.blit(resa, (padx, pady))
+resax=padx
+resay=pady
 padx += 60
 resb=bg.blit(resb, (padx, pady))
+resbx=padx
+resby=pady
 padx += 60
 copybax=bg.blit(copyba, (padx, pady))
 padx += 60
@@ -108,7 +114,10 @@ DR=0
 STAT="Ready"
 #limits the mpi, mcv, and mni calculations. too high numbers can take WAYYY too long
 mcalclimit=36
-
+#result copy locks
+resalock=0
+resblock=0
+docopy=0
 inputtextcol=(0, 0, 0)
 bgcol=(210, 210, 255)
 while qflg==0:
@@ -130,12 +139,22 @@ while qflg==0:
 		screensurf.blit(texgfx, (22, 40))
 		texgfx=simplefont.render(str(DR), True, (0, 0, 0), (255, 255, 255))
 		screensurf.blit(texgfx, (22, 60))
-		
+		#result copy lock overlays:
+		if resalock==1:
+			screensurf.blit(lockon, (resax, resay))
+		else:
+			screensurf.blit(lockoff, (resax, resay))
+		if resblock==1:
+			screensurf.blit(lockon, (resbx, resby))
+		else:
+			screensurf.blit(lockoff, (resbx, resby))
 		
 		pygame.display.update()
 	time.sleep(0.1)
+		
 	#event handler
 	for event in pygame.event.get():
+		keymods=pygame.key.get_mods()
 		if event.type == QUIT:
 			qflg=1
 			break
@@ -152,11 +171,13 @@ while qflg==0:
 				TR=libbaltcalc.DECTOBT(DR)
 				STAT="SUM A & B"
 				scupdate=1
+				docopy=1
 			if subx.collidepoint(event.pos)==1 and event.button==1:
 				DR=DA - DB
 				TR=libbaltcalc.DECTOBT(DR)
 				STAT="SUBTRACT A & B"
 				scupdate=1
+				docopy=1
 			if divx.collidepoint(event.pos)==1 and event.button==1:
 				try:
 					DR=DA // DB
@@ -164,18 +185,20 @@ while qflg==0:
 				except ZeroDivisionError:
 					STAT="DIVIDE BY ZERO ERROR"
 				TR=libbaltcalc.DECTOBT(DR)
-				
+				docopy=1
 				scupdate=1
 			if mulx.collidepoint(event.pos)==1 and event.button==1:
 				DR=DA * DB
 				TR=libbaltcalc.DECTOBT(DR)
 				STAT="MULTIPLY A & B"
 				scupdate=1
+				docopy=1
 			if copyabx.collidepoint(event.pos)==1 and event.button==1:
 				DB=DA
 				TB=libbaltcalc.DECTOBT(DB)
 				STAT="COPY A TO B"
 				scupdate=1
+				
 			if invertax.collidepoint(event.pos)==1 and event.button==1:
 				DA=( - DA)
 				TA=libbaltcalc.DECTOBT(DA)
@@ -188,6 +211,7 @@ while qflg==0:
 					TR=libbaltcalc.DECTOBT(DR)
 					STAT="mpi of A (DEC)"
 					scupdate=1
+					docopy=1
 				else:
 					STAT="mpi of over 36 is too large"
 					scupdate=1
@@ -197,15 +221,29 @@ while qflg==0:
 					TR=libbaltcalc.DECTOBT(DR)
 					STAT="mcv of A (DEC)"
 					scupdate=1
+					docopy=1
 				else:
 					STAT="mcv of over 36 is too large"
 					scupdate=1
-			if resa.collidepoint(event.pos)==1 and event.button==1:
+			
+			if resa.collidepoint(event.pos)==1 and event.button==1 and keymods & KMOD_SHIFT:
+				if resalock==1:
+					resalock=0
+				else:
+					resalock=1
+				scupdate=1
+			elif resa.collidepoint(event.pos)==1 and event.button==1:
 				DA=DR
 				TA=libbaltcalc.DECTOBT(DA)
 				STAT="copy RESULT to A"
 				scupdate=1
-			if resb.collidepoint(event.pos)==1 and event.button==1:
+			if resb.collidepoint(event.pos)==1 and event.button==1 and keymods & KMOD_SHIFT:
+				if resblock==1:
+					resblock=0
+				else:
+					resblock=1
+				scupdate=1
+			elif resb.collidepoint(event.pos)==1 and event.button==1:
 				DB=DR
 				TB=libbaltcalc.DECTOBT(DB)
 				STAT="copy RESULT to B"
@@ -227,6 +265,7 @@ while qflg==0:
 					TR=libbaltcalc.DECTOBT(DR)
 					STAT="mni of A (DEC)"
 					scupdate=1
+					docopy=1
 				else:
 					STAT="mni of over 36 is too large"
 					scupdate=1
@@ -243,6 +282,27 @@ while qflg==0:
 			if quitx.collidepoint(event.pos)==1 and event.button==1:
 				qflg=1
 				break
+			if docopy==1:
+				docopy=0
+				if resalock==1:
+					DA=DR
+					TA=libbaltcalc.DECTOBT(DA)
+				if resblock==1:
+					DB=DR
+					TB=libbaltcalc.DECTOBT(DB)
+			#special button locks - event process
+			if resa.collidepoint(event.pos)==1 and event.button==3:
+				if resalock==1:
+					resalock=0
+				else:
+					resalock=1
+				scupdate=1
+			if resb.collidepoint(event.pos)==1 and event.button==3:
+				if resblock==1:
+					resblock=0
+				else:
+					resblock=1
+				scupdate=1
 			#data input handlers (powered by vmui's textinput function)
 			if tritabx.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=simplefont.render(TA, True, (255, 255, 255), (255, 255, 255))

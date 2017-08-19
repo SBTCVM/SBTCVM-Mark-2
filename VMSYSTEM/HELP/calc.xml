@@ -23,6 +23,8 @@ for common Ternary Calculations.
 Click on the balanced ternary portion (T) to enter a balanced ternary integer.
 cross conversion is preformed.
 
+When active, the inputs are highlighted in blue.
+
 Note: if you want the result (RES) in one of the inputs, the "RES>A" and "RES>B"
 buttons can be used.
 </text>
@@ -30,7 +32,7 @@ buttons can be used.
 	<title>Result and Status area:</title>
 	<img>calcstat.png</img>
 	<text>The result readouts look similar to the inputs, but you will see an
-addition part labeled "s." This is the Status readout.
+additional part labeled "s." This is the Status readout.
 This will generally show information on Errors and
 results of calculations.</text>
 	<title>Buttons Explained:</title>
@@ -41,16 +43,23 @@ results of calculations.</text>
 "mul":    multiply A by B
 "copy A>B":    Copy A to B
 "invert A":    Invert A "tritwise" (replace + with - and vice versa)
-"mpi":    Calculate The Max positive integer of an integer (Decimal A) trits long.
-"mcv":    Calculate The Max combinations value of an integer (Decimal A) trits long.
-"res>A":    Copy Result to A (This is NOT done automatically!)
-"res>B":    Copy Result to B (This is NOT done automatically!)
+"mpi":    Calculate The Max positive integer of an integer (Decimal A) trits long.*
+"mcv":    Calculate The Max combinations value of an integer (Decimal A) trits long.*
+"res>A":    Copy Result to A **
+"res>B":    Copy Result to B **
 "copy B>A":    Copy B to A
 "invert B":    Invert B "tritwise" (replace + with - and vice versa)
-"mni":    Calculate The Max Negative integer of an integer (Decimal A) trits long.
+"mni":    Calculate The Max Negative integer of an integer (Decimal A) trits long.*
 "swap":    Swap A with B
 "help":    SBTCVM help
 "quit":    quit the calculator.
+
+*(limited to up to 36 due to technical and graphical limitations. you can use
+the command shell equivalent if you wish to exceed 36)
+**(these operations can be "locked" using shift+left click or right click.
+In the case of "res>A" and "res>B", this triggers the operations after
+every result-producing operation)
+
 </text>
 
 </main>
