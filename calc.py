@@ -111,7 +111,7 @@ DB=0
 TR="0"
 DR=0
 #inital status
-STAT="Ready"
+STAT="SBTCVM T.C. V2.0.3 Ready."
 #limits the mpi, mcv, and mni calculations. too high numbers can take WAYYY too long
 mcalclimit=36
 #result copy locks

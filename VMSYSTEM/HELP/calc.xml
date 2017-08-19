@@ -14,14 +14,15 @@ for common Ternary Calculations.
 	<text>Input A is the primary input. 
 </text>
 	<title>Input B:</title>
-	<text>Input A is the primary input. 
+	<text>Input B is the secondary input.
 </text>
 	
 	<title>Inputs Explained:</title>
 	<img>calcinput.png</img>
-	<text>click on the decimal portion (D)to enter a decimal integer.
+	<text>click on the decimal portion (D) to enter a decimal integer.
 Click on the balanced ternary portion (T) to enter a balanced ternary integer.
-cross conversion is preformed.
+When you enter a decimal or balanced ternary integer, you enter input mode.
+cross conversion is preformed automatically when you leave input mode. (enter/left click)
 
 When active, the inputs are highlighted in blue.
 
@@ -58,7 +59,8 @@ results of calculations.</text>
 the command shell equivalent if you wish to exceed 36)
 **(these operations can be "locked" using shift+left click or right click.
 In the case of "res>A" and "res>B", this triggers the operations after
-every result-producing operation)
+every result-producing operation) these buttons will have a blue "light"
+across the bottom (as shown in the image on the "res>A" button), when locked.
 
 </text>
 
