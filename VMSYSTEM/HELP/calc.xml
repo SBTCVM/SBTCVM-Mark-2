@@ -24,7 +24,9 @@ Click on the balanced ternary portion (T) to enter a balanced ternary integer.
 When you enter a decimal or balanced ternary integer, you enter input mode.
 cross conversion is preformed automatically when you leave input mode. (enter/left click)
 
-When active, the inputs are highlighted in blue.
+When active, a blinking curser will appear. you can use the
+left and right arrow keys to move it.
+(movement with mouse and clipboard features are not supported)
 
 Note: if you want the result (RES) in one of the inputs, the "RES>A" and "RES>B"
 buttons can be used.

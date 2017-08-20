@@ -120,6 +120,7 @@ resblock=0
 docopy=0
 inputtextcol=(0, 0, 0)
 bgcol=(210, 210, 255)
+bgcol=(255, 255, 255)
 while qflg==0:
 	if scupdate==1:
 		scupdate=0

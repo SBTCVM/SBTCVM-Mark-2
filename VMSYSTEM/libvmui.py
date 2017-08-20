@@ -404,19 +404,58 @@ def helpscreen(flookup):
 #set bgcol to None for transparent text background.
 #upon mousebutton 1 press down event, it should return, and have placed said event back into pygame event queue
 
+#support functions for text input.
+#used to remove characters at the curoffset when backspace is pressed
+def charremove(string, indexq):
+	if indexq==0:
+		return string
+	else:
+		return (string[:(indexq-1)] + string[(indexq):])
+#used to add characters at the curoffset, and place the "curser" (in reality a vertical bar) in the correct place.
+def charinsert(string, char, indexq):
+	if indexq==0:
+		return char + string
+	else:
+		return (string[:(indexq-1)] + char + string[(indexq-1):])
+
 def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20, textstring="", acceptchars=""):
 	global screensurf
 	scbak=screensurf.copy()
 	textfnt = pygame.font.SysFont(None, fontsize)
+	curstatus=1
+	curcnt=0
+	curpoint=20
+	redraw=1
+	curoffset=len(textstring)
+	pygame.key.set_repeat(250, 50)
+	#print charremove("testing", 0)
 	while True:
 		time.sleep(.03)
 		screensurf.blit(scbak, (0, 0))
-		if bgcol!=None:
-			abttextB=textfnt.render(textstring, True, textcol, bgcol)
+		if curcnt<curpoint:
+			curcnt += 1
 		else:
-			abttextB=textfnt.render(textstring, True, textcol)
-		screensurf.blit(abttextB, (xpos, ypos))
-		pygame.display.update()
+			curcnt=0
+			if curstatus==1:
+				curstatus=0
+				redraw=1
+			else:
+				curstatus=1
+				redraw=1
+		if redraw==1:
+			redraw=0
+			if curstatus==1:
+				#textstringD=(textstring + "|")
+				textstringD=charinsert(textstring, "|", (curoffset + 1))
+			else:
+				#textstringD=(textstring + " ")
+				textstringD=charinsert(textstring, " ", (curoffset + 1))
+			if bgcol!=None:
+				abttextB=textfnt.render(textstringD, True, textcol, bgcol)
+			else:
+				abttextB=textfnt.render(textstringD, True, textcol)
+			screensurf.blit(abttextB, (xpos, ypos))
+			pygame.display.update()
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
@@ -425,13 +464,27 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 				return textstring
 			elif event.type == KEYDOWN and event.key == K_ESCAPE:
 				return textstring
+			elif event.type == KEYDOWN and event.key == K_LEFT:
+				if curoffset!=0:
+					curoffset -= 1
+					redraw=1
+			elif event.type == KEYDOWN and event.key == K_RIGHT:
+				if curoffset!=len(textstring):
+					curoffset += 1
+					redraw=1
 			elif event.type == KEYDOWN and event.key == K_BACKSPACE:
-				if len(textstring)!=0:
-					textstring=textstring[:-1]
+				if len(textstring)!=0 and curoffset!=0:
+					#textstring=textstring[:-1]
+					textstring=charremove(textstring, curoffset)
+					curoffset -= 1
+					redraw=1
 				break
 			elif event.type == KEYDOWN and event.key != K_TAB:
 				if str(event.unicode) in acceptchars or len(acceptchars)==0:
-					textstring=textstring + str(event.unicode)
+					#textstring=textstring + str(event.unicode)
+					curoffset += 1
+					textstring=charinsert(textstring, str(event.unicode), curoffset)
+					redraw=1
 				break
 			elif event.type == MOUSEBUTTONDOWN and event.button==1:
 				#Place event back into queue, so the calling program can use it.
