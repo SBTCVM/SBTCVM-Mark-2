@@ -60,10 +60,10 @@ bttool.initui(screensurf, 1)
 #
 evhappenflg=0
 #visual menu item names:
-mainmenulst=["Get Started", "Launcher", "Fileview","Tutorials",  "Demo Menu", "Games Menu", "Extras Menu", "About", "Quit"]
+mainmenulst=["Get Started", "Launcher", "Fileview","SBTCVM Help",  "Demo Menu", "Games Menu", "Extras Menu", "About", "Quit"]
 #selection codes:
 mainmenucode=["GETSTART", "LAUNCH", "FILEVIEW", "HELP", "DEMO", "GAMES", "EXTRAS", "CREDITS", "QUIT"]
-mainmenudesc=["Get started with SBTCVM", "SBTCVM's main launcher", "Browse SBTCVM's files.", "Lean how to use SBTCVM.", "A selection of various demo programs.", "Play some balanced ternary computer games.", "A selection of various extras.", "About SBTCVM", "Quit."]
+mainmenudesc=["Get started with SBTCVM", "SBTCVM's main launcher", "Browse SBTCVM's files.", "SBTCVM's integrated help system.", "A selection of various demo programs.", "Play some balanced ternary computer games.", "A selection of various extras.", "About SBTCVM", "Quit."]
 #number of menu items:
 mainmenucnt=9
 menudesc="Main Menu"
@@ -309,7 +309,7 @@ while qflg!=1:
 			#curmenucode=hlpmenucode
 			#curmenudesc=hlpmenudesc
 			#menudesc="Help Menu"
-			subprocess.Popen(["python", "SBTCVM_tutorial.py"])
+			subprocess.Popen(["python", "helpview.py"])
 		elif curmenucode[menuhighnum - 1]=="LAUNCH":
 			subprocess.Popen(["python", "launcher.py"])
 		elif curmenucode[menuhighnum - 1]=="FILEVIEW":
