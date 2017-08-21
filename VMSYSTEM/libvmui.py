@@ -424,14 +424,15 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 	textfnt = pygame.font.SysFont(None, fontsize)
 	curstatus=1
 	curcnt=0
+	#number of loops between changing cursor blink state.
 	curpoint=20
 	redraw=1
 	curoffset=len(textstring)
 	pygame.key.set_repeat(250, 50)
-	#print charremove("testing", 0)
 	while True:
 		time.sleep(.03)
 		screensurf.blit(scbak, (0, 0))
+		#cursor blinking counter
 		if curcnt<curpoint:
 			curcnt += 1
 		else:
@@ -442,28 +443,31 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 			else:
 				curstatus=1
 				redraw=1
+		#drawing operations
 		if redraw==1:
 			redraw=0
+			#add in cursor
 			if curstatus==1:
-				#textstringD=(textstring + "|")
 				textstringD=charinsert(textstring, "|", (curoffset + 1))
 			else:
-				#textstringD=(textstring + " ")
 				textstringD=charinsert(textstring, " ", (curoffset + 1))
+			#draw text
 			if bgcol!=None:
 				abttextB=textfnt.render(textstringD, True, textcol, bgcol)
 			else:
 				abttextB=textfnt.render(textstringD, True, textcol)
 			screensurf.blit(abttextB, (xpos, ypos))
 			pygame.display.update()
+		#event processor
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
-				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiinput1.png')))
 				break
 			elif event.type == KEYDOWN and event.key == K_RETURN:
 				return textstring
 			elif event.type == KEYDOWN and event.key == K_ESCAPE:
 				return textstring
+			#cursor movement
 			elif event.type == KEYDOWN and event.key == K_LEFT:
 				if curoffset!=0:
 					curoffset -= 1
@@ -472,16 +476,16 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 				if curoffset!=len(textstring):
 					curoffset += 1
 					redraw=1
+			#backspace code (also see charremove function)
 			elif event.type == KEYDOWN and event.key == K_BACKSPACE:
 				if len(textstring)!=0 and curoffset!=0:
-					#textstring=textstring[:-1]
 					textstring=charremove(textstring, curoffset)
 					curoffset -= 1
 					redraw=1
 				break
+			#character input processing (also see charinsert function)
 			elif event.type == KEYDOWN and event.key != K_TAB:
 				if str(event.unicode) in acceptchars or len(acceptchars)==0:
-					#textstring=textstring + str(event.unicode)
 					curoffset += 1
 					textstring=charinsert(textstring, str(event.unicode), curoffset)
 					redraw=1
