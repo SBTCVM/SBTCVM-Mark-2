@@ -467,6 +467,15 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 				return textstring
 			elif event.type == KEYDOWN and event.key == K_ESCAPE:
 				return textstring
+			#home/end support.
+			elif event.type == KEYDOWN and event.key == K_HOME:
+				if curoffset!=0:
+					curoffset=0
+					redraw=1
+			elif event.type == KEYDOWN and event.key == K_END:
+				if curoffset!=len(textstring):
+					curoffset=len(textstring)
+					redraw=1
 			#cursor movement
 			elif event.type == KEYDOWN and event.key == K_LEFT:
 				if curoffset!=0:
