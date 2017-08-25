@@ -102,8 +102,9 @@ elif cmd==None:
 				call(["python", "MK2-TOOLS.py"])
 		elif (usercalllst[0]).lower()=="mainmenu":
 				call(["python", "MK2-MENU.py"])
-		elif (usercalllst[0]).lower()=="tutorial":
-				call(["python", "SBTCVM_tutorial.py"])
+		#Dropped
+		#elif (usercalllst[0]).lower()=="tutorial":
+		#		call(["python", "SBTCVM_tutorial.py"])
 		elif (usercalllst[0]).lower()=="launcher":
 				call(["python", "launcher.py"])
 		elif (usercalllst[0]).lower()=="fileview":
