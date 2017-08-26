@@ -183,6 +183,8 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		#makes semicolon a stand-in for vertical bars. (offered as an easier to type option)
 		linen=linen.replace(";", "|")
 		linelist=linen.split("|")
+		#set this to one by default, set it otherwise on multi-instruction macros.
+		instlenflg=1
 		
 		if (len(linelist))==2:
 			instword=(linelist[0])
@@ -337,10 +339,15 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instcnt += 1
 		elif instword=="TTYbg":
 			instcnt += 2
+			#this flag MUST be set to 2 on dual-instruction keywords like the regset macros here.
+			#this is only for the prescan pass as its needed to properly calculate gotorefrence labels.
+			instlenflg=2
 		elif instword=="TTYlinedraw":
 			instcnt += 2
+			instlenflg=2
 		elif instword=="TTYmode":
 			instcnt += 2
+			instlenflg=2
 		elif instword=="threadref":
 			instcnt += 1
 		elif instword=="threadstart":
@@ -375,7 +382,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		if (len(linelist))==3 and gtflag==1 and txtblk==0 and instword[0]!="#":
 			if instword=="textstart":
 				instcnt += 1
-			gtox=gotoref((instcnt - 1), linelist[2])
+			gtox=gotoref((instcnt - instlenflg), linelist[2])
 			gotoreflist.extend([gtox])
 			
 			

@@ -1,0 +1,17 @@
+#this is to test a fix for multi-instruction goto refrence bugs.
+
+gotodata|>test1
+TTYmode|54|test2
+gotodata|>test3
+
+TTYbg|0,200,0|test1
+textstart
+This is a test...
+textstop
+gotodata|>test2
+TTYlinedraw|on|test3
+textstart
+This is ONLY a test...
+textstop
+
+stop
