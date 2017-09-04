@@ -313,7 +313,7 @@ while qflg!=1:
 		elif curmenucode[menuhighnum - 1]=="LAUNCH":
 			subprocess.Popen(["python", "launcher.py"])
 		elif curmenucode[menuhighnum - 1]=="FILEVIEW":
-			subprocess.Popen(["python", "fileview.py"])
+			subprocess.Popen(["python", "fileview2.py"])
 		elif curmenucode[menuhighnum - 1]=="EXTRAS":
 			menuhighnum=1
 			curmenulst=exmenulst

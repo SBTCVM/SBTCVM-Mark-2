@@ -108,7 +108,7 @@ elif cmd==None:
 		elif (usercalllst[0]).lower()=="launcher":
 				call(["python", "launcher.py"])
 		elif (usercalllst[0]).lower()=="fileview":
-				call(["python", "fileview.py"])
+				call(["python", "fileview2.py"])
 		elif (usercalllst[0]).lower()=="quit":
 			qflg=1
 		elif (usercalllst[0]).lower()=="btdec":

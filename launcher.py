@@ -83,7 +83,7 @@ while qflg==0:
 			if icn5.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
 			if icn6.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "fileview.py"])
+				subprocess.Popen(["python", "fileview2.py"])
 			if icn7.collidepoint(event.pos)==1 and event.button==1:
 				#subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join("VMSYSTEM", "launcherabout.txt"))])
 				subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
