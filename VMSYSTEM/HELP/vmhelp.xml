@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="SBTCVM Mark 2 VM overview"/>
+	<!--the rest can appear-->
+	<title>Overview</title>
+	<text>SBTCVM's virtual machine is what SBTCVM's utilities and backend
+revolve around. Naturally, it can seem a bit daunting at first.</text>
+	<title>Controls</title>
+	<text>ESCAPE = pause menu. press while in pause menu to resume VM.
+F1 = launch helpviewer
+F2 = step-by-step debug
+F4 = toggle status display update
+F7 = capture screenshots of raster displays
+F8 = capture screenshot (works in menus as well)
+F10 = manually dump memory maps to capture directory.</text>
+	<title>More Help</title>
+	<lnk label="VM User Interface Overview">uiov.xml</lnk>
+	<title>See Also</title>
+	<lnk label="Settings help.">settings.xml</lnk>
+</main>

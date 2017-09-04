@@ -9,6 +9,7 @@
 	<lnk label="File types">ftype.xml</lnk>
 	<div/>
 	<text>SBTCVM Mark 2 Virtual Machine</text>
+	<lnk label="SBTCVM Mark 2 VM overview">vmhelp.xml</lnk>
 	<lnk label="Overview Of VM User Interface">uiov.xml</lnk>
 	<div/>
 	<text>Command Shell</text>

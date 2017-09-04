@@ -7,11 +7,45 @@
 	<text>To toggle an on/off setting, click the switch button
 </text>
 	<img>setswitch.jpg</img>
+	<text>Status Readouts: 
+Control default state of the status readouts.
+
+TTY (Virtual text display): 
+enables/disables rendering of SBTCVM's TTY.
+
+Step By Step debug mode: 
+Controls The state of SBTCVM's Step by step debug mode.
+This lets the user manually increment the CPU clock by pressing enter. 
+(can also be toggled with F2)
+
+Log Execution Process:
+same effect as the -log argument of the run command in SBTCVM's command shell.
+causes SBTCVM to generate a log of key information every clock cycle.
+(please use run -tos for benchmarking as execution logging may cause slowdown.)
+
+Dump IObus on exit:
+Toggles generating SBTCVM .dmp files of the IObus memory map state on VM exit.
+
+Dump memory bus on exit:
+Toggles generating SBTCVM .dmp files of the executable memory map state on VM exit.
+
+Log Memory bus operations:
+Toggles logging executable memory bus operations.
+</text>
+	<div/>
 	<text>
 To toggle a arrow selector setting, click either the left or right
 arrows to cycle through the available options.
+
 </text>
 	<img>setselect.jpg</img>
+	<text>
+Frameskip: 
+sets frame skip interval for VM
+
+Sound Mixer Rate:
+Sets the mixing rate for SBTCVM's sound.</text>
+	<div/>
 	<text>
 To change the CPU speed preset, click on the desired option.
 </text>

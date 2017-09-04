@@ -37,12 +37,12 @@ lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 #-----
 #Pause menu
 #visual menu item names:
-paumenulst=["Continue VM", "Quick Help", "About", "Extras Menu", "Stop VM"]
-paumenulstKIOSK=["Continue VM", "Quick Help", "About", "Extras Menu", "Stop VM"]
+paumenulst=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM"]
+paumenulstKIOSK=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM"]
 #selection codes:
 paumenucode=["CONTINUE", "QHELP", "CREDIT", "EXTRAS", "VMSTOP"]
-paumenudesc=["Continue running VM", "Get Quick Help", "About SBTCVM Mark 2", "Extra stuff", "Stop VM"]
-paumenudescKIOSK=["Continue running VM", "Get Quick Help", "About SBTCVM Mark 2", "Extras", "Stop VM"]
+paumenudesc=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extra stuff", "Stop VM"]
+paumenudescKIOSK=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extras", "Stop VM"]
 #number of menu items:
 paumenucnt=5
 pmenudesc="Pause Menu"
@@ -251,7 +251,7 @@ def pausemenu():
 		if ixreturn==1:
 			ixreturn=0
 			if curmenucode[menuhighnum - 1]=="QHELP":
-				textsciter_internal("L_QHELP.TXT")
+				subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 			if curmenucode[menuhighnum - 1]=="CREDIT":
 				creditsscroll()
 			if curmenucode[menuhighnum - 1]=="CLOCK":

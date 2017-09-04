@@ -31,4 +31,5 @@ These are disabled by default outside the main menu, but can be toggled with
 F4 and fully enabled using settings.py.
 also you will see the CPU status LED; cyan=on, orange=standby, and the step-by-
 step mode LED. Again, The users manual goes into more detail.</text>
+	<lnk label="SBTCVM Mark 2 VM overview">vmhelp.xml</lnk>
 </main>

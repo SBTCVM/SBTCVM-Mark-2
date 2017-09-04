@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import VMSYSTEM.libtrom as libtrom
 import pygame
+import subprocess
 from pygame.locals import *
 import time
 import os
@@ -1490,6 +1491,8 @@ while stopflag==0:
 						break
 					else:
 						break
+				if event.type == KEYDOWN and event.key == K_F1:
+					subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 				if event.type == KEYDOWN and event.key == K_F7:
 					pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
 					pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
@@ -1550,6 +1553,8 @@ while stopflag==0:
 						break
 					else:
 						break
+				if event.type == KEYDOWN and event.key == K_F1:
+					subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 				if event.type == KEYDOWN and event.key == K_F7:
 					pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
 					pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
@@ -1613,6 +1618,8 @@ while stopflag==0:
 						break
 					else:
 						break
+				if event.type == KEYDOWN and event.key == K_F1:
+					subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 				if event.type == KEYDOWN and event.key == K_F7:
 					pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
 					pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
@@ -1653,6 +1660,8 @@ while stopflag==0:
 					break
 				else:
 					break
+			if event.type == KEYDOWN and event.key == K_F1:
+					subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 			if event.type == KEYDOWN and event.key == K_F7:
 				pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
 				pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
