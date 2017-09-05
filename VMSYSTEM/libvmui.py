@@ -507,6 +507,116 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 				return textstring
 			elif event.type == QUIT:
 				return textstring
+#menuitem class used to make menu item entries for menuset
+#label=item label
+#retstring=string returned when clicked.
+#noclick= wether to make item clickable
+#icon= pygame surface to be used as an icon. (note: no resizing of icon preformed)
+class menuitem:
+	def __init__(self, label, retstring, noclick=0, icon=None, box=None, labelsurf=None):
+		self.label=label
+		self.retstring=retstring
+		self.icon=icon
+		self.box=box
+		self.labelsurf=labelsurf
+		self.noclick=noclick
+
+#menu system.
+#draws menu at xpos, ypos
+#uses menuitem instances in menulist to create menu.
+#reclick controls wether to repost a click outside the menu area:
+# -reclick=1 returns and reposts upon click outside menu (default
+# -reclick=0 just returns upon click outside menu
+# -reclick=2 ignores click outside menu
+# (menuset will return None upon returning due to click outside menu)
+def menuset(menulist, xpos, ypos, reclick=1, textcol=(0, 0, 0), unavcol=(100, 100, 100), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+	global screensurf
+	scbak=screensurf.copy()
+	textfnt = pygame.font.SysFont(None, fontsize)
+	yjump=fontsize
+	#menuh=(len(menulist) * yjump)
+	menuw=0
+	menuh=0
+	for item in menulist:
+		if item.icon==None:
+			itemsize=(textfnt.size(item.label)[0])
+			if itemsize>menuw:
+				menuw=itemsize
+			menuh += yjump
+		else:
+			iconwidth=(item.icon).get_width()
+			iconheight=((item.icon).get_height() + 4)
+			itemsize=(textfnt.size(item.label)[0] + iconwidth + 2)
+			if itemsize>menuw:
+				menuw=itemsize
+			if iconheight>yjump:
+				menuh += iconheight
+			else:
+				menuh += yjump
+			
+	menuw += 4
+	menubox=pygame.Surface((menuw, menuh))
+	#itembox=pygame.Surface((menuw, yjump))
+	menubox.fill(bgcol)
+	menugx=screensurf.blit(menubox, (xpos, ypos))
+	pygame.draw.rect(screensurf, linecol, menugx, 1)
+	menuy=ypos
+	menux=xpos + 2
+	for item in menulist:
+		if item.labelsurf==None:
+			if item.noclick==0:
+				itemtext=textfnt.render(item.label, True, textcol)
+				item.labelsurf=itemtext
+			else:
+				itemtext=textfnt.render(item.label, True, unavcol)
+				item.labelsurf=itemtext
+		else:
+			itemtext=item.labelsurf
+		if item.icon==None:
+			screensurf.blit(itemtext, (menux, menuy))
+			gx=Rect(xpos, menuy, menuw, yjump)
+			menuy += yjump
+		elif (item.icon).get_height()>yjump:
+			screensurf.blit(item.icon, (menux, (menuy + 2)))
+			screensurf.blit(itemtext, ((menux + 2 + (item.icon).get_width()), menuy))
+			gx=Rect(xpos, menuy, menuw, (item.icon).get_height())
+			menuy += ((item.icon).get_height() + 2)
+		else:
+			screensurf.blit(item.icon, (menux, (menuy + 2)))
+			screensurf.blit(itemtext, ((menux + 2 + (item.icon).get_width()), menuy))
+			gx=Rect(xpos, menuy, menuw, yjump)
+			menuy += yjump
+		#pygame.draw.rect(screensurf, (255, 0, 0), gx, 1)
+		
+		
+		item.box=gx
+		pygame.draw.line(screensurf, linecol, ((0 + xpos), menuy), ((menuw + xpos - 1), menuy))
+	pygame.display.update()
+	while True:
+		time.sleep(0.1)
+		for event in pygame.event.get():
+			if event.type == MOUSEBUTTONDOWN and event.button==1:
+				clickblock=0
+				
+				for item in menulist:
+					#print "ERG"
+					if (item.box).collidepoint(event.pos):
+						#print "ORG"
+						if item.noclick==0:
+							#print "ARG"
+							screensurf.blit(scbak, (0, 0))
+							pygame.display.update()
+							return item.retstring
+						else:
+							clickblock=1
+				if clickblock==0 and reclick!=2:
+					if reclick==1:
+						pygame.event.clear()
+						pygame.event.post(event)
+					screensurf.blit(scbak, (0, 0))
+					pygame.display.update()
+					return None
+		
 
 
 def textsciter(flookup):

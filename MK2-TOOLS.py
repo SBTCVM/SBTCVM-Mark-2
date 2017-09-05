@@ -73,7 +73,7 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -128,6 +128,22 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		textinpout=vmui.textinput(4, 210)
 		print "Input has returned:"
 		print textinpout
+	if cmd=="menu":
+		vmui.toolsscreen(1)
+		mi1=vmui.menuitem("Testing", "ITEM1", icon=windowicon)
+		mi2=vmui.menuitem("Testing2", "ITEM2")
+		mi3=vmui.menuitem("Testing3 (this item is not clickable)", "ITEM3", noclick=1)
+		mi0a=vmui.menuitem("This menu will ignore clicks outside menu. (reclick=2)", "ITEM4", noclick=1)
+		mi0b=vmui.menuitem("This menu will just return None for clicks outside menu (reclick=0)", "ITEM4", noclick=1)
+		menulist=[mi0a, mi1, mi2, mi3]
+		menulist2=[mi0b, mi1, mi2, mi3]
+		menuret=vmui.menuset(menulist, 4, 210, reclick=2)
+		vmui.toolsscreen(1)
+		print "menu has returned:"
+		print menuret
+		menuret2=vmui.menuset(menulist2, 20, 210, reclick=0)
+		print "menu2 has returned:"
+		print menuret2
 	if cmd=="helpview":
 		vmui.toolsscreen(5)
 		try:

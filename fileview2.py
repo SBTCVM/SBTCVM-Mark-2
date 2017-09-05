@@ -10,6 +10,8 @@ import copy
 import sys
 import os
 import subprocess
+import VMSYSTEM.libvmui as vmui
+
 from pygame.locals import *
 
 print "SBTCVM FileView file browser. v2.0"
@@ -36,6 +38,7 @@ class filetyp:
 		self.filterflg=filterflg
 
 screensurf=pygame.display.set_mode((420, 600))
+vmui.initui(screensurf, 1)
 #image data loading
 filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileview2.jpg')).convert()
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
@@ -154,6 +157,17 @@ fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 #(screen updating is done only when what is shown would actually change)
 scupdate=1
 #create gxmask only once. just reuse it.
+
+menuitrun=vmui.menuitem("Run", "RUN")
+menuitview=vmui.menuitem("View", "VIEW")
+menuittrom=vmui.menuitem("Trom file", "TROM", noclick=1, icon=fvtrom)
+menuitstreg=vmui.menuitem("Streg file", "TROM", noclick=1, icon=fvstreg)
+
+#right click menus:
+trommenu=[menuittrom, menuitrun, menuitview]
+stregmenu=[menuitstreg, menuitrun, menuitview]
+
+
 gxmask=pygame.Surface((410, 40))
 gxmask2=pygame.Surface((390, 40))
 while quitflag==0:
@@ -393,12 +407,26 @@ while quitflag==0:
 				listyoff2=110
 			#filelist clickbox checker.
 			for f in flist:
+				if f.pane==1:
+					iterfilesq=iterfiles
+				else:
+					iterfilesq=iterfiles2
+				if f.box.collidepoint(event.pos)==1 and event.button==3:
+					if f.ftype=="trom":
+						menuret=vmui.menuset(trommenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="RUN":
+							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+					if f.ftype=="streg":
+						menuret=vmui.menuset(stregmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="RUN":
+							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+					
 				if f.box.collidepoint(event.pos)==1 and event.button==1:
 					#program launchers
-					if f.pane==1:
-						iterfilesq=iterfiles
-					else:
-						iterfilesq=iterfiles2
 					if runexec==0:
 						if f.ftype=="trom":
 							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
