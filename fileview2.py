@@ -465,31 +465,33 @@ while quitflag==0:
 						
 				#scroll wheel handling
 				if event.button==4:
-					if (event.pos[0])<400 or panemode==1:
-						if listyoff<110:
-							listyoff += yjump
-							scupdate=1
-						break
-					else:
-						if listyoff2<110:
-							listyoff2 += yjump
-							scupdate=1
-						break
+					if event.pos[1]>110:
+						if (event.pos[0])<420 or panemode==1:
+							if listyoff<110:
+								listyoff += yjump
+								scupdate=1
+							break
+						else:
+							if listyoff2<110:
+								listyoff2 += yjump
+								scupdate=1
+							break
 				if event.button==5:
-					if (event.pos[0])<400 or panemode==1:
-						if listy>screeny:
-							listyoff -= yjump
-							scupdate=1
-						if listyoff>110:
-							listyoff=110
-							scupdate=1
-						break
-					else:
-						if listy2>screeny:
-							listyoff2 -= yjump
-							scupdate=1
-						if listyoff2>110:
-							listyoff2=110
-							scupdate=1
-						break
+					if event.pos[1]>110:
+						if (event.pos[0])<420 or panemode==1:
+							if listy>screeny:
+								listyoff -= yjump
+								scupdate=1
+							if listyoff>110:
+								listyoff=110
+								scupdate=1
+							break
+						else:
+							if listy2>screeny:
+								listyoff2 -= yjump
+								scupdate=1
+							if listyoff2>110:
+								listyoff2=110
+								scupdate=1
+							break
 			
