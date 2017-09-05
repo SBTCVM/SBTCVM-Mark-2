@@ -509,7 +509,7 @@ def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20
 				return textstring
 #menuitem class used to make menu item entries for menuset
 #label=item label
-#retstring=string returned when clicked.
+#retstring=string or other item returned when clicked.
 #noclick= wether to make item clickable
 #icon= pygame surface to be used as an icon. (note: no resizing of icon preformed)
 class menuitem:
@@ -595,6 +595,8 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=(0, 0, 0), unavcol=(100, 10
 	while True:
 		time.sleep(0.1)
 		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
 			if event.type == MOUSEBUTTONDOWN and event.button==1:
 				clickblock=0
 				

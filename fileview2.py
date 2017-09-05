@@ -61,6 +61,8 @@ fvswon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fv
 fvswoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-off.png')).convert_alpha()
 fvpane1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane1.png')).convert()
 fvpane2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane2.png')).convert()
+panefilter1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter1.png')).convert()
+panefilter2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter2.png')).convert()
 #definitions of all non-directory file types...
 typ_png=filetyp("png", fvimg, "img", 2)
 typ_jpg=filetyp("jpg", fvimg, "img", 2)
@@ -97,6 +99,7 @@ maskx=0
 maskx2=423
 #set inital filter to "all"
 filterflg=0
+filterflg2=0
 filtertext="All"
 #vertical jump between tiles (remember to account for tile size!)
 yjump=42
@@ -117,36 +120,38 @@ gneww=filebg.blit(newbtn, (85, 5))
 runx=filebg.blit(fvrun, (136, 5))
 viewx=filebg.blit(fvview, (177, 5))
 
-fil0=filebg.blit(fvall, (3, 57))
-fil1=filebg.blit(fvtrom, (44, 57))
-fil2=filebg.blit(fvimg, (85, 57))
-fil3=filebg.blit(fvstreg, (126, 57))
-fil4=filebg.blit(fvtasm, (167, 57))
-fil5=filebg.blit(fvtext, (208, 57))
-fil6=filebg.blit(fvlog, (249, 57))
-fil7=filebg.blit(fvdmp, (290, 57))
-#unused
-#fil8=filebg.blit(fvdummy, (512, 5))
-#fil9=filebg.blit(fvdummy, (553, 5))
-#fil10=filebg.blit(fvdummy, (594, 5))
-#fil11=filebg.blit(fvdummy, (635, 5))
+filp1=filebg.blit(panefilter1, (3, 57))
+filp2=filebg.blit(panefilter2, (95, 57))
+#fil0=filebg.blit(fvall, (3, 57))
+#fil1=filebg.blit(fvtrom, (44, 57))
+#fil2=filebg.blit(fvimg, (85, 57))
+#fil3=filebg.blit(fvstreg, (126, 57))
+#fil4=filebg.blit(fvtasm, (167, 57))
+#fil5=filebg.blit(fvtext, (208, 57))
+#fil6=filebg.blit(fvlog, (249, 57))
+#fil7=filebg.blit(fvdmp, (290, 57))
+##unused
+##fil8=filebg.blit(fvdummy, (512, 5))
+##fil9=filebg.blit(fvdummy, (553, 5))
+##fil10=filebg.blit(fvdummy, (594, 5))
+##fil11=filebg.blit(fvdummy, (635, 5))
 
-#draw switch off states to background, later draw over them on surface as needed.
-filebg.blit(fvswoff, (3, 57))
-filebg.blit(fvswoff, (44, 57))
-filebg.blit(fvswoff, (85, 57))
-filebg.blit(fvswoff, (126, 57))
-filebg.blit(fvswoff, (167, 57))
-filebg.blit(fvswoff, (208, 57))
-filebg.blit(fvswoff, (249, 57))
-filebg.blit(fvswoff, (290, 57))
-filebg.blit(fvswoff, (136, 5))
-filebg.blit(fvswoff, (177, 5))
-#unused
-#filebg.blit(fvswoff, (512, 157))
-#filebg.blit(fvswoff, (553, 157))
-#filebg.blit(fvswoff, (594, 157))
-#filebg.blit(fvswoff, (635, 157))
+##draw switch off states to background, later draw over them on surface as needed.
+#filebg.blit(fvswoff, (3, 57))
+#filebg.blit(fvswoff, (44, 57))
+#filebg.blit(fvswoff, (85, 57))
+#filebg.blit(fvswoff, (126, 57))
+#filebg.blit(fvswoff, (167, 57))
+#filebg.blit(fvswoff, (208, 57))
+#filebg.blit(fvswoff, (249, 57))
+#filebg.blit(fvswoff, (290, 57))
+#filebg.blit(fvswoff, (136, 5))
+#filebg.blit(fvswoff, (177, 5))
+##unused
+##filebg.blit(fvswoff, (512, 157))
+##filebg.blit(fvswoff, (553, 157))
+##filebg.blit(fvswoff, (594, 157))
+##filebg.blit(fvswoff, (635, 157))
 
 panemode=1
 
@@ -162,6 +167,17 @@ menuitrun=vmui.menuitem("Run", "RUN")
 menuitview=vmui.menuitem("View", "VIEW")
 menuittrom=vmui.menuitem("Trom file", "TROM", noclick=1, icon=fvtrom)
 menuitstreg=vmui.menuitem("Streg file", "TROM", noclick=1, icon=fvstreg)
+fil0=vmui.menuitem("All", 0, icon=fvall)
+fil1=vmui.menuitem("Trom", 1, icon=fvtrom)
+fil2=vmui.menuitem("Image", 2, icon=fvimg)
+fil3=vmui.menuitem("Streg", 3, icon=fvstreg)
+fil4=vmui.menuitem("Tasm", 4, icon=fvtasm)
+fil5=vmui.menuitem("Text", 5, icon=fvtext)
+fil6=vmui.menuitem("Log", 6, icon=fvlog)
+fil7=vmui.menuitem("Dmp", 7, icon=fvdmp)
+
+filtermenu=[fil0, fil1, fil2, fil3, fil4, fil5, fil6, fil7]
+iconlist=[fvall, fvtrom, fvimg, fvstreg, fvtasm, fvtext, fvlog, fvdmp]
 
 #right click menus:
 trommenu=[menuittrom, menuitrun, menuitview]
@@ -265,7 +281,7 @@ while quitflag==0:
 							qx=fileclick(gx, fname, "dir", 2)
 							fileval=1
 				for typ in typelist:
-					if fnamelo.endswith(("." + typ.ext)) and (filterflg==0 or filterflg==typ.filterflg): 
+					if fnamelo.endswith(("." + typ.ext)) and (filterflg2==0 or filterflg2==typ.filterflg): 
 						if listy2<listydef2:
 							fileval=2
 							break
@@ -291,22 +307,24 @@ while quitflag==0:
 			panex=screensurf.blit(fvpane1, (225, 5))
 		else:
 			panex=screensurf.blit(fvpane2, (225, 5))
-		if filterflg==0:
-			screensurf.blit(fvswon, (3, 57))
-		elif filterflg==1:
-			screensurf.blit(fvswon, (44, 57))
-		elif filterflg==2:
-			screensurf.blit(fvswon, (85, 57))
-		elif filterflg==3:
-			screensurf.blit(fvswon, (126, 57))
-		elif filterflg==4:
-			screensurf.blit(fvswon, (167, 57))
-		elif filterflg==5:
-			screensurf.blit(fvswon, (208, 57))
-		elif filterflg==6:
-			screensurf.blit(fvswon, (249, 57))
-		elif filterflg==7:
-			screensurf.blit(fvswon, (290, 57))
+		screensurf.blit(iconlist[filterflg], (43, 57))
+		screensurf.blit(iconlist[filterflg2], (135, 57))
+		#if filterflg==0:
+			#screensurf.blit(fvswon, (3, 57))
+		#elif filterflg==1:
+			#screensurf.blit(fvswon, (44, 57))
+		#elif filterflg==2:
+			#screensurf.blit(fvswon, (85, 57))
+		#elif filterflg==3:
+			#screensurf.blit(fvswon, (126, 57))
+		#elif filterflg==4:
+			#screensurf.blit(fvswon, (167, 57))
+		#elif filterflg==5:
+			#screensurf.blit(fvswon, (208, 57))
+		#elif filterflg==6:
+			#screensurf.blit(fvswon, (249, 57))
+		#elif filterflg==7:
+			#screensurf.blit(fvswon, (290, 57))
 		if runexec==0:
 			screensurf.blit(fvswon, (136, 5))
 		elif runexec==1:
@@ -356,55 +374,70 @@ while quitflag==0:
 			if viewx.collidepoint(event.pos)==1 and event.button==1:
 				runexec=1
 				scupdate=1
+			
+			#filp1=filebg.blit(panefilter1, (3, 57))
+			#filp2=filebg.blit(panefilter2, (95, 57))
+			if filp1.collidepoint(event.pos)==1 and event.button==1:
+				filterbak=filterflg
+				filterflg=vmui.menuset(filtermenu, 3, 97, reclick=0)
+				if filterflg==None:
+					filterflg=filterbak
+				scupdate=1
+			if filp2.collidepoint(event.pos)==1 and event.button==1:
+				filterbak=filterflg2
+				filterflg2=vmui.menuset(filtermenu, 95, 97, reclick=0)
+				if filterflg2==None:
+					filterflg2=filterbak
+				scupdate=1
 			#filter buttons
-			if fil0.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=0
-				filtertext="All"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil1.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=1
-				filtertext="TROM"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil2.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=2
-				filtertext="Image"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil3.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=3
-				filtertext="STREG"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil4.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=4
-				filtertext="TASM"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil5.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=5
-				filtertext="Text"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil6.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=6
-				filtertext="log"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
-			if fil7.collidepoint(event.pos)==1 and event.button==1:
-				filterflg=7
-				filtertext="Mem Dump"
-				scupdate=1
-				listyoff=110
-				listyoff2=110
+			#if fil0.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=0
+				#filtertext="All"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil1.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=1
+				#filtertext="TROM"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil2.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=2
+				#filtertext="Image"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil3.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=3
+				#filtertext="STREG"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil4.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=4
+				#filtertext="TASM"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil5.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=5
+				#filtertext="Text"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil6.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=6
+				#filtertext="log"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
+			#if fil7.collidepoint(event.pos)==1 and event.button==1:
+				#filterflg=7
+				#filtertext="Mem Dump"
+				#scupdate=1
+				#listyoff=110
+				#listyoff2=110
 			#filelist clickbox checker.
 			for f in flist:
 				if f.pane==1:
