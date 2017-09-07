@@ -73,7 +73,7 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu":
+elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -128,6 +128,40 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		textinpout=vmui.textinput(4, 210)
 		print "Input has returned:"
 		print textinpout
+	if cmd=="okdiag":
+		vmui.toolsscreen(1)
+		#note: to center dialog in a pygame window use half the window width as xpos,
+		#and half the window height as ypos
+		screenw=800
+		screenh=600
+		xpos=(screenw // 2)
+		ypos=(screenh // 2)
+		diagtext='''This is a test.
+of vmui.okdiag()
+a function to create OK dialogs.'''
+		diagout=vmui.okdiag(diagtext, xpos, ypos)
+		print "ok dialog has returned:"
+		print diagout
+		diagout=vmui.okdiag("test", xpos, ypos)
+		print "ok dialog 2 has returned:"
+		print diagout
+	if cmd=="yndiag":
+		vmui.toolsscreen(1)
+		#note: to center dialog in a pygame window use half the window width as xpos,
+		#and half the window height as ypos
+		screenw=800
+		screenh=600
+		xpos=(screenw // 2)
+		ypos=(screenh // 2)
+		diagtext='''This is a test.
+of vmui.yndiag()
+a function to create Yes/No dialogs.'''
+		diagout=vmui.yndiag(diagtext, xpos, ypos)
+		print "yes/no dialog has returned:"
+		print diagout
+		diagout=vmui.yndiag("test", xpos, ypos)
+		print "yes/no dialog 2 has returned:"
+		print diagout
 	if cmd=="menu":
 		vmui.toolsscreen(1)
 		mi1=vmui.menuitem("Testing", "ITEM1", icon=windowicon)

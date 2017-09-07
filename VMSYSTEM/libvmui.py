@@ -314,6 +314,9 @@ def initui(scsurf, kiomode):
 	global vmtoolsbgfull
 	global vmbg
 	global sbtccat
+	global diagbtnok
+	global diagbtnyes
+	global diagbtnno
 	KIOSKMODE=kiomode
 	vmtoolsbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS.png')).convert_alpha()
 	vmtoolsbgfull=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS_FULL.png')).convert()
@@ -332,6 +335,10 @@ def initui(scsurf, kiomode):
 	#CPULEDACT=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-BLUE.png')).convert()
 	CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
 	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
+	
+	diagbtnok=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnok.png')).convert()
+	diagbtnyes=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnyes.png')).convert()
+	diagbtnno=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnno.png')).convert()
 
 	
 
@@ -619,6 +626,161 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=(0, 0, 0), unavcol=(100, 10
 					pygame.display.update()
 					return None
 		
+#returns list of lines contained in textstring)
+def listline(textstring):
+	textcont=(textstring + "\n")
+	textchunk=""
+	chunklist=list()
+	for texch in textcont:
+		if texch=="\n":
+			chunklist.extend([textchunk])
+			textchunk=""
+		else:
+			textchunk=(textchunk + texch)
+	return chunklist
+
+#textstring is a body of text, (can be multiple lines) that will show in the dialog
+#okdiag will return "OK" upon user clicking the "OK" button.
+#reclick controls wether to repost a click outside the dialog area:
+# -reclick=1 returns and reposts upon click outside dialog
+# -reclick=0 just returns upon click outside dialog
+# -reclick=2 ignores click outside dialog (default)
+# (okdiag will return None upon returning due to click outside dialog)
+#
+#SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
+def okdiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+	global screensurf
+	scbak=screensurf.copy()
+	btnw=100
+	btnh=30
+	textfnt = pygame.font.SysFont(None, fontsize)
+	yjump=fontsize
+	textlist=listline(textstring)
+	textbodyh=(len(textlist)*yjump)
+	ypad=5
+	xpad=5
+	textbtnpad=10
+	dialogh=(textbodyh + ypad + ypad + btnh + textbtnpad)
+	textwidest=0
+	minwid=(btnw)
+	for item in textlist:
+		itemsize=textfnt.size(item)[0]
+		if itemsize>textwidest:
+			textwidest=itemsize
+	if textwidest<minwid:
+		textwidest=minwid
+	dialogw=(textwidest + xpad + xpad)
+	xpos -= (dialogw // 2)
+	ypos -= (dialogh // 2)
+	menubox=pygame.Surface((dialogw, dialogh))
+	menubox.fill(bgcol)
+	menugx=screensurf.blit(menubox, (xpos, ypos))
+	pygame.draw.rect(screensurf, linecol, menugx, 1)
+	texty=(ypos+ypad)
+	for item in textlist:
+		itemtext=textfnt.render(item, True, textcol)
+		#itemxpos=((xpos + xpad)  (itemtext.get_width() // 2))
+		itembox=itemtext.get_rect()
+		itembox.centerx=menugx.centerx
+		itembox.y=texty
+		screensurf.blit(itemtext, itembox)
+		texty += yjump
+	btny=(texty + textbtnpad)
+	btnx1=((dialogw // 2)-(btnw // 2) + xpos)
+	btnokx=screensurf.blit(diagbtnok, (btnx1, btny))
+	pygame.display.update()
+	while True:
+		time.sleep(0.1)
+		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
+			if event.type == MOUSEBUTTONDOWN and event.button==1:
+				if menugx.collidepoint(event.pos):
+					if btnokx.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "OK"
+				elif reclick!=2:
+					if reclick==1:
+						pygame.event.clear()
+						pygame.event.post(event)
+					return None
+					
+#textstring is a body of text, (can be multiple lines) that will show in the dialog
+#okdiag will return "YES" upon user clicking the "Yes" button.
+#okdiag will return "NO" upon user clicking the "No" button.
+#reclick controls wether to repost a click outside the dialog area:
+# -reclick=1 returns and reposts upon click outside dialog
+# -reclick=0 just returns upon click outside dialog
+# -reclick=2 ignores click outside dialog (default)
+# (okdiag will return None upon returning due to click outside dialog)
+#
+#SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
+def yndiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+	global screensurf
+	scbak=screensurf.copy()
+	btnw=100
+	btnh=30
+	textfnt = pygame.font.SysFont(None, fontsize)
+	yjump=fontsize
+	textlist=listline(textstring)
+	textbodyh=(len(textlist)*yjump)
+	ypad=5
+	xpad=5
+	btnsep=20
+	btnoffset=(btnw+btnsep)
+	textbtnpad=10
+	dialogh=(textbodyh + ypad + ypad + btnh + textbtnpad)
+	textwidest=0
+	minwid=(btnw + btnw + btnsep)
+	for item in textlist:
+		itemsize=textfnt.size(item)[0]
+		if itemsize>textwidest:
+			textwidest=itemsize
+	if textwidest<minwid:
+		textwidest=minwid
+	dialogw=(textwidest + xpad + xpad)
+	xpos -= (dialogw // 2)
+	ypos -= (dialogh // 2)
+	menubox=pygame.Surface((dialogw, dialogh))
+	menubox.fill(bgcol)
+	menugx=screensurf.blit(menubox, (xpos, ypos))
+	pygame.draw.rect(screensurf, linecol, menugx, 1)
+	texty=(ypos+ypad)
+	for item in textlist:
+		itemtext=textfnt.render(item, True, textcol)
+		#itemxpos=((xpos + xpad)  (itemtext.get_width() // 2))
+		itembox=itemtext.get_rect()
+		itembox.centerx=menugx.centerx
+		itembox.y=texty
+		screensurf.blit(itemtext, itembox)
+		texty += yjump
+	btny=(texty + textbtnpad)
+	btnx1=((dialogw // 2)-(btnw // 2) + xpos - (btnoffset // 2))
+	btnx2=((dialogw // 2)-(btnw // 2) + xpos + (btnoffset // 2))
+	btnyesx=screensurf.blit(diagbtnyes, (btnx1, btny))
+	btnnox=screensurf.blit(diagbtnno, (btnx2, btny))
+	pygame.display.update()
+	while True:
+		time.sleep(0.1)
+		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
+			if event.type == MOUSEBUTTONDOWN and event.button==1:
+				if menugx.collidepoint(event.pos):
+					if btnyesx.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "YES"
+					if btnnox.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "NO"
+				elif reclick!=2:
+					if reclick==1:
+						pygame.event.clear()
+						pygame.event.post(event)
+					return None
 
 
 def textsciter(flookup):
