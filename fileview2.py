@@ -63,6 +63,11 @@ fvpane1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'f
 fvpane2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane2.png')).convert()
 panefilter1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter1.png')).convert()
 panefilter2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter2.png')).convert()
+
+fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvfilemenu.png')).convert()
+fvrunsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvrunsw.png')).convert()
+fvviewsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvviewsw.png')).convert()
+
 #definitions of all non-directory file types...
 typ_png=filetyp("png", fvimg, "img", 2)
 typ_jpg=filetyp("jpg", fvimg, "img", 2)
@@ -114,11 +119,11 @@ runexec=0
 
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 #blit fixed on-screen buttons to filebg.
-quitx=filebg.blit(exitbtn, (3, 5))
-ghelpx=filebg.blit(helpbtn, (44, 5))
-gneww=filebg.blit(newbtn, (85, 5))
-runx=filebg.blit(fvrun, (136, 5))
-viewx=filebg.blit(fvview, (177, 5))
+filemenux=filebg.blit(fvfilemenu, (3, 5))
+#ghelpx=filebg.blit(helpbtn, (44, 5))
+#gneww=filebg.blit(newbtn, (85, 5))
+#runx=filebg.blit(fvrun, (136, 5))
+#viewx=filebg.blit(fvview, (177, 5))
 
 filp1=filebg.blit(panefilter1, (3, 57))
 filp2=filebg.blit(panefilter2, (95, 57))
@@ -131,6 +136,16 @@ fillabel=simplefontC.render(("Type Filter: " + filtertext), True, (0, 0, 0))
 #set scupdate to one at start, so it will draw the screen on startup
 #(screen updating is done only when what is shown would actually change)
 scupdate=1
+
+
+#filemenu
+fmnew=vmui.menuitem("New Window", "NEW")
+fmhelp=vmui.menuitem("Help (F1)", "HELP")
+fmabout=vmui.menuitem("About Fileview", "ABOUT")
+fmquit=vmui.menuitem("Quit", "QUIT")
+filemenu=[fmnew, fmhelp, fmabout, fmquit]
+
+
 #create gxmask only once. just reuse it.
 
 menuitrun=vmui.menuitem("Run", "RUN")
@@ -175,6 +190,10 @@ textdesc="""plain text file"""
 logdesc="""SBTCVM log file."""
 dmpdesc="""SBTCVM Virtualized Memory Dump"""
 
+diagabt="""Fileview v2.0
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
 
 def getdesc(filetype, fname, path):
 	if filetype=="trom":
@@ -317,15 +336,15 @@ while quitflag==0:
 				if listy2>screeny:
 					break
 		if panemode==1:
-			panex=screensurf.blit(fvpane1, (225, 5))
+			panex=screensurf.blit(fvpane1, (89, 5))
 		else:
-			panex=screensurf.blit(fvpane2, (225, 5))
+			panex=screensurf.blit(fvpane2, (89, 5))
+		if runexec==0:
+			runviewx=screensurf.blit(fvrunsw, (46, 5))
+		else:
+			runviewx=screensurf.blit(fvviewsw, (46, 5))
 		screensurf.blit(iconlist[filterflg], (43, 57))
 		screensurf.blit(iconlist[filterflg2], (135, 57))
-		if runexec==0:
-			screensurf.blit(fvswon, (136, 5))
-		elif runexec==1:
-			screensurf.blit(fvswon, (177, 5))
 		#draw path and filter status
 		if panemode==2:
 			menulabel=simplefontC.render(("path: " + iterfiles), True, (0, 0, 0))
@@ -348,12 +367,20 @@ while quitflag==0:
 			break
 		if event.type==MOUSEBUTTONDOWN:
 			#onscreen button handler (blitted to background image during startup)
-			if quitx.collidepoint(event.pos)==1 and event.button==1:
-				quitflag=1
-				break
+				
 			#help button
-			if ghelpx.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "helpview.py", "fileview.xml"])
+			
+			if filemenux.collidepoint(event.pos)==1 and event.button==1:
+				menuret=vmui.menuset(filemenu, 3, 45, reclick=0, fontsize=26)
+				if menuret=="HELP":
+					subprocess.Popen(["python", "helpview.py", "fileview.xml"])
+				if menuret=="QUIT":
+					quitflag=1
+					break
+				if menuret=="ABOUT":
+					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+				if menuret=="NEW":
+					subprocess.Popen(["python", "fileview2.py"])
 			if panex.collidepoint(event.pos)==1 and event.button==1:
 				if panemode==1:
 					panemode=2
@@ -367,14 +394,20 @@ while quitflag==0:
 					scupdate=1
 					screenx=420
 					screeny=600
-			if gneww.collidepoint(event.pos)==1 and event.button==1:
-				subprocess.Popen(["python", "fileview2.py"])
-			if runx.collidepoint(event.pos)==1 and event.button==1:
-				runexec=0
+			if runviewx.collidepoint(event.pos)==1 and event.button==1:
+				if runexec==1:
+					runexec=0
+				else:
+					runexec=1
 				scupdate=1
-			if viewx.collidepoint(event.pos)==1 and event.button==1:
-				runexec=1
-				scupdate=1
+			#if gneww.collidepoint(event.pos)==1 and event.button==1:
+			#	subprocess.Popen(["python", "fileview2.py"])
+			#if runx.collidepoint(event.pos)==1 and event.button==1:
+			#	runexec=0
+			#	scupdate=1
+			#if viewx.collidepoint(event.pos)==1 and event.button==1:
+			#	runexec=1
+			#	scupdate=1
 			if filp1.collidepoint(event.pos)==1 and event.button==1:
 				filterbak=filterflg
 				filterflg=vmui.menuset(filtermenu, 3, 97, reclick=0)
