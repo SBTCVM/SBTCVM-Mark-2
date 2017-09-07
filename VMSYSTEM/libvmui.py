@@ -693,7 +693,7 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 1
 		time.sleep(0.1)
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
-				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiokdialog.png')))
 			if event.type == MOUSEBUTTONDOWN and event.button==1:
 				if menugx.collidepoint(event.pos):
 					if btnokx.collidepoint(event.pos):
@@ -765,7 +765,7 @@ def yndiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 1
 		time.sleep(0.1)
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
-				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiyndialog.png')))
 			if event.type == MOUSEBUTTONDOWN and event.button==1:
 				if menugx.collidepoint(event.pos):
 					if btnyesx.collidepoint(event.pos):

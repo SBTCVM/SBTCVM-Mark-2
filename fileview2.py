@@ -107,7 +107,7 @@ yjump=42
 iterfiles='.'
 iterfiles2='.'
 #used in event handler and drawing system. MAKE SURE THESE ARE THE SAME AS SCREEN SIZE!
-screenx=800
+screenx=420
 screeny=600
 
 runexec=0
@@ -135,8 +135,14 @@ scupdate=1
 
 menuitrun=vmui.menuitem("Run", "RUN")
 menuitview=vmui.menuitem("View", "VIEW")
+menuitinfo=vmui.menuitem("Info", "INFO")
 menuittrom=vmui.menuitem("Trom file", "TROM", noclick=1, icon=fvtrom)
 menuitstreg=vmui.menuitem("Streg file", "TROM", noclick=1, icon=fvstreg)
+menuitimage=vmui.menuitem("Image file", "TROM", noclick=1, icon=fvimg)
+menuittasm=vmui.menuitem("Tasm file", "TROM", noclick=1, icon=fvtasm)
+menuittext=vmui.menuitem("Text file", "TROM", noclick=1, icon=fvtext)
+menuitlog=vmui.menuitem("Log file", "TROM", noclick=1, icon=fvlog)
+menuitdmp=vmui.menuitem("Dmp file", "TROM", noclick=1, icon=fvdmp)
 fil0=vmui.menuitem("All", 0, icon=fvall)
 fil1=vmui.menuitem("Trom", 1, icon=fvtrom)
 fil2=vmui.menuitem("Image", 2, icon=fvimg)
@@ -149,9 +155,46 @@ fil7=vmui.menuitem("Dmp", 7, icon=fvdmp)
 filtermenu=[fil0, fil1, fil2, fil3, fil4, fil5, fil6, fil7]
 iconlist=[fvall, fvtrom, fvimg, fvstreg, fvtasm, fvtext, fvlog, fvdmp]
 
+
 #right click menus:
-trommenu=[menuittrom, menuitrun, menuitview]
-stregmenu=[menuitstreg, menuitrun, menuitview]
+trommenu=[menuittrom, menuitrun, menuitview, menuitinfo]
+stregmenu=[menuitstreg, menuitrun, menuitview, menuitinfo]
+imgmenu=[menuitimage, menuitview, menuitinfo]
+tasmmenu=[menuittasm, menuitview, menuitinfo]
+textmenu=[menuittext, menuitview, menuitinfo]
+logmenu=[menuitlog, menuitview, menuitinfo]
+dmpmenu=[menuitdmp, menuitview, menuitinfo]
+
+tromdesc="""SBTCVM Balanced Ternary ROM image."""
+stregdesc="""Sbtcvm TRom Ececute Group
+configuration file."""
+imagedesc="""image filetype that SBTCVM's
+image viewer can show."""
+tasmdesc="""SBTCVM assembly source file."""
+textdesc="""plain text file"""
+logdesc="""SBTCVM log file."""
+dmpdesc="""SBTCVM Virtualized Memory Dump"""
+
+
+def getdesc(filetype, fname, path):
+	if filetype=="trom":
+		return (fname + "\n-" + "\n" + tromdesc)
+	if filetype=="streg":
+		return (fname + "\n-" + "\n" + stregdesc)
+	if filetype=="img":
+		return (fname + "\n-" + "\n" + imagedesc)
+	if filetype=="text":
+		return (fname + "\n-" + "\n" + textdesc)
+	if filetype=="tasm":
+		return (fname + "\n-" + "\n" + tasmdesc)
+	if filetype=="log":
+		return (fname + "\n-" + "\n" + logdesc)
+	if filetype=="dmp":
+		return (fname + "\n-" + "\n" + dmpdesc)
+
+
+
+
 
 
 gxmask=pygame.Surface((410, 40))
@@ -316,10 +359,14 @@ while quitflag==0:
 					panemode=2
 					screensurf=pygame.display.set_mode((800, 600))
 					scupdate=1
+					screenx=800
+					screeny=600
 				else:
 					panemode=1
 					screensurf=pygame.display.set_mode((420, 600))
 					scupdate=1
+					screenx=420
+					screeny=600
 			if gneww.collidepoint(event.pos)==1 and event.button==1:
 				subprocess.Popen(["python", "fileview2.py"])
 			if runx.collidepoint(event.pos)==1 and event.button==1:
@@ -357,13 +404,46 @@ while quitflag==0:
 							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
 						if menuret=="VIEW":
 							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("trom", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
 					if f.ftype=="streg":
 						menuret=vmui.menuset(stregmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
 						if menuret=="RUN":
 							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
 						if menuret=="VIEW":
 							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
-					
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("streg", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
+					if f.ftype=="tasm":
+						menuret=vmui.menuset(tasmmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("tasm", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
+					if f.ftype=="log":
+						menuret=vmui.menuset(logmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("log", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
+					if f.ftype=="dmp":
+						menuret=vmui.menuset(dmpmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("dmp", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
+					if f.ftype=="img":
+						menuret=vmui.menuset(imgmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "imgview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("img", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
+					if f.ftype=="text":
+						menuret=vmui.menuset(textmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="VIEW":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(iterfilesq, f.filename))])
+						if menuret=="INFO":
+							vmui.okdiag(getdesc("text", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
 				if f.box.collidepoint(event.pos)==1 and event.button==1:
 					#program launchers
 					if runexec==0:
