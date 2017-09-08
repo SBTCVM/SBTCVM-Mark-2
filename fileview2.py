@@ -11,6 +11,7 @@ import sys
 import os
 import subprocess
 import VMSYSTEM.libvmui as vmui
+import VMSYSTEM.libthemeconf as libthemeconf
 
 from pygame.locals import *
 
@@ -40,7 +41,11 @@ class filetyp:
 screensurf=pygame.display.set_mode((420, 600))
 vmui.initui(screensurf, 1)
 #image data loading
-filebg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileview2.jpg')).convert()
+
+filehud=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileviewhud.png')).convert_alpha()
+filebg=(libthemeconf.bgmake(filehud)).convert()
+
+
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
 helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvhelp.png')).convert()
 newbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvneww.png')).convert()
@@ -191,6 +196,7 @@ logdesc="""SBTCVM log file."""
 dmpdesc="""SBTCVM Virtualized Memory Dump"""
 
 diagabt="""Fileview v2.0
+Part of the SBTCVM Project
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
 See README.md for more information."""
@@ -214,10 +220,10 @@ def getdesc(filetype, fname, path):
 
 
 
+tilebgcolor=(255, 255, 255, 200)
 
-
-gxmask=pygame.Surface((410, 40))
-gxmask2=pygame.Surface((390, 40))
+gxmask=pygame.Surface((410, 40), SRCALPHA)
+gxmask2=pygame.Surface((390, 40), SRCALPHA)
 while quitflag==0:
 	#check to save needlessly redrawing display
 	if scupdate==1:
@@ -229,9 +235,9 @@ while quitflag==0:
 		#reset list of fileclick objects.
 		flist=list()
 		if iterfiles!='.' and listy>=listydef:
-			textit=simplefontB.render("..", True, (0, 0, 0), (255, 255, 255))
+			textit=simplefontB.render("..", True, (0, 0, 0))
 			#gxmask=pygame.Surface((410, 40))
-			gxmask.fill((255, 255, 255))
+			gxmask.fill(tilebgcolor)
 			gxmask.blit(fvup, (iconx, 0))
 			gxmask.blit(textit, (labelx, 0))
 			gx=screensurf.blit(gxmask, (maskx, listy))
@@ -248,9 +254,9 @@ while quitflag==0:
 					if listy<listydef:
 						fileval=2
 					else:
-						textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+						textit=simplefontB.render(fname, True, (0, 0, 0))
 						#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
-						gxmask.fill((255, 255, 255))
+						gxmask.fill(tilebgcolor)
 						gxmask.blit(fvdir, (iconx, 0))
 						gxmask.blit(textit, (labelx, 0))
 						gx=screensurf.blit(gxmask, (maskx, listy))
@@ -263,9 +269,9 @@ while quitflag==0:
 						fileval=2
 						break
 					else:
-						textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+						textit=simplefontB.render(fname, True, (0, 0, 0))
 						#gxmask=pygame.Surface((410, 40))
-						gxmask.fill((255, 255, 255))
+						gxmask.fill(tilebgcolor)
 						gxmask.blit(typ.typeicon, (iconx, 0))
 						gxmask.blit(textit, (labelx, 0))
 						gx=screensurf.blit(gxmask, (maskx, listy))
@@ -284,9 +290,9 @@ while quitflag==0:
 			listy2=listyoff2
 			#reset list of fileclick objects.
 			if iterfiles2!='.' and listy2>=listydef2:
-				textit=simplefontB.render("..", True, (0, 0, 0), (255, 255, 255))
+				textit=simplefontB.render("..", True, (0, 0, 0))
 				#gxmask=pygame.Surface((410, 40))
-				gxmask2.fill((255, 255, 255))
+				gxmask2.fill(tilebgcolor)
 				gxmask2.blit(fvup, (iconx, 0))
 				gxmask2.blit(textit, (labelx, 0))
 				gx=screensurf.blit(gxmask2, (maskx2, listy2))
@@ -303,9 +309,9 @@ while quitflag==0:
 						if listy2<listydef2:
 							fileval=2
 						else:
-							textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+							textit=simplefontB.render(fname, True, (0, 0, 0))
 							#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
-							gxmask2.fill((255, 255, 255))
+							gxmask2.fill(tilebgcolor)
 							gxmask2.blit(fvdir, (iconx, 0))
 							gxmask2.blit(textit, (labelx, 0))
 							gx=screensurf.blit(gxmask2, (maskx2, listy2))
@@ -318,9 +324,9 @@ while quitflag==0:
 							fileval=2
 							break
 						else:
-							textit=simplefontB.render(fname, True, (0, 0, 0), (255, 255, 255))
+							textit=simplefontB.render(fname, True, (0, 0, 0))
 							#gxmask=pygame.Surface((410, 40))
-							gxmask2.fill((255, 255, 255))
+							gxmask2.fill(tilebgcolor)
 							gxmask2.blit(typ.typeicon, (iconx, 0))
 							gxmask2.blit(textit, (labelx, 0))
 							gx=screensurf.blit(gxmask2, (maskx2, listy2))

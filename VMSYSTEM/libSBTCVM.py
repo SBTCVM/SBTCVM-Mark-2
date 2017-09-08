@@ -6,6 +6,7 @@ import math
 import time
 import os
 import libvmconf
+import libthemeconf
 
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
 
@@ -312,8 +313,8 @@ def autosquare(freq, lenth):
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 16)
 
-font0=libvmconf.getconf("font", "font0")
-font1=libvmconf.getconf("font", "font1")
+font0=libthemeconf.getconf("font", "font0")
+font1=libthemeconf.getconf("font", "font1")
 fondir=os.path.join("VMSYSTEM", font0)
 fondir2=os.path.join("VMSYSTEM", font1)
 

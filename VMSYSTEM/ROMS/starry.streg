@@ -1,0 +1,10 @@
+#SBTCVM trom execution group file
+#this is appended to the SBTCVM window title.
+streg_subtitle="SBTCVM Demos: Starry"
+TROMA="starry.trom"
+#TROMB="DEFAULT.TROM"
+#TROMC="DEFAULT.TROM"
+#TROMD="DEFAULT.TROM"
+#TROME="DEFAULT.TROM"
+#TROMF="DEFAULT.TROM"
+

@@ -5,5 +5,4 @@
 	<log vmexec="0" romexit="0" ioexit="0" tromlogging="0"/>
 	<video disablereadouts="1" fskip="0" ttystyle="0"/>
 	<bootup DEFAULTSTREG="intro.streg"/>
-	<font font0="FONT0" font1="FONT1"/>
 </conf>
