@@ -37,14 +37,14 @@ lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 #-----
 #Pause menu
 #visual menu item names:
-paumenulst=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM"]
-paumenulstKIOSK=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM"]
+paumenulst=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM", "Quit Now"]
+paumenulstKIOSK=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM", "Quit Now"]
 #selection codes:
-paumenucode=["CONTINUE", "QHELP", "CREDIT", "EXTRAS", "VMSTOP"]
-paumenudesc=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extra stuff", "Stop VM"]
-paumenudescKIOSK=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extras", "Stop VM"]
+paumenucode=["CONTINUE", "QHELP", "CREDIT", "EXTRAS", "VMSTOP", "QUICKQUIT"]
+paumenudesc=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extra stuff", "Stop VM", "Stop VM without wait at end"]
+paumenudescKIOSK=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extras", "Stop VM", "Stop VM without wait at end"]
 #number of menu items:
-paumenucnt=5
+paumenucnt=6
 pmenudesc="Pause Menu"
 #-----
 #pause extras menu
@@ -282,6 +282,14 @@ def pausemenu():
 				print "stop VM. "
 				print "------------------"
 				return("s")
+			if curmenucode[menuhighnum - 1]=="QUICKQUIT":
+				if KIOSKMODE==0:
+					screensurf.blit(scbak, (0, 0))
+					pygame.display.update()
+				#print "------------------"
+				print "stop VM. "
+				print "------------------"
+				return("qs")
 			if curmenucode[menuhighnum - 1]=="EXTRAS":
 				menuhighnum=1
 				curmenulst=expaumenulst

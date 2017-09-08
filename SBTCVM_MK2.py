@@ -353,7 +353,7 @@ if disablereadouts==1:
 
 TTYBGCOL=libSBTCVM.colorfind("------")
 TTYBGCOLREG="------"
-
+quickquit=0
 
 colvectorreg="000000"
 monovectorreg="000000"
@@ -1501,6 +1501,14 @@ while stopflag==0:
 							vmexeclog("VMSYSHALT: USER STOP")
 							evhappenflg2=1
 							break
+						if pmenret=="qs":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							quickquit=1
+							break
 						else:
 							break
 				if event.type == KEYDOWN and event.key == K_ESCAPE:
@@ -1511,6 +1519,14 @@ while stopflag==0:
 						abt=libSBTCVM.abtslackline(abt, "User stop.")
 						vmexeclog("VMSYSHALT: USER STOP")
 						evhappenflg2=1
+						break
+					if pmenret=="qs":
+						stopflag=1
+						abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+						abt=libSBTCVM.abtslackline(abt, "User stop.")
+						vmexeclog("VMSYSHALT: USER STOP")
+						evhappenflg2=1
+						quickquit=1
 						break
 					else:
 						break
@@ -1584,6 +1600,14 @@ while stopflag==0:
 							vmexeclog("VMSYSHALT: USER STOP")
 							evhappenflg2=1
 							break
+						if pmenret=="qs":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							quickquit=1
+							break
 						else:
 							break
 				if event.type == KEYDOWN and event.key == K_n:
@@ -1597,6 +1621,14 @@ while stopflag==0:
 						abt=libSBTCVM.abtslackline(abt, "User stop.")
 						vmexeclog("VMSYSHALT: USER STOP")
 						evhappenflg2=1
+						break
+					if pmenret=="qs":
+						stopflag=1
+						abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+						abt=libSBTCVM.abtslackline(abt, "User stop.")
+						vmexeclog("VMSYSHALT: USER STOP")
+						evhappenflg2=1
+						quickquit=1
 						break
 					else:
 						break
@@ -1668,6 +1700,14 @@ while stopflag==0:
 							vmexeclog("VMSYSHALT: USER STOP")
 							evhappenflg2=1
 							break
+						if pmenret=="qs":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							quickquit=1
+							break
 						else:
 							break
 				if event.type == KEYDOWN and event.key == K_LSHIFT:
@@ -1686,6 +1726,14 @@ while stopflag==0:
 						abt=libSBTCVM.abtslackline(abt, "User stop.")
 						vmexeclog("VMSYSHALT: USER STOP")
 						evhappenflg2=1
+						break
+					if pmenret=="qs":
+						stopflag=1
+						abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+						abt=libSBTCVM.abtslackline(abt, "User stop.")
+						vmexeclog("VMSYSHALT: USER STOP")
+						evhappenflg2=1
+						quickquit=1
 						break
 					else:
 						break
@@ -1750,6 +1798,14 @@ while stopflag==0:
 					abt=libSBTCVM.abtslackline(abt, "User stop.")
 					vmexeclog("VMSYSHALT: USER STOP")
 					break
+				if pmenret=="qs":
+					stopflag=1
+					abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+					abt=libSBTCVM.abtslackline(abt, "User stop.")
+					vmexeclog("VMSYSHALT: USER STOP")
+					evhappenflg2=1
+					quickquit=1
+					break
 				else:
 					break
 			if event.type == MOUSEBUTTONDOWN:
@@ -1761,6 +1817,14 @@ while stopflag==0:
 						abt=libSBTCVM.abtslackline(abt, "User stop.")
 						vmexeclog("VMSYSHALT: USER STOP")
 						evhappenflg2=1
+						break
+					if pmenret=="qs":
+						stopflag=1
+						abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+						abt=libSBTCVM.abtslackline(abt, "User stop.")
+						vmexeclog("VMSYSHALT: USER STOP")
+						evhappenflg2=1
+						quickquit=1
 						break
 					else:
 						break
@@ -2198,8 +2262,9 @@ if trackopsec==1:
 	#exlogclockticnum += 1
 	#exlogcurtime=time.time()
 
-evhappenflg3=0
-while evhappenflg3==0:
+if quickquit==0:
+	evhappenflg3=0
+	while evhappenflg3==0:
 		time.sleep(.1)
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN and event.key == K_RETURN:
