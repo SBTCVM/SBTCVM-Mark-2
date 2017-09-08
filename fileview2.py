@@ -235,7 +235,7 @@ while quitflag==0:
 		listy=listyoff
 		#reset list of fileclick objects.
 		flist=list()
-		if iterfiles!='.' and listy>=listydef:
+		if iterfiles!='.' and listy>=listydef and listy<screeny:
 			textit=simplefontB.render("..", True, (0, 0, 0))
 			#gxmask=pygame.Surface((410, 40))
 			gxmask.fill(tilebgcolor)
@@ -252,7 +252,7 @@ while quitflag==0:
 			if os.path.isdir(os.path.join(iterfiles, fname)):
 				#if check to hide hidden git directory. 
 				if not fname.endswith(".git"):
-					if listy<listydef:
+					if listy<listydef or listy>screeny:
 						fileval=2
 					else:
 						textit=simplefontB.render(fname, True, (0, 0, 0))
@@ -266,7 +266,7 @@ while quitflag==0:
 						fileval=1
 			for typ in typelist:
 				if fnamelo.endswith(("." + typ.ext)) and (filterflg==0 or filterflg==typ.filterflg): 
-					if listy<listydef:
+					if listy<listydef or listy>screeny:
 						fileval=2
 						break
 					else:
@@ -290,7 +290,7 @@ while quitflag==0:
 		if panemode==2:
 			listy2=listyoff2
 			#reset list of fileclick objects.
-			if iterfiles2!='.' and listy2>=listydef2:
+			if iterfiles2!='.' and listy2>=listydef2 and listy2<screeny:
 				textit=simplefontB.render("..", True, (0, 0, 0))
 				#gxmask=pygame.Surface((410, 40))
 				gxmask2.fill(tilebgcolor)
@@ -307,7 +307,7 @@ while quitflag==0:
 				if os.path.isdir(os.path.join(iterfiles2, fname)):
 					#if check to hide hidden git directory. 
 					if not fname.endswith(".git"):
-						if listy2<listydef2:
+						if listy2<listydef2 or listy2>screeny:
 							fileval=2
 						else:
 							textit=simplefontB.render(fname, True, (0, 0, 0))
@@ -321,7 +321,7 @@ while quitflag==0:
 							fileval=1
 				for typ in typelist:
 					if fnamelo.endswith(("." + typ.ext)) and (filterflg2==0 or filterflg2==typ.filterflg): 
-						if listy2<listydef2:
+						if listy2<listydef2 or listy2>screeny:
 							fileval=2
 							break
 						else:
