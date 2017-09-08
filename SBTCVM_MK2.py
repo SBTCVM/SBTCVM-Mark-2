@@ -66,11 +66,16 @@ class BTTHREAD:
 windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon64.png'))
 pygame.display.set_icon(windowicon)
 
+disablereadouts=int(libvmconf.getconf("video", "disablereadouts"))
+
+
 screensurf=pygame.display.set_mode((800, 600))
 #
 
 
 vmbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VMBG.png')).convert()
+pauseicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'PAUSEBTN.png')).convert()
+pausex=vmbg.blit(pauseicon, (650, 300))
 screensurf.blit(vmbg, (0, 0))
 #init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
 vmui.initui(screensurf, 0)
@@ -340,6 +345,10 @@ if 'GLOBKIOSK' in globals():
 		ttystyle=0
 		print "Kiosk mode active... enabling readouts and TTY mode 0..."
 
+if disablereadouts==1:
+	screensurf=pygame.display.set_mode((800, 486))
+	screensurf.blit(vmbg, (0, 0))
+	pygame.display.update()
 
 
 TTYBGCOL=libSBTCVM.colorfind("------")
@@ -355,7 +364,7 @@ else:
 	STEPLED=LEDGREENOFF
 
 #keep unused events out of queue
-pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP])
+pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN])
 
 libSBTCVMsurf=pygame.Surface((648, 486)).convert()
 libSBTCVMsurf.fill(TTYBGCOL)
@@ -414,6 +423,7 @@ prevINST="diff"
 prevDATA="diff"
 regsetpoint="000000000"
 updtcdisp=1
+ttyredrawfull=1
 updtmdisp=1
 updtblits=list()
 updtttyprev=list()
@@ -1480,6 +1490,19 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_RETURN:
 					evhappenflg2=1
 					break
+					
+				if event.type == MOUSEBUTTONDOWN:
+					if pausex.collidepoint(event.pos)==1 and event.button==1:
+						pmenret=vmui.pausemenu()
+						if pmenret=="s":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							break
+						else:
+							break
 				if event.type == KEYDOWN and event.key == K_ESCAPE:
 					pmenret=vmui.pausemenu()
 					if pmenret=="s":
@@ -1519,11 +1542,23 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
+						screensurf=pygame.display.set_mode((800, 600))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
+						screensurf=pygame.display.set_mode((800, 486))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
 					#STEPLED=LEDGREENON
+					updtcdisp=1
+					ttyredraw=1
+					updtmdisp=1
+					ttyredrawfull=1
 					break
 		abt=libSBTCVM.abtslackline(abt, ("\n"))
 		USRWAIT=0
@@ -1539,6 +1574,18 @@ while stopflag==0:
 					EXECCHANGE=1
 					evhappenflg2=1
 					break
+				if event.type == MOUSEBUTTONDOWN:
+					if pausex.collidepoint(event.pos)==1 and event.button==1:
+						pmenret=vmui.pausemenu()
+						if pmenret=="s":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							break
+						else:
+							break
 				if event.type == KEYDOWN and event.key == K_n:
 					evhappenflg2=1
 					break
@@ -1580,11 +1627,23 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
+						screensurf=pygame.display.set_mode((800, 600))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
+						screensurf=pygame.display.set_mode((800, 486))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
 					#STEPLED=LEDGREENON
+					updtcdisp=1
+					ttyredraw=1
+					updtmdisp=1
+					ttyredrawfull=1
 					break
 		abt=libSBTCVM.abtslackline(abt, ("\n"))
 		USRYN=0
@@ -1599,6 +1658,18 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_RETURN:
 					evhappenflg2=1
 					break
+				if event.type == MOUSEBUTTONDOWN:
+					if pausex.collidepoint(event.pos)==1 and event.button==1:
+						pmenret=vmui.pausemenu()
+						if pmenret=="s":
+							stopflag=1
+							abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+							abt=libSBTCVM.abtslackline(abt, "User stop.")
+							vmexeclog("VMSYSHALT: USER STOP")
+							evhappenflg2=1
+							break
+						else:
+							break
 				if event.type == KEYDOWN and event.key == K_LSHIFT:
 					stepcont=1
 					evhappenflg2=1
@@ -1634,6 +1705,27 @@ while stopflag==0:
 					updtblits.extend([upt])
 					evhappenflg2=1
 					break
+				if event.type == KEYDOWN and event.key == K_F4:
+					if disablereadouts==1:
+						disablereadouts=0
+						screensurf=pygame.display.set_mode((800, 600))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
+						print "readouts enabled"
+					elif disablereadouts==0:
+						print "readouts disabled"
+						disablereadouts=1
+						screensurf=pygame.display.set_mode((800, 486))
+						screensurf.blit(vmbg, (0, 0))
+						vmui.dummyreadouts()
+						pygame.display.update()
+					#STEPLED=LEDGREENON
+					updtcdisp=1
+					ttyredraw=1
+					updtmdisp=1
+					ttyredrawfull=1
+					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
 					for IOitm in IOdumplist:
@@ -1660,6 +1752,18 @@ while stopflag==0:
 					break
 				else:
 					break
+			if event.type == MOUSEBUTTONDOWN:
+				if pausex.collidepoint(event.pos)==1 and event.button==1:
+					pmenret=vmui.pausemenu()
+					if pmenret=="s":
+						stopflag=1
+						abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
+						abt=libSBTCVM.abtslackline(abt, "User stop.")
+						vmexeclog("VMSYSHALT: USER STOP")
+						evhappenflg2=1
+						break
+					else:
+						break
 			if event.type == KEYDOWN and event.key == K_F1:
 					subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
 			if event.type == KEYDOWN and event.key == K_F7:
@@ -1687,11 +1791,23 @@ while stopflag==0:
 			if event.type == KEYDOWN and event.key == K_F4:
 				if disablereadouts==1:
 					disablereadouts=0
+					screensurf=pygame.display.set_mode((800, 600))
+					screensurf.blit(vmbg, (0, 0))
+					vmui.dummyreadouts()
+					pygame.display.update()
 					print "readouts enabled"
 				elif disablereadouts==0:
 					print "readouts disabled"
 					disablereadouts=1
-				#STEPLED=LEDGREENON
+					screensurf=pygame.display.set_mode((800, 486))
+					screensurf.blit(vmbg, (0, 0))
+					vmui.dummyreadouts()
+					pygame.display.update()
+					#STEPLED=LEDGREENON
+				updtcdisp=1
+				ttyredraw=1
+				updtmdisp=1
+				ttyredrawfull=1
 				break
 			if event.type == KEYDOWN and (event.key == K_1 or event.key == K_KP1) and key1 == 1:
 				EXECADDRNEXT=key1adr

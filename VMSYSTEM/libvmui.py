@@ -116,6 +116,7 @@ def pausemenu():
 	curmenulst=paumenulst
 	curmenucnt=paumenucnt
 	curmenucode=paumenucode
+	menubtnrect=pygame.Rect(650, 300, 40, 40)
 	if KIOSKMODE==1:
 		curmenudesc=paumenudescKIOSK
 		curmenulst=paumenulstKIOSK
@@ -219,6 +220,13 @@ def pausemenu():
 					break
 				if event.type == MOUSEBUTTONDOWN:
 					mousexcnt=1
+					if menubtnrect.collidepoint(event.pos)==1 and event.button==1:
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						#print "------------------"
+						print "continue VM. "
+						print "------------------"
+						return("c")
 					for fxd in curmenulst:
 						if datdict[mousexcnt].collidepoint(event.pos)==1 and event.button==1:
 							menuhighnum=mousexcnt
