@@ -43,7 +43,7 @@ vmui.initui(screensurf, 1)
 #image data loading
 
 filehud=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileviewhud.png')).convert_alpha()
-filebg=(libthemeconf.bgmake(filehud)).convert()
+
 
 
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
@@ -124,15 +124,15 @@ runexec=0
 
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 #blit fixed on-screen buttons to filebg.
-filemenux=filebg.blit(fvfilemenu, (3, 5))
+filemenux=filehud.blit(fvfilemenu, (3, 5))
 #ghelpx=filebg.blit(helpbtn, (44, 5))
 #gneww=filebg.blit(newbtn, (85, 5))
 #runx=filebg.blit(fvrun, (136, 5))
 #viewx=filebg.blit(fvview, (177, 5))
 
-filp1=filebg.blit(panefilter1, (3, 57))
-filp2=filebg.blit(panefilter2, (95, 57))
-
+filp1=filehud.blit(panefilter1, (3, 57))
+filp2=filehud.blit(panefilter2, (95, 57))
+filebg=(libthemeconf.bgmake(filehud)).convert()
 panemode=1
 
 listy2=0
@@ -147,8 +147,9 @@ scupdate=1
 fmnew=vmui.menuitem("New Window", "NEW")
 fmhelp=vmui.menuitem("Help (F1)", "HELP")
 fmabout=vmui.menuitem("About Fileview", "ABOUT")
+fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
-filemenu=[fmnew, fmhelp, fmabout, fmquit]
+filemenu=[fmnew, fmhelp, fmabout, fmbg, fmquit]
 
 
 #create gxmask only once. just reuse it.
@@ -385,6 +386,10 @@ while quitflag==0:
 					break
 				if menuret=="ABOUT":
 					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+				if menuret=="SETBG":
+					libthemeconf.settheme(3, 45)
+					scupdate=1
+					filebg=(libthemeconf.bgmake(filehud)).convert()
 				if menuret=="NEW":
 					subprocess.Popen(["python", "fileview2.py"])
 			if panex.collidepoint(event.pos)==1 and event.button==1:

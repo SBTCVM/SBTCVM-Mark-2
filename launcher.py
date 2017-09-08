@@ -140,11 +140,7 @@ fmquit=vmui.menuitem("Quit", "QUIT")
 filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 
-bgitem0=vmui.menuitem("Blue Gradient", "BG0")
-bgitem1=vmui.menuitem("Flower", "BG1")
-bgitem2=vmui.menuitem("Sky", "BG1")
 
-bgmenu=[bgitem0, bgitem1]
 #menulabel=simplefontC.render("SBTCVM launcher v2.0", True, (0, 0, 0))
 #bg.blit(menulabel, (258, 4))
 #itemlabel=simplefontB.render(curmenudesc[(menuhighnum - 1)], True, (0, 0, 0), (255, 255, 255))
@@ -196,19 +192,22 @@ while qflg==0:
 				if menuret=="ABOUT":
 					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
 				if menuret=="SETBG":
-					bgret=vmui.menuset(bgmenu, 3, 43, reclick=0, fontsize=26)
-					if bgret=="BG0":
-						#bg=bg0
-						scupdate=1
-						libthemeconf.setconf("desk", "bgtheme", "0")
-						libthemeconf.saveconf()
-						bg=(libthemeconf.bgmake(bghud)).convert()
-					if bgret=="BG1":
-						#bg=bg1
-						scupdate=1
-						libthemeconf.setconf("desk", "bgtheme", "1")
-						libthemeconf.saveconf()
-						bg=(libthemeconf.bgmake(bghud)).convert()
+					libthemeconf.settheme(3, 43)
+					scupdate=1
+					bg=(libthemeconf.bgmake(bghud)).convert()
+					#bgret=vmui.menuset(bgmenu, 3, 43, reclick=0, fontsize=26)
+					#if bgret=="BG0":
+						##bg=bg0
+						#scupdate=1
+						#libthemeconf.setconf("desk", "bgtheme", "0")
+						#libthemeconf.saveconf()
+						#bg=(libthemeconf.bgmake(bghud)).convert()
+					#if bgret=="BG1":
+						##bg=bg1
+						#scupdate=1
+						#libthemeconf.setconf("desk", "bgtheme", "1")
+						#libthemeconf.saveconf()
+						#bg=(libthemeconf.bgmake(bghud)).convert()
 						
 				if menuret=="QUIT":
 					qflg=1
