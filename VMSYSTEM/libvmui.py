@@ -7,6 +7,7 @@ from pygame.locals import *
 #import libSBTCVM
 #import libbaltcalc
 import subprocess
+import VMSYSTEM.libthemeconf as libthemeconf
 pygame.font.init()
 #pygame.mixer.init()
 
@@ -14,6 +15,10 @@ pygame.font.init()
 #this library handles many graphical tasks, as well as containing
 #functions for many tools and features found in the menus and in MK2-TOOLS
 #even the VM pause menu is in here.
+
+
+
+
 
 #fonts
 simplefont = pygame.font.SysFont(None, 16)
@@ -552,7 +557,7 @@ class menuitem:
 # -reclick=0 just returns upon click outside menu
 # -reclick=2 ignores click outside menu
 # (menuset will return None upon returning due to click outside menu)
-def menuset(menulist, xpos, ypos, reclick=1, textcol=(0, 0, 0), unavcol=(100, 100, 100), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unavcol=libthemeconf.diaginact, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
 	global screensurf
 	scbak=screensurf.copy()
 	textfnt = pygame.font.SysFont(None, fontsize)
@@ -672,7 +677,7 @@ def listline(textstring):
 # (okdiag will return None upon returning due to click outside dialog)
 #
 #SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
-def okdiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
 	global screensurf
 	scbak=screensurf.copy()
 	btnw=100
@@ -747,7 +752,7 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 1
 # (okdiag will return None upon returning due to click outside dialog)
 #
 #SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
-def yndiag(textstring, xpos, ypos, reclick=2, textcol=(0, 0, 0), linecol=(120, 120, 120), bgcol=(255, 255, 255),  fontsize=20):
+def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
 	global screensurf
 	scbak=screensurf.copy()
 	btnw=100
@@ -1372,5 +1377,21 @@ def creditsscroll():
 				elif event.type == QUIT:
 					return()
 
+mbg0=menuitem("Blue Gradient", "BG0")
+mbg1=menuitem("Flower", "BG1")
+mbg2=menuitem("Clouds", "BG2")
 
+bgmenu=[mbg0, mbg1, mbg2]
+
+def settheme(xpos, ypos):
+	bgret=menuset(bgmenu, xpos, ypos, reclick=0, fontsize=26)
+	if bgret=="BG0":
+		libthemeconf.setconf("desk", "bgtheme", "0")
+		libthemeconf.saveconf()
+	if bgret=="BG1":
+		libthemeconf.setconf("desk", "bgtheme", "1")
+		libthemeconf.saveconf()
+	if bgret=="BG2":
+		libthemeconf.setconf("desk", "bgtheme", "2")
+		libthemeconf.saveconf()
 

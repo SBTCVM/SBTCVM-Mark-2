@@ -387,7 +387,7 @@ while quitflag==0:
 				if menuret=="ABOUT":
 					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
 				if menuret=="SETBG":
-					libthemeconf.settheme(3, 45)
+					vmui.settheme(3, 45)
 					scupdate=1
 					filebg=(libthemeconf.bgmake(filehud)).convert()
 				if menuret=="NEW":

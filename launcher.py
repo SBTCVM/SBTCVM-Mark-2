@@ -30,7 +30,7 @@ pygame.display.set_caption(("SBTCVM Launcher"), ("SBTCVM Launcher"))
 
 windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'icon.png'))
 pygame.display.set_icon(windowicon)
-screensurf=pygame.display.set_mode((800, 600))
+screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 screenx=800
 screeny=600
 vmui.initui(screensurf, 1)
@@ -42,10 +42,15 @@ Copyright (c) 2016-2017 Thomas Leathers and Contributors
 See README.md for more information."""
 
 #image data:
-bghud=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'launchhud.png')).convert_alpha()
+#bghud=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'launchhud.png')).convert_alpha()
+bghud=pygame.Surface((screenx, screeny), SRCALPHA)
 
 
 bg=(libthemeconf.bgmake(bghud)).convert()
+
+sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'SBTCVMbadge.png')).convert()
+bgoverlay=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpbgover.png')).convert_alpha()
+
 gtticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'gtt.png')).convert()
 introicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'intro.png')).convert()
 
@@ -66,7 +71,7 @@ fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.p
 class launchtile:
 	def __init__(self, label, icon, ltype, lref=None, lref2=None):
 		self.label=label
-		self.textren=tilefont.render(self.label, True, (0, 0, 0))
+		self.textren=tilefont.render(self.label, True, libthemeconf.tiletext)
 		self.icon=icon
 		self.ltype=ltype
 		self.lref=lref
@@ -77,7 +82,7 @@ class launchtile:
 		self.iconh=60
 		self.tilebox=pygame.Rect(0, 0, self.tileh, self.tilew)
 		self.tilesurf=pygame.Surface((self.tilew, self.tileh), SRCALPHA)
-		self.tilesurf.fill((255, 255, 255, 200))
+		self.tilesurf.fill(libthemeconf.tilecolor)
 		self.textx=((self.tileh // 2) - (self.textren.get_width() // 2))
 		self.iconx=((self.tileh // 2) - (self.icon.get_width() // 2))
 		self.icony=3
@@ -144,11 +149,27 @@ filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 scupdate=1
 qflg=0
+resizeflg=0
 while qflg==0:
+	if resizeflg==1:
+		resizeflg=2
+	elif resizeflg==2:
+		screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
+		bg=(libthemeconf.bgmake(None)).convert()
+		bg=pygame.transform.scale(bg, (resw, resh))
+		scupdate=1
+		resizeflg=0	
+		screeny=resh
+		screenx=resw
 	#display drawing
 	if scupdate==1:
 		scupdate=0
+		screensurf.fill(libthemeconf.deskcolor)
 		screensurf.blit(bg, (0, 0))
+		hudrect=pygame.Rect(0, 0, screenx, 44)
+		screensurf.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
 		tilex=10
 		tiley=60
 		tilejumpx=100
@@ -160,7 +181,7 @@ while qflg==0:
 		#tile render
 		for tile in tilelist:
 			tile.render(tilex, tiley)
-			if tilex+tilejumpx<screenx:
+			if tilex+tilejumpx+90<screenx:
 				tilex += tilejumpx
 			else:
 				tilex=10
@@ -177,6 +198,12 @@ while qflg==0:
 		if event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 			break
+		if event.type==VIDEORESIZE:
+			resizeflg=1
+			resw=event.w
+			resh=event.h
+			time.sleep(0.1)
+			break
 		if event.type==MOUSEBUTTONDOWN:
 			#process tile clicks
 			for tile in tilelist:
@@ -192,10 +219,10 @@ while qflg==0:
 				if menuret=="ABOUT":
 					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
 				if menuret=="SETBG":
-					libthemeconf.settheme(3, 43)
+					vmui.settheme(3, 43)
 					scupdate=1
-					bg=(libthemeconf.bgmake(bghud)).convert()
-						
+					bg=(libthemeconf.bgmake(None)).convert()
+					bg=pygame.transform.scale(bg, (screenx, screeny))
 				if menuret=="QUIT":
 					qflg=1
 					break
