@@ -100,8 +100,9 @@ elif cmd==None:
 				call(arglst2)
 			except IndexError:
 				call(["python", "MK2-TOOLS.py"])
-		elif (usercalllst[0]).lower()=="mainmenu":
-				call(["python", "MK2-MENU.py"])
+		#Dropped
+		#elif (usercalllst[0]).lower()=="mainmenu":
+		#		call(["python", "MK2-MENU.py"])
 		#Dropped
 		#elif (usercalllst[0]).lower()=="tutorial":
 		#		call(["python", "SBTCVM_tutorial.py"])

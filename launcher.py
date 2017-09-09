@@ -46,11 +46,8 @@ bghud=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'launchhud.png
 
 
 bg=(libthemeconf.bgmake(bghud)).convert()
-#abticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'about.png')).convert_alpha()
-#exiticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'exit.png')).convert_alpha()
 gtticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'gtt.png')).convert()
 introicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'intro.png')).convert()
-#menuicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'menu.png')).convert_alpha()
 
 DUMMY=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'dummy.png')).convert()
 helpicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'help.png')).convert()
@@ -103,7 +100,7 @@ class launchtile:
 			if self.ltype==2:
 				subprocess.Popen(["python", "MK2-RUN.py", self.lref])
 			
-
+#create launchtile objects
 helpt=launchtile("Help", helpicn, 0, lref="helpview.py")
 filet=launchtile("FileView", fvicn, 0, lref="fileview2.py")
 settingt=launchtile("Settings", settingsicn, 0, lref="settings.py")
@@ -115,6 +112,7 @@ starryt=launchtile("Starry", romicon, 2, lref="starry.streg")
 rayburstt=launchtile("Ray Burst", romicon, 2, lref="rayburst.streg")
 dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
+
 #category lists
 maincat=[filet, calct, settingt, helpt, creditt]
 gamescat=[gttt]
@@ -126,12 +124,14 @@ tilelist=maincat
 catid=0
 catname="Main"
 
+#categoru menu
 cmitem0=vmui.menuitem("Main", "MAIN")
 cmitem1=vmui.menuitem("Games", "GAMES")
 cmitem2=vmui.menuitem("Welcome", "WELCOME")
 cmitem3=vmui.menuitem("Demos", "DEMOS")
 catmenu=[cmitem0, cmitem1, cmitem2, cmitem3]
 
+#file menu
 fmhelp=vmui.menuitem("Help (F1)", "HELP")
 fmabout=vmui.menuitem("About Launcher", "ABOUT")
 fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
@@ -141,13 +141,11 @@ filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 
 
-#menulabel=simplefontC.render("SBTCVM launcher v2.0", True, (0, 0, 0))
-#bg.blit(menulabel, (258, 4))
-#itemlabel=simplefontB.render(curmenudesc[(menuhighnum - 1)], True, (0, 0, 0), (255, 255, 255))
-#bg.blit(itemlabel, (170, 34))
+
 scupdate=1
 qflg=0
 while qflg==0:
+	#display drawing
 	if scupdate==1:
 		scupdate=0
 		screensurf.blit(bg, (0, 0))
@@ -159,8 +157,7 @@ while qflg==0:
 		catmx=screensurf.blit(fvcatmenu, (48, 3))
 		menulabel=catfont.render(catname, True, (0, 0, 0))
 		screensurf.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
-		#menulabel=simplefontC.render("Category: " + catname, True, (0, 0, 0))
-		#screensurf.blit(menulabel, (258, 4))
+		#tile render
 		for tile in tilelist:
 			tile.render(tilex, tiley)
 			if tilex+tilejumpx<screenx:
@@ -170,6 +167,7 @@ while qflg==0:
 				tiley += tilejumpy
 		pygame.display.update()
 	time.sleep(0.1)
+	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			qflg=1
@@ -180,9 +178,11 @@ while qflg==0:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 			break
 		if event.type==MOUSEBUTTONDOWN:
+			#process tile clicks
 			for tile in tilelist:
 				if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
 					tile.act()
+			#file menu
 			if filemx.collidepoint(event.pos)==1 and event.button==1:
 				menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
 				if menuret=="HELP":
@@ -195,23 +195,11 @@ while qflg==0:
 					libthemeconf.settheme(3, 43)
 					scupdate=1
 					bg=(libthemeconf.bgmake(bghud)).convert()
-					#bgret=vmui.menuset(bgmenu, 3, 43, reclick=0, fontsize=26)
-					#if bgret=="BG0":
-						##bg=bg0
-						#scupdate=1
-						#libthemeconf.setconf("desk", "bgtheme", "0")
-						#libthemeconf.saveconf()
-						#bg=(libthemeconf.bgmake(bghud)).convert()
-					#if bgret=="BG1":
-						##bg=bg1
-						#scupdate=1
-						#libthemeconf.setconf("desk", "bgtheme", "1")
-						#libthemeconf.saveconf()
-						#bg=(libthemeconf.bgmake(bghud)).convert()
 						
 				if menuret=="QUIT":
 					qflg=1
 					break
+			#category menu
 			if catmx.collidepoint(event.pos)==1 and event.button==1:
 				menuret=vmui.menuset(catmenu, 48, 43, reclick=0, fontsize=26)
 				if menuret=="MAIN":
@@ -234,25 +222,3 @@ while qflg==0:
 					catid=3
 					catname="Demos"
 					scupdate=1
-			#if icn1.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "MK2-MENU.py"])
-			#if icn2.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "helpview.py"])
-			#if icn3.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "MK2-RUN.py", "-k", "gtt.streg"])
-			#if icn4.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "MK2-RUN.py", "-k", "intro.streg"])
-			#if icn5.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
-			#if icn6.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "fileview2.py"])
-			#if icn7.collidepoint(event.pos)==1 and event.button==1:
-				##subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join("VMSYSTEM", "launcherabout.txt"))])
-				#subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
-			#if icn8.collidepoint(event.pos)==1 and event.button==1:
-			#	qflg=1
-			#	break
-			#if icn9.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "settings.py"])
-			#if icn10.collidepoint(event.pos)==1 and event.button==1:
-				#subprocess.Popen(["python", "calc.py"])
