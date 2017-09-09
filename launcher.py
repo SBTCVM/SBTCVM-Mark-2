@@ -144,7 +144,7 @@ fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
 filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
-
+versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
 
 scupdate=1
@@ -170,6 +170,7 @@ while qflg==0:
 		screensurf.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
 		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
 		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
+		screensurf.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
 		tilex=10
 		tiley=60
 		tilejumpx=100
