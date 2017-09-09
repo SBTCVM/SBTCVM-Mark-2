@@ -96,6 +96,8 @@ for f in mixlist:
 
 qflg=0
 scupdate=1
+
+stcolor=(255, 255, 255)
 while qflg==0:
 	time.sleep(0.05)
 	if scupdate==1:
@@ -123,43 +125,43 @@ while qflg==0:
 			menulabel=catfont.render("Other", True, (0, 0, 0))
 		screensurf.blit(menulabel, (209, 5))
 		
-		menulabel=simplefontB.render("Status Readouts.", True, (0, 0, 0))
+		menulabel=simplefontB.render("Status Readouts.", True, stcolor)
 		screensurf.blit(menulabel, (0, 80))
 		if disablereadouts==0:
 			disre=screensurf.blit(swon, (0, 100))
 		else:
 			disre=screensurf.blit(swoff, (0, 100))
-		menulabel=simplefontB.render("TTY (virtual text display)", True, (0, 0, 0))
+		menulabel=simplefontB.render("TTY (virtual text display)", True, stcolor)
 		screensurf.blit(menulabel, (250, 80))
 		if ttystyle==0:
 			ttyx=screensurf.blit(swon, (250, 100))
 		else:
 			ttyx=screensurf.blit(swoff, (250, 100))
-		menulabel=simplefontB.render("Step By Step CPU debug mode.", True, (0, 0, 0))
+		menulabel=simplefontB.render("Step By Step CPU debug mode.", True, stcolor)
 		screensurf.blit(menulabel, (0, 130))
 		if stepbystep==1:
 			stepx=screensurf.blit(swon, (0, 150))
 		else:
 			stepx=screensurf.blit(swoff, (0, 150))
-		menulabel=simplefontB.render("Log execution process.", True, (0, 0, 0))
+		menulabel=simplefontB.render("Log execution process.", True, stcolor)
 		screensurf.blit(menulabel, (250, 130))
 		if vmexeclogflg==1:
 			vmex=screensurf.blit(swon, (250, 150))
 		else:
 			vmex=screensurf.blit(swoff, (250, 150))
-		menulabel=simplefontB.render("Dump IObus on exit.", True, (0, 0, 0))
+		menulabel=simplefontB.render("Dump IObus on exit.", True, stcolor)
 		screensurf.blit(menulabel, (0, 180))
 		if logIOexit==1:
 			ioex=screensurf.blit(swon, (0, 200))
 		else:
 			ioex=screensurf.blit(swoff, (0, 200))
-		menulabel=simplefontB.render("Dump memory bus on exit.", True, (0, 0, 0))
+		menulabel=simplefontB.render("Dump memory bus on exit.", True, stcolor)
 		screensurf.blit(menulabel, (250, 180))
 		if logromexit==1:
 			romex=screensurf.blit(swon, (250, 200))
 		else:
 			romex=screensurf.blit(swoff, (250, 200))
-		menulabel=simplefontB.render("Log memory bus operations", True, (0, 0, 0))
+		menulabel=simplefontB.render("Log memory bus operations", True, stcolor)
 		screensurf.blit(menulabel, (0, 230))
 		if tromlogging==1:
 			tromx=screensurf.blit(swon, (0, 250))
