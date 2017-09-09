@@ -210,18 +210,21 @@ while qflg==0:
 				mixrate=vmui.menuset(mixmenu, 45, 45, reclick=0, fontsize=26)
 				if mixrate==None:
 					mixrate=mixratebak
+				libvmconf.setconf("audio", "mixrate", str(mixrate))
 				scupdate=1
 			if cpux.collidepoint(event.pos)==1 and event.button==1:
 				cpubak=CPUWAIT
 				CPUWAIT=vmui.menuset(cpumenu, 209, 45, reclick=0, fontsize=26)
 				if CPUWAIT==None:
 					CPUWAIT=cpubak
+				libvmconf.setconf("cpu", "cpuwait", str(CPUWAIT))
 				scupdate=1
 			if fskipx.collidepoint(event.pos)==1 and event.button==1:
 				fskipbak=fskip
 				fskip=vmui.menuset(fskipmenu, 127, 45, reclick=0, fontsize=26)
 				if fskip==None:
 					fskip=fskipbak
+				libvmconf.setconf("video", "fskip", str(fskip))
 				scupdate=1
 			#if quitx.collidepoint(event.pos)==1 and event.button==1:
 				#qflg=1
