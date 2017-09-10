@@ -48,7 +48,7 @@ bghud=pygame.Surface((screenx, screeny), SRCALPHA)
 
 bg=(libthemeconf.bgmake(bghud)).convert()
 
-sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'SBTCVMbadge.png')).convert()
+sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 bgoverlay=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpbgover.png')).convert_alpha()
 
 gtticn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'gtt.png')).convert()
@@ -58,6 +58,8 @@ DUMMY=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'dummy.png')).
 helpicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'help.png')).convert()
 fvicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fileview.png')).convert()
 settingsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'settings.png')).convert()
+themeicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'theme.png')).convert()
+
 calcicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'calc.png')).convert()
 creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.png')).convert()
 
@@ -109,6 +111,8 @@ class launchtile:
 helpt=launchtile("Help", helpicn, 0, lref="helpview.py")
 filet=launchtile("FileView", fvicn, 0, lref="fileview2.py")
 settingt=launchtile("Settings", settingsicn, 0, lref="settings.py")
+themet=launchtile("Theme", themeicn, 0, lref="theme.py")
+
 calct=launchtile("Calc", calcicn, 0, lref="calc.py")
 creditt=launchtile("Credits", creditsicn, 0, lref="MK2-TOOLS.py", lref2="uicredits")
 introt=launchtile("intro", introicn, 1, lref="intro.streg")
@@ -119,7 +123,7 @@ dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 
 #category lists
-maincat=[filet, calct, settingt, helpt, creditt]
+maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]

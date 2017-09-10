@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+	<!--Theme info... formatvers is the FORMAT VERSION NUMBER not the version of the theme..-->
+	<info formatvers="1.0" name="Casual (default)" description="The Default SBTCVM color theme." />
+	<!--Used in UI "huds" and other utility-specific usage-->
+	<hud bg="#E5E5E5" text="#000000" div="#505050" />
+	<!--used in places where a "desk" color is needed. such as calc and settings...-->
+	<desk bg="#2C4764" text="#FFFFFF" />
+	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
+	<tile color="#FFFFFF" alpha="200" text="#000000" />
+	<!--Used by popup/dropdown menus and dialogs...-->
+	<diag bg="#FFFFFF" line="#787878" inact="#646464" text="#000000" />
+	<!--Used in text boxes and textinput-->
+	<textbox bg="#FFFFFF" line="#505050" text="#000000" />
+	<!--Colors used for the claculator's pad and lock indicators (hud and desk are used for the background)-->
+	<calc padbg="#FFFFFF" padtext="#000000" padline="#000000" lockoff="#141414" lockon="#5F9BFF" />
+	<!--Colors used bt SBTCVM's helpviewer-->
+	<help bg="#D2E6FF" text="#000000" link="#0000FF" />
+	<!--colors used by textview and codeview.-->
+	<textview bg="#FFFFFF" text="#000000" textblock="#000096" hig1="#E6E6E6" comment="#960000" gotoref="#E6FFE6" gotolabel="#E6E6FF" />
+</theme>

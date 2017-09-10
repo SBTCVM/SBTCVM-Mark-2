@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Settings"/>
+	<!--the rest can appear-->
+	<title>SBTCVM Theme</title>
+	<text>To choose a theme click the "theme" button and select an item from the list.
+
+To choose a background, click the "background" button and select an item from the list.
+
+to save click file>save</text>
+</main>

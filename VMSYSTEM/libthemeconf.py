@@ -22,7 +22,44 @@ elif os.path.isfile(os.path.join("VMSYSTEM", "CFG", "theme.xml")):
 	confroot = conftree.getroot()
 else:
 	sys.exit("ERROR: libthemeconf: UNABLE TO LOAD: theme.xml")
+
+themetag=confroot.find("theme")
+themefile=themetag.attrib.get("themefile")
+
+if os.path.isfile(os.path.join("VMSYSTEM", "CFG", themefile)):
+	themetree = ET.parse(os.path.join("VMSYSTEM", "CFG", themefile))
+	themeroot = themetree.getroot()
+elif os.path.isfile(os.path.join("VMUSER", "CFG", themefile)):
+	themetree = ET.parse(os.path.join("VMUSER", "CFG", themefile))
+	themeroot = themetree.getroot()
+elif os.path.isfile(os.path.join("VMSYSTEM", "CFG", "default.thm")):
+	themetree = ET.parse(os.path.join("VMSYSTEM", "CFG", themefile))
+	themeroot = themetree.getroot()
+else:
+	sys.exit("ERROR: libthemeconf: UNABLE TO LOAD A .thm THEME FILE!")
+
+internalformatvers=1.0
+
+themeinfo=themeroot.find("info")
+themename=themeinfo.attrib.get("name")
+themedesc=themeinfo.attrib.get("description")
+formatvers=float(themeinfo.attrib.get("formatvers"))
+
+
+def getthemeinfo(themefilename):
+	if os.path.isfile(os.path.join("VMSYSTEM", "CFG", themefilename)):
+		thtree = ET.parse(os.path.join("VMSYSTEM", "CFG", themefilename))
+		throot = thtree.getroot()
+	elif os.path.isfile(os.path.join("VMUSER", "CFG", themefilename)):
+		thtree = ET.parse(os.path.join("VMUSER", "CFG", themefilename))
+		throot = thtree.getroot()
+	thinfo=throot.find("info")
+	thname=thinfo.attrib.get("name")
+	thdescription=thinfo.attrib.get("description")
+	return (thname, thdescription)
 	
+
+
 
 def getconf(category, attrib):
 	cattag=confroot.find(category)
@@ -60,13 +97,62 @@ def bgmake(programbgoverlay=None):
 
 
 
+hudtag=themeroot.find("hud")
+hudbg=pygame.Color(hudtag.attrib.get("bg"))
+hudtext=pygame.Color(hudtag.attrib.get("text"))
+huddiv=pygame.Color(hudtag.attrib.get("div"))
 
-hudbg=(229, 229, 229)
-hudtext=(0, 0, 0)
-deskcolor=(44, 71, 100)
-tilecolor=(255, 255, 255, 200)
-tiletext=(0, 0, 0)
-diagbg=(255, 255, 255)
-diagtext=(0, 0, 0)
-diaginact=(100, 100, 100)
-diagline=(120, 120, 120)
+
+desktag=themeroot.find("desk")
+deskcolor=pygame.Color(desktag.attrib.get("bg"))
+desktext=pygame.Color(desktag.attrib.get("text"))
+
+
+
+tiletag=themeroot.find("tile")
+tilecolor=pygame.Color(tiletag.attrib.get("color"))
+tilecolor.a=(int(tiletag.attrib.get("alpha")))
+tiletext=pygame.Color(tiletag.attrib.get("text"))
+
+
+
+diagtag=themeroot.find("diag")
+diagbg=pygame.Color(diagtag.attrib.get("bg"))
+diagtext=pygame.Color(diagtag.attrib.get("text"))
+diaginact=pygame.Color(diagtag.attrib.get("inact"))
+diagline=pygame.Color(diagtag.attrib.get("line"))
+
+
+tbtag=themeroot.find("textbox")
+textboxline=pygame.Color(tbtag.attrib.get("line"))
+textboxbg=pygame.Color(tbtag.attrib.get("bg"))
+textboxtext=pygame.Color(tbtag.attrib.get("text"))
+
+
+calctag=themeroot.find("calc")
+
+calcpadbg=pygame.Color(calctag.attrib.get("padbg"))
+calcpadtext=pygame.Color(calctag.attrib.get("padtext"))
+calcpadline=pygame.Color(calctag.attrib.get("padline"))
+calclockon=pygame.Color(calctag.attrib.get("lockon"))
+calclockoff=pygame.Color(calctag.attrib.get("lockoff"))
+
+
+helptag=themeroot.find("help")
+
+helpbg=pygame.Color(helptag.attrib.get("bg"))
+helptext=pygame.Color(helptag.attrib.get("text"))
+helplink=pygame.Color(helptag.attrib.get("link"))
+
+
+tvtag=themeroot.find("textview")
+
+textvbg=pygame.Color(tvtag.attrib.get("bg"))
+textvtext=pygame.Color(tvtag.attrib.get("text"))
+textvtextblk=pygame.Color(tvtag.attrib.get("textblock"))
+textvhig1=pygame.Color(tvtag.attrib.get("hig1"))
+textvcomment=pygame.Color(tvtag.attrib.get("comment"))
+textvgotoref=pygame.Color(tvtag.attrib.get("gotoref"))
+textvgotolabel=pygame.Color(tvtag.attrib.get("gotolabel"))
+
+

@@ -13,45 +13,96 @@ import subprocess
 import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libbaltcalc as libbaltcalc
 from pygame.locals import *
+import VMSYSTEM.libthemeconf as libthemeconf
 
 pygame.display.init()
 pygame.font.init()
 
 simplefont = pygame.font.SysFont(None, 22)
+btnfont = pygame.font.SysFont(None, 21)
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 pygame.display.set_caption(("Ternary Calculator"), ("Ternary Calculator"))
 
 windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'icon.png'))
 pygame.display.set_icon(windowicon)
-screensurf=pygame.display.set_mode((450, 500))
+screensurf=pygame.display.set_mode((450, 450))
 
 vmui.initui(screensurf, 1)
 
-bg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'bg.jpg')).convert()
+def makebtn(text, text2=None):
+	btn=pygame.Surface((60, 60))
+	btnlocrec=pygame.Rect(0, 0, 60, 60)
+	btn.fill(libthemeconf.calcpadbg)
+	pygame.draw.rect(btn, libthemeconf.calcpadline, btnlocrec, 1)
+	texgfx=btnfont.render(text, True, libthemeconf.calcpadtext, libthemeconf.calcpadbg)
+	btn.blit(texgfx, ((30 - (texgfx.get_width() // 2)), 2))
+	if text2!=None:
+		texgfx=btnfont.render(text2, True, libthemeconf.calcpadtext, libthemeconf.calcpadbg)
+		btn.blit(texgfx, ((30 - (texgfx.get_width() // 2)), 30))
+	return btn
+
+#bg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'bg.jpg')).convert()
+bg=pygame.Surface((450, 500))
 lockon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockon.png')).convert_alpha()
 lockoff=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockoff.png')).convert_alpha()
+lockon=pygame.Surface((60, 60), SRCALPHA)
+lockoff=pygame.Surface((60, 60), SRCALPHA)
+lockrect=pygame.Rect(0, 48, 60, 12)
+
+pygame.draw.rect(lockon, libthemeconf.calclockon, lockrect, 0)
+pygame.draw.rect(lockon, libthemeconf.calcpadline, lockrect, 1)
+pygame.draw.rect(lockoff, libthemeconf.calclockoff, lockrect, 0)
+pygame.draw.rect(lockoff, libthemeconf.calcpadline, lockrect, 1)
 #row 1 gfx
-add=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'add.png')).convert()
-sub=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'sub.png')).convert()
-div=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'div.png')).convert()
-mul=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mul.png')).convert()
-copyab=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyab.png')).convert()
-inverta=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'inverta.png')).convert()
+add=makebtn("ADD")
+sub=makebtn("SUB")
+div=makebtn("DIV")
+mul=makebtn("MUL")
+copyab=makebtn("COPY", "A>B")
+inverta=makebtn("INVERT", "A")
 #row 2 gfx
-mpi=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mpi.png')).convert()
-mcv=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mcv.png')).convert()
-resa=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resa.png')).convert()
-resb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'resb.png')).convert()
-copyba=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'copyba.png')).convert()
-invertb=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'invertb.png')).convert()
+copyba=makebtn("COPY", "B>A")
+invertb=makebtn("INVERT", "B")
+mpi=makebtn("mpi")
+mcv=makebtn("mcv")
+resa=makebtn("res>A")
+resb=makebtn("res>B")
 #row 3 gfx
-swap=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'swap.png')).convert()
-mni=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'mni.png')).convert()
-quitg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'quit.png')).convert()
-helpg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'help.png')).convert()
+swap=makebtn("swap")
+mni=makebtn("mni")
+quitg=makebtn("QUIT")
+helpg=makebtn("HELP")
 
 scupdate=1
 qflg=0
+
+
+bgrect1=pygame.Rect(0, 0, 450, 256)
+bg.fill(libthemeconf.hudbg)
+pygame.draw.rect(bg, libthemeconf.deskcolor, bgrect1, 0)
+
+#clickboxes for user text inputs
+tritabx=pygame.Rect(20, 95, 404, 24)
+decabx=pygame.Rect(20, 119, 404, 24)
+tritbbx=pygame.Rect(20, 159, 404, 24)
+decbbx=pygame.Rect(20, 183, 404, 24)
+resbx=pygame.Rect(20, 19, 404, 64)
+
+#draw input boxes and result box...
+pygame.draw.rect(bg, libthemeconf.textboxbg, resbx, 0)
+pygame.draw.rect(bg, libthemeconf.textboxline, resbx, 1)
+
+pygame.draw.rect(bg, libthemeconf.textboxbg, tritabx, 0)
+pygame.draw.rect(bg, libthemeconf.textboxline, tritabx, 1)
+
+pygame.draw.rect(bg, libthemeconf.textboxbg, decabx, 0)
+pygame.draw.rect(bg, libthemeconf.textboxline, decabx, 1)
+
+pygame.draw.rect(bg, libthemeconf.textboxbg, tritbbx, 0)
+pygame.draw.rect(bg, libthemeconf.textboxline, tritbbx, 1)
+
+pygame.draw.rect(bg, libthemeconf.textboxbg, decbbx, 0)
+pygame.draw.rect(bg, libthemeconf.textboxline, decbbx, 1)
 
 #draw buttons onto background.
 padx=22
@@ -98,11 +149,20 @@ padx += 60
 quitx=bg.blit(quitg, (padx, pady))
 padx += 60
 
-#clickboxes for user text inputs
-tritabx=pygame.Rect(22, 97, 404, 24)
-decabx=pygame.Rect(22, 121, 404, 24)
-tritbbx=pygame.Rect(22, 161, 404, 24)
-decbbx=pygame.Rect(22, 186, 404, 24)
+terncalc=simplefont.render("SBTCVM Ternary Calculator", True, libthemeconf.desktext)
+bg.blit(terncalc, (2, 230))
+slab=simplefont.render("s.", True, libthemeconf.desktext)
+bg.blit(slab, (2, 20))
+tlab=simplefont.render("T", True, libthemeconf.desktext)
+bg.blit(tlab, (2, 40))
+bg.blit(tlab, (2, 97))
+bg.blit(tlab, (2, 161))
+
+dlab=simplefont.render("D", True, libthemeconf.desktext)
+bg.blit(dlab, (2, 60))
+bg.blit(dlab, (2, 121))
+bg.blit(dlab, (2, 186))
+
 #inital register values
 TA="0"
 DA=0
@@ -118,27 +178,26 @@ mcalclimit=36
 resalock=0
 resblock=0
 docopy=0
-inputtextcol=(0, 0, 0)
-bgcol=(210, 210, 255)
-bgcol=(255, 255, 255)
+#inputtextcol=(0, 0, 0)
+#bgcol=(255, 255, 255)
 while qflg==0:
 	if scupdate==1:
 		scupdate=0
 		screensurf.blit(bg, (0, 0))
 		#readout text
-		texgfx=simplefont.render(TA, True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(TA, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 97))
-		texgfx=simplefont.render(str(DA), True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(str(DA), True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 121))
-		texgfx=simplefont.render(TB, True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(TB, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 161))
-		texgfx=simplefont.render(str(DB), True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(str(DB), True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 186))
-		texgfx=simplefont.render(STAT, True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(STAT, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 20))
-		texgfx=simplefont.render(TR, True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(TR, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 40))
-		texgfx=simplefont.render(str(DR), True, (0, 0, 0), (255, 255, 255))
+		texgfx=simplefont.render(str(DR), True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (22, 60))
 		#result copy lock overlays:
 		if resalock==1:
@@ -308,14 +367,14 @@ while qflg==0:
 			if tritabx.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=simplefont.render(TA, True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 97))
-				TA=vmui.textinput(22, 97, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=TA, acceptchars="-0+")
+				TA=vmui.textinput(22, 97, fontsize=22, textstring=TA, acceptchars="-0+")
 				scupdate=1
 				DA=libbaltcalc.BTTODEC(TA)
 			if decabx.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=simplefont.render(str(DA), True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 121))
 				try:
-					DA=int(vmui.textinput(22, 121, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=str(DA), acceptchars="0987654321-"))
+					DA=int(vmui.textinput(22, 121, fontsize=22, textstring=str(DA), acceptchars="0987654321-"))
 				except ValueError:
 					print "SYNTAX ERROR IN DECIMAL INPUT A"
 					STAT="SYNTAX ERROR IN DECIMAL INPUT A"
@@ -324,14 +383,14 @@ while qflg==0:
 			if tritbbx.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=simplefont.render(TB, True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 161))
-				TB=vmui.textinput(22, 161, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=TB, acceptchars="-0+")
+				TB=vmui.textinput(22, 161, fontsize=22, textstring=TB, acceptchars="-0+")
 				scupdate=1
 				DB=libbaltcalc.BTTODEC(TB)
 			if decbbx.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=simplefont.render(str(DB), True, (255, 255, 255), (255, 255, 255))
 				screensurf.blit(texgfx, (22, 186))
 				try:
-					DB=int(vmui.textinput(22, 186, fontsize=22, textcol=inputtextcol, bgcol=bgcol, textstring=str(DB), acceptchars="0987654321-"))
+					DB=int(vmui.textinput(22, 186, fontsize=22, textstring=str(DB), acceptchars="0987654321-"))
 				except ValueError:
 					print "SYNTAX ERROR IN DECIMAL INPUT B"
 					STAT="SYNTAX ERROR IN DECIMAL INPUT B"

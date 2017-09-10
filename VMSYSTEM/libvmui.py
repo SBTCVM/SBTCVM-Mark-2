@@ -446,7 +446,7 @@ def charinsert(string, char, indexq):
 	else:
 		return (string[:(indexq-1)] + char + string[(indexq-1):])
 
-def textinput(xpos, ypos, textcol=(0, 0, 0), bgcol=(255, 255, 255),  fontsize=20, textstring="", acceptchars=""):
+def textinput(xpos, ypos, textcol=libthemeconf.textboxtext, bgcol=libthemeconf.textboxbg,  fontsize=20, textstring="", acceptchars=""):
 	global screensurf
 	scbak=screensurf.copy()
 	textfnt = pygame.font.SysFont(None, fontsize)
@@ -933,11 +933,11 @@ def textview(textfile):
 			#seek 0
 			abt.seek(0)
 			#fill screen
-			screensurf.fill((255, 255, 255))
+			screensurf.fill(libthemeconf.textvbg)
 			#text iterator
 			for f in abt:
 				if (texty+yjump)>0:
-					abttext=simplefontmono.render(f.replace("\n", ""), True, (0,0,0), (255, 255, 255))
+					abttext=simplefontmono.render(f.replace("\n", ""), True, libthemeconf.textvtext, libthemeconf.textvbg)
 					screensurf.blit(abttext, (textx, texty))
 				texty += yjump
 				if texty>screenh:
@@ -1055,7 +1055,7 @@ def codeview(textfile):
 			if redraw==1:
 				redraw=0
 			abt.seek(0)
-			screensurf.fill((255, 255, 255))
+			screensurf.fill(libthemeconf.textvbg)
 			linecnt=1
 			textblk=0
 			for f in abt:
@@ -1066,19 +1066,19 @@ def codeview(textfile):
 					if tasmflg==1:
 						if textblk==1:
 							
-							abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,150), (230, 230, 230))
+							abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvtextblk, libthemeconf.textvhig1)
 						else:
 							if f.startswith("#"):
-								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (150,0,0), (230, 230, 230))
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvcomment, libthemeconf.textvhig1)
 							elif "|>" in (f.replace(";", "|")):
-								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 255, 230))
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvtext, libthemeconf.textvgotoref)
 							elif (f.replace(";", "|")).count("|")==2:
-								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (230, 230, 255))
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvtext, libthemeconf.textvgotolabel)
 
 							else:
-								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
+								abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvtext, libthemeconf.textvbg)
 					else:
-						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, (0,0,0), (255, 255, 255))
+						abttext=simplefontmono.render(("{:<5}".format(str(linecnt)) + " " + f.replace("\n", "")), True, libthemeconf.textvtext, libthemeconf.textvbg)
 					screensurf.blit(abttext, (textx, texty))
 				if f.startswith("textstart") and tasmflg==1:
 					textblk=1
@@ -1214,7 +1214,7 @@ def imgview(imgfile):
 			scupdate=1
 		if scupdate==1:
 			scupdate=0
-			screensurf.fill((151, 178, 208))
+			screensurf.fill(libthemeconf.deskcolor)
 			#imgsc=pygame.transform.rotozoom(img, 0.0, scalefact)
 			#if scale factor is different from the previous scale factor, rescale image.
 			if scalefact!=pscalefact:

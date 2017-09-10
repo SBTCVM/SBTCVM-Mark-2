@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 import VMSYSTEM.libvmconf as libvmconf
 import xml.etree.ElementTree as ET
+import VMSYSTEM.libthemeconf as libthemeconf
 
 
 clicklist=list()
@@ -89,9 +90,9 @@ iconquit=pygame.image.load(os.path.join(datapath, 'iconquit.png')).convert()
 
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
 
-textcol=(0, 0, 0)
-bgcol=(210, 230, 255)
-linkcol=(0, 0, 255)
+textcol=libthemeconf.helptext
+bgcol=libthemeconf.helpbg
+linkcol=libthemeconf.helplink
 screenh=486
 screenw=648
 yoff=0

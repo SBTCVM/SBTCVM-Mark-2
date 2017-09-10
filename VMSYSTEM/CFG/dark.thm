@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+	<!--Theme info... formatvers is the FORMAT VERSION NUMBER not the version of the theme..-->
+	<info formatvers="1.0" name="Dark" description="A darker theme." />
+	<!--Used in UI "huds" and other utility-specific usage-->
+	<hud bg="#2D2D2D" text="#FFFFFF" div="#5B738B" />
+	<!--used in places where a "desk" color is needed. such as calc and settings...-->
+	<desk bg="#000E5B" text="#FFFFFF" />
+	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
+	<tile color="#343750" alpha="220" text="#FFFFFF" />
+	<!--Used by popup/dropdown menus and dialogs...-->
+	<diag bg="#000000" line="#5B738B" inact="#5B738B" text="#FFFFFF" />
+	<!--Used in text boxes and textinput-->
+	<textbox bg="#000000" line="#5B738B" text="#FFFFFF" />
+	<!--Colors used for the claculator's pad and lock indicators (hud and desk are used for the background)-->
+	<calc padbg="#000000" padtext="#FFFFFF" padline="#5B738B" lockoff="#141414" lockon="#5F9BFF" />
+	<!--Colors used bt SBTCVM's helpviewer-->
+	<help bg="#2D2D2D" text="#FFFFFF" link="#0000FF" />
+	<!--colors used by textview and codeview.-->
+	<textview bg="#000000" text="#FFFFFF" textblock="#0000FF" hig1="#404040" comment="#FF0000" gotoref="#3B7C3B" gotolabel="#3B3B76" />
+</theme>

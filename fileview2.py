@@ -42,10 +42,11 @@ screensurf=pygame.display.set_mode((420, 600))
 vmui.initui(screensurf, 1)
 #image data loading
 
-filehud=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileviewhud.png')).convert_alpha()
+#filehud=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileviewhud.png')).convert_alpha()
+#filehud=pygame.Surface((screenx, screeny), SRCALPHA)
 
 
-
+fvbadge=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvbadge.png')).convert_alpha()
 exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
 helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvhelp.png')).convert()
 newbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvneww.png')).convert()
@@ -95,6 +96,7 @@ quitflag=0
 #fonts
 simplefontC = pygame.font.SysFont(None, 22)
 simplefontB = pygame.font.SysFont(None, 19)
+hudfont = pygame.font.SysFont(None, 19)
 #inital scroll offset.
 listyoff=110
 listyoff2=110
@@ -124,15 +126,14 @@ runexec=0
 
 pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 #blit fixed on-screen buttons to filebg.
-filemenux=filehud.blit(fvfilemenu, (3, 5))
+
 #ghelpx=filebg.blit(helpbtn, (44, 5))
 #gneww=filebg.blit(newbtn, (85, 5))
 #runx=filebg.blit(fvrun, (136, 5))
 #viewx=filebg.blit(fvview, (177, 5))
 
-filp1=filehud.blit(panefilter1, (3, 57))
-filp2=filehud.blit(panefilter2, (95, 57))
-filebg=(libthemeconf.bgmake(filehud)).convert()
+#filebg=(libthemeconf.bgmake(filehud)).convert()
+filebg=(libthemeconf.bgmake(None)).convert()
 panemode=1
 
 listy2=0
@@ -219,24 +220,52 @@ def getdesc(filetype, fname, path):
 		return (fname + "\n-" + "\n" + dmpdesc)
 
 
+hudupdate=1
+#pane1upt=1
+#pane1upt=1
 
-
-tilebgcolor=(255, 255, 255, 200)
+tilebgcolor=libthemeconf.tilecolor
 
 gxmask=pygame.Surface((410, 40), SRCALPHA)
 gxmask2=pygame.Surface((390, 40), SRCALPHA)
+box1rect=pygame.Rect(433, 17, 349, 23)
+box2rect=pygame.Rect(433, 71, 349, 23)
+
 while quitflag==0:
 	#check to save needlessly redrawing display
 	if scupdate==1:
 		scupdate=0
 		#blit background
 		screensurf.blit(filebg, (0, 0))
+		panerect=pygame.Rect(0, 109, screenx, (screeny-109))
+		uptlist=[panerect]
+		if hudupdate==1:
+			hudrect=pygame.Rect(0, 0, screenx, 109)
+			
+			filehud=pygame.Surface((screenx, screeny), SRCALPHA).convert_alpha()
+			pygame.draw.rect(filehud, libthemeconf.hudbg, hudrect, 0)
+			pygame.draw.rect(filehud, libthemeconf.textboxbg, box1rect, 0)
+			pygame.draw.rect(filehud, libthemeconf.textboxline, box1rect, 1)
+			pygame.draw.rect(filehud, libthemeconf.textboxbg, box2rect, 0)
+			pygame.draw.rect(filehud, libthemeconf.textboxline, box2rect, 1)
+			pygame.draw.line(filehud, libthemeconf.huddiv, (420, 0), (420, screeny), 2)
+			pygame.draw.line(filehud, libthemeconf.huddiv, (420, 50), (screenx, 50), 2)
+			filemenux=filehud.blit(fvfilemenu, (3, 5))
+			filp1=filehud.blit(panefilter1, (2, 56))
+			filp2=filehud.blit(panefilter2, (94, 56))
+			filehud.blit(fvbadge, (338, 14))
+			hudt=hudfont.render("Fileview", True, libthemeconf.hudtext)
+			filehud.blit(hudt, (340, 88))
+			hudt2=hudfont.render("Pane 1", True, libthemeconf.hudtext)
+			filehud.blit(hudt2, (433, 1))
+			hudt3=hudfont.render("Pane 2", True, libthemeconf.hudtext)
+			filehud.blit(hudt3, (433, 56))
 		#set list vertical draw to listyoff offset. note that listy is used to blit gxmask
 		listy=listyoff
 		#reset list of fileclick objects.
 		flist=list()
 		if iterfiles!='.' and listy>=listydef and listy<screeny:
-			textit=simplefontB.render("..", True, (0, 0, 0))
+			textit=simplefontB.render("..", True, libthemeconf.tiletext)
 			#gxmask=pygame.Surface((410, 40))
 			gxmask.fill(tilebgcolor)
 			gxmask.blit(fvup, (iconx, 0))
@@ -255,7 +284,7 @@ while quitflag==0:
 					if listy<listydef or listy>screeny:
 						fileval=2
 					else:
-						textit=simplefontB.render(fname, True, (0, 0, 0))
+						textit=simplefontB.render(fname, True, libthemeconf.tiletext)
 						#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
 						gxmask.fill(tilebgcolor)
 						gxmask.blit(fvdir, (iconx, 0))
@@ -270,7 +299,7 @@ while quitflag==0:
 						fileval=2
 						break
 					else:
-						textit=simplefontB.render(fname, True, (0, 0, 0))
+						textit=simplefontB.render(fname, True, libthemeconf.tiletext)
 						#gxmask=pygame.Surface((410, 40))
 						gxmask.fill(tilebgcolor)
 						gxmask.blit(typ.typeicon, (iconx, 0))
@@ -291,7 +320,7 @@ while quitflag==0:
 			listy2=listyoff2
 			#reset list of fileclick objects.
 			if iterfiles2!='.' and listy2>=listydef2 and listy2<screeny:
-				textit=simplefontB.render("..", True, (0, 0, 0))
+				textit=simplefontB.render("..", True, libthemeconf.tiletext)
 				#gxmask=pygame.Surface((410, 40))
 				gxmask2.fill(tilebgcolor)
 				gxmask2.blit(fvup, (iconx, 0))
@@ -310,7 +339,7 @@ while quitflag==0:
 						if listy2<listydef2 or listy2>screeny:
 							fileval=2
 						else:
-							textit=simplefontB.render(fname, True, (0, 0, 0))
+							textit=simplefontB.render(fname, True, libthemeconf.tiletext)
 							#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
 							gxmask2.fill(tilebgcolor)
 							gxmask2.blit(fvdir, (iconx, 0))
@@ -325,7 +354,7 @@ while quitflag==0:
 							fileval=2
 							break
 						else:
-							textit=simplefontB.render(fname, True, (0, 0, 0))
+							textit=simplefontB.render(fname, True, libthemeconf.tiletext)
 							#gxmask=pygame.Surface((410, 40))
 							gxmask2.fill(tilebgcolor)
 							gxmask2.blit(typ.typeicon, (iconx, 0))
@@ -342,6 +371,21 @@ while quitflag==0:
 				#break from file iteration when future gxmask tiles would be completely off-screen.
 				if listy2>screeny:
 					break
+		
+		#draw paths and add hud rect to update list if needed.
+		if panemode==2 and hudupdate==1:
+			uptlist.extend([hudrect])
+			hudupdate==0
+			menulabel=simplefontC.render(("path: " + iterfiles), True, libthemeconf.textboxtext)
+			filehud.blit(menulabel, (435, 20))
+			menulabel2=simplefontC.render(("path: " + iterfiles2), True, libthemeconf.textboxtext)
+			filehud.blit(menulabel2, (435, 74))
+			screensurf.blit(filehud, (0, 0))
+		elif hudupdate==1:
+			hudupdate==0
+			uptlist.extend([hudrect])
+			screensurf.blit(filehud, (0, 0))
+		#pane mode and run/view mode switches:
 		if panemode==1:
 			panex=screensurf.blit(fvpane1, (89, 5))
 		else:
@@ -352,14 +396,7 @@ while quitflag==0:
 			runviewx=screensurf.blit(fvviewsw, (46, 5))
 		screensurf.blit(iconlist[filterflg], (43, 57))
 		screensurf.blit(iconlist[filterflg2], (135, 57))
-		#draw path and filter status
-		if panemode==2:
-			menulabel=simplefontC.render(("path: " + iterfiles), True, (0, 0, 0))
-			screensurf.blit(menulabel, (435, 20))
-			menulabel2=simplefontC.render(("path: " + iterfiles2), True, (0, 0, 0))
-			screensurf.blit(menulabel2, (435, 74))
-		#screensurf.blit(fillabel, (430, 88))
-		pygame.display.update()
+		pygame.display.update(uptlist)
 	time.sleep(0.05)
 	
 	#event handler
@@ -399,18 +436,21 @@ while quitflag==0:
 					scupdate=1
 					screenx=800
 					screeny=600
+					hudupdate=1
 				else:
 					panemode=1
 					screensurf=pygame.display.set_mode((420, 600))
 					scupdate=1
 					screenx=420
 					screeny=600
+					hudupdate=1
 			if runviewx.collidepoint(event.pos)==1 and event.button==1:
 				if runexec==1:
 					runexec=0
 				else:
 					runexec=1
 				scupdate=1
+				hudupdate=1
 			#if gneww.collidepoint(event.pos)==1 and event.button==1:
 			#	subprocess.Popen(["python", "fileview2.py"])
 			#if runx.collidepoint(event.pos)==1 and event.button==1:
@@ -427,6 +467,7 @@ while quitflag==0:
 				else:
 					listyoff=110
 				scupdate=1
+				hudupdate=1
 			if filp2.collidepoint(event.pos)==1 and event.button==1:
 				filterbak=filterflg2
 				filterflg2=vmui.menuset(filtermenu, 95, 97, reclick=0)
@@ -435,6 +476,7 @@ while quitflag==0:
 				else:
 					listyoff2=110
 				scupdate=1
+				hudupdate=1
 			#filelist clickbox checker.
 			for f in flist:
 				if f.pane==1:
@@ -513,6 +555,7 @@ while quitflag==0:
 						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(iterfilesq, f.filename))])
 					#special directory handler
 					if f.ftype=="dir":
+						hudupdate=1
 						if f.pane==1:
 							listyoff=110
 							scupdate=1

@@ -13,6 +13,7 @@ import subprocess
 from pygame.locals import *
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libvmui as vmui
+import VMSYSTEM.libthemeconf as libthemeconf
 
 pygame.display.init()
 pygame.font.init()
@@ -22,9 +23,12 @@ windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "setti
 pygame.display.set_icon(windowicon)
 
 screensurf=pygame.display.set_mode((450, 300))
+screenx=450
+screeny=300
 vmui.initui(screensurf, 1)
 #image data
-setbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settingsbg2.jpg')).convert()
+sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+#setbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settingsbg2.jpg')).convert()
 swon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchon.png')).convert()
 swoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchoff.png')).convert()
 
@@ -97,12 +101,16 @@ for f in mixlist:
 qflg=0
 scupdate=1
 
-stcolor=(255, 255, 255)
+stcolor=libthemeconf.desktext
 while qflg==0:
 	time.sleep(0.05)
 	if scupdate==1:
 		scupdate=0
-		screensurf.blit(setbg, (0, 0))
+		hudrect=pygame.Rect(0, 0, screenx, 60)
+		#screensurf.blit(setbg, (0, 0))
+		screensurf.fill(libthemeconf.deskcolor)
+		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
 		fmx=screensurf.blit(fvfilemenu, (3, 5))
 		mixx=screensurf.blit(mixbtn, (45, 5))
 		menulabel=catfont.render(str(mixrate), True, (0, 0, 0))
