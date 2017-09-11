@@ -7,6 +7,8 @@ from pygame.locals import *
 import VMSYSTEM.libvmconf as libvmconf
 import xml.etree.ElementTree as ET
 import VMSYSTEM.libthemeconf as libthemeconf
+import VMSYSTEM.libvmui as vmui
+import subprocess
 
 
 clicklist=list()
@@ -83,10 +85,15 @@ class clicktab:
 windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpicon.png'))
 pygame.display.set_icon(windowicon)
 screensurf=pygame.display.set_mode((648, 486), pygame.RESIZABLE)
+vmui.initui(screensurf, 1)
 logooverlay=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpbgover.png')).convert_alpha()
-iconhelp=pygame.image.load(os.path.join(datapath, 'iconhelp.png')).convert()
-iconindex=pygame.image.load(os.path.join(datapath, 'iconindex.png')).convert()
-iconquit=pygame.image.load(os.path.join(datapath, 'iconquit.png')).convert()
+#iconhelp=pygame.image.load(os.path.join(datapath, 'iconhelp.png')).convert()
+#iconindex=pygame.image.load(os.path.join(datapath, 'iconindex.png')).convert()
+#iconquit=pygame.image.load(os.path.join(datapath, 'iconquit.png')).convert()
+sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
 
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
 
@@ -95,7 +102,7 @@ bgcol=libthemeconf.helpbg
 linkcol=libthemeconf.helplink
 screenh=486
 screenw=648
-yoff=0
+yoff=44
 xoff=5
 yjump=22
 fontsize=21
@@ -107,7 +114,21 @@ prevpage=None
 scupdate=1
 followmouse=0
 
+diagabt="""Helpview v2.0.3
+Part of the SBTCVM Project
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
+
 pygame.key.set_repeat(250, 50)
+
+fmhelp=vmui.menuitem("Help (F1)", "HELP")
+fmindex=vmui.menuitem("Index", "INDEX")
+fmquit=vmui.menuitem("Quit", "QUIT")
+fmabout=vmui.menuitem("About Helpview", "ABOUT")
+fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
+
+filemenu=[fmhelp, fmindex, fmabout, fmabout2, fmquit]
 
 while qflg==0:
 	#handles resize operations when videoresize events are detected.
@@ -190,12 +211,17 @@ while qflg==0:
 				yval += 10
 			#add a 4-pixel margin between elements.
 			yval += 4
+		hudrect=pygame.Rect(0, 0, screenw, 44)
+		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+		screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
 		#draw floating buttons
-		helpq=screensurf.blit(iconhelp, (((screenw - 44), (0))))
-		quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
-		indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
+		#helpq=screensurf.blit(iconhelp, (((screenw - 44), (0))))
+		#quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
+		#indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
+		fmx=screensurf.blit(fvfilemenu, ((3, 3)))
+		
 		pygame.display.update()
 		qtexty=yval
 	#handles "click and drag" scrolling
@@ -204,10 +230,10 @@ while qflg==0:
 		mpos=pygame.mouse.get_pos()
 		#xoff -=(ppos[0] - mpos[0])
 		fmoffset=(ppos[1] - mpos[1])
-		if fmoffset<0 or (qtexty + 30)>screenh:
+		if fmoffset<44 or (qtexty + 30)>screenh:
 			yoff -=fmoffset
-		if yoff>0:
-			yoff=0
+		if yoff>44:
+			yoff=44
 		scupdate=1
 	time.sleep(0.05)
 	#event parser
@@ -231,13 +257,13 @@ while qflg==0:
 			scupdate=1
 		if event.type == KEYDOWN and event.key == K_UP:
 			yoff += yjump
-			if yoff>0:
-				yoff=0
+			if yoff>44:
+				yoff=44
 			scupdate=1
 		if event.type == KEYDOWN and event.key == K_PAGEUP:
 			yoff += (yjump * 20)
-			if yoff>0:
-				yoff=0
+			if yoff>44:
+				yoff=44
 			scupdate=1
 		if event.type == KEYDOWN and event.key == K_PAGEDOWN:
 			if (qtexty + 30)>screenh:
@@ -269,17 +295,36 @@ while qflg==0:
 			titlefont = pygame.font.SysFont(None, (fontsize + 10))
 			scupdate=1
 		if event.type==MOUSEBUTTONDOWN:
-			if helpq.collidepoint(event.pos)==1 and event.button==1:
-				pageref="helponhelp.xml"
-				yoff=0
-				break
-			if indexq.collidepoint(event.pos)==1 and event.button==1:
-				pageref="helpindex.xml"
-				yoff=0
-				break
-			if quitq.collidepoint(event.pos)==1 and event.button==1:
-				qflg=1
-				break
+			if fmx.collidepoint(event.pos)==1 and event.button==1:
+				menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
+				if menuret=="HELP":
+					pageref="helponhelp.xml"
+					yoff=44
+					break
+				if menuret=="INDEX":
+					pageref="helpindex.xml"
+					yoff=44
+					break
+				if menuret=="QUIT":
+					qflg=1
+					break
+				if menuret=="ABOUT2":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
+				if menuret=="ABOUT":
+					vmui.okdiag(diagabt, (screenw // 2), (screenh // 2))
+				
+			#if helpq.collidepoint(event.pos)==1 and event.button==1:
+			#	pageref="helponhelp.xml"
+			#	yoff=0
+			#	break
+			#if indexq.collidepoint(event.pos)==1 and event.button==1:
+			#	pageref="helpindex.xml"
+			#	yoff=0
+			#	break
+			#if quitq.collidepoint(event.pos)==1 and event.button==1:
+			#	qflg=1
+			#	break
+			
 			#mouse wheel scrolling
 			if event.button==5:
 				if (qtexty + 30)>screenh:
@@ -288,8 +333,8 @@ while qflg==0:
 					#break
 			if event.button==4:
 				yoff += yjump
-				if yoff>0:
-					yoff=0
+				if yoff>44:
+					yoff=44
 				scupdate=1
 				#break
 			#parses clickboxes generated by links
@@ -297,7 +342,7 @@ while qflg==0:
 			for clint in clicklist:
 				if (clint.box).collidepoint(event.pos)==1 and event.button==1:
 					pageref=clint.link
-					yoff=0
+					yoff=44
 					clickdrag=0
 					break
 			if event.button==1 and clickdrag==1:

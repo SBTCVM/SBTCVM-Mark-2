@@ -108,7 +108,9 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		screensurf=pygame.display.set_mode((648, 486))
 	elif cmd=="helpview":
 		screensurf=pygame.display.set_mode((648, 486))
-	elif cmd=="imgview" or cmd=="textview" or cmd=="codeview":
+	elif cmd=="imgview":
+		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+	elif cmd=="textview" or cmd=="codeview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	else:
 		screensurf=pygame.display.set_mode((800, 600))

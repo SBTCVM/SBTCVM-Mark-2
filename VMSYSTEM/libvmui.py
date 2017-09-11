@@ -1007,12 +1007,24 @@ def textview(textfile):
 	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 	textoff=0
 	yjump=22
-	yoff=0
+	yoff=44
 	textx=0
 	fontsize=15
 	ptexty=1
 	redraw=0
 	qflg=0
+	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+	fvfilemenu=makemenubtn("FILE", icon=fmicon)
+	fmhelp=menuitem("Help (F1)", "HELP")
+	fmquit=menuitem("Quit", "QUIT")
+	fmabout=menuitem("About Textview", "ABOUT")
+	filemenu=[fmhelp, fmabout, fmquit]
+	diagabt="""Textview v2.0.3
+Part of the SBTCVM Project
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
 	#get screen width and height
 	screenw=screensurf.get_width()
 	screenh=screensurf.get_height()
@@ -1053,6 +1065,10 @@ def textview(textfile):
 				texty += yjump
 				if texty>screenh:
 					break
+			hudrect=pygame.Rect(0, 0, screenw, 44)
+			pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+			fmx=screensurf.blit(fvfilemenu, ((3, 3)))
+			screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 			pygame.display.update()
 			#store a copy of texty for use in scrolling handling.
 			qtexty=texty
@@ -1068,12 +1084,12 @@ def textview(textfile):
 					yoff -= yjump
 			if event.type == KEYDOWN and event.key == K_UP:
 				yoff += yjump
-				if yoff>0:
-					yoff=0
+				if yoff>44:
+					yoff=44
 			if event.type == KEYDOWN and event.key == K_PAGEUP:
 				yoff += (yjump * 20)
-				if yoff>0:
-					yoff=0
+				if yoff>44:
+					yoff=44
 			if event.type == KEYDOWN and event.key == K_PAGEDOWN:
 				if qtexty>(yjump + yjump):
 					yoff -= (yjump * 20)
@@ -1105,19 +1121,28 @@ def textview(textfile):
 				qflg=1
 				break
 			if event.type == KEYDOWN and event.key == K_SPACE:
-				yoff=0
+				yoff=44
 				textx=0
 				redraw=1
 			if event.type==MOUSEBUTTONDOWN:
+				if fmx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=menuset(filemenu, 3, 43, reclick=0, fontsize=26)
+					if menuret=="HELP":
+						subprocess.Popen(["python", "helpview.py", "textview.xml"])
+					if menuret=="QUIT":
+						qflg=1
+						break
+					if menuret=="ABOUT":
+						okdiag(diagabt, (screenw // 2), (screenh // 2))
 				if event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
 				if event.button==4:
 					yoff += yjump
-					if yoff>0:
-						yoff=0
+					if yoff>44:
+						yoff=44
 				if event.button==3:
-					yoff=0
+					yoff=44
 					textx=0
 					redraw=1
 			if event.type==VIDEORESIZE:
@@ -1129,18 +1154,32 @@ def textview(textfile):
 				
 #code viewer
 
+
 def codeview(textfile):
 	global screensurf
 	pygame.display.set_caption(("codeview - " + textfile), ("codeview - " + textfile))
 	simplefontmono = pygame.font.SysFont("monospace", 15, bold=True)
 	textoff=0
 	yjump=22
-	yoff=0
+	yoff=44
 	textx=0
 	fontsize=15
 	ptexty=1
 	redraw=0
 	qflg=0
+	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+	fvfilemenu=makemenubtn("FILE", icon=fmicon)
+	fmhelp=menuitem("Help (F1)", "HELP")
+	fmquit=menuitem("Quit", "QUIT")
+	fmabout=menuitem("About Codeview", "ABOUT")
+	filemenu=[fmhelp, fmabout, fmquit]
+	diagabt="""Codeview v2.0.3
+Part of the SBTCVM Project
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
+	
 	if (textfile.lower()).endswith(".tasm"):
 		tasmflg=1
 	else:
@@ -1167,6 +1206,7 @@ def codeview(textfile):
 				redraw=0
 			abt.seek(0)
 			screensurf.fill(libthemeconf.textvbg)
+			
 			linecnt=1
 			textblk=0
 			for f in abt:
@@ -1198,6 +1238,10 @@ def codeview(textfile):
 				linecnt += 1
 				if texty>screenh:
 					break
+			hudrect=pygame.Rect(0, 0, screenw, 44)
+			pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+			fmx=screensurf.blit(fvfilemenu, ((3, 3)))
+			screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 			pygame.display.update()
 			qtexty=texty
 		for event in pygame.event.get():
@@ -1212,12 +1256,12 @@ def codeview(textfile):
 					yoff -= yjump
 			if event.type == KEYDOWN and event.key == K_UP:
 				yoff += yjump
-				if yoff>0:
-					yoff=0
+				if yoff>44:
+					yoff=44
 			if event.type == KEYDOWN and event.key == K_PAGEUP:
 				yoff += (yjump * 20)
-				if yoff>0:
-					yoff=0
+				if yoff>44:
+					yoff=44
 			if event.type == KEYDOWN and event.key == K_PAGEDOWN:
 				if qtexty>(yjump + yjump):
 					yoff -= (yjump * 20)
@@ -1249,19 +1293,28 @@ def codeview(textfile):
 				qflg=1
 				break
 			if event.type == KEYDOWN and event.key == K_SPACE:
-				yoff=0
+				yoff=44
 				textx=0
 				redraw=1
 			if event.type==MOUSEBUTTONDOWN:
+				if fmx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=menuset(filemenu, 3, 43, reclick=0, fontsize=26)
+					if menuret=="HELP":
+						subprocess.Popen(["python", "helpview.py", "codeview.xml"])
+					if menuret=="QUIT":
+						qflg=1
+						break
+					if menuret=="ABOUT":
+						okdiag(diagabt, (screenw // 2), (screenh // 2))
 				if event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
 				if event.button==4:
 					yoff += yjump
-					if yoff>0:
-						yoff=0
+					if yoff>44:
+						yoff=44
 				if event.button==3:
-					yoff=0
+					yoff=44
 					textx=0
 					redraw=1
 			if event.type==VIDEORESIZE:
@@ -1287,29 +1340,36 @@ def imgview(imgfile):
 	qflg=0
 	#set inital offset
 	xoff=(screensurf.get_rect().centerx)
-	yoff=(screensurf.get_rect().centery)
+	yoff=((screensurf.get_rect().centery) + 22)
+	screenw=screensurf.get_width()
+	screenh=screensurf.get_height()
 	roto=0.1
 	resizeflg=0
 	followmouse=0
 	pygame.key.set_repeat(250, 50)
 	#get size of image
+	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+	fvfilemenu=makemenubtn("FILE", icon=fmicon)
+	fmhelp=menuitem("Help (F1)", "HELP")
+	fmquit=menuitem("Quit", "QUIT")
+	fmabout=menuitem("About Imageview", "ABOUT")
+	filemenu=[fmhelp, fmabout, fmquit]
+	diagabt="""Imageview v2.0.3
+Part of the SBTCVM Project
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
 	imgx=img.get_width()
 	imgy=img.get_height()
-	#some basic intelegent inital scale logic
-	if imgx<=400 and imgy<=300:
-		scalefact=float(2.0)
-	if imgx<=266 and imgy<=200:
-		scalefact=float(3.0)	
-	if imgx<=200 and imgy<=150:
-		scalefact=float(4.0)
-	if imgx<=133 and imgy<=100:
-		scalefact=float(6.0)
-	if imgx<=50 and imgy<=75:
-		scalefact=float(8.0)
-	if imgx<=66 and imgy<=50:
-		scalefact=float(12.0)
-	if imgx<=25 and imgy<=38:
-		scalefact=float(16.0)
+	
+	scalefactx=(float(screenw) / imgx)
+	scalefacty=(screenh - 44) / float(imgy)
+	if scalefactx>scalefacty:
+		scalefact=scalefacty
+	else:
+		scalefact=scalefactx
+	
 	defscale=scalefact
 	#main loop
 	scupdate=1
@@ -1320,9 +1380,11 @@ def imgview(imgfile):
 		elif resizeflg==2:
 			screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 			xoff=(screensurf.get_rect().centerx)
-			yoff=(screensurf.get_rect().centery)
+			yoff=((screensurf.get_rect().centery) + 22)
 			resizeflg=0
 			scupdate=1
+			screenh=resh
+			screenw=resw
 		if scupdate==1:
 			scupdate=0
 			screensurf.fill(libthemeconf.deskcolor)
@@ -1336,6 +1398,11 @@ def imgview(imgfile):
 			imgbox.centerx = xoff
 			imgbox.centery = yoff
 			screensurf.blit(imgsc, imgbox)
+			
+			hudrect=pygame.Rect(0, 0, screenw, 44)
+			pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+			fmx=screensurf.blit(fvfilemenu, ((3, 3)))
+			screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 			pygame.display.update()
 		time.sleep(0.05)
 		#move image in relation to mouse when followmouse is set to 1 (see event handler below)
@@ -1382,7 +1449,7 @@ def imgview(imgfile):
 				roto = 0.1
 				scalefact = defscale
 				xoff=(screensurf.get_rect().centerx)
-				yoff=(screensurf.get_rect().centery)
+				yoff=((screensurf.get_rect().centery) + 22)
 				scupdate=1
 			if event.type==MOUSEBUTTONDOWN:
 				if event.button==5:
@@ -1404,10 +1471,19 @@ def imgview(imgfile):
 					roto = 0.1
 					scalefact = defscale
 					xoff=(screensurf.get_rect().centerx)
-					yoff=(screensurf.get_rect().centery)
+					yoff=((screensurf.get_rect().centery) + 22)
 					scupdate=1
 				#sets followmouse to 1 for image moving
-				if event.button==1:
+				if fmx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=menuset(filemenu, 3, 43, reclick=0, fontsize=26)
+					if menuret=="HELP":
+						subprocess.Popen(["python", "helpview.py", "imgview.xml"])
+					if menuret=="QUIT":
+						qflg=1
+						break
+					if menuret=="ABOUT":
+						okdiag(diagabt, (screenw // 2), (screenh // 2))
+				elif event.button==1 and not hudrect.collidepoint(event.pos):
 					followmouse=1
 					mpos=pygame.mouse.get_pos()
 			if event.type==MOUSEBUTTONUP:
