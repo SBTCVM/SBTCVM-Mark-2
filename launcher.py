@@ -66,8 +66,11 @@ creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.
 romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).convert()
 
 
-fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
-fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.png')).convert()
+#fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
+fvcatmenu=vmui.makemenubtn("CATEGORY", width=80)
+#fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.png')).convert()
 
 
 class launchtile:
@@ -181,7 +184,7 @@ while qflg==0:
 		tilejumpy=95
 		filemx=screensurf.blit(fvfilemenu, (3, 3))
 		catmx=screensurf.blit(fvcatmenu, (48, 3))
-		menulabel=catfont.render(catname, True, (0, 0, 0))
+		menulabel=catfont.render(catname, True, libthemeconf.btntext)
 		screensurf.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 		#tile render
 		for tile in tilelist:

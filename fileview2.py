@@ -65,14 +65,28 @@ fvrun=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvr
 fvview=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvview.png')).convert()
 fvswon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-on.png')).convert_alpha()
 fvswoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-off.png')).convert_alpha()
-fvpane1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane1.png')).convert()
-fvpane2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane2.png')).convert()
+
 panefilter1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter1.png')).convert()
 panefilter2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter2.png')).convert()
+panefilter1=vmui.makerotbtn("Pane 1", "Filter")
+panefilter2=vmui.makerotbtn("Pane 2", "Filter")
+#fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvfilemenu.png')).convert()
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
 
-fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvfilemenu.png')).convert()
-fvrunsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvrunsw.png')).convert()
-fvviewsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvviewsw.png')).convert()
+#fvrunsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvrunsw.png')).convert()
+#fvviewsw=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvviewsw.png')).convert()
+fvrunview=vmui.makeswitchbtn("RUN", "VIEW")
+fvrunsw=fvrunview[0]
+fvviewsw=fvrunview[1]
+
+#fvpane1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane1.png')).convert()
+#fvpane2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvpane2.png')).convert()
+
+fvpane=vmui.makeswitchbtn("1 PANE", "2 PANE")
+fvpane1=fvpane[0]
+fvpane2=fvpane[1]
+
 
 #definitions of all non-directory file types...
 typ_png=filetyp("png", fvimg, "img", 2)

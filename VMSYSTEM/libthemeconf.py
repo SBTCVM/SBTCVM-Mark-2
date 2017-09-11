@@ -155,4 +155,15 @@ textvcomment=pygame.Color(tvtag.attrib.get("comment"))
 textvgotoref=pygame.Color(tvtag.attrib.get("gotoref"))
 textvgotolabel=pygame.Color(tvtag.attrib.get("gotolabel"))
 
+btntag=themeroot.find("btn")
+
+btnbg1=pygame.Color(btntag.attrib.get("bg1"))
+btnbg2=pygame.Color(btntag.attrib.get("bg2"))
+btnactbg=pygame.Color(btntag.attrib.get("actbg"))
+btnacttext=pygame.Color(btntag.attrib.get("acttext"))
+btninactbg=pygame.Color(btntag.attrib.get("inactbg"))
+btninacttext=pygame.Color(btntag.attrib.get("inacttext"))
+btnline=pygame.Color(btntag.attrib.get("line"))
+btntext=pygame.Color(btntag.attrib.get("text"))
+
 

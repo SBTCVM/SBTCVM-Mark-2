@@ -22,20 +22,28 @@ pygame.display.set_caption(("Settings"), ("Settings"))
 windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settings64.png'))
 pygame.display.set_icon(windowicon)
 
-screensurf=pygame.display.set_mode((450, 300))
+screensurf=pygame.display.set_mode((450, 400))
 screenx=450
-screeny=300
+screeny=400
 vmui.initui(screensurf, 1)
 #image data
 sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 #setbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settingsbg2.jpg')).convert()
-swon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchon.png')).convert()
-swoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchoff.png')).convert()
+#swon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchon.png')).convert()
+#swoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchoff.png')).convert()
+swn=vmui.makeswitchbtn("ON", "OFF")
+swon=swn[0]
+swoff=swn[1]
 
-cpubtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'cpuspeed.png')).convert()
-mixbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'mixrate.png')).convert()
-fskipbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'frameskip.png')).convert()
-fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'fvfilemenu.png')).convert()
+#cpubtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'cpuspeed.png')).convert()
+#mixbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'mixrate.png')).convert()
+#fskipbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'frameskip.png')).convert()
+#fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'fvfilemenu.png')).convert()
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
+cpubtn=vmui.makemenubtn("CPU SPEED", width=80)
+mixbtn=vmui.makemenubtn("MIXER RATE", width=80)
+fskipbtn=vmui.makemenubtn("FRAME SKIP", width=80)
 
 lbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'lbtn.png')).convert()
 rbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'rbtn.png')).convert()
@@ -113,24 +121,24 @@ while qflg==0:
 		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
 		fmx=screensurf.blit(fvfilemenu, (3, 5))
 		mixx=screensurf.blit(mixbtn, (45, 5))
-		menulabel=catfont.render(str(mixrate), True, (0, 0, 0))
+		menulabel=catfont.render(str(mixrate), True, libthemeconf.btntext)
 		screensurf.blit(menulabel, (45, 5))
 		
 		fskipx=screensurf.blit(fskipbtn, (127, 5))
-		menulabel=catfont.render(str(fskip), True, (0, 0, 0))
+		menulabel=catfont.render(str(fskip), True, libthemeconf.btntext)
 		screensurf.blit(menulabel, (127, 5))
 		
 		cpux=screensurf.blit(cpubtn, (209, 5))
 		if CPUWAIT==CPUSLOW:
-			menulabel=catfont.render("Slow", True, (0, 0, 0))
+			menulabel=catfont.render("Slow", True, libthemeconf.btntext)
 		elif CPUWAIT==CPUNORM:
-			menulabel=catfont.render("Normal", True, (0, 0, 0))
+			menulabel=catfont.render("Normal", True, libthemeconf.btntext)
 		elif CPUWAIT==CPUFAST:
-			menulabel=catfont.render("Fast", True, (0, 0, 0))
+			menulabel=catfont.render("Fast", True, libthemeconf.btntext)
 		elif CPUWAIT==CPUSUPER:
-			menulabel=catfont.render("Super", True, (0, 0, 0))
+			menulabel=catfont.render("Super", True, libthemeconf.btntext)
 		else:
-			menulabel=catfont.render("Other", True, (0, 0, 0))
+			menulabel=catfont.render("Other", True, libthemeconf.btntext)
 		screensurf.blit(menulabel, (209, 5))
 		
 		menulabel=simplefontB.render("Status Readouts.", True, stcolor)
@@ -146,35 +154,35 @@ while qflg==0:
 		else:
 			ttyx=screensurf.blit(swoff, (250, 100))
 		menulabel=simplefontB.render("Step By Step CPU debug mode.", True, stcolor)
-		screensurf.blit(menulabel, (0, 130))
+		screensurf.blit(menulabel, (0, 150))
 		if stepbystep==1:
-			stepx=screensurf.blit(swon, (0, 150))
+			stepx=screensurf.blit(swon, (0, 170))
 		else:
-			stepx=screensurf.blit(swoff, (0, 150))
+			stepx=screensurf.blit(swoff, (0, 170))
 		menulabel=simplefontB.render("Log execution process.", True, stcolor)
-		screensurf.blit(menulabel, (250, 130))
+		screensurf.blit(menulabel, (250, 150))
 		if vmexeclogflg==1:
-			vmex=screensurf.blit(swon, (250, 150))
+			vmex=screensurf.blit(swon, (250, 170))
 		else:
-			vmex=screensurf.blit(swoff, (250, 150))
+			vmex=screensurf.blit(swoff, (250, 170))
 		menulabel=simplefontB.render("Dump IObus on exit.", True, stcolor)
-		screensurf.blit(menulabel, (0, 180))
+		screensurf.blit(menulabel, (0, 220))
 		if logIOexit==1:
-			ioex=screensurf.blit(swon, (0, 200))
+			ioex=screensurf.blit(swon, (0, 240))
 		else:
-			ioex=screensurf.blit(swoff, (0, 200))
+			ioex=screensurf.blit(swoff, (0, 240))
 		menulabel=simplefontB.render("Dump memory bus on exit.", True, stcolor)
-		screensurf.blit(menulabel, (250, 180))
+		screensurf.blit(menulabel, (250, 220))
 		if logromexit==1:
-			romex=screensurf.blit(swon, (250, 200))
+			romex=screensurf.blit(swon, (250, 240))
 		else:
-			romex=screensurf.blit(swoff, (250, 200))
+			romex=screensurf.blit(swoff, (250, 240))
 		menulabel=simplefontB.render("Log memory bus operations", True, stcolor)
-		screensurf.blit(menulabel, (0, 230))
+		screensurf.blit(menulabel, (0, 290))
 		if tromlogging==1:
-			tromx=screensurf.blit(swon, (0, 250))
+			tromx=screensurf.blit(swon, (0, 310))
 		else:
-			tromx=screensurf.blit(swoff, (0, 250))
+			tromx=screensurf.blit(swoff, (0, 310))
 		
 		
 		

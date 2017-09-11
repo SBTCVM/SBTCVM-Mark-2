@@ -24,6 +24,7 @@ pygame.font.init()
 simplefont = pygame.font.SysFont(None, 16)
 simplefontA = pygame.font.SysFont(None, 20)
 simplefontB = pygame.font.SysFont(None, 22)
+btnfont = pygame.font.SysFont(None, 16)
 
 simplefontC = pygame.font.SysFont(None, 32)
 smldispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
@@ -62,7 +63,85 @@ expaumenucnt=2
 expmenudesc="Pause Menu | extras"
 #-----
 
+def makemenubtn(label, width=40, icon=None):
+	height=40
+	btn=pygame.Surface((width, height))
+	btnrect=pygame.Rect(0, 0, width, height)
+	btnrecttop=pygame.Rect(0, 0, width, 23)
+	btnrectbot=pygame.Rect(0, 22, width, (height - 22))
+	btngrabrect=pygame.Rect(3, 36, (width - 6), 2)
+	pygame.draw.rect(btn, libthemeconf.btnbg1, btnrectbot, 0)
+	pygame.draw.rect(btn, libthemeconf.btnbg2, btnrecttop, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrectbot, 1)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrecttop, 1)
+	pygame.draw.rect(btn, libthemeconf.btnline, btngrabrect, 0)
+	#btn.fill(libthemeconf.btnbg2)
+	menulabel=btnfont.render(label, True, libthemeconf.btntext)
+	btn.blit(menulabel, (((width // 2) - (menulabel.get_width() // 2)), 24))
+	if icon!=None:
+		btn.blit(icon, (((width // 2) - (icon.get_width() // 2)), 1))
+	return btn
 
+def makerotbtn(toplabel, bottomlabel):
+	height=42
+	width=82
+	halfwidth=41
+	btn=pygame.Surface((width, height))
+	btnrect=pygame.Rect(0, 0, width, height)
+	btngrabrect=pygame.Rect(4, 37, (halfwidth - 7), 2)
+	halfbox=pygame.Rect(1, 1, 40, 40)
+	btnrecttop=pygame.Rect(1, 1, (halfwidth - 1), 23)
+	pygame.draw.rect(btn, libthemeconf.btnbg1, btnrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btn, libthemeconf.btnline, halfbox, 1)
+	pygame.draw.rect(btn, libthemeconf.btnline, btngrabrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnbg2, btnrecttop, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrecttop, 1)
+	menulabel=btnfont.render(toplabel, True, libthemeconf.btntext)
+	btn.blit(menulabel, (((halfwidth // 2) - (menulabel.get_width() // 2)), 1))
+	menulabel2=btnfont.render(bottomlabel, True, libthemeconf.btntext)
+	btn.blit(menulabel2, (((halfwidth // 2) - (menulabel.get_width() // 2)), 24))
+	return btn
+
+def makeswitchbtn(toplabel, bottomlabel):
+	height=40
+	width=40
+	btna=pygame.Surface((width, height))
+	btnb=pygame.Surface((width, height))
+	btnrect=pygame.Rect(0, 0, width, height)
+	toprect=pygame.Rect(0, 0, width, 16)
+	botrect=pygame.Rect(0, 24, width, 16)
+	midrect=pygame.Rect(0, 15, width, 10)
+	arrowa=[(6, 17), (33, 17), (19, 22)]#down
+	arrowb=[(19, 17), (6, 22), (33, 22)]#up
+	menulabel=btnfont.render(toplabel, True, libthemeconf.btnacttext)
+	menulabel2=btnfont.render(bottomlabel, True, libthemeconf.btnacttext)
+	menulabelinact=btnfont.render(toplabel, True, libthemeconf.btninacttext)
+	menulabel2inact=btnfont.render(bottomlabel, True, libthemeconf.btninacttext)
+	#btna
+	pygame.draw.rect(btna, libthemeconf.btnactbg, toprect, 0)
+	pygame.draw.rect(btna, libthemeconf.btninactbg, botrect, 0)
+	#btnb
+	pygame.draw.rect(btnb, libthemeconf.btnactbg, botrect, 0)
+	pygame.draw.rect(btnb, libthemeconf.btninactbg, toprect, 0)
+	#middle
+	pygame.draw.rect(btnb, libthemeconf.btnbg2, midrect, 0)
+	pygame.draw.rect(btna, libthemeconf.btnbg2, midrect, 0)
+	
+	#lines
+	pygame.draw.rect(btna, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btnb, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btna, libthemeconf.btnline, midrect, 1)
+	pygame.draw.rect(btnb, libthemeconf.btnline, midrect, 1)
+	
+	#polygons (arrows)
+	pygame.draw.polygon(btna, libthemeconf.btnline, arrowb)
+	pygame.draw.polygon(btnb, libthemeconf.btnline, arrowa)
+	btna.blit(menulabel, (((width // 2) - (menulabel.get_width() // 2)), 1))
+	btnb.blit(menulabelinact, (((width // 2) - (menulabel.get_width() // 2)), 1))
+	btna.blit(menulabel2inact, (((width // 2) - (menulabel.get_width() // 2)), 25))
+	btnb.blit(menulabel2, (((width // 2) - (menulabel.get_width() // 2)), 25))
+	return (btna, btnb)
 #used by tools launcher to draw backgrounds as needed.
 def toolsscreen(mode):
 	if mode==1:
@@ -1377,21 +1456,38 @@ def creditsscroll():
 				elif event.type == QUIT:
 					return()
 
+
+
 mbg0=menuitem("Blue Gradient", "BG0")
 mbg1=menuitem("Flower", "BG1")
 mbg2=menuitem("Clouds", "BG2")
 
 bgmenu=[mbg0, mbg1, mbg2]
 
-def settheme(xpos, ypos):
+def getbgname(bgnum):
+	if bgnum==0:
+		return "Blue Gradient"
+	if bgnum==1:
+		return "Flower"
+	if bgnum==2:
+		return "Clouds"
+	
+
+def settheme(xpos, ypos, nosave=0):
 	bgret=menuset(bgmenu, xpos, ypos, reclick=0, fontsize=26)
 	if bgret=="BG0":
 		libthemeconf.setconf("desk", "bgtheme", "0")
-		libthemeconf.saveconf()
+		if nosave==0:
+			libthemeconf.saveconf()
+			#return "Blue Gradient"
 	if bgret=="BG1":
 		libthemeconf.setconf("desk", "bgtheme", "1")
-		libthemeconf.saveconf()
+		if nosave==0:
+			libthemeconf.saveconf()
+			#return "Flower"
 	if bgret=="BG2":
 		libthemeconf.setconf("desk", "bgtheme", "2")
-		libthemeconf.saveconf()
+		if nosave==0:
+			libthemeconf.saveconf()
+			#return "clouds"
 

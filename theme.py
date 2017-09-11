@@ -29,13 +29,20 @@ vmui.initui(screensurf, 1)
 #image data
 sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 #setbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settingsbg2.jpg')).convert()
-swon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchon.png')).convert()
-swoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchoff.png')).convert()
+#swon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchon.png')).convert()
+#swoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'switchoff.png')).convert()
+swn=vmui.makeswitchbtn("ON", "OFF")
+swon=swn[0]
+swoff=swn[1]
 
-bgbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'bgbtn.png')).convert()
-themebtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'themebtn.png')).convert()
-fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'fvfilemenu.png')).convert()
+#bgbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'bgbtn.png')).convert()
+#themebtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'themebtn.png')).convert()
+#fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'fvfilemenu.png')).convert()
 
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
+bgbtn=vmui.makemenubtn("BACKGROUND", width=89)
+themebtn=vmui.makemenubtn("THEME", width=120)
 
 simplefontC = pygame.font.SysFont(None, 28)
 simplefontB = pygame.font.SysFont(None, 19)
@@ -49,6 +56,7 @@ thememenu=list()
 curtheme=libthemeconf.getconf("theme", "themefile")
 curthemename=(libthemeconf.getthemeinfo(curtheme))[0]
 curbg=int(libthemeconf.getconf("desk", "bgtheme"))
+curbgname=vmui.getbgname(curbg)
 for fname in os.listdir(iterate1):
 	fnamelo=fname.lower()
 	if fnamelo.endswith((".thm")):
@@ -62,7 +70,7 @@ for fname in os.listdir(iterate2):
 		thitm=vmui.menuitem(thname, fname)
 		thememenu.extend([thitm])		
 
-"""NOTICE:
+themenot="""NOTICE:
 You may need to restart SBTCVM utilities
 for changes to take effect!"""
 
@@ -88,13 +96,23 @@ while qflg==0:
 		screensurf.fill(libthemeconf.deskcolor)
 		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
 		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
-		fmx=screensurf.blit(fvfilemenu, (3, 5))
+		hudy=3
+		hudpad=5
+		fmx=screensurf.blit(fvfilemenu, (hudy, 5))
+		fmxy=hudy
+		hudy += hudpad
+		hudy += fvfilemenu.get_width()
 		
-		bgx=screensurf.blit(bgbtn, (45, 5))
-		
-		themex=screensurf.blit(themebtn, (127, 5))
-		menulabel=catfont.render(curthemename, True, (0, 0, 0))
-		screensurf.blit(menulabel, (127, 5))
+		bgx=screensurf.blit(bgbtn, (hudy, 5))
+		menulabel=catfont.render(curbgname, True, libthemeconf.btntext)
+		screensurf.blit(menulabel, (hudy, 5))
+		bgxy=hudy
+		hudy += hudpad
+		hudy += bgbtn.get_width()
+		themexy=hudy
+		themex=screensurf.blit(themebtn, (hudy, 5))
+		menulabel=catfont.render(curthemename, True, libthemeconf.btntext)
+		screensurf.blit(menulabel, (hudy, 5))
 		
 		
 		pygame.display.update()
@@ -110,26 +128,32 @@ while qflg==0:
 		if event.type==MOUSEBUTTONDOWN:
 			if themex.collidepoint(event.pos)==1 and event.button==1:
 				curbak=curtheme
-				curtheme=vmui.menuset(thememenu, 127, 45, reclick=0, fontsize=26)
+				curtheme=vmui.menuset(thememenu, themexy, 45, reclick=0, fontsize=26)
 				if curtheme==None:
 					curtheme=curbak
 				libthemeconf.setconf("theme", "themefile", curtheme)
 				curthemename=(libthemeconf.getthemeinfo(curtheme))[0]
 				scupdate=1
+				
 			if bgx.collidepoint(event.pos)==1 and event.button==1:
-				vmui.settheme(45, 45)
+				vmui.settheme(bgxy, 45, nosave=1)
+				curbg=int(libthemeconf.getconf("desk", "bgtheme"))
+				curbgname=vmui.getbgname(curbg)
+				scupdate=1
 			if fmx.collidepoint(event.pos)==1 and event.button==1:
-				menuret=vmui.menuset(filemenu, 3, 45, reclick=0, fontsize=26)
+				menuret=vmui.menuset(filemenu, fmxy, 45, reclick=0, fontsize=26)
 				if menuret=="HELP":
 					subprocess.Popen(["python", "helpview.py", "theme.xml"])
 				if menuret=="SAVE":
 					libthemeconf.saveconf()
+					vmui.okdiag(themenot, (screenx // 2), (screeny // 2))
 				if menuret=="RESET":
 					
 					libthemeconf.resetconf()
 					curtheme=libthemeconf.getconf("theme", "themefile")
 					curthemename=(libthemeconf.getthemeinfo(curtheme))[0]
 					curbg=int(libthemeconf.getconf("desk", "bgtheme"))
+					curbgname=vmui.getbgname(curbg)
 					#frameskip selector code
 					print "dxreset"
 					scupdate=1

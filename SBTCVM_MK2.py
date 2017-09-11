@@ -74,7 +74,9 @@ screensurf=pygame.display.set_mode((800, 600))
 
 
 vmbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VMBG.png')).convert()
-pauseicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'PAUSEBTN.png')).convert()
+#pauseicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'PAUSEBTN.png')).convert()
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+pauseicon=vmui.makemenubtn("MENU", icon=fmicon)
 pausex=vmbg.blit(pauseicon, (650, 300))
 screensurf.blit(vmbg, (0, 0))
 #init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
