@@ -220,6 +220,47 @@ def dummyreadouts():
 #SBTCVM pause menu.
 #called upon by SBTCVM_MK2.py when Escape is pressed.
 def pausemenu():
+	print "------------------"
+	print "SBTCVM pause menu."
+	pmpause=menuitem("(paused)", "PAUSE", noclick=1)
+	pmcont=menuitem("continue", "CONT")
+	pmhelp=menuitem("Help (F1)", "HELP")
+	pmcredit=menuitem("Credits", "CREDIT")
+	pmabout=menuitem("About SBTCVM Mark 2", "PMABOUT")
+	pmabout2=menuitem("About SBTCVM", "ABOUT")
+	pmstop=menuitem("Stop VM", "STOP")
+	pmquit=menuitem("Quit", "QUIT")
+	pmmenu=[pmpause, pmcont, pmhelp, pmcredit, pmabout, pmabout2, pmstop, pmquit]
+	diagabt="""SBTCVM Mark 2 v2.0.3
+Part of the SBTCVM Project
+Copyright (c) 2016-2017 Thomas Leathers and Contributors
+
+See README.md for more information."""
+	while True:
+		menuret=menuset(pmmenu, 3, 43, reclick=0, scrndest='SCREENSHOT.png', fontsize=26)
+		if menuret=="CONT" or menuret==None:
+			print "continue VM. "
+			print "------------------"
+			return("c")
+		if menuret=="HELP":
+			subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
+		if menuret=="CREDIT":
+			subprocess.Popen(["python", "MK2-TOOLS.py", "uicredits"])
+		if menuret=="ABOUT":
+			subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
+		if menuret=="PMABOUT":
+			okdiag(diagabt, (950 // 2), (600 // 2))
+		if menuret=="STOP":
+			print "Stop VM. "
+			print "------------------"
+			return("s")
+		if menuret=="QUIT":
+			print "Stop VM. "
+			print "------------------"
+			return("qs")
+	
+
+def pausemenuold():
 	global screensurf
 	print "------------------"
 	print "SBTCVM pause menu."
@@ -228,7 +269,7 @@ def pausemenu():
 	curmenulst=paumenulst
 	curmenucnt=paumenucnt
 	curmenucode=paumenucode
-	menubtnrect=pygame.Rect(650, 300, 40, 40)
+	menubtnrect=pygame.Rect(3, 3, 40, 40)
 	if KIOSKMODE==1:
 		curmenudesc=paumenudescKIOSK
 		curmenulst=paumenulstKIOSK
@@ -668,7 +709,7 @@ class menuitem:
 # -reclick=0 just returns upon click outside menu
 # -reclick=2 ignores click outside menu
 # (menuset will return None upon returning due to click outside menu)
-def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unavcol=libthemeconf.diaginact, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
+def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unavcol=libthemeconf.diaginact, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20, scrndest='SCREENSHOT-vmuimenuset.png'):
 	global screensurf
 	scbak=screensurf.copy()
 	textfnt = pygame.font.SysFont(None, fontsize)
@@ -743,7 +784,7 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unav
 		time.sleep(0.1)
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
-				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuimenuset.png')))
+				pygame.image.save(screensurf, (os.path.join('CAP', scrndest)))
 			if event.type == MOUSEBUTTONDOWN and event.button==1:
 				clickblock=0
 				
@@ -1501,10 +1542,12 @@ See README.md for more information."""
 				
 #credits scroller
 
-def creditsscroll():
+def creditsscroll(topleft=0):
 	pixcnt1=0
 	pixjmp=14
 	scrollsurfwid=24
+	if topleft==1:
+		scrollsurfwid=0
 	
 	texttable=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
 	GFXLOGOCRED=GFXLOGO.copy()
@@ -1516,11 +1559,14 @@ def creditsscroll():
 			texttable.append(flid)
 			scrollsurfyaw=-20
 			scrollmaskyaw=65
+			if topleft==1:
+				scrollmaskyaw=0
 			slidecnt=0
 			pixcnt1=0
 			scrollsurf=pygame.Surface((600, 410))
 			scrollmask=pygame.Surface((600, 370))
 			scrollsurf.fill((255, 255, 255))
+			#screensurf.fill((255, 255, 255))
 			for qlid in texttable:
 				if qlid=="-<GFXLOGO>-":
 					abttextbox=GFXLOGOCRED.get_rect()

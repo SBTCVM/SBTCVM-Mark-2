@@ -10,6 +10,7 @@ import VMSYSTEM.libbaltcalc as libbaltcalc
 import VMSYSTEM.libvmui as vmui
 import sys
 import VMSYSTEM.libvmconf as libvmconf
+import VMSYSTEM.libthemeconf as libthemeconf
 from random import randint
 pygame.display.init()
 
@@ -69,31 +70,69 @@ pygame.display.set_icon(windowicon)
 disablereadouts=int(libvmconf.getconf("video", "disablereadouts"))
 
 
-screensurf=pygame.display.set_mode((800, 600))
-#
-
-
-vmbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VMBG.png')).convert()
-#pauseicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'PAUSEBTN.png')).convert()
-fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-pauseicon=vmui.makemenubtn("MENU", icon=fmicon)
-pausex=vmbg.blit(pauseicon, (650, 300))
-screensurf.blit(vmbg, (0, 0))
-#init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
-vmui.initui(screensurf, 0)
-vmui.dummyreadouts()
-pygame.display.update()
-libSBTCVM.glyphoptim(screensurf)
-pygame.display.set_caption("SBTCVM Mark 2", "SBTCVM Mark 2")
-pygame.font.init()
-
+screensurf=pygame.display.set_mode((950, 600))
 simplefont = pygame.font.SysFont(None, 16)
+
 #used for smaller data displays (inst. data etc.)
 #smldispfont = pygame.font.SysFont(None, 16)
 smldispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 #used in larger data displays (register displays, etc.)
 #lgdispfont = pygame.font.SysFont(None, 20)
 lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
+
+
+
+#
+#position bank:
+hudsize=44
+pausebtnx=3
+pausebtny=3
+ttyyoffset=44
+#ttyxoffset=0
+colordispx=649
+colordispy=1 + hudsize
+cdispscale=148 + 148
+mdispscale=144
+mdispx=649
+mdispy=150 + 148 + hudsize
+statybegin=360
+statx=800
+statjump=30
+statrect=(statx, statybegin - 15, 150, 300)
+hudrect=pygame.Rect(0, 0, 950, hudsize)
+
+
+
+vmbg=pygame.Surface((950, 600)).convert()
+vmbg.fill(libthemeconf.vmbg)
+
+#vmbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VMBG.png')).convert()
+pygame.draw.rect(vmbg, libthemeconf.hudbg, hudrect, 0)
+pygame.draw.rect(vmbg, libthemeconf.vmstatbg, statrect, 0)
+
+staty=statybegin-15
+for label in ["inst", "dat", "reg1", "reg2", "address", "current rom", "thread"]:
+	labgx=simplefont.render(label, True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+	vmbg.blit(labgx, (statx, staty))
+	staty += statjump
+
+#pauseicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'PAUSEBTN.png')).convert()
+
+sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
+vmbg.blit(sbtcvmbadge, ((950-120), 0))
+
+fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
+pauseicon=vmui.makemenubtn("MENU", icon=fmicon)
+pausex=vmbg.blit(pauseicon, (pausebtnx, pausebtny))
+screensurf.blit(vmbg, (0, 0))
+#init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
+vmui.initui(screensurf, 0)
+#vmui.dummyreadouts()
+pygame.display.update()
+libSBTCVM.glyphoptim(screensurf)
+pygame.display.set_caption("SBTCVM Mark 2", "SBTCVM Mark 2")
+pygame.font.init()
+
 pixcnt1=40
 pixjmp=14
 USRYN=0
@@ -347,10 +386,10 @@ if 'GLOBKIOSK' in globals():
 		ttystyle=0
 		print "Kiosk mode active... enabling readouts and TTY mode 0..."
 
-if disablereadouts==1:
-	screensurf=pygame.display.set_mode((800, 486))
-	screensurf.blit(vmbg, (0, 0))
-	pygame.display.update()
+#if disablereadouts==1:
+	#screensurf=pygame.display.set_mode((950, 600))
+	#screensurf.blit(vmbg, (0, 0))
+	#pygame.display.update()
 
 
 TTYBGCOL=libSBTCVM.colorfind("------")
@@ -400,8 +439,8 @@ ttyredraw=1
 #the random integer port is read only.
 IOreadonly=["--0------"]
 
-MONODISPBIG=pygame.transform.scale(MONODISP, (144, 144))
-COLORDISPBIG=pygame.transform.scale(COLORDISP, (148, 148))
+MONODISPBIG=pygame.transform.scale(MONODISP, (mdispscale, mdispscale))
+COLORDISPBIG=pygame.transform.scale(COLORDISP, (cdispscale, cdispscale))
 #RAMBANK startup end
 colorreg="++++++"
 ROMFILE=TROMA
@@ -430,13 +469,15 @@ updtmdisp=1
 updtblits=list()
 updtttyprev=list()
 updtrandport=1
-upt=screensurf.blit(CPULEDACT, (749, 505))
-updtblits.extend([upt])
-upt=screensurf.blit(STEPLED, (750, 512))
-updtblits.extend([upt])
+#upt=screensurf.blit(CPULEDACT, (749, 505))
+#updtblits.extend([upt])
+#upt=screensurf.blit(STEPLED, (750, 512))
+#updtblits.extend([upt])
 print "Prep threading system..."
 threadref="00"
 #vmexeclog("Preping threading system...")
+
+prevCLOCK=2242
 
 ttyredrawfull=1
 
@@ -447,8 +488,8 @@ for cur_id in ["-0","-+","0-","00","0+","+-","+0","++"]:
 btthreadcnt=1
 btcurthread="--"
 
-curthrtex=lgdispfont.render(btcurthread, True, (127, 0, 255), (0, 0, 0)).convert()
-upt=screensurf.blit(curthrtex, (170, 522))
+curthrtex=lgdispfont.render(btcurthread, True, libthemeconf.vmcurth, libthemeconf.vmstatbg).convert()
+upt=screensurf.blit(curthrtex, (statx, (statybegin + (statjump*6))))
 updtblits.extend([upt])
 
 ttyblitsprev=list()
@@ -498,41 +539,79 @@ while stopflag==0:
 		if disablereadouts==0 or stepbystep==1:
 			#screensurf.blit(vmbg, (0, 0))
 			#these show the instruction and data in the instruction/data box :)
+			staty=statybegin
 			if prevINST!=curinst:
-				insttext=smldispfont.render(curinst, True, (0, 255, 255), (0, 0, 0)).convert()
+				insttext=smldispfont.render(curinst, True, libthemeconf.vminst, libthemeconf.vmstatbg).convert()
 				prevINST=curinst
-				upt=screensurf.blit(insttext, (8, 522))
+				upt=screensurf.blit(insttext, (statx, staty))
 				updtblits.extend([upt])
+			staty += statjump
 			if prevDATA!=curdata:
-				datatext=smldispfont.render(curdata, True, (0, 255, 127), (0, 0, 0)).convert()
+				datatext=smldispfont.render(curdata, True, libthemeconf.vmdata, libthemeconf.vmstatbg).convert()
 				prevDATA=curdata
-				upt=screensurf.blit(datatext, (8, 566))
+				upt=screensurf.blit(datatext, (statx, staty))
 				updtblits.extend([upt])
-			
+			staty += statjump
 			#these draw the register displays :)
 			if prevREG1!=REG1:
-				reg1text=lgdispfont.render(REG1, True, (255, 0, 127), (0, 0, 0)).convert()
+				reg1text=lgdispfont.render(REG1, True, libthemeconf.vmreg1, libthemeconf.vmstatbg).convert()
 				prevREG1=REG1
-				upt=screensurf.blit(reg1text, (219, 521))
+				upt=screensurf.blit(reg1text, (statx, staty))
 				updtblits.extend([upt])
+			staty += statjump
 			if prevREG2!=REG2:
-				reg2text=lgdispfont.render(REG2, True, (255, 127, 0), (0, 0, 0)).convert()
+				reg2text=lgdispfont.render(REG2, True, libthemeconf.vmreg2, libthemeconf.vmstatbg).convert()
 				prevREG2=REG2
-				upt=screensurf.blit(reg2text, (219, 564))
+				upt=screensurf.blit(reg2text, (statx, staty))
 				updtblits.extend([upt])
-			
-			
+			staty += statjump
 			#and here is what draws the ROM address display :)
-			ROMadrtex=lgdispfont.render(EXECADDR, True, (0, 127, 255), (0, 0, 0)).convert()
-			upt=screensurf.blit(ROMadrtex, (425, 564))
+			ROMadrtex=lgdispfont.render(EXECADDR, True, libthemeconf.vmaddr, libthemeconf.vmstatbg).convert()
+			upt=screensurf.blit(ROMadrtex, (statx, staty))
 			updtblits.extend([upt])
+			staty += statjump
 			#and the current rom display :)
 			CURROMTEXT=(ROMLAMPFLG)
 			if prevROM!=CURROMTEXT:
-				curROMtex=lgdispfont.render(CURROMTEXT, True, (255, 0, 255), (0, 0, 0)).convert()
+				curROMtex=lgdispfont.render(CURROMTEXT, True, libthemeconf.vmrom, libthemeconf.vmstatbg).convert()
 				prevROM=CURROMTEXT
-				upt=screensurf.blit(curROMtex, (126, 522))
+				upt=screensurf.blit(curROMtex, (statx, staty))
 				updtblits.extend([upt])
+			staty += statjump
+			staty += statjump
+			if prevCLOCK!=stepbystep:
+				prevCLOCK=stepbystep
+				if stepbystep==0:
+					
+					labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+					upt2=screensurf.blit(labgx, (statx, staty))
+					labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+					upt=screensurf.blit(labgx, (statx, staty))
+				else:
+					labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+					upt2=screensurf.blit(labgx, (statx, staty))
+					labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+					upt=screensurf.blit(labgx, (statx, staty))
+				updtblits.extend([upt])
+				updtblits.extend([upt2])
+		else:
+			staty=statybegin + (statjump * 7)
+			if prevCLOCK!=stepbystep:
+				prevCLOCK=stepbystep
+				if stepbystep==0:
+					
+					labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+					upt2=screensurf.blit(labgx, (statx, staty))
+					labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+					upt=screensurf.blit(labgx, (statx, staty))
+				else:
+					labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+					upt2=screensurf.blit(labgx, (statx, staty))
+					labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+					upt=screensurf.blit(labgx, (statx, staty))
+				updtblits.extend([upt])
+				updtblits.extend([upt2])
+			
 		#LED LAMPS
 		#CPU
 		#screensurf.blit(CPULEDACT, (749, 505))
@@ -540,13 +619,13 @@ while stopflag==0:
 		
 		if updtcdisp==1:
 			updtcdisp=0
-			COLORDISPBIG=pygame.transform.scale(COLORDISP, (148, 148))
-			upt=screensurf.blit(COLORDISPBIG, (649, 1))
+			COLORDISPBIG=pygame.transform.scale(COLORDISP, (cdispscale, cdispscale))
+			upt=screensurf.blit(COLORDISPBIG, (colordispx, colordispy))
 			updtblits.extend([upt])
 		if updtmdisp==1:
 			updtmdisp=0
-			MONODISPBIG=pygame.transform.scale(MONODISP, (144, 144))
-			upt=screensurf.blit(MONODISPBIG, (649, 150))
+			MONODISPBIG=pygame.transform.scale(MONODISP, (mdispscale, mdispscale))
+			upt=screensurf.blit(MONODISPBIG, (mdispx, mdispy))
 			updtblits.extend([upt])
 		if abtpref!=abt or ttyredraw==1:
 			abtpref=abt
@@ -567,11 +646,12 @@ while stopflag==0:
 								xq=libSBTCVM.charblit2(libSBTCVMsurf, colq, lineq, charq)
 							else:
 								xq=libSBTCVM.charblit(libSBTCVMsurf, colq, lineq, charq)
+							xq[1].y += ttyyoffset
 							ttyblits.extend([xq[1]])
 							colq +=1
 						lineq +=1
 					linexq +=1		
-				upt=screensurf.blit(libSBTCVMsurf, (0, 0))
+				upt=screensurf.blit(libSBTCVMsurf, (0, ttyyoffset))
 				if ttyredrawfull==1:
 					updtblits.extend([upt])
 					ttyredrawfull=0
@@ -1400,29 +1480,44 @@ while stopflag==0:
 	if extradraw==1:
 		#screensurf.blit(vmbg, (0, 0))
 		#these show the instruction and data in the instruction/data box :)
-		insttext=smldispfont.render(curinst, True, (0, 255, 255), (0, 0, 0))
-		datatext=smldispfont.render(curdata, True, (0, 255, 127), (0, 0, 0))
-		screensurf.blit(insttext, (8, 522))
-		screensurf.blit(datatext, (8, 566))
+		staty=statybegin
+		insttext=smldispfont.render(curinst, True, libthemeconf.vminst, libthemeconf.vmstatbg)
+		datatext=smldispfont.render(curdata, True, libthemeconf.vmdata, libthemeconf.vmstatbg)
+		screensurf.blit(insttext, (statx, staty))
+		staty += statjump
+		screensurf.blit(datatext, (statx, staty))
+		staty += statjump
 		#these draw the register displays :)
-		reg1text=lgdispfont.render(REG1, True, (255, 0, 127), (0, 0, 0))
-		reg2text=lgdispfont.render(REG2, True, (255, 127, 0), (0, 0, 0))
-		screensurf.blit(reg1text, (219, 521))
-		screensurf.blit(reg2text, (219, 564))
+		reg1text=lgdispfont.render(REG1, True, libthemeconf.vmreg1, libthemeconf.vmstatbg)
+		reg2text=lgdispfont.render(REG2, True, libthemeconf.vmreg2, libthemeconf.vmstatbg)
+		screensurf.blit(reg1text, (statx, staty))
+		staty += statjump
+		screensurf.blit(reg2text, (statx, staty))
+		staty += statjump
 		#and here is what draws the ROM address display :)
-		ROMadrtex=lgdispfont.render(EXECADDR, True, (0, 127, 255), (0, 0, 0))
-		screensurf.blit(ROMadrtex, (425, 564))
+		ROMadrtex=lgdispfont.render(EXECADDR, True, libthemeconf.vmaddr, libthemeconf.vmstatbg)
+		screensurf.blit(ROMadrtex, (statx, staty))
+		staty += statjump
 		#and the current rom display :)
 		CURROMTEXT=(ROMLAMPFLG)
-		curROMtex=lgdispfont.render(CURROMTEXT, True, (255, 0, 255), (0, 0, 0))
-		screensurf.blit(curROMtex, (126, 522))
-		#LED LAMPS
-		#CPU
-		screensurf.blit(CPULEDACT, (749, 505))
-		#STEP
-		screensurf.blit(STEPLED, (750, 512))
-		screensurf.blit(COLORDISPBIG, (649, 1))
-		screensurf.blit(MONODISPBIG, (649, 150))
+		curROMtex=lgdispfont.render(CURROMTEXT, True, libthemeconf.vmrom, libthemeconf.vmstatbg)
+		screensurf.blit(curROMtex, (statx, staty))
+		staty += statjump
+		staty += statjump
+		if stepbystep==0:	
+			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+			upt2=screensurf.blit(labgx, (statx, staty))
+			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			upt=screensurf.blit(labgx, (statx, staty))
+		else:
+			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+			upt2=screensurf.blit(labgx, (statx, staty))
+			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			upt=screensurf.blit(labgx, (statx, staty))
+		updtblits.extend([upt])
+		updtblits.extend([upt2])
+		screensurf.blit(COLORDISPBIG, (colordispx, colordispy))
+		screensurf.blit(MONODISPBIG, (mdispx, mdispy))
 		#TTY drawer :)
 		#abtpref=abt
 		#ttyredraw=0
@@ -1445,7 +1540,7 @@ while stopflag==0:
 						colq +=1
 					lineq +=1
 				linexq +=1
-			upt=screensurf.blit(libSBTCVMsurf, (0, 0))
+			upt=screensurf.blit(libSBTCVMsurf, (0, ttyyoffset))
 			updtblits.extend([upt])
 		lineq=0
 		linexq=0
@@ -1543,9 +1638,9 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=1
-					STEPLED=LEDGREENON
-					upt=screensurf.blit(STEPLED, (750, 512))
-					updtblits.extend([upt])
+					#STEPLED=LEDGREENON
+					#upt=screensurf.blit(STEPLED, (750, 512))
+					#updtblits.extend([upt])
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
@@ -1560,18 +1655,18 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						screensurf=pygame.display.set_mode((800, 600))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 600))
+						#screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						screensurf=pygame.display.set_mode((800, 486))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 486))
+						#screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
@@ -1645,9 +1740,9 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=1
-					STEPLED=LEDGREENON
-					upt=screensurf.blit(STEPLED, (750, 512))
-					updtblits.extend([upt])
+					#STEPLED=LEDGREENON
+					#upt=screensurf.blit(STEPLED, (750, 512))
+					#updtblits.extend([upt])
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
@@ -1661,18 +1756,18 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						screensurf=pygame.display.set_mode((800, 600))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 600))
+						#screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						screensurf=pygame.display.set_mode((800, 486))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 486))
+						#screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
@@ -1750,26 +1845,26 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=0
-					STEPLED=LEDGREENOFF
-					upt=screensurf.blit(STEPLED, (750, 512))
-					updtblits.extend([upt])
+					#STEPLED=LEDGREENOFF
+					#upt=screensurf.blit(STEPLED, (750, 512))
+					#updtblits.extend([upt])
 					evhappenflg2=1
 					break
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						screensurf=pygame.display.set_mode((800, 600))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 600))
+					#	screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						screensurf=pygame.display.set_mode((800, 486))
-						screensurf.blit(vmbg, (0, 0))
-						vmui.dummyreadouts()
-						pygame.display.update()
+						#screensurf=pygame.display.set_mode((800, 486))
+						#screensurf.blit(vmbg, (0, 0))
+						#vmui.dummyreadouts()
+						#pygame.display.update()
 					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
@@ -1850,25 +1945,25 @@ while stopflag==0:
 				break
 			if event.type == KEYDOWN and event.key == K_F2:
 				stepbystep=1
-				STEPLED=LEDGREENON
-				upt=screensurf.blit(STEPLED, (750, 512))
-				updtblits.extend([upt])
+				#STEPLED=LEDGREENON
+				#upt=screensurf.blit(STEPLED, (750, 512))
+				#updtblits.extend([upt])
 				break
 			if event.type == KEYDOWN and event.key == K_F4:
 				if disablereadouts==1:
 					disablereadouts=0
-					screensurf=pygame.display.set_mode((800, 600))
-					screensurf.blit(vmbg, (0, 0))
-					vmui.dummyreadouts()
-					pygame.display.update()
+					#screensurf=pygame.display.set_mode((800, 600))
+					#screensurf.blit(vmbg, (0, 0))
+					#vmui.dummyreadouts()
+					#pygame.display.update()
 					print "readouts enabled"
 				elif disablereadouts==0:
 					print "readouts disabled"
 					disablereadouts=1
-					screensurf=pygame.display.set_mode((800, 486))
-					screensurf.blit(vmbg, (0, 0))
-					vmui.dummyreadouts()
-					pygame.display.update()
+					#screensurf=pygame.display.set_mode((800, 486))
+					#screensurf.blit(vmbg, (0, 0))
+					#vmui.dummyreadouts()
+					#pygame.display.update()
 					#STEPLED=LEDGREENON
 				updtcdisp=1
 				ttyredraw=1
@@ -2148,8 +2243,9 @@ while stopflag==0:
 		mempoint=BTSTACK[btcurthread].mempoint
 		#change the Thread status display.
 		if (disablereadouts==0 or stepbystep==1) and fskipcnt == fskip:
-			curthrtex=lgdispfont.render(btcurthread, True, (127, 0, 255), (0, 0, 0)).convert()
-			upt=screensurf.blit(curthrtex, (170, 522))
+			curthrtex=lgdispfont.render(btcurthread, True, libthemeconf.vmcurth, libthemeconf.vmstatbg).convert()
+			#upt=screensurf.blit(curthrtex, (170, 522))
+			upt=screensurf.blit(curthrtex, (statx, (statybegin + (statjump*6))))
 			updtblits.extend([upt])
 		
 		#print EXECADDR
@@ -2159,29 +2255,48 @@ while stopflag==0:
 		#screensurf.fill((0,127,255))
 		#screensurf.blit(vmbg, (0, 0))
 	
-		#these show the instruction and data in the instruction/data box :)
-		insttext=smldispfont.render(curinst, True, (0, 255, 255), (0, 0, 0))
-		datatext=smldispfont.render(curdata, True, (0, 255, 127), (0, 0, 0))
-		screensurf.blit(insttext, (8, 522))
-		screensurf.blit(datatext, (8, 566))
+		staty=statybegin
+		insttext=smldispfont.render(curinst, True, libthemeconf.vminst, libthemeconf.vmstatbg)
+		datatext=smldispfont.render(curdata, True, libthemeconf.vmdata, libthemeconf.vmstatbg)
+		screensurf.blit(insttext, (statx, staty))
+		staty += statjump
+		screensurf.blit(datatext, (statx, staty))
+		staty += statjump
 		#these draw the register displays :)
-		reg1text=lgdispfont.render(REG1, True, (255, 0, 127), (0, 0, 0))
-		reg2text=lgdispfont.render(REG2, True, (255, 127, 0), (0, 0, 0))
-		screensurf.blit(reg1text, (219, 521))
-		screensurf.blit(reg2text, (219, 564))
+		reg1text=lgdispfont.render(REG1, True, libthemeconf.vmreg1, libthemeconf.vmstatbg)
+		reg2text=lgdispfont.render(REG2, True, libthemeconf.vmreg2, libthemeconf.vmstatbg)
+		screensurf.blit(reg1text, (statx, staty))
+		staty += statjump
+		screensurf.blit(reg2text, (statx, staty))
+		staty += statjump
 		#and here is what draws the ROM address display :)
-		ROMadrtex=lgdispfont.render(EXECADDR, True, (0, 127, 255), (0, 0, 0))
-		screensurf.blit(ROMadrtex, (425, 564))
+		ROMadrtex=lgdispfont.render(EXECADDR, True, libthemeconf.vmaddr, libthemeconf.vmstatbg)
+		screensurf.blit(ROMadrtex, (statx, staty))
+		staty += statjump
 		#and the current rom display :)
 		CURROMTEXT=(ROMLAMPFLG)
-		curROMtex=lgdispfont.render(CURROMTEXT, True, (255, 0, 255), (0, 0, 0))
-		screensurf.blit(curROMtex, (126, 522))
+		curROMtex=lgdispfont.render(CURROMTEXT, True, libthemeconf.vmrom, libthemeconf.vmstatbg)
+		screensurf.blit(curROMtex, (statx, staty))
 		#LED LAMPS
-		screensurf.blit(CPULEDSTANDBY, (749, 505))
+		#screensurf.blit(CPULEDSTANDBY, (749, 505))
 		#STEP
-		screensurf.blit(STEPLED, (750, 512))
-		screensurf.blit(COLORDISPBIG, (649, 1))
-		screensurf.blit(MONODISPBIG, (649, 150))
+		#screensurf.blit(STEPLED, (750, 512))
+		staty += statjump
+		staty += statjump
+		if stepbystep==0:	
+			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+			upt2=screensurf.blit(labgx, (statx, staty))
+			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			upt=screensurf.blit(labgx, (statx, staty))
+		else:
+			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+			upt2=screensurf.blit(labgx, (statx, staty))
+			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			upt=screensurf.blit(labgx, (statx, staty))
+		updtblits.extend([upt])
+		updtblits.extend([upt2])
+		screensurf.blit(COLORDISPBIG, (colordispx, colordispy))
+		screensurf.blit(MONODISPBIG, (mdispx, mdispy))
 		CURROMTEXT=("ROM " + ROMLAMPFLG)
 		reg2text=lgdispfont.render(CURROMTEXT, True, (255, 0, 255), (0, 0, 0))
 		lineq=0
@@ -2203,7 +2318,7 @@ while stopflag==0:
 						colq +=1
 					lineq +=1
 				linexq +=1
-			upt=screensurf.blit(libSBTCVMsurf, (0, 0))
+			upt=screensurf.blit(libSBTCVMsurf, (0, ttyyoffset))
 			updtblits.extend([upt])
 		lineq=0
 		linexq=0

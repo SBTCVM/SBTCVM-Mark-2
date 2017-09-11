@@ -105,7 +105,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		pygame.display.set_icon(windowicon)
 	#screen fonts
 	if cmd=="uicredits":
-		screensurf=pygame.display.set_mode((648, 486))
+		screensurf=pygame.display.set_mode((600, 370))
 	elif cmd=="helpview":
 		screensurf=pygame.display.set_mode((648, 486))
 	elif cmd=="imgview":
@@ -124,7 +124,7 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#uicredits is the special creditsscroll wrapper mode used by launcher.py
 	if cmd=="uicredits":
 		vmui.toolsscreen(4)
-		vmui.creditsscroll()
+		vmui.creditsscroll(topleft=1)
 	if cmd=="textinput":
 		vmui.toolsscreen(1)
 		textinpout=vmui.textinput(4, 210)
