@@ -111,7 +111,7 @@ pygame.draw.rect(vmbg, libthemeconf.hudbg, hudrect, 0)
 pygame.draw.rect(vmbg, libthemeconf.vmstatbg, statrect, 0)
 
 staty=statybegin-15
-for label in ["inst", "dat", "reg1", "reg2", "address", "current rom", "thread"]:
+for label in ["instruction", "data", "register 1", "register 2", "address", "current rom", "thread"]:
 	labgx=simplefont.render(label, True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
 	vmbg.blit(labgx, (statx, staty))
 	staty += statjump
@@ -147,11 +147,11 @@ keyintreg="0000"
 
 #indicator lamps
 #GREEN
-LEDGREENON=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN.png')).convert()
-LEDGREENOFF=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN-OFF.png')).convert()
+#LEDGREENON=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN.png')).convert()
+#LEDGREENOFF=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN-OFF.png')).convert()
 #CPU
-CPULEDACT=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-BLUE.png')).convert()
-CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
+#CPULEDACT=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-BLUE.png')).convert()
+#CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
 
 COLORDISP=pygame.Surface((27, 27)).convert()
 MONODISP=pygame.Surface((9, 9)).convert()
@@ -399,10 +399,6 @@ quickquit=0
 colvectorreg="000000"
 monovectorreg="000000"
 
-if stepbystep==1:
-	STEPLED=LEDGREENON
-else:
-	STEPLED=LEDGREENOFF
 
 #keep unused events out of queue
 pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN])
@@ -487,6 +483,53 @@ for cur_id in ["-0","-+","0-","00","0+","+-","+0","++"]:
 
 btthreadcnt=1
 btcurthread="--"
+
+curinst="000000"
+curdata="000000000"
+
+staty=statybegin
+insttext=smldispfont.render(curinst, True, libthemeconf.vminst, libthemeconf.vmstatbg)
+datatext=smldispfont.render(curdata, True, libthemeconf.vmdata, libthemeconf.vmstatbg)
+upt=screensurf.blit(insttext, (statx, staty))
+updtblits.extend([upt])
+staty += statjump
+upt=screensurf.blit(datatext, (statx, staty))
+updtblits.extend([upt])
+staty += statjump
+#these draw the register displays :)
+reg1text=lgdispfont.render(REG1, True, libthemeconf.vmreg1, libthemeconf.vmstatbg)
+reg2text=lgdispfont.render(REG2, True, libthemeconf.vmreg2, libthemeconf.vmstatbg)
+upt=screensurf.blit(reg1text, (statx, staty))
+updtblits.extend([upt])
+staty += statjump
+upt=screensurf.blit(reg2text, (statx, staty))
+updtblits.extend([upt])
+staty += statjump
+#and here is what draws the ROM address display :)
+ROMadrtex=lgdispfont.render(EXECADDR, True, libthemeconf.vmaddr, libthemeconf.vmstatbg)
+upt=screensurf.blit(ROMadrtex, (statx, staty))
+updtblits.extend([upt])
+
+staty += statjump
+#and the current rom display :)
+CURROMTEXT=(ROMLAMPFLG)
+curROMtex=lgdispfont.render(CURROMTEXT, True, libthemeconf.vmrom, libthemeconf.vmstatbg)
+upt=screensurf.blit(curROMtex, (statx, staty))
+updtblits.extend([upt])
+staty += statjump
+staty += statjump
+if stepbystep==0:	
+	labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+	upt2=screensurf.blit(labgx, (statx, staty))
+	labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+	upt=screensurf.blit(labgx, (statx, staty))
+else:
+	labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
+	upt2=screensurf.blit(labgx, (statx, staty))
+	labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+	upt=screensurf.blit(labgx, (statx, staty))
+updtblits.extend([upt])
+updtblits.extend([upt2])
 
 curthrtex=lgdispfont.render(btcurthread, True, libthemeconf.vmcurth, libthemeconf.vmstatbg).convert()
 upt=screensurf.blit(curthrtex, (statx, (statybegin + (statjump*6))))

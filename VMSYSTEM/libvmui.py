@@ -200,8 +200,8 @@ def toolsscreen(mode):
 
 #used to show placeholder readouts.
 def dummyreadouts():
-	screensurf.blit(CPULEDSTANDBY, (749, 505))
-	screensurf.blit(LEDGREENOFF, (750, 512))
+	#screensurf.blit(CPULEDSTANDBY, (749, 505))
+	#screensurf.blit(LEDGREENOFF, (750, 512))
 	curROMtex=lgdispfont.render("A", True, (255, 0, 255), (0, 0, 0)).convert()
 	screensurf.blit(curROMtex, (126, 522))
 	ROMadrtex=lgdispfont.render("---------", True, (0, 127, 255), (0, 0, 0)).convert()
@@ -1565,7 +1565,9 @@ def creditsscroll(topleft=0):
 			pixcnt1=0
 			scrollsurf=pygame.Surface((600, 410))
 			scrollmask=pygame.Surface((600, 370))
-			scrollsurf.fill((255, 255, 255))
+			hbar=pygame.Surface((190, 4))
+			hbar.fill(libthemeconf.credittext)
+			scrollsurf.fill(libthemeconf.creditbg)
 			#screensurf.fill((255, 255, 255))
 			for qlid in texttable:
 				if qlid=="-<GFXLOGO>-":
@@ -1574,17 +1576,17 @@ def creditsscroll(topleft=0):
 					abttextbox.y=pixcnt1
 					scrollsurf.blit(GFXLOGOCRED, abttextbox)
 				elif qlid=="-<HBAR>-":
-					abttextbox=CREDITHBAR.get_rect()
+					abttextbox=hbar.get_rect()
 					abttextbox.centerx=scrollsurf.get_rect().centerx
 					abttextbox.y=pixcnt1
-					scrollsurf.blit(CREDITHBAR, abttextbox)
+					scrollsurf.blit(hbar, abttextbox)
 				elif qlid=="-<SBTCCAT>-":
 					abttextbox=sbtccat.get_rect()
 					abttextbox.centerx=scrollsurf.get_rect().centerx
 					abttextbox.y=pixcnt1
 					scrollsurf.blit(sbtccat, abttextbox)
 				elif qlid!="":
-					abttext=simplefont.render(qlid, True, (0,0,0), (255, 255, 255))
+					abttext=simplefont.render(qlid, True, libthemeconf.credittext, libthemeconf.creditbg)
 					abttextbox=abttext.get_rect()
 					abttextbox.centerx=scrollsurf.get_rect().centerx
 					abttextbox.y=pixcnt1
