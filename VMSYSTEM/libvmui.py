@@ -25,6 +25,7 @@ simplefont = pygame.font.SysFont(None, 16)
 simplefontA = pygame.font.SysFont(None, 20)
 simplefontB = pygame.font.SysFont(None, 22)
 btnfont = pygame.font.SysFont(None, 16)
+btnfontdialog = pygame.font.SysFont(None, 20)
 
 simplefontC = pygame.font.SysFont(None, 32)
 smldispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
@@ -80,6 +81,33 @@ def makemenubtn(label, width=40, icon=None):
 	btn.blit(menulabel, (((width // 2) - (menulabel.get_width() // 2)), 24))
 	if icon!=None:
 		btn.blit(icon, (((width // 2) - (icon.get_width() // 2)), 1))
+	return btn
+
+def makediagbtn(btnmark, label):
+	width=100
+	height=30
+	boxwid=30
+	textareawid=70
+	tahalf=35+boxwid
+	btn=pygame.Surface((width, height))
+	btnrect=[0, 0, width, height]
+	markrect=[0, 0, boxwid, height]
+	checkp=[(4, 14), (10, 19), (25, 4), (28, 7), (10, 26), (1, 17)]
+	#crossp=[(1, 6), (14, 22), (14, 9), (23, 1), (28, 6), (19, 14), (28, 23), (23, 28), (15, 19), (6, 28), (1, 23), (9, 14)]
+	crossp1=[(1, 23), (6, 28), (28, 6), (23, 1)]
+	crossp2=[(23, 28), (28, 23), (6, 1), (1, 6)]
+	pygame.draw.rect(btn, libthemeconf.btnbg1, btnrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btn, libthemeconf.btnbg2, markrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, markrect, 1)
+	if btnmark==1:
+		pygame.draw.polygon(btn, libthemeconf.btnok, checkp)
+	else:
+		pygame.draw.polygon(btn, libthemeconf.btncancel, crossp1)
+		pygame.draw.polygon(btn, libthemeconf.btncancel, crossp2)
+	
+	menulabel=btnfontdialog.render(label, True, libthemeconf.btntext)
+	btn.blit(menulabel, (((tahalf) - (menulabel.get_width() // 2)), 4))
 	return btn
 
 def makerotbtn(toplabel, bottomlabel):
@@ -436,11 +464,15 @@ def initui(scsurf, kiomode):
 	CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
 	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
 	
-	diagbtnok=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnok.png')).convert()
-	diagbtnyes=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnyes.png')).convert()
-	diagbtnno=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnno.png')).convert()
-
+	#diagbtnok=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnok.png')).convert()
+	#diagbtnyes=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnyes.png')).convert()
+	#diagbtnno=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnno.png')).convert()
+	diagbtnok=makediagbtn(1, "OK")
+	diagbtnno=makediagbtn(0, "NO")
+	diagbtnyes=makediagbtn(1, "YES")
 	
+	
+
 
 #used by pausemenu function.
 def textsciter_internal(flookup):

@@ -165,5 +165,6 @@ btninactbg=pygame.Color(btntag.attrib.get("inactbg"))
 btninacttext=pygame.Color(btntag.attrib.get("inacttext"))
 btnline=pygame.Color(btntag.attrib.get("line"))
 btntext=pygame.Color(btntag.attrib.get("text"))
-
+btnok=pygame.Color(btntag.attrib.get("ok"))
+btncancel=pygame.Color(btntag.attrib.get("cancel"))
 
