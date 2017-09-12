@@ -131,6 +131,7 @@ dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
 widtest=launchtile("Test tool", romicon, 3, lref="TEST")
+widscribble=launchtile("scribble tool", romicon, 3, lref="scribble")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
@@ -140,7 +141,7 @@ maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[widtest]
+ltoolcat=[widtest, widscribble]
 #category definitions
 tilelist=maincat
 catid=0
@@ -233,7 +234,7 @@ while qflg==0:
 		scupdate=1
 		time.sleep(0.04)
 	else:
-		time.sleep(0.1)
+		time.sleep(0.08)
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:

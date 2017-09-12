@@ -24,6 +24,8 @@ fpad=1
 def widlookup(namestring):
 	if namestring=="TEST":
 		return testwid
+	if namestring=="scribble":
+		return scribble
 
 #standardized rect generation
 def getframes(x, y, widsurf):
@@ -99,6 +101,81 @@ class testwid:
 	def hostquit(self):
 		print "host program quit."
 		
+
+class scribble:
+	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
+		#screensurf is the surface to blit the window to
+		self.screensurf=screensurf
+		#wo is a sorting variable used to sort the windows in a list
+		self.wo=windoworder
+		#title is the name of the window
+		self.title="scribble"
+		
+		self.widx=324
+		self.widy=283
+		self.x=xpos
+		self.y=ypos
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill((200, 200, 200))
+		self.paintsurf=pygame.Surface((self.widx, self.widy-40)).convert(self.widsurf)
+		self.paintsurf.fill((255, 255, 255))
+		self.paintrect=self.paintsurf.get_rect()
+		self.paintrect.x = (self.x)
+		self.paintrect.y = (self.y + 20)
+		self.scribblecolor=(0, 0, 0)
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.scrib=0
+		#these rects are needed
+		#frame close button rect
+		self.closerect=self.frametoup[2]
+		#rect of window content
+		self.widbox=self.frametoup[0]
+		#frame rect
+		self.framerect=self.frametoup[1]
+	def render(self):
+		if self.scrib==1:
+			self.dx=self.sx
+			self.dy=self.sy
+			self.mpos=pygame.mouse.get_pos()
+			self.sx=(self.mpos[0] - self.x)
+			self.sy=(self.mpos[1] - self.y - hudy)
+			pygame.draw.line(self.paintsurf, self.scribblecolor, (self.dx, self.dy), (self.sx, self.sy))
+			self.widsurf.blit(self.paintsurf, (0, 0))
+		#self.labtx=simplefont.render("window order: " + str(self.wo), True, frametext, framebg)
+		#self.widsurf.blit(self.labtx, (0, 0))
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+	def movet(self, xoff, yoff):
+		self.x -= xoff
+		self.y -= yoff
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+		self.paintrect.x = (self.x)
+		self.paintrect.y = (self.y)
+	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
+	def click(self, event):
+		if self.paintrect.collidepoint(event.pos) == 1:
+			self.sx=(event.pos[0] - self.x)
+			self.sy=(event.pos[1] - self.y - hudy)
+			self.scrib=1
+	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
+	def clickup(self, event):
+		self.scrib=0
+	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
+	def keydown(self, event):
+		return
+		#print event.unicode
+	def keyup(self, event):
+		return
+	#close is called when the window is to be closed.
+	def close(self):
+		return
+	#hostquit is called when the host program is going to quit.
+	def hostquit(self):
+		return
+		
+
 
 
 		
