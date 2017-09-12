@@ -284,6 +284,13 @@ while qflg==0:
 							#activewids.sort(key=lambda x: x.wo, reverse=True)
 					else:
 						wid.click(event.pos[0], event.pos[1], event.button)
+						if wid.wo!=0:
+							wid.wo=0
+							activewids.remove(wid)
+							for widd in activewids:
+								widd.wo += 1
+							activewids.extend([wid])
+						break
 			if notile==0:
 				for tile in tilelist:
 					if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
