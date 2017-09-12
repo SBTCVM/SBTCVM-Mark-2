@@ -263,6 +263,11 @@ while qflg==0:
 		if event.type==MOUSEBUTTONUP:
 			if movewid==1:
 				movewid=0
+			else:
+				for wid in activewids:
+					if wid.wo==0:
+						if wid.widbox.collidepoint(event.pos)==1:
+							wid.clickup(event)
 		if event.type==MOUSEBUTTONDOWN:
 			#process tile clicks
 			notile=0

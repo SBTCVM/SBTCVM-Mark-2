@@ -80,9 +80,12 @@ class testwid:
 		self.closerect=self.frametoup[2]
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
-	#click is given pygame mouse click events that fall within widbox
+	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
 		print "click"
+	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
+	def clickup(self, event):
+		print "clickup"
 	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
 	def keydown(self, event):
 		print "keydown"
