@@ -867,9 +867,9 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 				instcnt += 1
 			else:
 				if instgpe[1]=="enter":
-					ksc=" "
-				elif instgpe[1]=="space":
 					ksc="\n"
+				elif instgpe[1]=="space":
+					ksc=" "
 				else:
 					ksc=(instgpe[1])[0]
 				outn.write("--+++0" + "000" + (libSBTCVM.charlook(ksc)) + "\n")
