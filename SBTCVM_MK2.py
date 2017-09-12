@@ -87,6 +87,8 @@ lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 hudsize=44
 pausebtnx=3
 pausebtny=3
+sysmx=46
+sysmy=3
 ttyyoffset=44
 #ttyxoffset=0
 colordispx=649
@@ -122,8 +124,10 @@ sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')
 vmbg.blit(sbtcvmbadge, ((950-120), 0))
 
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-pauseicon=vmui.makemenubtn("MENU", icon=fmicon)
+pauseicon=vmui.makemenubtn("FILE", icon=fmicon)
+sysmenuicon=vmui.makemenubtn("SYSTEM", width=80)
 pausex=vmbg.blit(pauseicon, (pausebtnx, pausebtny))
+sysmenux=vmbg.blit(sysmenuicon, (sysmx, sysmy))
 screensurf.blit(vmbg, (0, 0))
 #init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
 vmui.initui(screensurf, 0)
@@ -132,6 +136,7 @@ pygame.display.update()
 libSBTCVM.glyphoptim(screensurf)
 pygame.display.set_caption("SBTCVM Mark 2", "SBTCVM Mark 2")
 pygame.font.init()
+
 
 pixcnt1=40
 pixjmp=14
@@ -338,6 +343,62 @@ if 'GLOBOPSEC' in globals():
 		trackopsec=0
 else:
 	trackopsec=0
+
+sysmdisread0=vmui.menuitem("status readouts (off)", "READ0")
+sysmdisread1=vmui.menuitem("status readouts (on)", "READ1")
+sysmstep0=vmui.menuitem("step-by-step debugging (off)", "STEP0")
+sysmstep1=vmui.menuitem("step-by-step debugging (on)", "STEP1")
+sysmtty0=vmui.menuitem("TTY (on)", "TTY0")
+sysmtty1=vmui.menuitem("TTY (off)", "TTY1")
+sysmmemorydmp=vmui.menuitem("Generate Memory *.DMPs", "DMP")
+sysmhalted=vmui.menuitem("(System halted)", "SYSHLT", noclick=1)
+def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
+	global disablereadouts
+	global stepbystep
+	global ttystyle
+	global ttyredraw
+	global ttyredrawfull
+	if disablereadouts==1:
+		sysmdisread=sysmdisread0
+	else:
+		sysmdisread=sysmdisread1
+	if stepbystep==1:
+		sysmstep=sysmstep1
+	else:
+		sysmstep=sysmstep0
+	if ttystyle==0:
+		sysmtty=sysmtty0
+	else:
+		sysmtty=sysmtty1
+	if posthalt==1:
+		sysmmen=[sysmhalted, sysmmemorydmp]
+	else:
+		sysmmen=[sysmdisread, sysmstep, sysmtty, sysmmemorydmp]
+	menuret=vmui.menuset(sysmmen, x, y, reclick=0, scrndest='SCREENSHOT.png', fontsize=26)
+	if menuret=="READ0":
+		disablereadouts=0
+	if menuret=="READ1":
+		disablereadouts=1
+	if menuret=="STEP0":
+		stepbystep=1
+	if menuret=="STEP1":
+		stepbystep=0
+	if menuret=="TTY0":
+		ttystyle=1
+	if menuret=="TTY1":
+		ttystyle=0
+		ttyredraw=1
+		ttyredrawfull=1
+	if menuret=="DMP":
+		ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
+		for IOitm in IOdumplist:
+			ramdmp.write(RAMbank[IOitm] + "\n")
+		ramdmp.close()
+		for threaddex in BTSTACK:
+			print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+		libtrom.manualdumptroms()
+	return
+		
 		
 
 #tritlength defaults
@@ -1632,6 +1693,8 @@ while stopflag==0:
 					break
 					
 				if event.type == MOUSEBUTTONDOWN:
+					if sysmenux.collidepoint(event.pos)==1 and event.button==1:
+						sysmenu()
 					if pausex.collidepoint(event.pos)==1 and event.button==1:
 						pmenret=vmui.pausemenu()
 						if pmenret=="s":
@@ -1731,6 +1794,8 @@ while stopflag==0:
 					evhappenflg2=1
 					break
 				if event.type == MOUSEBUTTONDOWN:
+					if sysmenux.collidepoint(event.pos)==1 and event.button==1:
+						sysmenu()
 					if pausex.collidepoint(event.pos)==1 and event.button==1:
 						pmenret=vmui.pausemenu()
 						if pmenret=="s":
@@ -1831,6 +1896,11 @@ while stopflag==0:
 					evhappenflg2=1
 					break
 				if event.type == MOUSEBUTTONDOWN:
+					if sysmenux.collidepoint(event.pos)==1 and event.button==1:
+						sysmenu()
+						if stepbystep==0:
+							evhappenflg2=1
+							break
 					if pausex.collidepoint(event.pos)==1 and event.button==1:
 						pmenret=vmui.pausemenu()
 						if pmenret=="s":
@@ -1949,6 +2019,8 @@ while stopflag==0:
 				else:
 					break
 			if event.type == MOUSEBUTTONDOWN:
+				if sysmenux.collidepoint(event.pos)==1 and event.button==1:
+					sysmenu()
 				if pausex.collidepoint(event.pos)==1 and event.button==1:
 					pmenret=vmui.pausemenu()
 					if pmenret=="s":
@@ -2329,12 +2401,12 @@ while stopflag==0:
 		if stepbystep==0:	
 			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
 			upt2=screensurf.blit(labgx, (statx, staty))
-			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			labgx=simplefont.render("Clock: System Halted", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
 			upt=screensurf.blit(labgx, (statx, staty))
 		else:
 			labgx=simplefont.render("Clock: Normal run", True, libthemeconf.vmstatbg, libthemeconf.vmstatbg).convert()
 			upt2=screensurf.blit(labgx, (statx, staty))
-			labgx=simplefont.render("Clock: Step by Step", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
+			labgx=simplefont.render("Clock: System Halted", True, libthemeconf.vmstattext, libthemeconf.vmstatbg).convert()
 			upt=screensurf.blit(labgx, (statx, staty))
 		updtblits.extend([upt])
 		updtblits.extend([upt2])
@@ -2427,9 +2499,39 @@ if quickquit==0:
 	while evhappenflg3==0:
 		time.sleep(.1)
 		for event in pygame.event.get():
+			if event.type == MOUSEBUTTONDOWN:
+				if sysmenux.collidepoint(event.pos)==1 and event.button==1:
+					sysmenu(posthalt=1)
+				if pausex.collidepoint(event.pos)==1 and event.button==1:
+					pmenret=vmui.pausemenu(posthalt=1)
+					if pmenret=="s":
+						evhappenflg3=1
+						break
+					if pmenret=="qs":
+						stopflag=1
+						evhappenflg3=1
+						quickquit=1
+						break
+					else:
+						break
 			if event.type == pygame.KEYDOWN and event.key == K_RETURN:
 				evhappenflg3=1
 				break
+			if event.type == KEYDOWN and event.key == K_F1:
+				subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
+			if event.type == KEYDOWN and event.key == K_F7:
+				pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
+				pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT.png')))
+			if event.type == KEYDOWN and event.key == K_F10:
+				ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
+				for IOitm in IOdumplist:
+					ramdmp.write(RAMbank[IOitm] + "\n")
+				ramdmp.close()
+				for threaddex in BTSTACK:
+					print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+				libtrom.manualdumptroms()
 
 
 

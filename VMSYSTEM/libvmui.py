@@ -219,18 +219,22 @@ def dummyreadouts():
 
 #SBTCVM pause menu.
 #called upon by SBTCVM_MK2.py when Escape is pressed.
-def pausemenu():
+def pausemenu(posthalt=0):
 	print "------------------"
 	print "SBTCVM pause menu."
 	pmpause=menuitem("(paused)", "PAUSE", noclick=1)
+	pmhalted=menuitem("(System halted)", "SYSHLT", noclick=1)
 	pmcont=menuitem("continue", "CONT")
 	pmhelp=menuitem("Help (F1)", "HELP")
 	pmcredit=menuitem("Credits", "CREDIT")
 	pmabout=menuitem("About SBTCVM Mark 2", "PMABOUT")
-	pmabout2=menuitem("About SBTCVM", "ABOUT")
+	pmabout2=menuitem("Readme", "ABOUT")
 	pmstop=menuitem("Stop VM", "STOP")
 	pmquit=menuitem("Quit", "QUIT")
-	pmmenu=[pmpause, pmcont, pmhelp, pmcredit, pmabout, pmabout2, pmstop, pmquit]
+	if posthalt==1:
+		pmmenu=[pmhalted, pmhelp, pmcredit, pmabout, pmquit]
+	else:
+		pmmenu=[pmhelp, pmcredit, pmabout, pmstop, pmquit]
 	diagabt="""SBTCVM Mark 2 v2.0.3
 Part of the SBTCVM Project
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
