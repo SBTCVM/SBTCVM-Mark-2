@@ -238,6 +238,8 @@ while qflg==0:
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			qflg=1
+			for wid in activewids:
+				wid.hostquit()
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
 			subprocess.Popen(["python", "helpview.py", "launcher.xml"])
@@ -266,6 +268,7 @@ while qflg==0:
 					notile=1
 					if not wid.widbox.collidepoint(event.pos)==1:
 						if wid.closerect.collidepoint(event.pos)==1 and event.button==1:
+							wid.close()
 							activewids.remove(wid)
 							scupdate=1
 							break
@@ -321,6 +324,8 @@ while qflg==0:
 					bg=pygame.transform.scale(bg, (screenx, screeny))
 				if menuret=="QUIT":
 					qflg=1
+					for wid in activewids:
+						wid.hostquit()
 					break
 			#category menu
 			if catmx.collidepoint(event.pos)==1 and event.button==1:

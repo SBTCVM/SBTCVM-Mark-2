@@ -61,28 +61,32 @@ class testwid:
 		self.widsurf=pygame.Surface((self.widx, self.widy))
 		self.widsurf.fill((255, 255, 255))
 		
-		
-		frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
 		#these rects are needed
 		#frame close button rect
-		self.closerect=frametoup[2]
+		self.closerect=self.frametoup[2]
 		#rect of window content
-		self.widbox=frametoup[0]
+		self.widbox=self.frametoup[0]
 		#frame rect
-		self.framerect=frametoup[1]
+		self.framerect=self.frametoup[1]
 	def render(self):
-		self.labtx=simplefont.render(str(self.wo), True, frametext, framebg)
+		self.labtx=simplefont.render("window order: " + str(self.wo), True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 0))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
-		frametoup=getframes(self.x, self.y, self.widsurf)
-		self.closerect=frametoup[2]
-		self.widbox=frametoup[0]
-		self.framerect=frametoup[1]
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
 	def click(self, xpos, ypos, button):
 		print "click"
+	def close(self):
+		print "window close"
+	def hostquit(self):
+		print "host program quit."
+		
 
 
 		
