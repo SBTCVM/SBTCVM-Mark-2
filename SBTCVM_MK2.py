@@ -351,6 +351,8 @@ sysmstep1=vmui.menuitem("step-by-step debugging (on)", "STEP1")
 sysmtty0=vmui.menuitem("TTY (on)", "TTY0")
 sysmtty1=vmui.menuitem("TTY (off)", "TTY1")
 sysmmemorydmp=vmui.menuitem("Generate Memory *.DMPs", "DMP")
+sysmcapplot=vmui.menuitem("Capture plotters", "DISPDMP")
+sysmcapscr=vmui.menuitem("Capture screenshot", "SCSHOT")
 sysmhalted=vmui.menuitem("(System halted)", "SYSHLT", noclick=1)
 def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
 	global disablereadouts
@@ -371,9 +373,9 @@ def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
 	else:
 		sysmtty=sysmtty1
 	if posthalt==1:
-		sysmmen=[sysmhalted, sysmmemorydmp]
+		sysmmen=[sysmhalted, sysmmemorydmp, sysmcapplot, sysmcapscr]
 	else:
-		sysmmen=[sysmdisread, sysmstep, sysmtty, sysmmemorydmp]
+		sysmmen=[sysmdisread, sysmstep, sysmtty, sysmmemorydmp, sysmcapplot, sysmcapscr]
 	menuret=vmui.menuset(sysmmen, x, y, reclick=0, scrndest='SCREENSHOT.png', fontsize=26)
 	if menuret=="READ0":
 		disablereadouts=0
@@ -389,6 +391,11 @@ def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
 		ttystyle=0
 		ttyredraw=1
 		ttyredrawfull=1
+	if menuret=="DISPDMP":
+		pygame.image.save(COLORDISP, (os.path.join('CAP', 'COLORDISP-OUT.png')))
+		pygame.image.save(MONODISP, (os.path.join('CAP', 'MONODISP-OUT.png')))
+	if menuret=="SCSHOT":
+		pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT.png')))
 	if menuret=="DMP":
 		ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
 		for IOitm in IOdumplist:
@@ -1744,9 +1751,6 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=1
-					#STEPLED=LEDGREENON
-					#upt=screensurf.blit(STEPLED, (750, 512))
-					#updtblits.extend([upt])
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
@@ -1761,19 +1765,10 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						#screensurf=pygame.display.set_mode((800, 600))
-						#screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						#screensurf=pygame.display.set_mode((800, 486))
-						#screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
-					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
 					updtmdisp=1
@@ -1848,9 +1843,6 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=1
-					#STEPLED=LEDGREENON
-					#upt=screensurf.blit(STEPLED, (750, 512))
-					#updtblits.extend([upt])
 					break
 				if event.type == KEYDOWN and event.key == K_F10:
 					ramdmp=open((os.path.join('CAP', 'IOBUSman.dmp')),  'w')
@@ -1864,19 +1856,10 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						#screensurf=pygame.display.set_mode((800, 600))
-						#screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						#screensurf=pygame.display.set_mode((800, 486))
-						#screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
-					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
 					updtmdisp=1
@@ -1958,27 +1941,15 @@ while stopflag==0:
 					break
 				if event.type == KEYDOWN and event.key == K_F2:
 					stepbystep=0
-					#STEPLED=LEDGREENOFF
-					#upt=screensurf.blit(STEPLED, (750, 512))
-					#updtblits.extend([upt])
 					evhappenflg2=1
 					break
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						#screensurf=pygame.display.set_mode((800, 600))
-					#	screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
 						print "readouts enabled"
 					elif disablereadouts==0:
 						print "readouts disabled"
 						disablereadouts=1
-						#screensurf=pygame.display.set_mode((800, 486))
-						#screensurf.blit(vmbg, (0, 0))
-						#vmui.dummyreadouts()
-						#pygame.display.update()
-					#STEPLED=LEDGREENON
 					updtcdisp=1
 					ttyredraw=1
 					updtmdisp=1
@@ -2060,26 +2031,14 @@ while stopflag==0:
 				break
 			if event.type == KEYDOWN and event.key == K_F2:
 				stepbystep=1
-				#STEPLED=LEDGREENON
-				#upt=screensurf.blit(STEPLED, (750, 512))
-				#updtblits.extend([upt])
 				break
 			if event.type == KEYDOWN and event.key == K_F4:
 				if disablereadouts==1:
 					disablereadouts=0
-					#screensurf=pygame.display.set_mode((800, 600))
-					#screensurf.blit(vmbg, (0, 0))
-					#vmui.dummyreadouts()
-					#pygame.display.update()
 					print "readouts enabled"
 				elif disablereadouts==0:
 					print "readouts disabled"
 					disablereadouts=1
-					#screensurf=pygame.display.set_mode((800, 486))
-					#screensurf.blit(vmbg, (0, 0))
-					#vmui.dummyreadouts()
-					#pygame.display.update()
-					#STEPLED=LEDGREENON
 				updtcdisp=1
 				ttyredraw=1
 				updtmdisp=1
@@ -2508,9 +2467,7 @@ if quickquit==0:
 						evhappenflg3=1
 						break
 					if pmenret=="qs":
-						stopflag=1
 						evhappenflg3=1
-						quickquit=1
 						break
 					else:
 						break
