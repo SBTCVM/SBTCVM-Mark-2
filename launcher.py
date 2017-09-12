@@ -316,50 +316,51 @@ while qflg==0:
 							#activewids.sort(key=lambda x: x.wo, reverse=True)
 							
 							
-			#file menu
-			if filemx.collidepoint(event.pos)==1 and event.button==1:
-				menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
-				if menuret=="HELP":
-					subprocess.Popen(["python", "helpview.py", "launcher.xml"])
-				if menuret=="ABOUT2":
-					subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
-				if menuret=="ABOUT":
-					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
-				if menuret=="SETBG":
-					vmui.settheme(3, 43)
-					scupdate=1
-					bg=(libthemeconf.bgmake(None)).convert()
-					bg=pygame.transform.scale(bg, (screenx, screeny))
-				if menuret=="QUIT":
-					qflg=1
-					for wid in activewids:
-						wid.hostquit()
-					break
-			#category menu
-			if catmx.collidepoint(event.pos)==1 and event.button==1:
-				menuret=vmui.menuset(catmenu, 48, 43, reclick=0, fontsize=26)
-				if menuret=="MAIN":
-					tilelist=maincat
-					catid=0
-					catname="Main"
-					scupdate=1
-				if menuret=="GAMES":
-					tilelist=gamescat
-					catid=1
-					catname="Games"
-					scupdate=1
-				if menuret=="WELCOME":
-					tilelist=welcomecat
-					catid=2
-					catname="Welcome"
-					scupdate=1
-				if menuret=="DEMOS":
-					tilelist=democat
-					catid=3
-					catname="Demos"
-					scupdate=1
-				if menuret=="LTOOL":
-					tilelist=ltoolcat
-					catid=4
-					catname="Mini Tools"
-					scupdate=1
+				#file menu
+				if filemx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
+					if menuret=="HELP":
+						subprocess.Popen(["python", "helpview.py", "launcher.xml"])
+					if menuret=="ABOUT2":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
+					if menuret=="ABOUT":
+						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+					if menuret=="SETBG":
+						vmui.settheme(3, 43)
+						scupdate=1
+						bg=(libthemeconf.bgmake(None)).convert()
+						bg=pygame.transform.scale(bg, (screenx, screeny))
+					if menuret=="QUIT":
+						qflg=1
+						for wid in activewids:
+							wid.hostquit()
+						break
+				#category menu
+				if catmx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=vmui.menuset(catmenu, 48, 43, reclick=0, fontsize=26)
+					if menuret=="MAIN":
+						tilelist=maincat
+						catid=0
+						catname="Main"
+						scupdate=1
+					if menuret=="GAMES":
+						tilelist=gamescat
+						catid=1
+						catname="Games"
+						scupdate=1
+					if menuret=="WELCOME":
+						tilelist=welcomecat
+						catid=2
+						catname="Welcome"
+						scupdate=1
+					if menuret=="DEMOS":
+						tilelist=democat
+						catid=3
+						catname="Demos"
+						scupdate=1
+					if menuret=="LTOOL":
+						tilelist=ltoolcat
+						catid=4
+						catname="Mini Tools"
+						scupdate=1
+	
