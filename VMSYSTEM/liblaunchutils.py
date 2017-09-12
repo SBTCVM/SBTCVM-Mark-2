@@ -80,10 +80,19 @@ class testwid:
 		self.closerect=self.frametoup[2]
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
-	def click(self, xpos, ypos, button):
+	#click is given pygame mouse click events that fall within widbox
+	def click(self, event):
 		print "click"
+	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
+	def keydown(self, event):
+		print "keydown"
+		#print event.unicode
+	def keyup(self, event):
+		print "keyup"
+	#close is called when the window is to be closed.
 	def close(self):
 		print "window close"
+	#hostquit is called when the host program is going to quit.
 	def hostquit(self):
 		print "host program quit."
 		

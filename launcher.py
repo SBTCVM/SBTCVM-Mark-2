@@ -243,9 +243,17 @@ while qflg==0:
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
 			subprocess.Popen(["python", "helpview.py", "launcher.xml"])
-		if event.type == KEYDOWN and event.key == K_F8:
+		elif event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 			break
+		elif event.type == KEYDOWN:
+			for wid in activewids:
+				if wid.wo==0:
+					wid.keydown(event)
+		if event.type == KEYUP:
+			for wid in activewids:
+				if wid.wo==0:
+					wid.keyup(event)
 		if event.type==VIDEORESIZE:
 			resizeflg=1
 			resw=event.w
@@ -286,7 +294,7 @@ while qflg==0:
 							#activewids.insert(0, wid)
 							#activewids.sort(key=lambda x: x.wo, reverse=True)
 					else:
-						wid.click(event.pos[0], event.pos[1], event.button)
+						wid.click(event)
 						if wid.wo!=0:
 							wid.wo=0
 							activewids.remove(wid)
