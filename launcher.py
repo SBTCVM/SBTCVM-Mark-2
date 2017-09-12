@@ -14,7 +14,7 @@ from pygame.locals import *
 import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
-
+import VMSYSTEM.liblaunchutils as launchutils
 
 print "SBTCVM Launcher v3.0"
 pygame.display.init()
@@ -105,6 +105,11 @@ class launchtile:
 					subprocess.Popen(["python", self.lref, self.lref2])
 				else:
 					subprocess.Popen(["python", self.lref])
+			if self.ltype==3:
+				if self.lref2!=None:
+					return (self.lref, self.lref2)
+				else:
+					return (self.lref, None)
 			if self.ltype==1:
 				subprocess.Popen(["python", "MK2-RUN.py", "-k", self.lref])
 			if self.ltype==2:
@@ -124,13 +129,18 @@ starryt=launchtile("Starry", romicon, 2, lref="starry.streg")
 rayburstt=launchtile("Ray Burst", romicon, 2, lref="rayburst.streg")
 dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
+#launch tools
+widtest=launchtile("Test tool", romicon, 3, lref="TEST")
+
+#testwid=launchutils.testwid(screensurf, 40, 40)
+activewids=[]
 
 #category lists
 maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-
+ltoolcat=[widtest]
 #category definitions
 tilelist=maincat
 catid=0
@@ -141,7 +151,11 @@ cmitem0=vmui.menuitem("Main", "MAIN")
 cmitem1=vmui.menuitem("Games", "GAMES")
 cmitem2=vmui.menuitem("Welcome", "WELCOME")
 cmitem3=vmui.menuitem("Demos", "DEMOS")
-catmenu=[cmitem0, cmitem1, cmitem2, cmitem3]
+cmitem4=vmui.menuitem("Mini Tools", "LTOOL")
+catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4]
+
+
+#widitem0=vmui.menuitem("main", 
 
 #file menu
 fmhelp=vmui.menuitem("Help (F1)", "HELP")
@@ -153,6 +167,10 @@ filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
+
+
+movewid=0
+widtomove=None
 
 scupdate=1
 qflg=0
@@ -187,6 +205,7 @@ while qflg==0:
 		menulabel=catfont.render(catname, True, libthemeconf.btntext)
 		screensurf.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 		#tile render
+		
 		for tile in tilelist:
 			tile.render(tilex, tiley)
 			if tilex+tilejumpx+90<screenx:
@@ -194,8 +213,27 @@ while qflg==0:
 			else:
 				tilex=10
 				tiley += tilejumpy
+		activewids.sort(key=lambda x: x.wo, reverse=True)
+		for wid in activewids:
+			wid.render()
 		pygame.display.update()
-	time.sleep(0.1)
+	else:
+		uptlist=list()
+		activewids.sort(key=lambda x: x.wo, reverse=True)
+		for wid in activewids:
+			wid.render()
+			uptlist.extend([wid.framerect])
+		pygame.display.update(uptlist)
+	if movewid==1:
+		prevpos=movepos
+		movepos=pygame.mouse.get_pos()
+		xoff =(prevpos[0] - movepos[0])
+		yoff =(prevpos[1] - movepos[1])
+		widtomove.movet(xoff, yoff)
+		scupdate=1
+		time.sleep(0.04)
+	else:
+		time.sleep(0.1)
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -212,11 +250,54 @@ while qflg==0:
 			resh=event.h
 			time.sleep(0.1)
 			break
+		if event.type==MOUSEBUTTONUP:
+			if movewid==1:
+				movewid=0
 		if event.type==MOUSEBUTTONDOWN:
 			#process tile clicks
-			for tile in tilelist:
-				if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
-					tile.act()
+			notile=0
+			#first=1
+			activewids.sort(key=lambda x: x.wo, reverse=False)
+			for wid in activewids:
+				#if wid.wo==0 and first==1:
+				#	print "fun"
+				#first=0
+				if wid.framerect.collidepoint(event.pos)==1:
+					notile=1
+					if not wid.widbox.collidepoint(event.pos)==1:
+						if wid.closerect.collidepoint(event.pos)==1 and event.button==1:
+							activewids.remove(wid)
+							scupdate=1
+							break
+						else:
+							movewid=1
+							movepos=event.pos
+							widtomove=wid
+							if wid.wo!=0:
+								wid.wo=0
+								activewids.remove(wid)
+								for widd in activewids:
+									widd.wo += 1
+								activewids.extend([wid])
+							break
+							#activewids.insert(0, wid)
+							#activewids.sort(key=lambda x: x.wo, reverse=True)
+					else:
+						wid.click(event.pos[0], event.pos[1], event.button)
+			if notile==0:
+				for tile in tilelist:
+					if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
+						actret=tile.act()
+						if actret!=None:
+							widis=launchutils.widlookup(actret[0])
+							widx=widis(screensurf, 0, 40, 40, argument=actret[1])
+							#ctivewids=activewids + [widx]
+							for wid in activewids:
+								wid.wo += 1
+							activewids.extend([widx])
+							#activewids.sort(key=lambda x: x.wo, reverse=True)
+							
+							
 			#file menu
 			if filemx.collidepoint(event.pos)==1 and event.button==1:
 				menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
@@ -256,4 +337,9 @@ while qflg==0:
 					tilelist=democat
 					catid=3
 					catname="Demos"
+					scupdate=1
+				if menuret=="LTOOL":
+					tilelist=ltoolcat
+					catid=4
+					catname="Mini Tools"
 					scupdate=1
