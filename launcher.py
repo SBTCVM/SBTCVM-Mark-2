@@ -43,10 +43,10 @@ See README.md for more information."""
 
 #image data:
 #bghud=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'launchhud.png')).convert_alpha()
-bghud=pygame.Surface((screenx, screeny), SRCALPHA)
+#bghud=pygame.Surface((screenx, screeny), SRCALPHA)
 
 
-bg=(libthemeconf.bgmake(bghud)).convert()
+bg=(libthemeconf.bgmake(None)).convert()
 
 sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 bgoverlay=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'helpbgover.png')).convert_alpha()
@@ -87,7 +87,7 @@ class launchtile:
 		self.iconw=60
 		self.iconh=60
 		self.tilebox=pygame.Rect(0, 0, self.tileh, self.tilew)
-		self.tilesurf=pygame.Surface((self.tilew, self.tileh), SRCALPHA)
+		self.tilesurf=pygame.Surface((self.tilew, self.tileh), SRCALPHA).convert_alpha()
 		self.tilesurf.fill(libthemeconf.tilecolor)
 		self.textx=((self.tileh // 2) - (self.textren.get_width() // 2))
 		self.iconx=((self.tileh // 2) - (self.icon.get_width() // 2))
@@ -177,20 +177,10 @@ widtomove=None
 scupdate=1
 qflg=0
 resizeflg=0
-
-#hudrect=pygame.Rect(0, 0, screenx, 44)
-#bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
-#pygame.draw.rect(bg, libthemeconf.hudbg, hudrect, 0)
-#bg.blit(sbtcvmbadge, ((screenx-120), 0))
-#bg.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
-
 uptcat=1
 redrawhud=1
-filemx=bg.blit(fvfilemenu, (3, 3))
-#catmx=bg.blit(fvcatmenu, (48, 3))
-#menulabel=catfont.render(catname, True, libthemeconf.btntext)
-#bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 while qflg==0:
+	#pygame window resize logic
 	if resizeflg==1:
 		resizeflg=2
 	elif resizeflg==2:
@@ -236,17 +226,20 @@ while qflg==0:
 			else:
 				tilex=10
 				tiley += tilejumpy
+		#minitool render
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
 			wid.render()
 		pygame.display.update()
 	else:
+		#passive minitool renderer to keep minitools updated.
 		uptlist=list()
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
 			wid.render()
 			uptlist.extend([wid.framerect])
 		pygame.display.update(uptlist)
+	#window movement
 	if movewid==1:
 		prevpos=movepos
 		movepos=pygame.mouse.get_pos()
@@ -257,7 +250,7 @@ while qflg==0:
 		time.sleep(0.04)
 	else:
 		time.sleep(0.08)
-	#sig processor	
+	#minitool sig processor	
 	for wid in activewids:
 		widret=wid.sig()
 		if widret!=None:
@@ -286,6 +279,7 @@ while qflg==0:
 		elif event.type == KEYDOWN and event.key == K_F8:
 			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 			break
+		#minitool keyboard event processors.
 		elif event.type == KEYDOWN:
 			for wid in activewids:
 				if wid.wo==0:
@@ -294,12 +288,14 @@ while qflg==0:
 			for wid in activewids:
 				if wid.wo==0:
 					wid.keyup(event)
+		#screen resize code activation
 		if event.type==VIDEORESIZE:
 			resizeflg=1
 			resw=event.w
 			resh=event.h
 			time.sleep(0.1)
 			break
+		#mousebuttonup code 
 		if event.type==MOUSEBUTTONUP:
 			if movewid==1:
 				movewid=0
@@ -309,7 +305,7 @@ while qflg==0:
 						if wid.widbox.collidepoint(event.pos)==1:
 							wid.clickup(event)
 		if event.type==MOUSEBUTTONDOWN:
-			#process tile clicks
+			#minitool click processing
 			notile=0
 			#first=1
 			activewids.sort(key=lambda x: x.wo, reverse=False)
@@ -347,6 +343,7 @@ while qflg==0:
 								widd.wo += 1
 							activewids.extend([wid])
 						break
+			#tile click processing
 			if notile==0:
 				for tile in tilelist:
 					if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
