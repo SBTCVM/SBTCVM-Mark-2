@@ -148,7 +148,7 @@ class scribble:
 		self.y=ypos
 		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
-		self.labtx=simplefont.render("click left box to cycle color [27 colors]", True, frametext, framebg)
+		self.labtx=simplefont.render("click left box or use a,s,d to cycle color [27 colors]", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 0))
 		self.labtx=simplefont.render("click the right box to change pen size", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 20))
@@ -246,7 +246,27 @@ class scribble:
 	def clickup(self, event):
 		self.scrib=0
 	def keydown(self, event):
-		return
+		if event.key==pygame.K_a:
+			if self.colorr==0:
+				self.colorr=127
+			elif self.colorr==127:
+				self.colorr=255
+			elif self.colorr==255:
+				self.colorr=0
+		if event.key==pygame.K_s:
+			if self.colorg==0:
+				self.colorg=127
+			elif self.colorg==127:
+				self.colorg=255
+			elif self.colorg==255:
+				self.colorg=0
+		if event.key==pygame.K_d:
+			if self.colorb==0:
+				self.colorb=127
+			elif self.colorb==127:
+				self.colorb=255
+			elif self.colorb==255:
+				self.colorb=0
 	def keyup(self, event):
 		return
 	def close(self):
