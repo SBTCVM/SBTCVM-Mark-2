@@ -69,8 +69,8 @@ miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'minisc
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
-fvcatmenu=vmui.makemenubtn("CATEGORY", width=80)
+fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon).convert()
+fvcatmenu=vmui.makemenubtn("CATEGORY", width=80).convert()
 #fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.png')).convert()
 
 
@@ -169,7 +169,7 @@ filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
-
+bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
 
 movewid=0
 widtomove=None
@@ -177,6 +177,19 @@ widtomove=None
 scupdate=1
 qflg=0
 resizeflg=0
+
+#hudrect=pygame.Rect(0, 0, screenx, 44)
+#bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+#pygame.draw.rect(bg, libthemeconf.hudbg, hudrect, 0)
+#bg.blit(sbtcvmbadge, ((screenx-120), 0))
+#bg.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
+
+uptcat=1
+redrawhud=1
+filemx=bg.blit(fvfilemenu, (3, 3))
+#catmx=bg.blit(fvcatmenu, (48, 3))
+#menulabel=catfont.render(catname, True, libthemeconf.btntext)
+#bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 while qflg==0:
 	if resizeflg==1:
 		resizeflg=2
@@ -188,24 +201,33 @@ while qflg==0:
 		resizeflg=0	
 		screeny=resh
 		screenx=resw
+		bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+		redrawhud=1
+	#hud rendering. (draws onto bg)
+	if redrawhud==1:
+		redrawhud=0
+		hudrect=pygame.Rect(0, 0, screenx, 44)
+		pygame.draw.rect(bg, libthemeconf.hudbg, hudrect, 0)
+		bg.blit(sbtcvmbadge, ((screenx-120), 0))
+		bg.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
+		#
+		filemx=bg.blit(fvfilemenu, (3, 3))
+		uptcat=1
+	#category button redraw (avoid full hud redraw on cat change
+	if uptcat==1:
+		uptcat=0
+		catmx=bg.blit(fvcatmenu, (48, 3))
+		menulabel=catfont.render(catname, True, libthemeconf.btntext)
+		bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 	#display drawing
 	if scupdate==1:
 		scupdate=0
-		screensurf.fill(libthemeconf.deskcolor)
 		screensurf.blit(bg, (0, 0))
-		hudrect=pygame.Rect(0, 0, screenx, 44)
-		screensurf.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
-		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
-		screensurf.blit(sbtcvmbadge, ((screenx-120), 0))
-		screensurf.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
 		tilex=10
 		tiley=60
 		tilejumpx=100
 		tilejumpy=95
-		filemx=screensurf.blit(fvfilemenu, (3, 3))
-		catmx=screensurf.blit(fvcatmenu, (48, 3))
-		menulabel=catfont.render(catname, True, libthemeconf.btntext)
-		screensurf.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
+		
 		#tile render
 		for tile in tilelist:
 			tile.render(tilex, tiley)
@@ -353,6 +375,8 @@ while qflg==0:
 						scupdate=1
 						bg=(libthemeconf.bgmake(None)).convert()
 						bg=pygame.transform.scale(bg, (screenx, screeny))
+						bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+						redrawhud=1
 					if menuret=="QUIT":
 						qflg=1
 						for wid in activewids:
@@ -366,24 +390,29 @@ while qflg==0:
 						catid=0
 						catname="Main"
 						scupdate=1
+						uptcat=1
 					if menuret=="GAMES":
 						tilelist=gamescat
 						catid=1
 						catname="Games"
 						scupdate=1
+						uptcat=1
 					if menuret=="WELCOME":
 						tilelist=welcomecat
 						catid=2
 						catname="Welcome"
 						scupdate=1
+						uptcat=1
 					if menuret=="DEMOS":
 						tilelist=democat
 						catid=3
 						catname="Demos"
 						scupdate=1
+						uptcat=1
 					if menuret=="LTOOL":
 						tilelist=ltoolcat
 						catid=4
 						catname="Mini Tools"
 						scupdate=1
+						uptcat=1
 	
