@@ -19,6 +19,14 @@ framediv=libthemeconf.huddiv
 hudy=20
 fpad=1
 
+#sig method:
+#sig must be a list of 2 arguments or be None
+#list of sig return codes:
+#(0, widinstance)=activate the pre-initalized wid widinstance
+#None=do nothing
+#
+#
+#
 
 #tool lookup function.
 def widlookup(namestring):
@@ -61,6 +69,7 @@ class testwid:
 		
 		self.widx=140
 		self.widy=140
+		#x and y are required.
 		self.x=xpos
 		self.y=ypos
 		self.widsurf=pygame.Surface((self.widx, self.widy))
@@ -74,9 +83,12 @@ class testwid:
 		self.widbox=self.frametoup[0]
 		#frame rect
 		self.framerect=self.frametoup[1]
+		self.newinstance=0
 	def render(self):
 		self.labtx=simplefont.render("window order: " + str(self.wo), True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 0))
+		self.labtx=simplefont.render("space = new instance", True, frametext, framebg)
+		self.widsurf.blit(self.labtx, (0, 20))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
@@ -88,6 +100,7 @@ class testwid:
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
 		print "click"
+		
 	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
 	def clickup(self, event):
 		print "clickup"
@@ -95,6 +108,8 @@ class testwid:
 	def keydown(self, event):
 		print "keydown"
 		#print event.unicode
+		if event.key==pygame.K_SPACE:
+			self.newinstance=1
 	def keyup(self, event):
 		print "keyup"
 	#close is called when the window is to be closed.
@@ -103,7 +118,11 @@ class testwid:
 	#hostquit is called when the host program is going to quit.
 	def hostquit(self):
 		print "host program quit."
-		
+	def sig(self):
+		if self.newinstance==1:
+			self.newinstance=0
+			return (0, testwid(self.screensurf, 0))
+		return
 
 class scribble:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
@@ -225,7 +244,8 @@ class scribble:
 		return
 	def hostquit(self):
 		return
-		
+	def sig(self):
+		return
 
 
 

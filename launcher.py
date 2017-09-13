@@ -235,6 +235,18 @@ while qflg==0:
 		time.sleep(0.04)
 	else:
 		time.sleep(0.08)
+	#sig processor	
+	for wid in activewids:
+		widret=wid.sig()
+		if widret!=None:
+			if widret[0]==0:
+				widadd=widret[1]
+				for widd in activewids:
+					widd.wo += 1
+				widadd.movet(-40, -80)
+				widadd.wo=0
+				activewids.extend([widadd])
+			
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -314,7 +326,7 @@ while qflg==0:
 						actret=tile.act()
 						if actret!=None:
 							widis=launchutils.widlookup(actret[0])
-							widx=widis(screensurf, 0, 40, 40, argument=actret[1])
+							widx=widis(screensurf, 0, 40, 80, argument=actret[1])
 							#ctivewids=activewids + [widx]
 							for wid in activewids:
 								wid.wo += 1
