@@ -64,6 +64,7 @@ calcicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'calc.png'))
 creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.png')).convert()
 
 romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).convert()
+miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
 
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
@@ -131,7 +132,7 @@ dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
 widtest=launchtile("Test tool", romicon, 3, lref="TEST")
-widscribble=launchtile("scribble tool", romicon, 3, lref="scribble")
+widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
@@ -206,7 +207,6 @@ while qflg==0:
 		menulabel=catfont.render(catname, True, libthemeconf.btntext)
 		screensurf.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 		#tile render
-		
 		for tile in tilelist:
 			tile.render(tilex, tiley)
 			if tilex+tilejumpx+90<screenx:

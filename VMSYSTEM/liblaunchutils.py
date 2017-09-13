@@ -29,6 +29,8 @@ def widlookup(namestring):
 
 #standardized rect generation
 def getframes(x, y, widsurf):
+	y -= 21
+	x -= 1
 	widbox=widsurf.get_rect()
 	widbox.x=x+fpad
 	widbox.y=y+hudy+fpad
@@ -42,6 +44,7 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title):
 	pygame.draw.rect(screensurf, framediv, framerect, 1)
 	pygame.draw.rect(screensurf, framebtn, closerect, 0)
 	pygame.draw.rect(screensurf, framediv, closerect, 1)
+	pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w), framerect.y+hudy))
 	screensurf.blit(widsurf, widbox)
 	labtx=simplefont.render(title, True, frametext, framebg)
 	screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
@@ -61,7 +64,7 @@ class testwid:
 		self.x=xpos
 		self.y=ypos
 		self.widsurf=pygame.Surface((self.widx, self.widy))
-		self.widsurf.fill((255, 255, 255))
+		self.widsurf.fill(framebg)
 		
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
 		#these rects are needed
@@ -116,13 +119,27 @@ class scribble:
 		self.x=xpos
 		self.y=ypos
 		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
-		self.widsurf.fill((200, 200, 200))
+		self.widsurf.fill(framebg)
+		self.labtx=simplefont.render("click left box to cycle color [27 colors]", True, frametext, framebg)
+		self.widsurf.blit(self.labtx, (0, 0))
+		self.labtx=simplefont.render("click the right box to change pen size", True, frametext, framebg)
+		self.widsurf.blit(self.labtx, (0, 20))
+		self.labtx=simplefont.render("click inside this window to begin.", True, frametext, framebg)
+		self.widsurf.blit(self.labtx, (0, 40))
 		self.paintsurf=pygame.Surface((self.widx, self.widy-40)).convert(self.widsurf)
 		self.paintsurf.fill((255, 255, 255))
 		self.paintrect=self.paintsurf.get_rect()
 		self.paintrect.x = (self.x)
-		self.paintrect.y = (self.y + 20)
-		self.scribblecolor=(0, 0, 0)
+		self.paintrect.y = (self.y)
+		self.pensize=1
+		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
+		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
+		self.penlist=[1, 3, 5, 7, 9, 10, 15, 20, 30]
+		self.penindex=0
+		self.colorr=0
+		self.colorb=0
+		self.colorg=0
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
 		self.scrib=0
 		#these rects are needed
@@ -132,18 +149,29 @@ class scribble:
 		self.widbox=self.frametoup[0]
 		#frame rect
 		self.framerect=self.frametoup[1]
+		self.firstclick=1
 	def render(self):
+		self.scribblecolor=(self.colorr, self.colorg, self.colorb)
+		if self.firstclick==2:
+			self.firstclick=0
+			self.widsurf.blit(self.paintsurf, (0, 0))
 		if self.scrib==1:
 			self.dx=self.sx
 			self.dy=self.sy
 			self.mpos=pygame.mouse.get_pos()
 			self.sx=(self.mpos[0] - self.x)
-			self.sy=(self.mpos[1] - self.y - hudy)
-			pygame.draw.line(self.paintsurf, self.scribblecolor, (self.dx, self.dy), (self.sx, self.sy))
+			self.sy=(self.mpos[1] - self.y)
+			pygame.draw.line(self.paintsurf, self.scribblecolor, (self.dx, self.dy), (self.sx, self.sy), self.penlist[self.penindex])
 			self.widsurf.blit(self.paintsurf, (0, 0))
+		
 		#self.labtx=simplefont.render("window order: " + str(self.wo), True, frametext, framebg)
 		#self.widsurf.blit(self.labtx, (0, 0))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		pygame.draw.rect(self.screensurf, self.scribblecolor, self.color1rect, 0)
+		pygame.draw.rect(self.screensurf, framediv, self.color1rect, 1)
+		pygame.draw.rect(self.screensurf, frametext, self.sizerect, 0)
+		self.labtx=simplefont.render(str(self.penlist[self.penindex]), True, framebg, frametext)
+		self.screensurf.blit(self.labtx, (self.x + 32, (self.y + self.widy - 38)))
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
@@ -153,25 +181,48 @@ class scribble:
 		self.framerect=self.frametoup[1]
 		self.paintrect.x = (self.x)
 		self.paintrect.y = (self.y)
-	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
+		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
 	def click(self, event):
-		if self.paintrect.collidepoint(event.pos) == 1:
+		if self.firstclick==1:
+			self.firstclick=2
+			
+		elif self.sizerect.collidepoint(event.pos) == 1:
+			if self.penindex==(len(self.penlist) - 1):
+				self.penindex=0
+			else:
+				self.penindex += 1
+		elif self.color1rect.collidepoint(event.pos) == 1:
+			if self.colorr==0:
+				self.colorr=127
+			elif self.colorr==127:
+				self.colorr=255
+			elif self.colorr==255:
+				self.colorr=0
+				if self.colorg==0:
+					self.colorg=127
+				elif self.colorg==127:
+					self.colorg=255
+				elif self.colorg==255:
+					self.colorg=0
+					if self.colorb==0:
+						self.colorb=127
+					elif self.colorb==127:
+						self.colorb=255
+					elif self.colorb==255:
+						self.colorb=0
+		elif self.paintrect.collidepoint(event.pos) == 1:
 			self.sx=(event.pos[0] - self.x)
-			self.sy=(event.pos[1] - self.y - hudy)
+			self.sy=(event.pos[1] - self.y)
 			self.scrib=1
-	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
 	def clickup(self, event):
 		self.scrib=0
-	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
 	def keydown(self, event):
 		return
-		#print event.unicode
 	def keyup(self, event):
 		return
-	#close is called when the window is to be closed.
 	def close(self):
 		return
-	#hostquit is called when the host program is going to quit.
 	def hostquit(self):
 		return
 		
