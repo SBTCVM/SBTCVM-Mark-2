@@ -131,7 +131,7 @@ rayburstt=launchtile("Ray Burst", romicon, 2, lref="rayburst.streg")
 dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
-widtest=launchtile("Test tool", romicon, 3, lref="TEST")
+widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
 widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)

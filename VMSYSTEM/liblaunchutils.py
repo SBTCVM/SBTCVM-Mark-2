@@ -8,7 +8,7 @@ import copy
 import sys
 import os
 pygame.font.init()
-simplefont = pygame.font.SysFont(None, 16)
+simplefont = pygame.font.SysFont(None, 19)
 
 framebg=libthemeconf.hudbg
 frametext=libthemeconf.hudtext
@@ -53,7 +53,7 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title):
 	pygame.draw.rect(screensurf, framediv, framerect, 1)
 	pygame.draw.rect(screensurf, framebtn, closerect, 0)
 	pygame.draw.rect(screensurf, framediv, closerect, 1)
-	pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w), framerect.y+hudy))
+	pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
 	screensurf.blit(widsurf, widbox)
 	labtx=simplefont.render(title, True, frametext, framebg)
 	screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
@@ -140,7 +140,7 @@ class scribble:
 		#wo is a sorting variable used to sort the windows in a list
 		self.wo=windoworder
 		#title is the name of the window
-		self.title="scribble"
+		self.title="Scribble"
 		
 		self.widx=324
 		self.widy=283
@@ -150,12 +150,15 @@ class scribble:
 		self.widsurf.fill(framebg)
 		self.labtx=simplefont.render("click left box or use a,s,d to cycle color [27 colors]", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 0))
-		self.labtx=simplefont.render("click the right box to change pen size", True, frametext, framebg)
+		self.labtx=simplefont.render("click the right box or use c to change pen size", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 20))
 		self.labtx=simplefont.render("click inside this window to begin.", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 40))
+		self.labtx=simplefont.render("z is undo, x is fill", True, frametext, framebg)
+		self.widsurf.blit(self.labtx, (0, 60))
 		self.paintsurf=pygame.Surface((self.widx, self.widy-40)).convert(self.widsurf)
 		self.paintsurf.fill((255, 255, 255))
+		self.paintsurfbak=self.paintsurf.copy()
 		self.paintrect=self.paintsurf.get_rect()
 		self.paintrect.x = (self.x)
 		self.paintrect.y = (self.y)
@@ -163,7 +166,7 @@ class scribble:
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
 		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
-		self.penlist=[1, 3, 5, 7, 9, 10, 15, 20, 30]
+		self.penlist=[1, 2, 3, 4, 5, 7, 9, 10, 15, 20, 30]
 		self.penindex=0
 		self.colorr=0
 		self.colorb=0
@@ -178,10 +181,14 @@ class scribble:
 		#frame rect
 		self.framerect=self.frametoup[1]
 		self.firstclick=1
+		self.redraw=0
 	def render(self):
 		self.scribblecolor=(self.colorr, self.colorg, self.colorb)
 		if self.firstclick==2:
 			self.firstclick=0
+			self.widsurf.blit(self.paintsurf, (0, 0))
+		if self.redraw==1:
+			self.redraw=0
 			self.widsurf.blit(self.paintsurf, (0, 0))
 		if self.scrib==1:
 			self.dx=self.sx
@@ -240,12 +247,14 @@ class scribble:
 					elif self.colorb==255:
 						self.colorb=0
 		elif self.paintrect.collidepoint(event.pos) == 1:
+			self.paintsurfbak=self.paintsurf.copy()
 			self.sx=(event.pos[0] - self.x)
 			self.sy=(event.pos[1] - self.y)
 			self.scrib=1
 	def clickup(self, event):
 		self.scrib=0
 	def keydown(self, event):
+		
 		if event.key==pygame.K_a:
 			if self.colorr==0:
 				self.colorr=127
@@ -267,6 +276,21 @@ class scribble:
 				self.colorb=255
 			elif self.colorb==255:
 				self.colorb=0
+		if event.key==pygame.K_z and self.firstclick==0:
+			self.paintsurfq=self.paintsurfbak
+			self.paintsurfbak=self.paintsurf
+			self.paintsurf=self.paintsurfq
+			self.redraw=1
+		if event.key==pygame.K_x and self.firstclick==0:
+			self.paintsurfbak=self.paintsurf.copy()
+			self.scribblecolor=(self.colorr, self.colorg, self.colorb)
+			self.paintsurf.fill(self.scribblecolor)
+			self.redraw=1
+		if event.key==pygame.K_c:
+			if self.penindex==(len(self.penlist) - 1):
+				self.penindex=0
+			else:
+				self.penindex += 1
 	def keyup(self, event):
 		return
 	def close(self):
