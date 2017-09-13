@@ -246,6 +246,11 @@ while qflg==0:
 				widadd.movet(-40, -80)
 				widadd.wo=0
 				activewids.extend([widadd])
+			elif widret[0]==1:
+				if widret[1]==0:
+					wid.close()
+				activewids.remove(wid)
+				scupdate=1
 			
 	#event handler
 	for event in pygame.event.get():
