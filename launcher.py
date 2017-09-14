@@ -67,6 +67,7 @@ creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.
 romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).convert()
 miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
 taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
+consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console.png')).convert()
 
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
@@ -136,10 +137,10 @@ dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
 widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
-widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
+widscribble=launchtile("Scribble", miniscribble, 3, lref="scribble")
 #widcred=launchtile("credits", DUMMY, 3, lref="credits")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
-LAUNCHCON=launchtile("Console", DUMMY, 3, lref="LaunchConsole")
+LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
 
@@ -173,7 +174,7 @@ fmtask=vmui.menuitem("Task Manager", "TASKMAN")
 fmcon=vmui.menuitem("Console", "CON")
 fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
-filemenu=[fmhelp, fmabout, fmabout2, fmtask, fmbg, fmquit]
+filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmtask, fmcon, fmquit]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
@@ -287,6 +288,7 @@ while qflg==0:
 					for widd in activewids:
 						if widd.taskid==widret[2]:
 							activewids.remove(widd)
+							widd.close()
 							scupdate=1
 							launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
 				if widret[1]==1:
@@ -422,11 +424,17 @@ while qflg==0:
 						widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
 						widx.taskid=taskidcnt
 						taskidcnt +=1
-						#ctivewids=activewids + [widx]
 						for wid in activewids:
 							wid.wo += 1
 						activewids.extend([widx])
 						taskmanlist.extend([widx.taskid])
+					if menuret=="CON":
+						widx=launchutils.launchconsole(screensurf, 0, 40, 80)
+						widx.taskid=taskidcnt
+						taskidcnt +=1
+						for wid in activewids:
+							wid.wo += 1
+						activewids.extend([widx])
 					if menuret=="SETBG":
 						vmui.settheme(3, 43)
 						scupdate=1
