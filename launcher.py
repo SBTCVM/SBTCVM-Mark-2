@@ -46,6 +46,7 @@ See README.md for more information."""
 #bghud=pygame.Surface((screenx, screeny), SRCALPHA)
 
 
+
 bg=(libthemeconf.bgmake(None)).convert()
 
 sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
@@ -138,7 +139,7 @@ widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
 widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
 #widcred=launchtile("credits", DUMMY, 3, lref="credits")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
-
+LAUNCHCON=launchtile("Console", DUMMY, 3, lref="LaunchConsole")
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
 
@@ -147,7 +148,7 @@ maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[widtest, widscribble, creditt, TASKMAN]
+ltoolcat=[widtest, widscribble, creditt, TASKMAN, LAUNCHCON]
 #category definitions
 tilelist=maincat
 catid=0
@@ -169,6 +170,7 @@ fmhelp=vmui.menuitem("Help (F1)", "HELP")
 fmabout=vmui.menuitem("About Launcher", "ABOUT")
 fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
 fmtask=vmui.menuitem("Task Manager", "TASKMAN")
+fmcon=vmui.menuitem("Console", "CON")
 fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
 filemenu=[fmhelp, fmabout, fmabout2, fmtask, fmbg, fmquit]
@@ -188,6 +190,7 @@ redrawhud=1
 taskidcnt=0
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
+launchutils.consolewrite(">>Launcher v3.0")
 while qflg==0:
 	#pygame window resize logic
 	if resizeflg==1:
@@ -285,16 +288,21 @@ while qflg==0:
 						if widd.taskid==widret[2]:
 							activewids.remove(widd)
 							scupdate=1
+							launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
 				if widret[1]==1:
 					for widq in activewids:
 						widq.wo += 1
 					for widd in activewids:
 						if widd.taskid==widret[2]:
+							launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
 							widd.wo=0
 							widd.x=40
 							widd.y=80
 							widd.movet(0, 0)
 							scupdate=1
+			elif widret[0]=="TASKMAN":
+				launchutils.consolewrite(">>WARNING: Unauthorized use of TASKMAN signals was blocked.")
+				launchutils.consolewrite(">>Task name: \"" + wid.title + "\" TaskID: \"" + str(wid.taskid) + "\"")
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
