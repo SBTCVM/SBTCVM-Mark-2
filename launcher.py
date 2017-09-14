@@ -14,7 +14,7 @@ from pygame.locals import *
 import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
-import VMSYSTEM.liblaunchutils as launchutils
+import VMSYSTEM.liblaunchutils2 as launchutils
 
 print "SBTCVM Launcher v3.0"
 pygame.display.init()
@@ -69,7 +69,6 @@ miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'minisc
 taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
 consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console.png')).convert()
 
-
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon).convert()
@@ -98,7 +97,11 @@ class launchtile:
 		self.texty=(self.icony+self.iconh+3)
 		self.tilesurf.blit(self.icon, (self.iconx, self.icony))
 		self.tilesurf.blit(self.textren, (self.textx, self.texty))
-		
+		if ltype==5:
+			self.plusrect1=pygame.Rect(6, 2, 4, 12)
+			self.plusrect2=pygame.Rect(2, 6, 12, 4)
+			pygame.draw.rect(self.tilesurf, libthemeconf.tiletext, self.plusrect1, 0)
+			pygame.draw.rect(self.tilesurf, libthemeconf.tiletext, self.plusrect2, 0)
 		
 	def render(self, xpos, ypos):
 		self.tilebox=screensurf.blit(self.tilesurf, (xpos, ypos))
@@ -116,6 +119,8 @@ class launchtile:
 					return (self.lref, self.lref2)
 				else:
 					return (self.lref, None)
+			if self.ltype==5:
+				return (self.lref, None, None)
 			if self.ltype==1:
 				subprocess.Popen(["python", "MK2-RUN.py", "-k", self.lref])
 			if self.ltype==2:
@@ -150,6 +155,22 @@ gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
 ltoolcat=[widtest, widscribble, creditt, TASKMAN, LAUNCHCON]
+plugincat=[]
+
+for plug in launchutils.pluglist:
+	PLUGTILE=launchtile(plug.label, plug.icon, 5, lref=plug.classref)
+	plugincat.extend([PLUGTILE])
+	if plug.catid==0:
+		maincat.extend([PLUGTILE])
+	if plug.catid==1:
+		gamescat.extend([PLUGTILE])
+	if plug.catid==2:
+		welcomecat.extend([PLUGTILE])
+	if plug.catid==3:
+		democat.extend([PLUGTILE])
+	if plug.catid==4:
+		ltoolcat.extend([PLUGTILE])
+
 #category definitions
 tilelist=maincat
 catid=0
@@ -161,7 +182,8 @@ cmitem1=vmui.menuitem("Games", "GAMES")
 cmitem2=vmui.menuitem("Welcome", "WELCOME")
 cmitem3=vmui.menuitem("Demos", "DEMOS")
 cmitem4=vmui.menuitem("Mini Tools", "LTOOL")
-catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4]
+cmitem5=vmui.menuitem("Plugins", "PLUG")
+catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4, cmitem5]
 
 
 #widitem0=vmui.menuitem("main", 
@@ -397,6 +419,15 @@ while qflg==0:
 									wid.wo += 1
 								activewids.extend([widx])
 								taskmanlist.extend([widx.taskid])
+							elif len(actret)==3:
+								widis=actret[0]
+								widx=widis(screensurf, 0, 40, 80, argument=None)
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
 							else:
 								
 								widis=launchutils.widlookup(actret[0])
@@ -478,6 +509,12 @@ while qflg==0:
 						tilelist=ltoolcat
 						catid=4
 						catname="Mini Tools"
+						scupdate=1
+						uptcat=1
+					if menuret=="PLUG":
+						tilelist=plugincat
+						catid=5
+						catname="Plugins"
 						scupdate=1
 						uptcat=1
 	

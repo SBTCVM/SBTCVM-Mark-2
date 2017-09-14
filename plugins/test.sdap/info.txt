@@ -1,0 +1,3 @@
+plugin dirs should contain all files needed by plugin, except for the plugin itself!
+
+This plugin is provided as a test/example.

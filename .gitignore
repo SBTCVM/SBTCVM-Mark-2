@@ -6,6 +6,11 @@ CAP/*
 VMUSER/*
 !VMUSER/CFG
 VMUSER/CFG/*
+plugins/*
+!plugins/info.txt
+!plugins/test.sdap.py
+!plugins/test.sdap/
+!plugins/test.sdap/*
 !VMUSER/info.txt
 !VMUSER/CFG/info.txt
 *.pyc
