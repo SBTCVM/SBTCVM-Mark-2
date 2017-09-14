@@ -65,6 +65,7 @@ creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.
 
 romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).convert()
 miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
+taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
 
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
@@ -100,6 +101,8 @@ class launchtile:
 	def render(self, xpos, ypos):
 		self.tilebox=screensurf.blit(self.tilesurf, (xpos, ypos))
 	def act(self):
+		if self.ltype==4:
+			return "taskman"
 		if self.lref!=None:
 			if self.ltype==0:
 				if self.lref2!=None:
@@ -134,6 +137,7 @@ pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
 widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
 #widcred=launchtile("credits", DUMMY, 3, lref="credits")
+TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
@@ -143,7 +147,7 @@ maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[widtest, widscribble, creditt]
+ltoolcat=[widtest, widscribble, creditt, TASKMAN]
 #category definitions
 tilelist=maincat
 catid=0
@@ -164,9 +168,10 @@ catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4]
 fmhelp=vmui.menuitem("Help (F1)", "HELP")
 fmabout=vmui.menuitem("About Launcher", "ABOUT")
 fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
+fmtask=vmui.menuitem("Task Manager", "TASKMAN")
 fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
-filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
+filemenu=[fmhelp, fmabout, fmabout2, fmtask, fmbg, fmquit]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
@@ -180,6 +185,9 @@ qflg=0
 resizeflg=0
 uptcat=1
 redrawhud=1
+taskidcnt=0
+#keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
+taskmanlist=list()
 while qflg==0:
 	#pygame window resize logic
 	if resizeflg==1:
@@ -261,13 +269,32 @@ while qflg==0:
 					widd.wo += 1
 				widadd.movet(-40, -80)
 				widadd.wo=0
+				widadd.taskid=taskidcnt
+				taskidcnt +=1
 				activewids.extend([widadd])
 			elif widret[0]==1:
 				if widret[1]==0:
 					wid.close()
 				activewids.remove(wid)
 				scupdate=1
-			
+			elif widret[0]=="TASKMAN" and wid.taskid in taskmanlist:
+				#reset taskman's return variable.
+				wid.sigret=None
+				if widret[1]==0:
+					for widd in activewids:
+						if widd.taskid==widret[2]:
+							activewids.remove(widd)
+							scupdate=1
+				if widret[1]==1:
+					for widq in activewids:
+						widq.wo += 1
+					for widd in activewids:
+						if widd.taskid==widret[2]:
+							widd.wo=0
+							widd.x=40
+							widd.y=80
+							widd.movet(0, 0)
+							scupdate=1
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -350,13 +377,27 @@ while qflg==0:
 					if tile.tilebox.collidepoint(event.pos)==1 and event.button==1:
 						actret=tile.act()
 						if actret!=None:
-							widis=launchutils.widlookup(actret[0])
-							widx=widis(screensurf, 0, 40, 80, argument=actret[1])
-							#ctivewids=activewids + [widx]
-							for wid in activewids:
-								wid.wo += 1
-							activewids.extend([widx])
-							#activewids.sort(key=lambda x: x.wo, reverse=True)
+							if actret=="taskman":
+								#widis=launchutils.widlookup("taskman")
+								widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
+								taskmanlist.extend([widx.taskid])
+							else:
+								
+								widis=launchutils.widlookup(actret[0])
+								widx=widis(screensurf, 0, 40, 80, argument=actret[1])
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
+								#activewids.sort(key=lambda x: x.wo, reverse=True)
 							
 							
 				#file menu
@@ -368,6 +409,16 @@ while qflg==0:
 						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 					if menuret=="ABOUT":
 						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+					if menuret=="TASKMAN":
+						#widis=launchutils.widlookup("taskman")
+						widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+						widx.taskid=taskidcnt
+						taskidcnt +=1
+						#ctivewids=activewids + [widx]
+						for wid in activewids:
+							wid.wo += 1
+						activewids.extend([widx])
+						taskmanlist.extend([widx.taskid])
 					if menuret=="SETBG":
 						vmui.settheme(3, 43)
 						scupdate=1
