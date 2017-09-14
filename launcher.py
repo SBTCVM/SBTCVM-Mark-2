@@ -340,8 +340,8 @@ while qflg==0:
 			else:
 				for wid in activewids:
 					if wid.wo==0:
-						if wid.widbox.collidepoint(event.pos)==1:
-							wid.clickup(event)
+						#if wid.widbox.collidepoint(event.pos)==1:
+						wid.clickup(event)
 		if event.type==MOUSEBUTTONDOWN:
 			#minitool click processing
 			notile=0

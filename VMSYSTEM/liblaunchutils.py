@@ -19,7 +19,7 @@ framediv=libthemeconf.huddiv
 hudy=20
 fpad=1
 
-constext=([""] * 20)
+constext=([""] * 100)
 #consfull=[]
 #print constext
 
@@ -277,7 +277,11 @@ class launchconsole:
 		self.taskid=0
 		self.yjump=16
 		self.widx=500
-		self.widy=(len(constext) * self.yjump)
+		self.conscope=20
+		self.conoffset=0
+		self.widy=(self.conscope * self.yjump)
+		
+		
 		self.consbak=list()
 		#x and y are required.
 		self.x=xpos
@@ -293,18 +297,60 @@ class launchconsole:
 		self.widbox=self.frametoup[0]
 		#frame rect
 		self.framerect=self.frametoup[1]
-		self.newinstance=0
-		self.selfquit=0
+		self.redraw=0
+		self.scrdrg=0
+		#print constext[(len(constext)-self.conscope+self.conoffset):(len(constext)-self.conoffset)]
+		#print -self.conscope+self.conoffset
+		#print -self.conoffset
+		consolewrite("Console: Use mouse wheel or UP/DOWN to scroll")
 	def render(self):
+		#scrollbar arithetic
+		if self.scrdrg==1:
+			self.redraw=1
+			self.scrlb=(100 * float(self.conscope)/float(len(constext)))
+			self.scrloff=(100 * float(self.conoffset-len(constext))/float(len(constext)))
+			self.scrlfull=300
+			self.dy=self.sy
+			self.mpos=pygame.mouse.get_pos()
+			self.sy=(self.mpos[1])
+			self.qy=self.dy-self.sy
+			if self.qy<0:
+				if not self.conscope+self.conoffset>=len(constext):
+					self.conoffset+=abs(self.qy//3)
+					#self.conoffset+1
+			if self.qy>0:
+				if self.conoffset!=0:
+					self.conoffset-=abs(self.qy//3)
+			if self.conscope+self.conoffset>len(constext):
+				self.conoffset=(len(constext)-self.conscope)
+			if self.conoffset<0:
+				self.conoffset=0
+			
+		self.scrlb=(100 * float(self.conscope)/float(len(constext)))
+		self.scrloff=(100 * float(self.conoffset)/float(len(constext)))
+		self.scrlfull=300
+		self.fullrect=pygame.Rect((self.x+self.widx-20), self.y, 20, (self.scrlfull + 1))
+		self.partrect=pygame.Rect((self.x+self.widx-19), (self.y + (3 * self.scrloff)), 18, (3 * self.scrlb))
+		#rendering
 		if self.consbak!=constext:
 			self.constbak=list(constext)
 			self.texty=0
 			self.widsurf.fill(framebg)
-			for self.conline in constext:
+			for self.conline in constext[(len(constext)-(self.conscope+self.conoffset)):(len(constext)-self.conoffset)]:
+				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
+				self.widsurf.blit(self.labtx, (0, self.texty))
+				self.texty += self.yjump
+		elif self.redraw==1:
+			self.redraw=0
+			self.texty=0
+			self.widsurf.fill(framebg)
+			for self.conline in constext[(len(constext)-(self.conscope+self.conoffset)):(len(constext)-self.conoffset)]:
 				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
+		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
@@ -314,12 +360,33 @@ class launchconsole:
 		self.framerect=self.frametoup[1]
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
-		return
+		if self.partrect.collidepoint(event.pos) and event.button==1:
+			self.scrdrg=1
+			self.sy=(event.pos[1])
+			self.redraw=1
+		if event.button==4:
+			if not self.conscope+self.conoffset>=len(constext):
+				self.conoffset+=1
+				self.redraw=1
+		if event.button==5:
+			if self.conoffset!=0:
+				self.conoffset-=1
+				self.redraw=1
 	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
 	def clickup(self, event):
+		if self.scrdrg==1:
+			self.scrdrg=0
 		return
 	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
 	def keydown(self, event):
+		if event.key==pygame.K_UP:
+			if not self.conscope+self.conoffset>=len(constext):
+				self.conoffset+=1
+				self.redraw=1
+		elif event.key==pygame.K_DOWN:
+			if self.conoffset!=0:
+				self.conoffset-=1
+				self.redraw=1
 		return
 	def keyup(self, event):
 		return
