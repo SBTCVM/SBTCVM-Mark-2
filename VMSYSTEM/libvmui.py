@@ -1581,7 +1581,7 @@ def creditsscroll(topleft=0):
 					abttextbox.centerx=scrollsurf.get_rect().centerx
 					abttextbox.y=pixcnt1
 					scrollsurf.blit(sbtccat, abttextbox)
-				elif qlid!="":
+				elif qlid!="" and qlid!="-<END>-":
 					abttext=simplefont.render(qlid, True, libthemeconf.credittext, libthemeconf.creditbg)
 					abttextbox=abttext.get_rect()
 					abttextbox.centerx=scrollsurf.get_rect().centerx

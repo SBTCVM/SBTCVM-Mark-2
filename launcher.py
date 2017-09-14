@@ -123,7 +123,7 @@ settingt=launchtile("Settings", settingsicn, 0, lref="settings.py")
 themet=launchtile("Theme", themeicn, 0, lref="theme.py")
 
 calct=launchtile("Calc", calcicn, 0, lref="calc.py")
-creditt=launchtile("Credits", creditsicn, 0, lref="MK2-TOOLS.py", lref2="uicredits")
+creditt=launchtile("Credits", creditsicn, 3, lref="credits")
 introt=launchtile("intro", introicn, 1, lref="intro.streg")
 gttt=launchtile("GTT", gtticn, 2, lref="gtt.streg")
 starryt=launchtile("Starry", romicon, 2, lref="starry.streg")
@@ -133,6 +133,7 @@ pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
 widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
 widscribble=launchtile("scribble tool", miniscribble, 3, lref="scribble")
+#widcred=launchtile("credits", DUMMY, 3, lref="credits")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
@@ -142,7 +143,7 @@ maincat=[filet, calct, settingt, themet, helpt, creditt]
 gamescat=[gttt]
 welcomecat=[introt, creditt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[widtest, widscribble]
+ltoolcat=[widtest, widscribble, creditt]
 #category definitions
 tilelist=maincat
 catid=0
@@ -249,7 +250,7 @@ while qflg==0:
 		scupdate=1
 		time.sleep(0.04)
 	else:
-		time.sleep(0.08)
+		time.sleep(0.04)
 	#minitool sig processor	
 	for wid in activewids:
 		widret=wid.sig()
