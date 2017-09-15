@@ -2,7 +2,7 @@
 #important notice: please keep variables inside class except for (see below)
 #notice: these plugins will be in the "plugins" directory in accordance to the plugin system.
 #Plugin classes should be prefixed with "PLUGIN_" the text following such should match SDAPNAME!
-class PLUGIN_sdaptest:
+class PLUGIN_testpkg_sdaptest:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
 		#screensurf is the surface to blit the window to
 		self.screensurf=screensurf
@@ -62,14 +62,14 @@ class PLUGIN_sdaptest:
 	def sig(self):
 		return
 #Refrence to class of plugin util
-SDAPPLUGREF=PLUGIN_sdaptest
+SDAPPLUGREF=PLUGIN_testpkg_sdaptest
 #plugin execname
-SDAPNAME="sdaptest"
+SDAPNAME="testpkg_sdaptest"
 SDAPLABEL="Test Plugin"
 #plugin icon refrence (60 x 60 pixels is preferred) set to None for placeholder
 SDAPICON="test.png"
 #plugin directory (set to None if none)
-SDAPDIR="test.sdap"
-#category ID: 0=main 1=Games, 2=Welcome, 3=Demos, 4=Mini Tools 5=Plugins (default, will be listed in plugins regardless)
-SDAPCAT=4
+SDAPDIR="testpkg.sdap"
+#category ID: 0=main 1=Games, 2=Welcome, 3=Demos, 4=Mini Tools 5=Plugins (default, will be listed in plugins regardless) should be a list.
+SDAPCAT=[4]
 

@@ -63,10 +63,10 @@ settingsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'setting
 themeicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'theme.png')).convert()
 
 calcicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'calc.png')).convert()
-creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.png')).convert()
+#creditsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'credits.png')).convert()
 
 romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).convert()
-miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
+#miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
 taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
 consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console.png')).convert()
 
@@ -145,7 +145,7 @@ settingt=launchtile("Settings", settingsicn, 0, lref="settings.py")
 themet=launchtile("Theme", themeicn, 0, lref="theme.py")
 
 calct=launchtile("Calc", calcicn, 0, lref="calc.py")
-creditt=launchtile("Credits", creditsicn, 3, lref="credits")
+#creditt=launchtile("Credits", creditsicn, 3, lref="credits")
 introt=launchtile("intro", introicn, 1, lref="intro.streg")
 gttt=launchtile("GTT", gtticn, 2, lref="gtt.streg")
 starryt=launchtile("Starry", romicon, 2, lref="starry.streg")
@@ -153,8 +153,8 @@ rayburstt=launchtile("Ray Burst", romicon, 2, lref="rayburst.streg")
 dazzlet=launchtile("Dazzle", romicon, 1, lref="dazzle.streg")
 pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #launch tools
-widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
-widscribble=launchtile("Scribble", miniscribble, 3, lref="scribble")
+#widtest=launchtile("Test tool", DUMMY, 3, lref="TEST")
+#widscribble=launchtile("Scribble", miniscribble, 3, lref="scribble")
 #widcred=launchtile("credits", DUMMY, 3, lref="credits")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
@@ -162,25 +162,25 @@ LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 activewids=[]
 
 #category lists
-maincat=[filet, calct, settingt, themet, helpt, creditt]
+maincat=[filet, calct, settingt, themet, helpt]
 gamescat=[gttt]
-welcomecat=[introt, creditt]
+welcomecat=[introt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[widtest, widscribble, creditt, TASKMAN, LAUNCHCON]
+ltoolcat=[TASKMAN, LAUNCHCON]
 plugincat=[]
 
 for plug in launchutils.pluglist:
 	PLUGTILE=launchtile(plug.label, plug.icon, 5, lref=plug.classref)
 	plugincat.extend([PLUGTILE])
-	if plug.catid==0:
+	if 0 in plug.catid:
 		maincat.extend([PLUGTILE])
-	if plug.catid==1:
+	if 1 in plug.catid:
 		gamescat.extend([PLUGTILE])
-	if plug.catid==2:
+	if 2 in plug.catid:
 		welcomecat.extend([PLUGTILE])
-	if plug.catid==3:
+	if 3 in plug.catid:
 		democat.extend([PLUGTILE])
-	if plug.catid==4:
+	if 4 in plug.catid:
 		ltoolcat.extend([PLUGTILE])
 
 #category definitions

@@ -8,9 +8,12 @@ VMUSER/*
 VMUSER/CFG/*
 plugins/*
 !plugins/info.txt
-!plugins/test.sdap.py
-!plugins/test.sdap/
-!plugins/test.sdap/*
+!plugins/defaultpkg*.sdap.py
+!plugins/defaultpkg.sdap/
+!plugins/defaultpkg.sdap/*
+!plugins/testpkg*.sdap.py
+!plugins/testpkg.sdap/
+!plugins/testpkg.sdap/*
 !VMUSER/info.txt
 !VMUSER/CFG/info.txt
 *.pyc
