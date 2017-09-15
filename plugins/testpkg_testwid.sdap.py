@@ -81,7 +81,7 @@ class PLUGIN_testpkg_testwid:
 		if self.newinstance==1:
 			self.newinstance=0
 			consolewrite("TEST: Sending mini tool launch signal")
-			return (0, testwid(self.screensurf, 0))
+			return (0, PLUGIN_testpkg_testwid(self.screensurf, 0))
 		if self.testsigprotect1==1:
 			self.testsigprotect1=0
 			consolewrite("TEST: Testing Signal Protection on task closing.")
