@@ -21,8 +21,10 @@ titleinacttext=libthemeconf.titleinacttext
 framebg=libthemeconf.hudbg
 frametext=libthemeconf.hudtext
 framebtn=libthemeconf.btnbg2
+framebtntext=libthemeconf.btntext
 framediv=libthemeconf.huddiv
 #frametext=libthemeconf.hudt
+
 
 hudy=20
 fpad=1
@@ -109,6 +111,8 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
 		pygame.draw.rect(screensurf, titlebg, framerect, 0)
 		pygame.draw.rect(screensurf, framediv, framerect, 1)
 		pygame.draw.rect(screensurf, framebtn, closerect, 0)
+		pygame.draw.line(screensurf, framebtntext, (closerect.x+4, closerect.y+4), (closerect.x+14, closerect.y+14), 3)
+		pygame.draw.line(screensurf, framebtntext, (closerect.x+14, closerect.y+4), (closerect.x+4, closerect.y+14), 3)
 		pygame.draw.rect(screensurf, framediv, closerect, 1)
 		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
 		screensurf.blit(widsurf, widbox)
@@ -118,6 +122,8 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
 		pygame.draw.rect(screensurf, titleinactbg, framerect, 0)
 		pygame.draw.rect(screensurf, framediv, framerect, 1)
 		pygame.draw.rect(screensurf, framebtn, closerect, 0)
+		pygame.draw.line(screensurf, framebtntext, (closerect.x+4, closerect.y+4), (closerect.x+14, closerect.y+14), 3)
+		pygame.draw.line(screensurf, framebtntext, (closerect.x+14, closerect.y+4), (closerect.x+4, closerect.y+14), 3)
 		pygame.draw.rect(screensurf, framediv, closerect, 1)
 		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
 		screensurf.blit(widsurf, widbox)

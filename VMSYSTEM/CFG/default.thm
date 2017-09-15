@@ -7,7 +7,7 @@
 	<!--used in places where a "desk" color is needed. such as calc and settings...-->
 	<desk bg="#2C4764" text="#FFFFFF" />
 	
-	<titleact bg="#C7C7FF" text="#000000" />
+	<titleact bg="#003C5E" text="#FFFFFF" />
 	<titleinact bg="#E5E5E5" text="#000000" />
 	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
 	<tile color="#FFFFFF" alpha="200" text="#000000" />
