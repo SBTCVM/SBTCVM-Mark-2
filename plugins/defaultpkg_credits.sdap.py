@@ -127,6 +127,8 @@ class PLUGIN_defaultpkg_qcredscroll:
 		return
 	def sig(self):
 		return
+	def que(self, signal):
+		return
 
 
 

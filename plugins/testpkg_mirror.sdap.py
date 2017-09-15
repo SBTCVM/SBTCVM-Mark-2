@@ -2,38 +2,56 @@
 #important notice: please keep variables inside class except for (see below)
 #notice: these plugins will be in the "plugins" directory in accordance to the plugin system.
 #Plugin classes should be prefixed with "PLUGIN_" the text following such should match SDAPNAME!
-class PLUGIN_testpkg_sdaptest:
+class PLUGIN_testpkg_mirror:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
 		#screensurf is the surface to blit the window to
 		self.screensurf=screensurf
 		#wo is a sorting variable used to sort the windows in a list
 		self.wo=windoworder
 		#title is the name of the window
-		self.title="plugTEST"
+		self.title="mirror"
 		#taskid is set automatically
 		self.taskid=0
 		self.widx=140
 		self.widy=140
+		self.argument=argument
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
+		self.mx=0
+		self.my=0
 		self.widsurf=pygame.Surface((self.widx, self.widy))
 		self.widsurf.fill(framebg)
-		consolewrite("plugTEST: test plugin running")
+		consolewrite("mirror: running")
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
 		#these rects are needed
 		#frame close button rect
 		self.closerect=self.frametoup[2]
 		#rect of window content
 		self.widbox=self.frametoup[0]
+		if self.argument==None:
+			self.newinstance=1
+			self.labtx=simplefont.render("point mirror", True, frametext, framebg)
+		else:
+			self.newinstance=0
+			self.labtx=simplefont.render("point origin", True, frametext, framebg)
 		#frame rect
 		self.framerect=self.frametoup[1]
-		self.newinstance=0
 		self.selfquit=0
 		self.testsigprotect1=0
 	def render(self):
-		self.labtx=simplefont.render("Test Plugin", True, frametext, framebg)
-		self.widsurf.blit(self.labtx, (0, 0))
+		if self.argument!=None:
+			self.widsurf.fill(framebg)
+			self.widsurf.blit(self.labtx, (0, 0))
+			self.mpos=pygame.mouse.get_pos()
+			self.mx=(self.mpos[0] - self.x)
+			self.my=(self.mpos[1] - self.y)
+			self.argument.que([0, self.mx, self.my])
+			pygame.draw.line(self.widsurf, frametext, (70, 70), (self.mx, self.my))
+		else:
+			self.widsurf.fill(framebg)
+			self.widsurf.blit(self.labtx, (0, 0))
+			pygame.draw.line(self.widsurf, frametext, (70, 70), (self.mx, self.my))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
@@ -60,14 +78,21 @@ class PLUGIN_testpkg_sdaptest:
 	def hostquit(self):
 		return
 	def sig(self):
-		return
+		if self.newinstance==1:
+			self.newinstance=0
+			self.otherinst=PLUGIN_testpkg_mirror(self.screensurf, 0, argument=self)
+			return (0, self.otherinst)
+		#return
 	def que(self, signal):
-		return
+		if self.argument==None:
+			if signal[0]==0:
+				self.mx=signal[1]
+				self.my=signal[2]
 #Refrence to class of plugin util
-SDAPPLUGREF=PLUGIN_testpkg_sdaptest
+SDAPPLUGREF=PLUGIN_testpkg_mirror
 #plugin execname
-SDAPNAME="testpkg_sdaptest"
-SDAPLABEL="Test Plugin"
+SDAPNAME="testpkg_mirror"
+SDAPLABEL="mirror test"
 #plugin icon refrence (60 x 60 pixels is preferred) set to None for placeholder
 SDAPICON="test.png"
 #plugin directory (set to None if none)

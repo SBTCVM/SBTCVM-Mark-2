@@ -92,6 +92,8 @@ class PLUGIN_testpkg_testwid:
 			consolewrite("TEST: Sending selfquit signal")
 			return (1, 0)
 		return
+	def que(self, signal):
+		return
 
 #Refrence to class of plugin util
 SDAPPLUGREF=PLUGIN_testpkg_testwid

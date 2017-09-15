@@ -172,6 +172,8 @@ class PLUGIN_defaultpkg_scribble:
 		return
 	def sig(self):
 		return
+	def que(self, signal):
+		return
 
 
 

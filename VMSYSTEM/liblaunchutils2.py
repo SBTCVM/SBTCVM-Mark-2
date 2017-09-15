@@ -36,6 +36,13 @@ def consolewrite(string):
 	#consfull.append(string)
 	print ("Con: " + string)
 
+#que method:
+#que is a system of inter-application communication.
+#que codes:
+#(0, arguments) = generic data
+#(1, arguments) = image data
+#(2, arguments) = text
+
 #sig method:
 #sig must be a list of arguments or be None
 #list of sig return codes:
@@ -197,6 +204,8 @@ class taskman:
 		return
 	def sig(self):
 		return self.sigret
+	def que(self, signal):
+		return
 
 
 class launchconsole:
@@ -330,6 +339,8 @@ class launchconsole:
 	def hostquit(self):
 		return 
 	def sig(self):
+		return
+	def que(self, signal):
 		return
 
 #Plugin Loader
