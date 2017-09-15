@@ -74,6 +74,7 @@ consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon).convert()
 fvcatmenu=vmui.makemenubtn("CATEGORY", width=80).convert()
+fvsystemmenu=vmui.makemenubtn("SYSTEM", width=60).convert()
 #fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.png')).convert()
 
 def errorreport(widtitle, area, err):
@@ -201,14 +202,20 @@ catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4, cmitem5]
 #widitem0=vmui.menuitem("main", 
 
 #file menu
-fmhelp=vmui.menuitem("Help (F1)", "HELP")
+fmhelp=vmui.menuitem("Help", "HELP")
 fmabout=vmui.menuitem("About Desktop", "ABOUT")
 fmabout2=vmui.menuitem("readme", "ABOUT2")
 fmtask=vmui.menuitem("Task Manager", "TASKMAN")
 fmcon=vmui.menuitem("Console", "CON")
 fmbg=vmui.menuitem("Background", "SETBG")
 fmquit=vmui.menuitem("Quit", "QUIT")
-filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmtask, fmcon, fmquit]
+filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
+
+#system menu
+sytask=vmui.menuitem("Task Manager", "TASKMAN")
+sycon=vmui.menuitem("Console", "CON")
+syscshot=vmui.menuitem("Screenshot", "SCSHOT")
+systemmenu=[sytask, sycon, syscshot]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
@@ -249,6 +256,7 @@ while qflg==0:
 		bg.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
 		#
 		filemx=bg.blit(fvfilemenu, (3, 3))
+		sysmx=bg.blit(fvsystemmenu, (133, 3))
 		uptcat=1
 	#category button redraw (avoid full hud redraw on cat change
 	if uptcat==1:
@@ -371,11 +379,12 @@ while qflg==0:
 				except Exception as err:
 					errorreport(wid.title, "Host Quit", err)
 			break
-		if event.type == KEYDOWN and event.key == K_F1:
-			subprocess.Popen(["python", "helpview.py", "launcher.xml"])
-		elif event.type == KEYDOWN and event.key == K_F8:
-			pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
-			break
+		#free up these keys for applications...
+		#if event.type == KEYDOWN and event.key == K_F1:
+		#	subprocess.Popen(["python", "helpview.py", "launcher.xml"])
+		#elif event.type == KEYDOWN and event.key == K_F8:
+		#	pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
+		#	break
 		#minitool keyboard event processors.
 		elif event.type == KEYDOWN:
 			for wid in activewids:
@@ -517,6 +526,25 @@ while qflg==0:
 						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 					if menuret=="ABOUT":
 						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+					if menuret=="SETBG":
+						vmui.settheme(3, 43)
+						scupdate=1
+						bg=(libthemeconf.bgmake(None)).convert()
+						bg=pygame.transform.scale(bg, (screenx, screeny))
+						bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+						redrawhud=1
+					if menuret=="QUIT":
+						qflg=1
+						for wid in activewids:
+							try:
+								wid.hostquit()
+							except Exception as err:
+								errorreport(wid.title, "Host Quit", err)
+								
+						break
+				#system menu
+				if sysmx.collidepoint(event.pos)==1 and event.button==1:
+					menuret=vmui.menuset(systemmenu, 133, 43, reclick=0, fontsize=26)
 					if menuret=="TASKMAN":
 						try:
 							#widis=launchutils.widlookup("taskman")
@@ -539,22 +567,8 @@ while qflg==0:
 							activewids.extend([widx])
 						except Exception as err:
 								errorreport("Console", "Init (Console)", err)
-					if menuret=="SETBG":
-						vmui.settheme(3, 43)
-						scupdate=1
-						bg=(libthemeconf.bgmake(None)).convert()
-						bg=pygame.transform.scale(bg, (screenx, screeny))
-						bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
-						redrawhud=1
-					if menuret=="QUIT":
-						qflg=1
-						for wid in activewids:
-							try:
-								wid.hostquit()
-							except Exception as err:
-								errorreport(wid.title, "Host Quit", err)
-								
-						break
+					if menuret=="SCSHOT":
+						pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 				#category menu
 				if catmx.collidepoint(event.pos)==1 and event.button==1:
 					menuret=vmui.menuset(catmenu, 48, 43, reclick=0, fontsize=26)
