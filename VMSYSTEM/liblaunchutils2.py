@@ -7,6 +7,7 @@ import time
 import copy
 import sys
 import os
+import traceback
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 19)
 
@@ -301,7 +302,6 @@ class launchconsole:
 		self.conscope=20
 		self.conoffset=0
 		self.widy=(self.conscope * self.yjump)
-		
 		
 		self.consbak=list()
 		#x and y are required.
@@ -719,11 +719,18 @@ class qcred:
 for plugcodefile in os.listdir(Plugpath):
 	if plugcodefile.lower().endswith(".sdap.py"):
 		PLUGFILE=open(os.path.join(Plugpath, plugcodefile), 'r')
-		PLUGEXEC=compile(PLUGFILE.read(), os.path.join(Plugpath, plugcodefile), 'exec')
-		exec(PLUGEXEC)
-		pluginst=plugobj(SDAPPLUGREF, SDAPNAME, SDAPLABEL, SDAPDIR, SDAPICON, SDAPCAT)
-		pluglist.extend([pluginst])
-		consolewrite("Load plugin: " + SDAPNAME)
+		try:
+			PLUGEXEC=compile(PLUGFILE.read(), os.path.join(Plugpath, plugcodefile), 'exec')
+			exec(PLUGEXEC)
+			pluginst=plugobj(SDAPPLUGREF, SDAPNAME, SDAPLABEL, SDAPDIR, SDAPICON, SDAPCAT)
+			pluglist.extend([pluginst])
+			consolewrite("Load plugin: " + SDAPNAME)
+		except SyntaxError as err:
+			consolewrite("Plugin failure: SyntaxError on " + plugcodefile)
+			print(traceback.format_exc())
+			for errline in vmui.listline(str(err)):
+				consolewrite(errline)
+		
 		
 
 

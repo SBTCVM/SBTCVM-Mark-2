@@ -12,7 +12,6 @@ class PLUGIN_sdaptest:
 		self.title="plugTEST"
 		#taskid is set automatically
 		self.taskid=0
-		
 		self.widx=140
 		self.widy=140
 		#x and y are required.

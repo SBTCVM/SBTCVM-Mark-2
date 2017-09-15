@@ -15,8 +15,9 @@ import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
 import VMSYSTEM.liblaunchutils2 as launchutils
+import traceback
 
-print "SBTCVM Launcher v3.0"
+print "SBTCVM Desktop v3.0"
 pygame.display.init()
 pygame.font.init()
 
@@ -26,7 +27,7 @@ tilefont = pygame.font.SysFont(None, 19)
 catfont = pygame.font.SysFont(None, 19)
 
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
-pygame.display.set_caption(("SBTCVM Launcher"), ("SBTCVM Launcher"))
+pygame.display.set_caption(("SBTCVM Desktop"), ("SBTCVM Desktop"))
 
 windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'icon.png'))
 pygame.display.set_icon(windowicon)
@@ -35,7 +36,7 @@ screenx=800
 screeny=600
 vmui.initui(screensurf, 1)
 
-diagabt="""Launcher v3.0
+diagabt="""SBTCVM Desktop v3.0
 Part of the SBTCVM Project
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
@@ -74,6 +75,17 @@ fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).co
 fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon).convert()
 fvcatmenu=vmui.makemenubtn("CATEGORY", width=80).convert()
 #fvcatmenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'catmenu.png')).convert()
+
+def errorreport(widtitle, area, err):
+	global scupdate
+	launchutils.consolewrite(">>ERROR in: \"" + widtitle + "\" terminating")
+	launchutils.consolewrite(">>Area: " + area)
+	print(traceback.format_exc())
+	errdiagtxt=("Error In: \"" + widtitle + "\" terminating... \n Area: " + area + " \n see Standard output for traceback. \n\"" + str(err) + "\"")
+	vmui.okdiag(errdiagtxt, (screenx // 2), (screeny // 2))
+	for errline in vmui.listline(str(err)):
+		launchutils.consolewrite(errline)
+	scupdate=1
 
 
 class launchtile:
@@ -190,8 +202,8 @@ catmenu=[cmitem0, cmitem1, cmitem2, cmitem3, cmitem4, cmitem5]
 
 #file menu
 fmhelp=vmui.menuitem("Help (F1)", "HELP")
-fmabout=vmui.menuitem("About Launcher", "ABOUT")
-fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
+fmabout=vmui.menuitem("About Desktop", "ABOUT")
+fmabout2=vmui.menuitem("readme", "ABOUT2")
 fmtask=vmui.menuitem("Task Manager", "TASKMAN")
 fmcon=vmui.menuitem("Console", "CON")
 fmbg=vmui.menuitem("Background", "SETBG")
@@ -213,7 +225,7 @@ redrawhud=1
 taskidcnt=0
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
-launchutils.consolewrite(">>Launcher v3.0")
+launchutils.consolewrite(">>SBTCVM Desktop v3.0")
 while qflg==0:
 	#pygame window resize logic
 	if resizeflg==1:
@@ -264,15 +276,24 @@ while qflg==0:
 		#minitool render
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
-			wid.render()
+			try:
+				wid.render()
+				uptlist.extend([wid.framerect])
+			except Exception as err:
+				errorreport(wid.title, "Render", err)
+				activewids.remove(wid)
 		pygame.display.update()
 	else:
 		#passive minitool renderer to keep minitools updated.
 		uptlist=list()
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
-			wid.render()
-			uptlist.extend([wid.framerect])
+			try:
+				wid.render()
+				uptlist.extend([wid.framerect])
+			except Exception as err:
+				errorreport(wid.title, "Render", err)
+				activewids.remove(wid)
 		pygame.display.update(uptlist)
 	#window movement
 	if movewid==1:
@@ -280,59 +301,75 @@ while qflg==0:
 		movepos=pygame.mouse.get_pos()
 		xoff =(prevpos[0] - movepos[0])
 		yoff =(prevpos[1] - movepos[1])
-		widtomove.movet(xoff, yoff)
+		try:
+			widtomove.movet(xoff, yoff)
+		except Exception as err:
+			errorreport(wid.title, "Window Move", err)
+			activewids.remove(widtomove)
+			movewid=0
 		scupdate=1
 		time.sleep(0.04)
 	else:
 		time.sleep(0.04)
 	#minitool sig processor	
 	for wid in activewids:
-		widret=wid.sig()
-		if widret!=None:
-			if widret[0]==0:
-				widadd=widret[1]
-				for widd in activewids:
-					widd.wo += 1
-				widadd.movet(-40, -80)
-				widadd.wo=0
-				widadd.taskid=taskidcnt
-				taskidcnt +=1
-				activewids.extend([widadd])
-			elif widret[0]==1:
-				if widret[1]==0:
-					wid.close()
-				activewids.remove(wid)
-				scupdate=1
-			elif widret[0]=="TASKMAN" and wid.taskid in taskmanlist:
-				#reset taskman's return variable.
-				wid.sigret=None
-				if widret[1]==0:
+		noerror=1
+		try:
+			widret=wid.sig()
+		except Exception as err:
+			errorreport(wid.title, "Signal Query", err)
+			activewids.remove(wid)
+			noerror=0
+		if noerror==1:
+			if widret!=None:
+				if widret[0]==0:
+					widadd=widret[1]
 					for widd in activewids:
-						if widd.taskid==widret[2]:
-							activewids.remove(widd)
-							widd.close()
-							scupdate=1
-							launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
-				if widret[1]==1:
-					for widq in activewids:
-						widq.wo += 1
-					for widd in activewids:
-						if widd.taskid==widret[2]:
-							launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
-							widd.wo=0
-							widd.x=40
-							widd.y=80
-							widd.movet(0, 0)
-							scupdate=1
-			elif widret[0]=="TASKMAN":
-				launchutils.consolewrite(">>WARNING: Unauthorized use of TASKMAN signals was blocked.")
-				launchutils.consolewrite(">>Task name: \"" + wid.title + "\" TaskID: \"" + str(wid.taskid) + "\"")
+						widd.wo += 1
+					widadd.movet(-40, -80)
+					widadd.wo=0
+					widadd.taskid=taskidcnt
+					taskidcnt +=1
+					activewids.extend([widadd])
+				elif widret[0]==1:
+					if widret[1]==0:
+						wid.close()
+					activewids.remove(wid)
+					scupdate=1
+				elif widret[0]=="TASKMAN" and wid.taskid in taskmanlist:
+					#reset taskman's return variable.
+					wid.sigret=None
+					if widret[1]==0:
+						for widd in activewids:
+							if widd.taskid==widret[2]:
+								activewids.remove(widd)
+								widd.close()
+								scupdate=1
+								launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
+					if widret[1]==1:
+						for widq in activewids:
+							widq.wo += 1
+						for widd in activewids:
+							if widd.taskid==widret[2]:
+								launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
+								widd.wo=0
+								widd.x=40
+								widd.y=80
+								widd.movet(0, 0)
+								scupdate=1
+				elif widret[0]=="TASKMAN":
+					launchutils.consolewrite(">>WARNING: Unauthorized use of TASKMAN signals was blocked.")
+					launchutils.consolewrite(">>Task name: \"" + wid.title + "\" TaskID: \"" + str(wid.taskid) + "\"")
+		
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			qflg=1
 			for wid in activewids:
-				wid.hostquit()
+				try:
+					wid.hostquit()
+				except Exception as err:
+					errorreport(wid.title, "Host Quit", err)
 			break
 		if event.type == KEYDOWN and event.key == K_F1:
 			subprocess.Popen(["python", "helpview.py", "launcher.xml"])
@@ -343,11 +380,19 @@ while qflg==0:
 		elif event.type == KEYDOWN:
 			for wid in activewids:
 				if wid.wo==0:
-					wid.keydown(event)
+					try:
+						wid.keydown(event)
+					except Exception as err:
+						errorreport(wid.title, "Keydown", err)
+						activewids.remove(wid)
 		if event.type == KEYUP:
 			for wid in activewids:
 				if wid.wo==0:
-					wid.keyup(event)
+					try:
+						wid.keyup(event)
+					except Exception as err:
+						errorreport(wid.title, "Keyup", err)
+						activewids.remove(wid)
 		#screen resize code activation
 		if event.type==VIDEORESIZE:
 			resizeflg=1
@@ -363,7 +408,11 @@ while qflg==0:
 				for wid in activewids:
 					if wid.wo==0:
 						#if wid.widbox.collidepoint(event.pos)==1:
-						wid.clickup(event)
+						try:
+							wid.clickup(event)
+						except Exception as err:
+							errorreport(wid.title, "Clickup", err)
+							activewids.remove(wid)
 		if event.type==MOUSEBUTTONDOWN:
 			#minitool click processing
 			notile=0
@@ -377,7 +426,10 @@ while qflg==0:
 					notile=1
 					if not wid.widbox.collidepoint(event.pos)==1:
 						if wid.closerect.collidepoint(event.pos)==1 and event.button==1:
-							wid.close()
+							try:
+								wid.close()
+							except Exception as err:
+								errorreport(wid.title, "Close", err)
 							activewids.remove(wid)
 							scupdate=1
 							break
@@ -395,7 +447,13 @@ while qflg==0:
 							#activewids.insert(0, wid)
 							#activewids.sort(key=lambda x: x.wo, reverse=True)
 					else:
-						wid.click(event)
+						try:
+							wid.click(event)
+						except Exception as err:
+							errorreport(wid.title, "Click", err)
+							activewids.remove(wid)
+							break
+							
 						if wid.wo!=0:
 							wid.wo=0
 							activewids.remove(wid)
@@ -411,34 +469,43 @@ while qflg==0:
 						if actret!=None:
 							if actret=="taskman":
 								#widis=launchutils.widlookup("taskman")
-								widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
-								widx.taskid=taskidcnt
-								taskidcnt +=1
-								#ctivewids=activewids + [widx]
-								for wid in activewids:
-									wid.wo += 1
-								activewids.extend([widx])
-								taskmanlist.extend([widx.taskid])
+								try:
+									widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+									widx.taskid=taskidcnt
+									taskidcnt +=1
+									#ctivewids=activewids + [widx]
+									for wid in activewids:
+										wid.wo += 1
+									activewids.extend([widx])
+									taskmanlist.extend([widx.taskid])
+								except Exception as err:
+									errorreport("Taskman", "Init (TASKMAN)", err)
 							elif len(actret)==3:
 								widis=actret[0]
-								widx=widis(screensurf, 0, 40, 80, argument=None)
-								widx.taskid=taskidcnt
-								taskidcnt +=1
-								#ctivewids=activewids + [widx]
-								for wid in activewids:
-									wid.wo += 1
-								activewids.extend([widx])
-							else:
+								try:
+									widx=widis(screensurf, 0, 40, 80, argument=None)
+									widx.taskid=taskidcnt
+									taskidcnt +=1
+									#ctivewids=activewids + [widx]
+									for wid in activewids:
+										wid.wo += 1
+									activewids.extend([widx])
+								except Exception as err:
+									errorreport("<INIT ERROR, SEE TRACEBACK>", "Init (plugin)", err)
 								
+							else:
 								widis=launchutils.widlookup(actret[0])
-								widx=widis(screensurf, 0, 40, 80, argument=actret[1])
-								widx.taskid=taskidcnt
-								taskidcnt +=1
-								#ctivewids=activewids + [widx]
-								for wid in activewids:
-									wid.wo += 1
-								activewids.extend([widx])
-								#activewids.sort(key=lambda x: x.wo, reverse=True)
+								try:
+									widx=widis(screensurf, 0, 40, 80, argument=actret[1])
+									widx.taskid=taskidcnt
+									taskidcnt +=1
+									#ctivewids=activewids + [widx]
+									for wid in activewids:
+										wid.wo += 1
+									activewids.extend([widx])
+									#activewids.sort(key=lambda x: x.wo, reverse=True)
+								except Exception as err:
+									errorreport("<INIT ERROR, SEE TRACEBACK>", "Init (internal)", err)
 							
 							
 				#file menu
@@ -451,21 +518,27 @@ while qflg==0:
 					if menuret=="ABOUT":
 						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
 					if menuret=="TASKMAN":
-						#widis=launchutils.widlookup("taskman")
-						widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
-						widx.taskid=taskidcnt
-						taskidcnt +=1
-						for wid in activewids:
-							wid.wo += 1
-						activewids.extend([widx])
-						taskmanlist.extend([widx.taskid])
+						try:
+							#widis=launchutils.widlookup("taskman")
+							widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+							widx.taskid=taskidcnt
+							taskidcnt +=1
+							for wid in activewids:
+								wid.wo += 1
+							activewids.extend([widx])
+							taskmanlist.extend([widx.taskid])
+						except Exception as err:
+								errorreport("Taskman", "Init (TASKMAN)", err)
 					if menuret=="CON":
-						widx=launchutils.launchconsole(screensurf, 0, 40, 80)
-						widx.taskid=taskidcnt
-						taskidcnt +=1
-						for wid in activewids:
-							wid.wo += 1
-						activewids.extend([widx])
+						try:
+							widx=launchutils.launchconsole(screensurf, 0, 40, 80)
+							widx.taskid=taskidcnt
+							taskidcnt +=1
+							for wid in activewids:
+								wid.wo += 1
+							activewids.extend([widx])
+						except Exception as err:
+								errorreport("Console", "Init (Console)", err)
 					if menuret=="SETBG":
 						vmui.settheme(3, 43)
 						scupdate=1
@@ -476,7 +549,11 @@ while qflg==0:
 					if menuret=="QUIT":
 						qflg=1
 						for wid in activewids:
-							wid.hostquit()
+							try:
+								wid.hostquit()
+							except Exception as err:
+								errorreport(wid.title, "Host Quit", err)
+								
 						break
 				#category menu
 				if catmx.collidepoint(event.pos)==1 and event.button==1:
