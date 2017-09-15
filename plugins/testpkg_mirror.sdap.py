@@ -31,10 +31,12 @@ class PLUGIN_testpkg_mirror:
 		self.widbox=self.frametoup[0]
 		if self.argument==None:
 			self.newinstance=1
-			self.labtx=simplefont.render("point mirror", True, frametext, framebg)
+			self.title="mirror - mirror"
+			#self.labtx=simplefont.render("point mirror", True, frametext, framebg)
 		else:
 			self.newinstance=0
-			self.labtx=simplefont.render("point origin", True, frametext, framebg)
+			self.title="mirror - origin"
+			#self.labtx=simplefont.render("point origin", True, frametext, framebg)
 		#frame rect
 		self.framerect=self.frametoup[1]
 		self.selfquit=0
@@ -42,7 +44,7 @@ class PLUGIN_testpkg_mirror:
 	def render(self):
 		if self.argument!=None:
 			self.widsurf.fill(framebg)
-			self.widsurf.blit(self.labtx, (0, 0))
+			#self.widsurf.blit(self.labtx, (0, 0))
 			self.mpos=pygame.mouse.get_pos()
 			self.mx=(self.mpos[0] - self.x)
 			self.my=(self.mpos[1] - self.y)
@@ -50,7 +52,7 @@ class PLUGIN_testpkg_mirror:
 			pygame.draw.line(self.widsurf, frametext, (70, 70), (self.mx, self.my))
 		else:
 			self.widsurf.fill(framebg)
-			self.widsurf.blit(self.labtx, (0, 0))
+			#self.widsurf.blit(self.labtx, (0, 0))
 			pygame.draw.line(self.widsurf, frametext, (70, 70), (self.mx, self.my))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
 	def movet(self, xoff, yoff):
