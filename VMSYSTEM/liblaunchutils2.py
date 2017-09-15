@@ -330,7 +330,7 @@ class launchconsole:
 	def sig(self):
 		return
 
-
+#Plugin Loader
 for plugcodefile in os.listdir(Plugpath):
 	if plugcodefile.lower().endswith(".sdap.py"):
 		PLUGFILE=open(os.path.join(Plugpath, plugcodefile), 'r')
@@ -339,7 +339,7 @@ for plugcodefile in os.listdir(Plugpath):
 			exec(PLUGEXEC)
 			pluginst=plugobj(SDAPPLUGREF, SDAPNAME, SDAPLABEL, SDAPDIR, SDAPICON, SDAPCAT)
 			pluglist.extend([pluginst])
-			consolewrite("Load plugin: " + SDAPNAME)
+			consolewrite("Load plugin: " + SDAPNAME + " (" + plugcodefile + ")")
 		except SyntaxError as err:
 			consolewrite("Plugin failure: SyntaxError on " + plugcodefile)
 			print(traceback.format_exc())
