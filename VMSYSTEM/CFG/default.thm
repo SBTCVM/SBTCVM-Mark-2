@@ -2,10 +2,13 @@
 <theme>
 	<!--Theme info... formatvers is the FORMAT VERSION NUMBER not the version of the theme..-->
 	<info formatvers="1.0" name="Casual (default)" description="The Default SBTCVM color theme." />
-	<!--Used in UI "huds" and other utility-specific usage-->
+	<!--Used in UI "huds" and other utility-specific usage.  -->
 	<hud bg="#E5E5E5" text="#000000" div="#505050" />
 	<!--used in places where a "desk" color is needed. such as calc and settings...-->
 	<desk bg="#2C4764" text="#FFFFFF" />
+	
+	<titleact bg="#C7C7FF" text="#000000" />
+	<titleinact bg="#E5E5E5" text="#000000" />
 	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
 	<tile color="#FFFFFF" alpha="200" text="#000000" />
 	<!--Used by popup/dropdown menus and dialogs...-->

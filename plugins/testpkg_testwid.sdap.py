@@ -45,7 +45,7 @@ class PLUGIN_testpkg_testwid:
 		self.widsurf.blit(self.labtx, (0, 60))
 		self.labtx=simplefont.render("e = test sig protect 1", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 80))
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff

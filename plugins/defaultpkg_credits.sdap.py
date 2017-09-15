@@ -99,7 +99,7 @@ class PLUGIN_defaultpkg_qcredscroll:
 			#pygame.display.update()
 		#scrollmask.blit(scrollsurf, (0, scrollsurfyaw))
 		#widsurf.blit(scrollmask, (scrollsurfwid, scrollmaskyaw))
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff

@@ -54,7 +54,7 @@ class PLUGIN_testpkg_mirror:
 			self.widsurf.fill(framebg)
 			#self.widsurf.blit(self.labtx, (0, 0))
 			pygame.draw.line(self.widsurf, frametext, (70, 70), (self.mx, self.my))
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff

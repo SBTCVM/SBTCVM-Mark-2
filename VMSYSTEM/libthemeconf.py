@@ -108,6 +108,12 @@ deskcolor=pygame.Color(desktag.attrib.get("bg"))
 desktext=pygame.Color(desktag.attrib.get("text"))
 
 
+titleacttag=themeroot.find("titleact")
+titleactbg=pygame.Color(titleacttag.attrib.get("bg"))
+titleacttext=pygame.Color(titleacttag.attrib.get("text"))
+titleinacttag=themeroot.find("titleinact")
+titleinactbg=pygame.Color(titleinacttag.attrib.get("bg"))
+titleinacttext=pygame.Color(titleinacttag.attrib.get("text"))
 
 tiletag=themeroot.find("tile")
 tilecolor=pygame.Color(tiletag.attrib.get("color"))

@@ -13,6 +13,11 @@ import traceback
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 19)
 
+
+titlebg=libthemeconf.titleactbg
+titletext=libthemeconf.titleacttext
+titleinactbg=libthemeconf.titleinactbg
+titleinacttext=libthemeconf.titleinacttext
 framebg=libthemeconf.hudbg
 frametext=libthemeconf.hudtext
 framebtn=libthemeconf.btnbg2
@@ -99,15 +104,26 @@ def getframes(x, y, widsurf):
 	return (widbox, framebox, closebtnrect)
 	
 #standardized frame drawing
-def drawframe(framerect, closerect, widbox, widsurf, screensurf, title):
-	pygame.draw.rect(screensurf, framebg, framerect, 0)
-	pygame.draw.rect(screensurf, framediv, framerect, 1)
-	pygame.draw.rect(screensurf, framebtn, closerect, 0)
-	pygame.draw.rect(screensurf, framediv, closerect, 1)
-	pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
-	screensurf.blit(widsurf, widbox)
-	labtx=simplefont.render(title, True, frametext, framebg)
-	screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
+def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
+	if wo==0:
+		pygame.draw.rect(screensurf, titlebg, framerect, 0)
+		pygame.draw.rect(screensurf, framediv, framerect, 1)
+		pygame.draw.rect(screensurf, framebtn, closerect, 0)
+		pygame.draw.rect(screensurf, framediv, closerect, 1)
+		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
+		screensurf.blit(widsurf, widbox)
+		labtx=simplefont.render(title, True, titletext, titlebg)
+		screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
+	else:
+		pygame.draw.rect(screensurf, titleinactbg, framerect, 0)
+		pygame.draw.rect(screensurf, framediv, framerect, 1)
+		pygame.draw.rect(screensurf, framebtn, closerect, 0)
+		pygame.draw.rect(screensurf, framediv, closerect, 1)
+		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
+		screensurf.blit(widsurf, widbox)
+		labtx=simplefont.render(title, True, titleinacttext, titleinactbg)
+		screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
+	
 	
 
 #taskman is a special case. due to the nature of it.
@@ -162,7 +178,7 @@ class taskman:
 			self.clickbx.y += self.y
 			self.taskdict[self.task.taskid]=self.clickbx
 			self.texty += 18
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		#task commands
 		self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
 		self.topx=self.screensurf.blit(self.bringtoptx, (self.x+5+self.closetasktx.get_width(), self.y))
@@ -290,7 +306,7 @@ class launchconsole:
 				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
 		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
 	def movet(self, xoff, yoff):

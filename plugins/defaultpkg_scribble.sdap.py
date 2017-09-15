@@ -74,7 +74,7 @@ class PLUGIN_defaultpkg_scribble:
 		
 		#self.labtx=simplefont.render("window order: " + str(self.wo), True, frametext, framebg)
 		#self.widsurf.blit(self.labtx, (0, 0))
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title)
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		pygame.draw.rect(self.screensurf, self.scribblecolor, self.color1rect, 0)
 		pygame.draw.rect(self.screensurf, framediv, self.color1rect, 1)
 		pygame.draw.rect(self.screensurf, frametext, self.sizerect, 0)

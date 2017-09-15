@@ -2,10 +2,13 @@
 <theme>
 	<!--Theme info... formatvers is the FORMAT VERSION NUMBER not the version of the theme..-->
 	<info formatvers="1.0" name="Dark" description="A darker theme." />
-	<!--Used in UI "huds" and other utility-specific usage-->
+	<!--Used in UI "huds" and other utility-specific usage. -->
 	<hud bg="#1D1D1D" text="#FFFFFF" div="#5B738B" />
 	<!--used in places where a "desk" color is needed. such as calc and settings...-->
 	<desk bg="#000E5B" text="#FFFFFF" />
+	
+	<titleact bg="#000000" text="#FFFFFF" />
+	<titleinact bg="#333333" text="#BABABA" />
 	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
 	<tile color="#343750" alpha="220" text="#FFFFFF" />
 	<!--Used by popup/dropdown menus and dialogs...-->
