@@ -107,6 +107,10 @@ class sysshellque:
 		self.qstart=None
 		return self.qstartX
 	def que(self, signal):
+		if signal[0]==102:
+			return ["System Shell ready. Type help for help."]
+		if signal[0]==101:
+			return
 		if signal[0]==100:
 			self.cmd=(signal[1]).lower()
 			if self.cmd=="taskman":

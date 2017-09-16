@@ -30,6 +30,7 @@ class PLUGIN_testpkg_testshell:
 		self.selfquit=0
 		self.testsigprotect1=0
 		self.launchshell=1
+		self.printlist=list()
 	def render(self):
 		self.labtx=simplefont.render("Test Plugin", True, frametext, framebg)
 		self.widsurf.blit(self.labtx, (0, 0))
@@ -43,17 +44,22 @@ class PLUGIN_testpkg_testshell:
 		self.framerect=self.frametoup[1]
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
+		self.printlist.extend(["click"])
 		return
 	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
 	def clickup(self, event):
+		self.printlist.extend(["clickup"])
 		return
 	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
 	def keydown(self, event):
+		self.printlist.extend(["keydown"])
 		return
 	def keyup(self, event):
+		self.printlist.extend(["keyup"])
 		return
 	#close is called when the window is to be closed.
 	def close(self):
+		self.printlist.extend(["The main window has closed", " but the input from the shell will still be returned.", "programs can use this to create various shells"])
 		return
 	#hostquit is called when the host program is going to quit.
 	def hostquit(self):
@@ -64,6 +70,13 @@ class PLUGIN_testpkg_testshell:
 			return (0, shell(self.screensurf, 0, argument=self))
 		return
 	def que(self, signal):
+		if signal[0]==102:
+			return ["Shell Ready.", "Clicks and keystrokes in main window will be printed to shell.", "Anything sent will be retuned."]
+		if signal[0]==101:
+			self.listret=self.printlist
+			self.printlist=list()
+			return self.listret
+		
 		if signal[0]==100:
 			return [signal[1]]
 		return

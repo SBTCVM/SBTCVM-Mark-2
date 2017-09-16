@@ -197,6 +197,11 @@ vmbg=pygame.Color(vmtag.attrib.get("bg"))
 #vmaddr=(0, 127, 255)
 #vmrom=(255, 0, 255)
 #vmbg=(5, 38, 121)
+
+constag=themeroot.find("console")
+constext=pygame.Color(constag.attrib.get("text"))
+consbg=pygame.Color(constag.attrib.get("bg"))
+
 credittag=themeroot.find("credit")
 
 

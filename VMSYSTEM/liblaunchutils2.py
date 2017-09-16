@@ -12,7 +12,8 @@ import traceback
 
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 19)
-
+monofont = pygame.font.SysFont("Mono", 16)
+#monofont.set_bold(True)
 
 titlebg=libthemeconf.titleactbg
 titletext=libthemeconf.titleacttext
@@ -23,6 +24,8 @@ frametext=libthemeconf.hudtext
 framebtn=libthemeconf.btnbg2
 framebtntext=libthemeconf.btntext
 framediv=libthemeconf.huddiv
+shellbg=libthemeconf.consbg
+shelltext=libthemeconf.constext
 #frametext=libthemeconf.hudt
 
 
@@ -50,7 +53,8 @@ def consolewrite(string):
 #(1, arguments) = image data
 #(2, arguments) = text
 #(100, arguments) = shell query (used by Shell), any responses should be in a list, 1 string per line
-
+#(101) = shell status check (used by Shell at regular interval, no arguments sent.), any responses should be in a list, 1 string per line
+#(102) = shell ready (used by Shell during shell startup, no arguments sent.), any responses should be in a list, 1 string per line
 #sig method:
 #sig must be a list of arguments or be None
 #list of sig return codes:
@@ -395,7 +399,7 @@ class shell:
 		self.argument=argument
 		if self.argument!=None:
 			self.title="Shell - " + self.argument.title
-		self.widx=500
+		self.widx=((monofont.size("_")[0])*60)+20
 		self.conscope=20
 		self.conoffset=0
 		self.curoffset=0
@@ -406,7 +410,7 @@ class shell:
 		self.x=xpos
 		self.y=ypos
 		self.widsurf=pygame.Surface((self.widx, self.widy))
-		self.widsurf.fill(framebg)
+		self.widsurf.fill(shellbg)
 		self.shtext=([""] * 100)
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
 		#these rects are needed
@@ -421,11 +425,24 @@ class shell:
 		self.curstatus=1
 		self.curcnt=0
 		self.curpoint=40
+		self.shellstart=1
 		self.inputrect=pygame.Rect(0, (self.widy-self.yjump-4), self.widx, (self.yjump+4))
 		#print self.shtext[(len(self.shtext)-self.conscope+self.conoffset):(len(self.shtext)-self.conoffset)]
 		#print -self.conscope+self.conoffset
 		#print -self.conoffset
 	def render(self):
+		if self.shellstart==1:
+			self.shellstart=0
+			if self.argument!=None:
+				self.retlist=self.argument.que([102])
+				if self.retlist!=None:
+					for self.line in self.retlist:
+						self.shellwrite(self.line)
+		if self.argument!=None:
+			self.retlist=self.argument.que([101])
+			if self.retlist!=None:
+				for self.line in self.retlist:
+					self.shellwrite(self.line)
 		#scrollbar arithetic
 		if self.curcnt<self.curpoint:
 			self.curcnt += 1
@@ -472,29 +489,30 @@ class shell:
 		if self.consbak!=self.shtext:
 			self.constbak=list(self.shtext)
 			self.texty=0
-			self.widsurf.fill(framebg)
+			self.widsurf.fill(shellbg)
 			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
-				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
+				self.labtx=monofont.render(self.conline, True, shelltext, shellbg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
-			self.labtx=simplefont.render(self.textinD, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
-			pygame.draw.rect(self.widsurf, libthemeconf.textboxbg, self.inputrect, 0)
-			pygame.draw.rect(self.widsurf, libthemeconf.textboxline, self.inputrect, 1)
+			self.labtx=monofont.render(self.textinD, True, shelltext, shellbg)
+			pygame.draw.rect(self.widsurf, shellbg, self.inputrect, 0)
+			pygame.draw.rect(self.widsurf, shelltext, self.inputrect, 1)
 			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
 		elif self.redraw==1:
 			self.redraw=0
 			self.texty=0
-			self.widsurf.fill(framebg)
+			self.widsurf.fill(shellbg)
 			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
-				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
+				self.labtx=monofont.render(self.conline, True, shelltext, shellbg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
-			self.labtx=simplefont.render(self.textinD, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
-			pygame.draw.rect(self.widsurf, libthemeconf.textboxbg, self.inputrect, 0)
-			pygame.draw.rect(self.widsurf, libthemeconf.textboxline, self.inputrect, 1)
+			self.labtx=monofont.render(self.textinD, True, shelltext, shellbg)
+			pygame.draw.rect(self.widsurf, shellbg, self.inputrect, 0)
+			pygame.draw.rect(self.widsurf, shelltext, self.inputrect, 1)
 			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
+		pygame.draw.rect(self.screensurf, framediv, self.fullrect, 1)
 		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
 		
 	def movet(self, xoff, yoff):
@@ -586,7 +604,9 @@ class shell:
 		return
 	def shellwrite(self, string):
 		self.shtext.pop(0)
-		self.shtext.append(string)
+		self.shtext.append(string[0:60])
+		if len(string)>60:
+			consolewrite("Shell: Warning: line of text too long... clipping...")
 
 
 		

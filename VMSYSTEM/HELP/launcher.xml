@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <main>
 	<!--Head should appear only once, and at the top-->
-	<head title="Launcher"/>
+	<head title="SBTCVM Desktop"/>
+	<title>SBTCVM Desktop</title>
 	<!--the rest can appear-->
-	<text>click on an icon to begin.
-F8: save screenshot in "CAP" directory.</text>
+	<text>The </text>
+	<title>Ghost programs</title>
+	<text>Ghost programs are a phenominon related to the que cross-application signaling method.
+What a Ghost Program is, is a program that closes after starting another program,
+but continues to operate from that program.
+
+A practical use of this is with the shell builtin application, and its special
+que signals, in order to create CLI interfaces on the SBTCVM Desktop.</text>
 </main>
