@@ -69,6 +69,7 @@ romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).
 #miniscribble=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'miniscribble.png')).convert()
 taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
 consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console.png')).convert()
+sysshellicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'sysshell.png')).convert()
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
@@ -88,7 +89,42 @@ def errorreport(widtitle, area, err):
 		launchutils.consolewrite(errline)
 	scupdate=1
 
-
+#"fake" program class passed to shell for system shell.
+systemshellhelp="""SBTCVM Desktop - System Shell.
+help - this text
+shtest - test shell
+tasks - list tasks
+taskman - start task manager
+console - start console"""
+class sysshellque:
+	def __init__(self):
+		self.title="SYSTEM"
+		#all system-level class objects have a taskid of -1.
+		self.taskid=-1
+		self.qstart=None
+	def QSTART(self):
+		self.qstartX=self.qstart
+		self.qstart=None
+		return self.qstartX
+	def que(self, signal):
+		if signal[0]==100:
+			self.cmd=(signal[1]).lower()
+			if self.cmd=="taskman":
+				self.qstart="taskman"
+				return ["Launching Taskman"]
+			if self.cmd=="console":
+				self.qstart="console"
+				return ["Launching Console"]
+			if self.cmd=="shtest":
+				return ["Shell working."]
+			if self.cmd=="help":
+				return vmui.listline(systemshellhelp)
+			if self.cmd=="tasks":
+				self.retlist=[]
+				for self.task in activewids:
+					self.retlist.extend([("Name: " + self.task.title + " | Order: " + str(self.task.wo) + " | taskid: " + str(self.task.taskid))])
+				return self.retlist
+ShellSystem=sysshellque()
 class launchtile:
 	def __init__(self, label, icon, ltype, lref=None, lref2=None):
 		self.label=label
@@ -159,6 +195,8 @@ pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 #widcred=launchtile("credits", DUMMY, 3, lref="credits")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
+LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=ShellSystem)
+
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
 
@@ -167,7 +205,7 @@ maincat=[filet, calct, settingt, themet, helpt]
 gamescat=[gttt]
 welcomecat=[introt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[TASKMAN, LAUNCHCON]
+ltoolcat=[TASKMAN, LAUNCHCON, LAUNCHSHELL]
 plugincat=[]
 
 for plug in launchutils.pluglist:
@@ -212,14 +250,17 @@ fmquit=vmui.menuitem("Quit", "QUIT")
 filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 
 #system menu
+sysyssh=vmui.menuitem("Shell", "SYSSHELL")
 sytask=vmui.menuitem("Task Manager", "TASKMAN")
 sycon=vmui.menuitem("Console", "CON")
 syscshot=vmui.menuitem("Screenshot", "SCSHOT")
-systemmenu=[sytask, sycon, syscshot]
+systemmenu=[sysyssh, sytask, sycon, syscshot]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
 bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+
+pygame.key.set_repeat(250, 50)
 
 movewid=0
 widtomove=None
@@ -319,6 +360,30 @@ while qflg==0:
 		time.sleep(0.04)
 	else:
 		time.sleep(0.04)
+	#ShellSystem processor
+	shsysret=ShellSystem.QSTART()
+	if shsysret=="taskman":
+		try:
+			widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+			widx.taskid=taskidcnt
+			taskidcnt +=1
+			#ctivewids=activewids + [widx]
+			for wid in activewids:
+				wid.wo += 1
+			activewids.extend([widx])
+			taskmanlist.extend([widx.taskid])
+		except Exception as err:
+			errorreport("Taskman", "Init (TASKMAN)", err)
+	if shsysret=="console":
+		try:
+			widx=launchutils.launchconsole(screensurf, 0, 40, 80)
+			widx.taskid=taskidcnt
+			taskidcnt +=1
+			for wid in activewids:
+				wid.wo += 1
+			activewids.extend([widx])
+		except Exception as err:
+				errorreport("Console", "Init (Console)", err)
 	#minitool sig processor	
 	for wid in activewids:
 		noerror=1
@@ -567,6 +632,16 @@ while qflg==0:
 							activewids.extend([widx])
 						except Exception as err:
 								errorreport("Console", "Init (Console)", err)
+					if menuret=="SYSSHELL":
+						try:
+							widx=launchutils.shell(screensurf, 0, 40, 80, argument=ShellSystem)
+							widx.taskid=taskidcnt
+							taskidcnt +=1
+							for wid in activewids:
+								wid.wo += 1
+							activewids.extend([widx])
+						except Exception as err:
+								errorreport("Console", "Init (Shell)", err)
 					if menuret=="SCSHOT":
 						pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 				#category menu

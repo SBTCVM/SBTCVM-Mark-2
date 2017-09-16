@@ -49,6 +49,7 @@ def consolewrite(string):
 #(0, arguments) = generic data
 #(1, arguments) = image data
 #(2, arguments) = text
+#(100, arguments) = shell query (used by Shell), any responses should be in a list, 1 string per line
 
 #sig method:
 #sig must be a list of arguments or be None
@@ -93,6 +94,8 @@ def widlookup(namestring):
 	#	return taskman
 	if namestring=="LaunchConsole":
 		return launchconsole
+	if namestring=="shell":
+		return shell
 
 #standardized rect generation
 def getframes(x, y, widsurf):
@@ -130,7 +133,21 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
 		labtx=simplefont.render(title, True, titleinacttext, titleinactbg)
 		screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
 	
-	
+#Plugin Loader
+for plugcodefile in os.listdir(Plugpath):
+	if plugcodefile.lower().endswith(".sdap.py"):
+		PLUGFILE=open(os.path.join(Plugpath, plugcodefile), 'r')
+		try:
+			PLUGEXEC=compile(PLUGFILE.read(), os.path.join(Plugpath, plugcodefile), 'exec')
+			exec(PLUGEXEC)
+			pluginst=plugobj(SDAPPLUGREF, SDAPNAME, SDAPLABEL, SDAPDIR, SDAPICON, SDAPCAT)
+			pluglist.extend([pluginst])
+			consolewrite("Load plugin: " + SDAPNAME + " (" + plugcodefile + ")")
+		except SyntaxError as err:
+			consolewrite("Plugin failure: SyntaxError on " + plugcodefile)
+			print(traceback.format_exc())
+			for errline in vmui.listline(str(err)):
+				consolewrite(errline)
 
 #taskman is a special case. due to the nature of it.
 class taskman:
@@ -245,7 +262,6 @@ class launchconsole:
 		self.conscope=20
 		self.conoffset=0
 		self.widy=(self.conscope * self.yjump)
-		
 		self.consbak=list()
 		#x and y are required.
 		self.x=xpos
@@ -365,21 +381,214 @@ class launchconsole:
 	def que(self, signal):
 		return
 
-#Plugin Loader
-for plugcodefile in os.listdir(Plugpath):
-	if plugcodefile.lower().endswith(".sdap.py"):
-		PLUGFILE=open(os.path.join(Plugpath, plugcodefile), 'r')
-		try:
-			PLUGEXEC=compile(PLUGFILE.read(), os.path.join(Plugpath, plugcodefile), 'exec')
-			exec(PLUGEXEC)
-			pluginst=plugobj(SDAPPLUGREF, SDAPNAME, SDAPLABEL, SDAPDIR, SDAPICON, SDAPCAT)
-			pluglist.extend([pluginst])
-			consolewrite("Load plugin: " + SDAPNAME + " (" + plugcodefile + ")")
-		except SyntaxError as err:
-			consolewrite("Plugin failure: SyntaxError on " + plugcodefile)
-			print(traceback.format_exc())
-			for errline in vmui.listline(str(err)):
-				consolewrite(errline)
+class shell:
+	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
+		#screensurf is the surface to blit the window to
+		self.screensurf=screensurf
+		#wo is a sorting variable used to sort the windows in a list
+		self.wo=windoworder
+		#title is the name of the window
+		self.title="Shell - test mode"
+		#taskid is set automatically
+		self.taskid=0
+		self.yjump=16
+		self.argument=argument
+		if self.argument!=None:
+			self.title="Shell - " + self.argument.title
+		self.widx=500
+		self.conscope=20
+		self.conoffset=0
+		self.curoffset=0
+		self.widy=(self.conscope * self.yjump) + self.yjump + 6
+		self.textin=""
+		self.consbak=list()
+		#x and y are required.
+		self.x=xpos
+		self.y=ypos
+		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf.fill(framebg)
+		self.shtext=([""] * 100)
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		#these rects are needed
+		#frame close button rect
+		self.closerect=self.frametoup[2]
+		#rect of window content
+		self.widbox=self.frametoup[0]
+		#frame rect
+		self.framerect=self.frametoup[1]
+		self.redraw=0
+		self.scrdrg=0
+		self.curstatus=1
+		self.curcnt=0
+		self.curpoint=40
+		self.inputrect=pygame.Rect(0, (self.widy-self.yjump-4), self.widx, (self.yjump+4))
+		#print self.shtext[(len(self.shtext)-self.conscope+self.conoffset):(len(self.shtext)-self.conoffset)]
+		#print -self.conscope+self.conoffset
+		#print -self.conoffset
+	def render(self):
+		#scrollbar arithetic
+		if self.curcnt<self.curpoint:
+			self.curcnt += 1
+		else:
+			self.curcnt=0
+			if self.curstatus==1:
+				self.curstatus=0
+				self.redraw=1
+			else:
+				self.curstatus=1
+				self.redraw=1
+		if self.curstatus==1:
+			self.textinD=vmui.charinsert(self.textin, "|", (self.curoffset + 1))
+		else:
+			self.textinD=vmui.charinsert(self.textin, " ", (self.curoffset + 1))
+		self.textinD=(">" + self.textinD)
+		if self.scrdrg==1:
+			self.redraw=1
+			self.scrlb=(100 * float(self.conscope)/float(len(self.shtext)))
+			self.scrloff=(100 * float(self.conoffset-len(self.shtext))/float(len(self.shtext)))
+			self.scrlfull=300
+			self.dy=self.sy
+			self.mpos=pygame.mouse.get_pos()
+			self.sy=(self.mpos[1])
+			self.qy=self.dy-self.sy
+			if self.qy<0:
+				if not self.conscope+self.conoffset>=len(self.shtext):
+					self.conoffset+=abs(self.qy//3)
+					#self.conoffset+1
+			if self.qy>0:
+				if self.conoffset!=0:
+					self.conoffset-=abs(self.qy//3)
+			if self.conscope+self.conoffset>len(self.shtext):
+				self.conoffset=(len(self.shtext)-self.conscope)
+			if self.conoffset<0:
+				self.conoffset=0
+			
+		self.scrlb=(100 * float(self.conscope)/float(len(self.shtext)))
+		self.scrloff=(100 * float(self.conoffset)/float(len(self.shtext)))
+		self.scrlfull=300
+		self.fullrect=pygame.Rect((self.x+self.widx-20), self.y, 20, (self.scrlfull + 1))
+		self.partrect=pygame.Rect((self.x+self.widx-19), (self.y + (3 * self.scrloff)), 18, (3 * self.scrlb))
+		#rendering
+		if self.consbak!=self.shtext:
+			self.constbak=list(self.shtext)
+			self.texty=0
+			self.widsurf.fill(framebg)
+			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
+				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
+				self.widsurf.blit(self.labtx, (0, self.texty))
+				self.texty += self.yjump
+			self.labtx=simplefont.render(self.textinD, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+			pygame.draw.rect(self.widsurf, libthemeconf.textboxbg, self.inputrect, 0)
+			pygame.draw.rect(self.widsurf, libthemeconf.textboxline, self.inputrect, 1)
+			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
+		elif self.redraw==1:
+			self.redraw=0
+			self.texty=0
+			self.widsurf.fill(framebg)
+			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
+				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
+				self.widsurf.blit(self.labtx, (0, self.texty))
+				self.texty += self.yjump
+			self.labtx=simplefont.render(self.textinD, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+			pygame.draw.rect(self.widsurf, libthemeconf.textboxbg, self.inputrect, 0)
+			pygame.draw.rect(self.widsurf, libthemeconf.textboxline, self.inputrect, 1)
+			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
+		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
+		
+	def movet(self, xoff, yoff):
+		self.x -= xoff
+		self.y -= yoff
+		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
+	def click(self, event):
+		if self.partrect.collidepoint(event.pos) and event.button==1:
+			self.scrdrg=1
+			self.sy=(event.pos[1])
+			self.redraw=1
+		if event.button==4:
+			if not self.conscope+self.conoffset>=len(self.shtext):
+				self.conoffset+=1
+				self.redraw=1
+		if event.button==5:
+			if self.conoffset!=0:
+				self.conoffset-=1
+				self.redraw=1
+	#similar to click, except it receves MOUSEBUTTONUP events that fall within widbox.
+	def clickup(self, event):
+		if self.scrdrg==1:
+			self.scrdrg=0
+		return
+	#keydown and keyup are given pygame KEYDOWN and KEYUP events.
+	def keydown(self, event):
+		if event.key==pygame.K_UP:
+			if not self.conscope+self.conoffset>=len(self.shtext):
+				self.conoffset+=1
+				self.redraw=1
+		elif event.key==pygame.K_DOWN:
+			if self.conoffset!=0:
+				self.conoffset-=1
+				self.redraw=1
+		#elif event.key==pygame.BACKSPACE:
+		#home/end support.
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_HOME:
+			if self.curoffset!=0:
+				self.curoffset=0
+				self.redraw=1
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_END:
+			if self.curoffset!=len(self.textin):
+				self.curoffset=len(self.textin)
+				self.redraw=1
+		#cursor movement
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+			if self.curoffset!=0:
+				self.curoffset -= 1
+				self.redraw=1
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+			if self.curoffset!=len(self.textin):
+				self.curoffset += 1
+				self.redraw=1
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+			self.shellwrite(">" + self.textin)
+			if self.argument!=None:
+				self.retlist=self.argument.que([100, self.textin])
+				if self.retlist!=None:
+					for self.line in self.retlist:
+						self.shellwrite(self.line)
+			self.curoffset=0
+			self.textin=""
+			self.conoffset=0
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
+			if len(self.textin)!=0 and self.curoffset!=0:
+				self.textin=vmui.charremove(self.textin, self.curoffset)
+				self.curoffset -= 1
+				self.redraw=1
+		elif event.type == pygame.KEYDOWN and event.key != pygame.K_TAB:
+			self.curoffset += 1
+			self.textin=vmui.charinsert(self.textin, str(event.unicode), self.curoffset)
+			self.redraw=1
+		return
+	def keyup(self, event):
+		return
+	#close is called when the window is to be closed.
+	def close(self):
+		return
+	#hostquit is called when the host program is going to quit.
+	def hostquit(self):
+		return 
+	def sig(self):
+		return
+	def que(self, signal):
+		return
+	def shellwrite(self, string):
+		self.shtext.pop(0)
+		self.shtext.append(string)
+
+
 		
 		
 
