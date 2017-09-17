@@ -171,7 +171,7 @@ class taskman:
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
 		
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
@@ -270,7 +270,7 @@ class launchconsole:
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
 		
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
@@ -313,8 +313,8 @@ class launchconsole:
 		self.scrlb=(100 * float(self.conscope)/float(len(constext)))
 		self.scrloff=(100 * float(self.conoffset)/float(len(constext)))
 		self.scrlfull=300
-		self.fullrect=pygame.Rect((self.x+self.widx-20), self.y, 20, (self.scrlfull + 1))
-		self.partrect=pygame.Rect((self.x+self.widx-19), (self.y + (3 * self.scrloff)), 18, (3 * self.scrlb))
+		self.fullrect=pygame.Rect((self.widx-20), 0, 20, (self.scrlfull + 1))
+		self.partrect=pygame.Rect((self.widx-19), (0 + (3 * self.scrloff)), 18, (3 * self.scrlb))
 		#rendering
 		if self.consbak!=constext:
 			self.constbak=list(constext)
@@ -324,17 +324,21 @@ class launchconsole:
 				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
+			self.redraw=2
 		elif self.redraw==1:
-			self.redraw=0
+			self.redraw=2
 			self.texty=0
 			self.widsurf.fill(framebg)
 			for self.conline in constext[(len(constext)-(self.conscope+self.conoffset)):(len(constext)-self.conoffset)]:
 				self.labtx=simplefont.render(self.conline, True, frametext, framebg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
+		if self.redraw==2:
+			self.redraw=0
+			pygame.draw.rect(self.widsurf, frametext, self.fullrect, 0)
+			pygame.draw.rect(self.widsurf, framebg, self.partrect, 0)
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
-		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
-		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
+		
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
@@ -344,7 +348,7 @@ class launchconsole:
 		self.framerect=self.frametoup[1]
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
-		if self.partrect.collidepoint(event.pos) and event.button==1:
+		if self.partrect.collidepoint(((event.pos[0]-self.x), (event.pos[1]-self.y))) and event.button==1:
 			self.scrdrg=1
 			self.sy=(event.pos[1])
 			self.redraw=1
@@ -409,7 +413,7 @@ class shell:
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(shellbg)
 		self.shtext=([""] * 100)
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
@@ -450,10 +454,10 @@ class shell:
 			self.curcnt=0
 			if self.curstatus==1:
 				self.curstatus=0
-				self.redraw=1
+				self.redraw=2
 			else:
 				self.curstatus=1
-				self.redraw=1
+				self.redraw=2
 		if self.curstatus==1:
 			self.textinD=vmui.charinsert(self.textin, "|", (self.curoffset + 1))
 		else:
@@ -483,12 +487,13 @@ class shell:
 		self.scrlb=(100 * float(self.conscope)/float(len(self.shtext)))
 		self.scrloff=(100 * float(self.conoffset)/float(len(self.shtext)))
 		self.scrlfull=300
-		self.fullrect=pygame.Rect((self.x+self.widx-20), self.y, 20, (self.scrlfull + 1))
-		self.partrect=pygame.Rect((self.x+self.widx-19), (self.y + (3 * self.scrloff)), 18, (3 * self.scrlb))
+		self.fullrect=pygame.Rect((self.widx-20), 0, 20, (self.scrlfull + 1))
+		self.partrect=pygame.Rect((self.widx-19), (0 + (3 * self.scrloff)), 18, (3 * self.scrlb))
 		#rendering
 		if self.consbak!=self.shtext:
 			self.constbak=list(self.shtext)
 			self.texty=0
+			self.redraw=3
 			self.widsurf.fill(shellbg)
 			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
 				self.labtx=monofont.render(self.conline, True, shelltext, shellbg)
@@ -499,21 +504,26 @@ class shell:
 			pygame.draw.rect(self.widsurf, shelltext, self.inputrect, 1)
 			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
 		elif self.redraw==1:
-			self.redraw=0
+			self.redraw=2
 			self.texty=0
 			self.widsurf.fill(shellbg)
 			for self.conline in self.shtext[(len(self.shtext)-(self.conscope+self.conoffset)):(len(self.shtext)-self.conoffset)]:
 				self.labtx=monofont.render(self.conline, True, shelltext, shellbg)
 				self.widsurf.blit(self.labtx, (0, self.texty))
 				self.texty += self.yjump
+		if self.redraw==2:
+			self.redraw=3
 			self.labtx=monofont.render(self.textinD, True, shelltext, shellbg)
 			pygame.draw.rect(self.widsurf, shellbg, self.inputrect, 0)
 			pygame.draw.rect(self.widsurf, shelltext, self.inputrect, 1)
 			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
+		
+		if self.redraw==3:
+			self.redraw=0
+			pygame.draw.rect(self.widsurf, frametext, self.fullrect, 0)
+			pygame.draw.rect(self.widsurf, framediv, self.fullrect, 1)
+			pygame.draw.rect(self.widsurf, framebg, self.partrect, 0)
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
-		pygame.draw.rect(self.screensurf, frametext, self.fullrect, 0)
-		pygame.draw.rect(self.screensurf, framediv, self.fullrect, 1)
-		pygame.draw.rect(self.screensurf, framebg, self.partrect, 0)
 		
 	def movet(self, xoff, yoff):
 		self.x -= xoff
@@ -524,7 +534,7 @@ class shell:
 		self.framerect=self.frametoup[1]
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
-		if self.partrect.collidepoint(event.pos) and event.button==1:
+		if self.partrect.collidepoint(((event.pos[0]-self.x), (event.pos[1]-self.y))) and event.button==1:
 			self.scrdrg=1
 			self.sy=(event.pos[1])
 			self.redraw=1
@@ -556,20 +566,20 @@ class shell:
 		elif event.type == pygame.KEYDOWN and event.key == pygame.K_HOME:
 			if self.curoffset!=0:
 				self.curoffset=0
-				self.redraw=1
+				self.redraw=2
 		elif event.type == pygame.KEYDOWN and event.key == pygame.K_END:
 			if self.curoffset!=len(self.textin):
 				self.curoffset=len(self.textin)
-				self.redraw=1
+				self.redraw=2
 		#cursor movement
 		elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
 			if self.curoffset!=0:
 				self.curoffset -= 1
-				self.redraw=1
+				self.redraw=2
 		elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
 			if self.curoffset!=len(self.textin):
 				self.curoffset += 1
-				self.redraw=1
+				self.redraw=2
 		elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
 			self.shellwrite(">" + self.textin)
 			if self.argument!=None:
@@ -584,11 +594,11 @@ class shell:
 			if len(self.textin)!=0 and self.curoffset!=0:
 				self.textin=vmui.charremove(self.textin, self.curoffset)
 				self.curoffset -= 1
-				self.redraw=1
+				self.redraw=2
 		elif event.type == pygame.KEYDOWN and event.key != pygame.K_TAB:
 			self.curoffset += 1
 			self.textin=vmui.charinsert(self.textin, str(event.unicode), self.curoffset)
-			self.redraw=1
+			self.redraw=2
 		return
 	def keyup(self, event):
 		return

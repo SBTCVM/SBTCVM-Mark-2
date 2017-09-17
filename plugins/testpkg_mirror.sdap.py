@@ -20,7 +20,7 @@ class PLUGIN_testpkg_mirror:
 		self.y=ypos
 		self.mx=0
 		self.my=0
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
 		consolewrite("mirror: running")
 		self.frametoup=getframes(self.x, self.y, self.widsurf)

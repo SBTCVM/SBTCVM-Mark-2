@@ -19,7 +19,7 @@ class PLUGIN_defaultpkg_qcredscroll:
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(libthemeconf.creditbg)
 		self.texttable=texttable=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
@@ -31,7 +31,7 @@ class PLUGIN_defaultpkg_qcredscroll:
 		#frame rect
 		self.framerect=self.frametoup[1]
 		self.abt = open(os.path.join("VMSYSTEM", "L_CREDIT.TXT"))
-		self.scrollsurf=pygame.Surface((600, 410))
+		self.scrollsurf=pygame.Surface((600, 410)).convert(self.widsurf)
 		self.scrollmask=pygame.Surface((600, 370))
 		self.scrollsurfyaw=-20
 		self.scrollmaskyaw=0

@@ -15,7 +15,7 @@ class PLUGIN_testpkg_testshell:
 		#x and y are required.
 		self.x=xpos
 		self.y=ypos
-		self.widsurf=pygame.Surface((self.widx, self.widy))
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
 		consolewrite("plugTEST: test plugin running")
 		self.frametoup=getframes(self.x, self.y, self.widsurf)
