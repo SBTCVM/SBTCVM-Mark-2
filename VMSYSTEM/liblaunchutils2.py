@@ -9,6 +9,7 @@ import copy
 import sys
 import os
 import traceback
+import xml.etree.ElementTree as ET
 
 pygame.font.init()
 simplefont = pygame.font.SysFont(None, 19)
