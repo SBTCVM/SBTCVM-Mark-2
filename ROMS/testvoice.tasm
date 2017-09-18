@@ -1,22 +1,52 @@
 textstart
 Demo of SBTCVM's new 3 voice sound chip in conjuntion with the new wait instruction.
 textstop
-splay|1:131
+#configure voice frequency
+sfreq|1:131
+sfreq|2:165
+sfreq|3:196
+
+textstart
+test 1
+textstop
+
+splay|1
 wait|:0.5
-splay|2:165
+splay|2
 wait|:0.5
-splay|3:196
+splay|3
 wait|:2
 sstop|1
 sstop|2
 sstop|3
+
+
+textstart
+test 2
+textstop
+
 wait|:2
-splaysame|1
-wait|:0.5
-splaysame|2
-wait|:0.5
-splaysame|3
+splay|1
+wait|:0.2
+splay|2
+wait|:0.2
+splay|3
 wait|:2
 sstop|1
 sstop|2
 sstop|3
+
+textstart
+test 3
+textstop
+
+wait|:2
+splay|1
+wait|:0.5
+sfreq|1:165
+splay|1
+wait|:0.5
+sfreq|1:196
+splay|1
+wait|:0.5
+sstop|1

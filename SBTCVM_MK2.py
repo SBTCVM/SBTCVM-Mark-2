@@ -620,6 +620,9 @@ svoice3sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample("0000000"))
 svoice1sam.set_volume(voicechanvol)
 svoice2sam.set_volume(voicechanvol)
 svoice3sam.set_volume(voicechanvol)
+sv1bak=svoice1sam
+sv2bak=svoice2sam
+sv3bak=svoice3sam
 #for f in BTSTACK:
 #	print str(BTSTACK[f].qxtact) + " " + f
 #for f in BTSTACK:
@@ -1600,33 +1603,39 @@ while stopflag==0:
 		sndfreqcode=(curdata[2] + curdata[3] + curdata[4] + curdata[5] + curdata[6] + curdata[7] + curdata[8])
 		if sndccode=="+":
 			if sndvcode=="+":
-				svoice1sam.stop()
+				sv1bak=svoice1sam
 				svoice1sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
 				svoice1sam.set_volume(voicechanvol)
-				svoice1sam.play(-1)
 			if sndvcode=="0":
-				svoice2sam.stop()
+				sv2bak=svoice2sam
 				svoice2sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
 				svoice2sam.set_volume(voicechanvol)
-				svoice2sam.play(-1)
 			if sndvcode=="-":
-				svoice3sam.stop()
+				sv3bak=svoice3sam
 				svoice3sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
 				svoice3sam.set_volume(voicechanvol)
-				svoice3sam.play(-1)
 		if sndccode=="0":
 			if sndvcode=="+":
+				sv1bak.stop()
+				svoice1sam.stop()
 				svoice1sam.play(-1)
 			if sndvcode=="0":
+				sv2bak.stop()
+				svoice2sam.stop()
 				svoice2sam.play(-1)
 			if sndvcode=="-":
+				sv3bak.stop()
+				svoice3sam.stop()
 				svoice3sam.play(-1)
 		if sndccode=="-":
 			if sndvcode=="+":
+				sv1bak.stop()
 				svoice1sam.stop()
 			if sndvcode=="0":
+				sv2bak.stop()
 				svoice2sam.stop()
 			if sndvcode=="-":
+				sv3bak.stop()
 				svoice3sam.stop()
 	#NULL INSTRUCTION (new variant) (compilers should use this in place of the legacy code.)
 	#elif curinst=="000000":

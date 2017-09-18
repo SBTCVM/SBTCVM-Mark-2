@@ -372,7 +372,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instcnt += 1
 		elif instword=="ptget":
 			instcnt += 1
-		elif instword=="splaysame":
+		elif instword=="sfreq":
 			instcnt += 1
 		elif instword=="splay":
 			instcnt += 1
@@ -1107,7 +1107,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		elif instword=="ptget":
 			instcnt += 1
 			outn.write("-0-0+-" + "000000000" + "\n")
-		elif instword=="splaysame":
+		elif instword=="splay":
 			instcnt += 1
 			instgpe=instdat.split(":")
 			if instgpe[0]=="1":
@@ -1119,7 +1119,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			else:
 				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP \n")
 				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP")
-		elif instword=="splay":
+		elif instword=="sfreq":
 			instcnt += 1
 			instgpe=instdat.split(":")
 			try:
