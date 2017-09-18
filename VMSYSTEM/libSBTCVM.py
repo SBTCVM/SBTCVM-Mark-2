@@ -86,6 +86,18 @@ def numstruct(code):
 	#print strut2
 	return strut2
 
+def timedecode(code):
+	strut1=(libbaltcalc.BTTODEC(code))
+	strut2=((strut1 + 9841)/float(1000))
+	#print strut2
+	return strut2
+
+def timeencode(code):
+	strut1=int(code*1000)-9841
+	strut2=(libbaltcalc.DECTOBT(strut1))
+	#print strut2
+	return strut2
+
 #used by the buzzer (do not use for 9 trit numtructs. use normal numstruct for that!)
 def buzznumstruct5(code):
 	strut1=(libbaltcalc.BTTODEC(code))

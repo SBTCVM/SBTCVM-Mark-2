@@ -782,8 +782,22 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 					sys.exit("ERROR: pointer: \"" + gtpoint + "\" Pointed at by: \"" +  instword + "\" At line: \"" + str(srcline) + "\", not found. STOP")
 			#instcnt += 1
 		elif instword=="wait":
-			outn.write("--00++" + instdat + "\n")
-			instcnt += 1
+			#outn.write("--00++" + instdat + "\n")
+			#instcnt += 1
+			instgpe=instdat.split(":")
+			if (len(instgpe))==1:
+				outn.write("--00++" + instdat + "\n")
+				instcnt += 1
+			else:
+				waittime=float(instgpe[1])
+				if waittime>=0 and waittime<=19.682:
+					outn.write("--00++" + libSBTCVM.timeencode(waittime) + "\n")
+					instcnt += 1
+				else:
+					complog("Out of range wait time At line: \"" + str(srcline) + "\", not found. STOP \n Wait times must be within 0 and 19.682 seconds! \n")
+					sys.exit("Out of range wait time At line: \"" + str(srcline) + "\", not found. STOP \n Wait times must be within 0 and 19.682 seconds!")
+
+				
 		elif instword=="YNgoto":
 			instgpe=instdat.split(">")
 			if (len(instgpe))==1:

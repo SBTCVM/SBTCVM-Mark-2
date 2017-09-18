@@ -1,0 +1,36 @@
+#this is a test of threading...
+textstart
+this is a test program for SBTCVM's
+threading system...
+you should see:
+a=every 1 second
+b=every 6 seconds
+c=every 3 seconds
+endlessly...
+textstop
+
+threadref|-0
+threadstart|>th1
+threadref|-+
+threadstart|>th2
+
+
+
+
+
+null||goback
+TTYwrite|--------+
+wait|:3
+gotodata|>goback
+
+
+
+null||th1
+TTYwrite|---------
+wait|:1
+gotodata|>th1
+
+null||th2
+TTYwrite|--------0
+wait|:6
+gotodata|>th2

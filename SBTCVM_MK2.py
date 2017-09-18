@@ -40,7 +40,7 @@ print "SBTCVM Mark 2 Starting up..."
 #thread data storage class
 #used to store thread-specific data in BTSTACK dictionary when thread is inactive.
 class BTTHREAD:
-	def __init__(self, qxtactg, EXECADDRg, REG1g, REG2g, contaddrg, EXECADDRrawg, regsetpointg, TTYBGCOLREGg, TTYBGCOLg, colvectorregg, monovectorregg, colorregg, tritloadleng, tritoffsetg, tritdestgndg, threadrefg, ROMFILEg, ROMLAMPFLGg, mempoint):
+	def __init__(self, qxtactg, EXECADDRg, REG1g, REG2g, contaddrg, EXECADDRrawg, regsetpointg, TTYBGCOLREGg, TTYBGCOLg, colvectorregg, monovectorregg, colorregg, tritloadleng, tritoffsetg, tritdestgndg, threadrefg, ROMFILEg, ROMLAMPFLGg, mempointg, timewaitg, waittillg):
 		self.qxtact=qxtactg
 		self.EXECADDR=EXECADDRg
 		self.REG1=REG1g
@@ -59,7 +59,9 @@ class BTTHREAD:
 		self.threadref=threadrefg
 		self.ROMFILE=ROMFILEg
 		self.ROMLAMPFLG=ROMLAMPFLGg
-		self.mempoint=mempoint
+		self.mempoint=mempointg
+		self.timewait=timewaitg
+		self.waittill=waittillg
 #ROMFILE=TROMA
 #ROMLAMPFLG="A"
 
@@ -544,10 +546,11 @@ threadref="00"
 prevCLOCK=2242
 
 ttyredrawfull=1
-
-BTSTACK={"--": BTTHREAD(1, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint)}
+timewait=0
+waittill=time.time()
+BTSTACK={"--": BTTHREAD(1, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint, timewait, waittill)}
 for cur_id in ["-0","-+","0-","00","0+","+-","+0","++"]:
-    BTSTACK[cur_id] = BTTHREAD(0, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint)
+    BTSTACK[cur_id] = BTTHREAD(0, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint, timewait, waittill)
 
 btthreadcnt=1
 btcurthread="--"
@@ -818,7 +821,9 @@ while stopflag==0:
 		fskipcnt+=1
 		#print "sc skip"
 	#ROM READ (first register)
-	if curinst=="------":
+	if timewait==1:
+		pass
+	elif curinst=="------":
 		REG1=(tritlen(libtrom.tromreaddata(curdata,ROMFILE), REG1))
 		#print("----")
 	#ROM READ (second register)
@@ -1028,14 +1033,16 @@ while stopflag==0:
 			EXECADDRNEXT=curdata
 			EXECCHANGE=1
 	elif curinst=="--00++":
-		waitchop=curdata[5]
-		if waitchop=="+":
-			waitmagn=0.3
-		elif waitchop=="-":
-			waitmagn=0.1
-		else:
-			waitmagn=0.2
-		time.sleep(( waitmagn))
+		timewait=1
+		waittill=(time.time()+libSBTCVM.timedecode(curdata))
+		#waitchop=curdata[5]
+		#if waitchop=="+":
+		#	waitmagn=0.3
+		#elif waitchop=="-":
+		#	waitmagn=0.1
+		#else:
+		#	waitmagn=0.2
+		#time.sleep(( waitmagn))
 	#asks user if goto to adress is desired
 	elif curinst=="--0+--":
 		abt=libSBTCVM.abtslackline(abt, ("GOTO: (" + curdata + ") Y or N?"))
@@ -1296,7 +1303,7 @@ while stopflag==0:
 			#	print (str(BTSTACK[threaddex].qxtact) + " rerror " + threaddex)
 		elif BTSTACK[threadref].qxtact==0:
 			#BTSTACK[threadref]=otherthreadinital
-			qxp=BTTHREAD(0, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, "---------")
+			qxp=BTTHREAD(0, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, "---------", 0, time.time())
 			#for threaddex in BTSTACK:
 			#	print (str(BTSTACK[threaddex].qxtact) + " pre thread launch r " + threaddex)
 			qxp.qxtact=1
@@ -2215,12 +2222,16 @@ while stopflag==0:
 		stopflag=1
 		abt=libSBTCVM.abtslackline(abt, "VM SYSHALT:")
 		abt=libSBTCVM.abtslackline(abt, "End Of RomBus.")
+	#exit timewait state for current thread if waittill time has been reached or passed.
+	if time.time()>=waittill:
+		timewait=0
 	#print "eek " + EXECADDRNEXT
 	#increment the program counter (EXEC addr)
-	EXECADDR=libbaltcalc.btadd(EXECADDR, "+")
-	EXECADDRraw=EXECADDR
-	#print EXECADDR
-	EXECADDR=libSBTCVM.trunkto6(EXECADDR)
+	if timewait!=1:
+		EXECADDR=libbaltcalc.btadd(EXECADDR, "+")
+		EXECADDRraw=EXECADDR
+		#print EXECADDR
+		EXECADDR=libSBTCVM.trunkto6(EXECADDR)
 	#print "ook " + EXECADDRNEXT
 	if EXECCHANGE==1:
 		EXECCHANGE=0
@@ -2266,10 +2277,11 @@ while stopflag==0:
 		#store current thread state in BTSTACK
 		if btstopthread==1:
 			BTSTACK[btcurthread].qxtact=0
+			BTSTACK[btcurthread].timewait=0
 			btthreadcnt -=1
 			btstopthread=0
 		else:
-			BTSTACK[btcurthread]=BTTHREAD(1, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint)
+			BTSTACK[btcurthread]=BTTHREAD(1, EXECADDR, REG1, REG2, contaddr, EXECADDRraw, regsetpoint, TTYBGCOLREG, TTYBGCOL, colvectorreg, monovectorreg, colorreg, tritloadlen, tritoffset, tritdestgnd, threadref, ROMFILE, ROMLAMPFLG, mempoint, timewait, waittill)
 		#iteratively detrmine next thread:
 		#for threaditer in ["--", "-0", "-+", "0-", "00", "0+", "+-", "+0", "++", "--", "-0", "-+", "0-", "00", "0+", "+-", "+0", "++", "--", "-0", "-+", "0-", "00", "0+", "+-", "+0", "++"]:
 			#if threaditer==btcurthread:
@@ -2315,6 +2327,8 @@ while stopflag==0:
 		ROMFILE=BTSTACK[btcurthread].ROMFILE
 		ROMLAMPFLG=BTSTACK[btcurthread].ROMLAMPFLG
 		mempoint=BTSTACK[btcurthread].mempoint
+		timewait=BTSTACK[btcurthread].timewait
+		waittill=BTSTACK[btcurthread].waittill
 		#change the Thread status display.
 		if (disablereadouts==0 or stepbystep==1) and fskipcnt == fskip:
 			curthrtex=lgdispfont.render(btcurthread, True, libthemeconf.vmcurth, libthemeconf.vmstatbg).convert()

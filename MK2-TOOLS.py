@@ -64,7 +64,7 @@ Copyright (c) 2016-2017 Thomas Leathers and Contributors
 '''
 elif cmd==None:
 	print "tip: use MK2-TOOLS.py -h for help."
-elif cmd=="namecrunch":
+elif cmd=="namecrunch" or cmd=="timecodetest":
 	if cmd=="namecrunch":
 		import VMSYSTEM.libSBTCVM as libSBTCVM
 		try:
@@ -73,6 +73,14 @@ elif cmd=="namecrunch":
 			ncruncharg="thisisatest"
 		print ncruncharg
 		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
+	if cmd=="timecodetest":
+		import VMSYSTEM.libSBTCVM as libSBTCVM
+		for BI in [19.682, 10.000, 0]:
+			print BI
+			BG=libSBTCVM.timeencode(BI)
+			print BG
+			BQ=libSBTCVM.timedecode(BG)
+			print BQ
 elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
