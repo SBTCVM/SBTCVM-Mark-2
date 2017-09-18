@@ -354,6 +354,7 @@ def foobsin(num):
 	#return math.sin(math.sin(math.sin(num)))
 	#return math.sin(math.sin(num))
 	return (math.floor(math.sin(num)) * 4500)
+	
 
 def autosquare2(freq):
 	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(mixrate))])
