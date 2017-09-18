@@ -1,0 +1,22 @@
+textstart
+Demo of SBTCVM's new 3 voice sound chip in conjuntion with the new wait instruction.
+textstop
+splay|1:131
+wait|:0.5
+splay|2:165
+wait|:0.5
+splay|3:196
+wait|:2
+sstop|1
+sstop|2
+sstop|3
+wait|:2
+splaysame|1
+wait|:0.5
+splaysame|2
+wait|:0.5
+splaysame|3
+wait|:2
+sstop|1
+sstop|2
+sstop|3

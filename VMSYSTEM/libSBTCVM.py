@@ -212,6 +212,28 @@ def trunkto6(code):
 
 
 
+#trunkation used in 3voice sound device
+def voice3trunk(code):
+	codecnt=0
+	for fel in code:
+		codecnt +=1
+	if codecnt<7:
+		if codecnt==6:
+			return("0" + code)
+		if codecnt==5:
+			return("00" + code)
+		if codecnt==4:
+			return("000" + code)
+		if codecnt==3:
+			return("0000" + code)
+		if codecnt==2:
+			return("00000" + code)
+		if codecnt==1:
+			return("000000" + code)
+	#print code
+	#code=libbaltcalc.BTINVERT(code)
+	return((code[0]) + (code[1]) + (code[2]) + (code[3]) + (code[4]) + (code[5]) + (code[6]))
+
 
 
 
@@ -310,11 +332,32 @@ def mk1buzz(code):
 	#print sampltnk
 	return sampltnk
 
+def mk23voicesample(code7trits):
+	strut1=(libbaltcalc.BTTODEC(code7trits))
+	#print strut1
+	strut2=(strut1+1094)
+	#print strut2
+	return autosquare2(strut2)
+
+def mk23voiceencode(code):
+	#print code
+	#strut1=(1094 - code)
+	#strut1=(1094 + (1094-code))
+	strut1=(code-1094)
+	#print strut1
+	strut2=(libbaltcalc.DECTOBT(strut1))
+	return strut2
+	
+	
+
 def foobsin(num):
 	#return math.sin(math.sin(math.sin(num)))
 	#return math.sin(math.sin(num))
 	return (math.floor(math.sin(num)) * 4500)
 
+def autosquare2(freq):
+	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(mixrate))])
+	return temparray
 
 def autosquare(freq, lenth):
 	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(lenth * mixrate))])

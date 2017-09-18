@@ -372,6 +372,12 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instcnt += 1
 		elif instword=="ptget":
 			instcnt += 1
+		elif instword=="splaysame":
+			instcnt += 1
+		elif instword=="splay":
+			instcnt += 1
+		elif instword=="sstop":
+			instcnt += 1
 		else:
 			gtflag=0
 		if gtflag==1 and (txtblk==0 or linenraw=="textstart"):
@@ -791,7 +797,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			else:
 				waittime=float(instgpe[1])
 				if waittime>=0 and waittime<=19.682:
-					outn.write("--00++" + libSBTCVM.timeencode(waittime) + "\n")
+					outn.write("--00++" + libSBTCVM.trunkto6(libSBTCVM.timeencode(waittime)) + "\n")
 					instcnt += 1
 				else:
 					complog("Out of range wait time At line: \"" + str(srcline) + "\", not found. STOP \n Wait times must be within 0 and 19.682 seconds! \n")
@@ -1094,6 +1100,47 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		elif instword=="ptget":
 			instcnt += 1
 			outn.write("-0-0+-" + "000000000" + "\n")
+		elif instword=="splaysame":
+			instcnt += 1
+			instgpe=instdat.split(":")
+			if instgpe[0]=="1":
+				outn.write("-00-++" + "+0" + "0000000" + "\n")
+			elif instgpe[0]=="2":
+				outn.write("-00-++" + "00" + "0000000" + "\n")
+			elif instgpe[0]=="3":
+				outn.write("-00-++" + "-0" + "0000000" + "\n")
+			else:
+				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n")
+				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP")
+		elif instword=="splay":
+			instcnt += 1
+			instgpe=instdat.split(":")
+			intarg=int(instgpe[1])
+			if intarg>=1 and intarg<=2187:
+				if instgpe[0]=="1":
+					outn.write("-00-++" + "++" + libSBTCVM.voice3trunk(libSBTCVM.mk23voiceencode(intarg)) + "\n")
+				elif instgpe[0]=="2":
+					outn.write("-00-++" + "0+" + libSBTCVM.voice3trunk(libSBTCVM.mk23voiceencode(intarg)) + "\n")
+				elif instgpe[0]=="3":
+					outn.write("-00-++" + "-+" + libSBTCVM.voice3trunk(libSBTCVM.mk23voiceencode(intarg)) + "\n")
+				else:
+					complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n")
+					sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP")
+			else:
+				complog("VOICE RANGE ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n must be within 1 and 2187 Hz \n")
+				sys.exit("VOICE RANGE ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n must be within 1 and 2187 Hz")
+		elif instword=="sstop":
+			instcnt += 1
+			instgpe=instdat.split(":")
+			if instgpe[0]=="1":
+				outn.write("-00-++" + "+-" + "0000000" + "\n")
+			elif instgpe[0]=="2":
+				outn.write("-00-++" + "0-" + "0000000" + "\n")
+			elif instgpe[0]=="3":
+				outn.write("-00-++" + "--" + "0000000" + "\n")
+			else:
+				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n")
+				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP")
 		else:
 			gtflag=0
 		

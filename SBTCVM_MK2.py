@@ -611,6 +611,15 @@ ttyblits=list()
 
 exlogclockticnum=0
 
+#3 voice sound gen volume control (fine tune to prevent clipping!)
+voicechanvol=0.5
+
+svoice1sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample("0000000"))
+svoice2sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample("0000000"))
+svoice3sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample("0000000"))
+svoice1sam.set_volume(voicechanvol)
+svoice2sam.set_volume(voicechanvol)
+svoice3sam.set_volume(voicechanvol)
 #for f in BTSTACK:
 #	print str(BTSTACK[f].qxtact) + " " + f
 #for f in BTSTACK:
@@ -1329,6 +1338,8 @@ while stopflag==0:
 	
 	#END OF THREADING RELATED INSTRUCTIONS
 	
+	
+	
 	#set ketinterupt register
 	elif curinst=="-0-+++":
 		keyintreg=(curdata[5] + curdata[6] + curdata[7] + curdata[8])
@@ -1582,8 +1593,41 @@ while stopflag==0:
 				keyspace=0
 			if keyintreg=="000-":
 				keyret=0
-		
-		
+	#3 VOICE SOUND:
+	elif curinst=="-00-++":
+		sndvcode=curdata[0]
+		sndccode=curdata[1]
+		sndfreqcode=(curdata[2] + curdata[3] + curdata[4] + curdata[5] + curdata[6] + curdata[7] + curdata[8])
+		if sndccode=="+":
+			if sndvcode=="+":
+				svoice1sam.stop()
+				svoice1sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
+				svoice1sam.set_volume(voicechanvol)
+				svoice1sam.play(-1)
+			if sndvcode=="0":
+				svoice2sam.stop()
+				svoice2sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
+				svoice2sam.set_volume(voicechanvol)
+				svoice2sam.play(-1)
+			if sndvcode=="-":
+				svoice3sam.stop()
+				svoice3sam=pygame.mixer.Sound(libSBTCVM.mk23voicesample(sndfreqcode))
+				svoice3sam.set_volume(voicechanvol)
+				svoice3sam.play(-1)
+		if sndccode=="0":
+			if sndvcode=="+":
+				svoice1sam.play(-1)
+			if sndvcode=="0":
+				svoice2sam.play(-1)
+			if sndvcode=="-":
+				svoice3sam.play(-1)
+		if sndccode=="-":
+			if sndvcode=="+":
+				svoice1sam.stop()
+			if sndvcode=="0":
+				svoice2sam.stop()
+			if sndvcode=="-":
+				svoice3sam.stop()
 	#NULL INSTRUCTION (new variant) (compilers should use this in place of the legacy code.)
 	#elif curinst=="000000":
 	#	
