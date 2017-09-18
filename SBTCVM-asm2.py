@@ -1117,8 +1117,8 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			elif instgpe[0]=="3":
 				outn.write("-00-++" + "-0" + "0000000" + "\n")
 			else:
-				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n")
-				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP")
+				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP \n")
+				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP")
 		elif instword=="splay":
 			instcnt += 1
 			instgpe=instdat.split(":")
@@ -1154,8 +1154,8 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			elif instgpe[0]=="3":
 				outn.write("-00-++" + "--" + "0000000" + "\n")
 			else:
-				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP \n")
-				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", not found. STOP")
+				complog("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP \n")
+				sys.exit("VOICE SYNTAX ERROR: At line: \"" + str(srcline) + "\", invalid voice argument. STOP")
 		else:
 			gtflag=0
 		
