@@ -657,7 +657,7 @@ while stopflag==0:
 	if trackopsec==1:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
-	elif vmexeclogflg==1:
+	elif vmexeclogflg==1 and timewait==0:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
 		vmexeclog("data: " + curdata + " |Inst: " + curinst + " |adr: " + EXECADDR +  " |Mem point: " + mempoint +" |thread: " + btcurthread + " |exec bank: " + ROMLAMPFLG + " |reg1: " + REG1 + " |reg2: " + REG2 + " |tic #: " + str(exlogclockticnum) + " |secs: " + format((exlogcurtime), '.11f'))
