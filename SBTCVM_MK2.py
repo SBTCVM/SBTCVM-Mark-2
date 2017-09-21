@@ -654,7 +654,7 @@ while stopflag==0:
 	#some screen display stuff & general blitting
 	#screensurf.fill((0,127,255))
 	#draw Background
-	if trackopsec==1:
+	if trackopsec==1 and timewait==0:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
 	elif vmexeclogflg==1 and timewait==0:
