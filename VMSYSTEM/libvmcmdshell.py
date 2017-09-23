@@ -15,6 +15,7 @@ helptext='''Commands:
 run [arguments]   : SBTCVM command line launcher. use "run help" for help.
 asm [arguments]   : SBTCVM assembler. "asm help" for help.
 gfx [arguments]   : SBTCVM graphics toolkit. use "gfx help" for help.
+gat [arguments]   : SBTCVM GAT toolkit. use "GAT help" for help.
 tools (t) [arguments] : SBTCVM tools launcher. use "t help" for help.
 list [type]       : use "list help" for help on the list command.
 help              : this text

@@ -92,6 +92,14 @@ elif cmd==None:
 				call(arglst2)
 			except IndexError:
 				call(["python", "MK2-GFX.py"])
+		elif (usercalllst[0]).lower()=="gat":
+			try:
+				arglst=list((usercalllst[1]).split(" "))
+				arglst2=list(["python", "MK2-GAT.py"])
+				arglst2.extend(arglst)
+				call(arglst2)
+			except IndexError:
+				call(["python", "MK2-GAT.py"])
 		elif (usercalllst[0]).lower()=="t" or (usercalllst[0]).lower()=="tools":
 			try:
 				arglst=list((usercalllst[1]).split(" "))
