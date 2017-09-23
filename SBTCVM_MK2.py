@@ -880,6 +880,8 @@ while stopflag==0:
 					
 				else:
 					dispmode="SB"
+					ttyredraw=1
+					ttyredrawfull=1
 				SBTGADEV.setmode(dispmode)
 			if curdata=="--0---+0-":
 				dispoffset=REG1
@@ -898,6 +900,8 @@ while stopflag==0:
 					dispmode="G0"
 				else:
 					dispmode="SB"
+					ttyredraw=1
+					ttyredrawfull=1
 				SBTGADEV.setmode(dispmode)
 			if curdata=="--0---+0-":
 				dispoffset=REG2
