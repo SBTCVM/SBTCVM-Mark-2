@@ -107,20 +107,22 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print '''This is SBTCVM Mark 2's GFX toolkit.
+	print '''This is SBTCVM Mark 2's GAT toolkit.
 commands:
-MK2-GFX.py -h (--help) (help): this text
-MK2-GFX.py -v (--version)
-MK2-GFX.py -a (--about): about MK2-GFX.py
-MK2-GFX.py -c (--colraster) [imagefile]: convert a 114x81 pixel or smaller image to a full framebuffer area (exported as a *.tasm)'''
+MK2-GAT.py -h (--help) (help): this text
+MK2-GAT.py -v (--version)
+MK2-GAT.py -a (--about): about MK2-GAT.py
+MK2-GAT.py -g0 (--modegfx0) [imagefile]: convert an (exactly) 114x81 pixel
+ image to a full framebuffer area (exported as a *.tasm) for the G0, 114x81,
+ 3-trit RGB screen mode.'''
 elif cmd=="-v" or cmd=="--version":
 	print "SBTCVM Mark 2 GAT toolkit v1.0.0"
 elif cmd==None:
 	print "tip: use MK2-GAT.py -h for help."
 elif cmd=="-a" or cmd=="--about":
-	print '''#SBTCVM Mark 2 GFX toolkit
+	print '''#SBTCVM Mark 2 GAT toolkit
 
-v2.1.0
+v1.0.0
 
 Copyright (c) 2016-2017 Thomas Leathers and Contributors
 
@@ -211,7 +213,7 @@ userwait
 		screensurf.blit(IMGSOURCE, (0, 0))
 		pygame.display.update()
 		HPIX += 1
-	tasmout.write("userwait")
+	#tasmout.write("userwait")
 	print ("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G0 (full)")
 	#pygame.image.save(IMGSOURCE, ("imgfilter-out.png"))
 			
