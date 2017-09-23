@@ -11,6 +11,7 @@ import VMSYSTEM.libvmui as vmui
 import sys
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
+import VMSYSTEM.libSBTGA as libSBTGA
 from random import randint
 pygame.display.init()
 
@@ -611,6 +612,22 @@ ttyblits=list()
 
 exlogclockticnum=0
 
+
+#SBTGA setup
+#SBTGA Bus
+dispmembus=libtrom.AROM
+#SBTGA display mode SB should be default
+dispmode="SB"
+#master valid mode list
+displist=["G0", "SB"]
+#all Modes that should disable TTY rendering need to be in here!
+dispttyover=["G0"]
+#default SBTGA offset.
+dispoffset="000000000"
+updatedisp=0
+SBTGADEV=libSBTGA.buffdisplay(screensurf, dispmembus, dispoffset, mode=dispmode)
+
+
 #3 voice sound gen volume control (fine tune to prevent clipping!)
 voicechanvol=0.5
 
@@ -633,10 +650,8 @@ initaltime=time.time()
 
 
 while stopflag==0:
-	#curinst=(libtrom.tromreadinst(EXECADDR,ROMFILE))
-	#curdata=(libtrom.tromreaddata(EXECADDR,ROMFILE))
+	#instruction load
 	EXECADDRNUM=libSBTCVM.numstruct(EXECADDR)
-	#fdelta=libtrom.ROMDICT[ROMFILE][EXECADDRNUM]
 	if ROMFILE==TROMA:
 		fdelta=libtrom.AROM[EXECADDRNUM]
 	elif ROMFILE==TROMB:
@@ -651,9 +666,7 @@ while stopflag==0:
 		fdelta=libtrom.FROM[EXECADDRNUM]
 	curinst=((fdelta[0]) + (fdelta[1]) + (fdelta[2]) + (fdelta[3]) + (fdelta[4]) + (fdelta[5]))
 	curdata=((fdelta[6]) + (fdelta[7]) + (fdelta[8]) + (fdelta[9]) + (fdelta[10]) + (fdelta[11]) + (fdelta[12]) + (fdelta[13]) + (fdelta[14]))
-	#some screen display stuff & general blitting
-	#screensurf.fill((0,127,255))
-	#draw Background
+	#logging and track operations/second
 	if trackopsec==1 and timewait==0:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
@@ -661,6 +674,7 @@ while stopflag==0:
 		exlogclockticnum += 1
 		exlogcurtime=(time.time() - initaltime)
 		vmexeclog("data: " + curdata + " |Inst: " + curinst + " |adr: " + EXECADDR +  " |Mem point: " + mempoint +" |thread: " + btcurthread + " |exec bank: " + ROMLAMPFLG + " |reg1: " + REG1 + " |reg2: " + REG2 + " |tic #: " + str(exlogclockticnum) + " |secs: " + format((exlogcurtime), '.11f'))
+	#main render
 	if fskipcnt == fskip or stepbystep==1:
 		if disablereadouts==0 or stepbystep==1:
 			#screensurf.blit(vmbg, (0, 0))
@@ -758,7 +772,7 @@ while stopflag==0:
 			ttyredraw=0
 			lineq=0
 			linexq=0
-			if ttystyle==0:
+			if ttystyle==0 and dispmode not in dispttyover:
 				libSBTCVMsurf.fill(TTYBGCOL)
 				for fnx in abt:
 					fnx=fnx.replace('\n', '')
@@ -832,9 +846,10 @@ while stopflag==0:
 	else:
 		fskipcnt+=1
 		#print "sc skip"
-	#ROM READ (first register)
+	#bypass instruction parser in entirety if in timewait mode.
 	if timewait==1:
 		pass
+	#ROM READ (first register)
 	elif curinst=="------":
 		REG1=(tritlen(libtrom.tromreaddata(curdata,ROMFILE), REG1))
 		#print("----")
@@ -859,6 +874,18 @@ while stopflag==0:
 		if curdata not in IOreadonly:
 			rambnkcur=RAMbank[curdata]
 			RAMbank[curdata] = tritlen(REG1, rambnkcur)
+			if curdata=="--0---+-+":
+				if REG1=="---------":
+					dispmode="G0"
+					
+				else:
+					dispmode="SB"
+				SBTGADEV.setmode(dispmode)
+			if curdata=="--0---+0-":
+				dispoffset=REG1
+				SBTGADEV.setoffset(dispoffset)
+			if curdata=="--0---+00":
+				updatedisp=1
 		else:
 			print "address \"" + curdata + "\" is read-only."
 	#IO WRITE REG2
@@ -866,6 +893,17 @@ while stopflag==0:
 		if curdata not in IOreadonly:
 			rambnkcur=RAMbank[curdata]
 			RAMbank[curdata] = tritlen(REG2, rambnkcur)
+			if curdata=="--0---+-+":
+				if REG2=="---------":
+					dispmode="G0"
+				else:
+					dispmode="SB"
+				SBTGADEV.setmode(dispmode)
+			if curdata=="--0---+0-":
+				dispoffset=REG2
+				SBTGADEV.setoffset(dispoffset)
+			if curdata=="--0---+00":
+				updatedisp=1
 		else:
 			print "address \"" + curdata + "\" is read-only."
 	#swap primary Registers
@@ -1645,8 +1683,10 @@ while stopflag==0:
 		updtrandport=0
 		RAMbank["--0------"]=libSBTCVM.trunkto6(libbaltcalc.DECTOBT(randint(-9841,9841)))
 	
-	
-	
+	if updatedisp==1:
+		updatedisp=0
+		upt=SBTGADEV.render(x=0, y=ttyyoffset)
+		updtblits.extend([upt])
 	#needed by user quering opcodes such as 0+--	
 	if extradraw==1:
 		#screensurf.blit(vmbg, (0, 0))
@@ -1694,7 +1734,7 @@ while stopflag==0:
 		#ttyredraw=0
 		lineq=0
 		linexq=0
-		if ttystyle==0:
+		if ttystyle==0 and dispmode not in dispttyover:
 			libSBTCVMsurf.fill(TTYBGCOL)
 			for fnx in abt:
 				fnx=fnx.replace('\n', '')
@@ -1929,7 +1969,7 @@ while stopflag==0:
 		USRYN=0
 	
 	#print(EXECADDR)
-	if stepbystep==1:
+	if stepbystep==1 and timewait==0:
 		#this is used when step-by-step mode is enabled
 		evhappenflg2=0
 		while evhappenflg2==0:
@@ -2442,7 +2482,7 @@ while stopflag==0:
 		reg2text=lgdispfont.render(CURROMTEXT, True, (255, 0, 255), (0, 0, 0))
 		lineq=0
 		linexq=0
-		if ttystyle==0:
+		if ttystyle==0 and dispmode not in dispttyover:
 			libSBTCVMsurf.fill(TTYBGCOL)
 			for fnx in abt:
 				fnx=fnx.replace('\n', '')

@@ -16,7 +16,7 @@ compvers="v2.3.0"
 outfile="assmout.trom"
 #define IOmaps
 IOmapread={"random": "--0------"}
-IOmapwrite={}
+IOmapwrite={"dispmode": "--0---+-+", "dispoffset": "--0---+0-", "dispupdate": "--0---+00"}
 #populate IOmaps with memory pointers
 scratchmap={}
 scratchstart="---------"
