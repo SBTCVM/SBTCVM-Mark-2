@@ -9,22 +9,22 @@ textstop
 #draw logo in background thread
 threadref|-0
 threadstart|>GTTicon
-wait
+wait|:0.2
 textstart
 Guess
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 textstart
 That
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 textstart
 Trit
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 
 setreg2|00000000-
 IOwrite2|>mem2
@@ -143,22 +143,22 @@ TTYclear
 textstart
 Thank you for playing:
 textstop
-wait
+wait|:0.2
 textstart
 Guess
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 textstart
 That
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 textstart
 Trit
 textstop
 buzzer|000-0++++
-wait
+wait|:0.2
 textstart
 your final score is:
 textstop
