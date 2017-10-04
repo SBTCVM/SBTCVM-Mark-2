@@ -9,6 +9,7 @@ import copy
 import sys
 import os
 import traceback
+import subprocess
 import xml.etree.ElementTree as ET
 
 pygame.font.init()
@@ -32,7 +33,7 @@ shelltext=libthemeconf.constext
 
 hudy=20
 fpad=1
-
+hudoffset=21
 Plugpath="plugins"
 
 constext=([""] * 100)
@@ -56,6 +57,7 @@ def consolewrite(string):
 #(100, arguments) = shell query (used by Shell), any responses should be in a list, 1 string per line
 #(101) = shell status check (used by Shell at regular interval, no arguments sent.), any responses should be in a list, 1 string per line
 #(102) = shell ready (used by Shell during shell startup, no arguments sent.), any responses should be in a list, 1 string per line
+
 #sig method:
 #sig must be a list of arguments or be None
 #list of sig return codes:
@@ -67,6 +69,7 @@ def consolewrite(string):
 ##special sigs:
 #("TASKMAN", code, taskid)=used ONLY by taskman. (the host program keeps track of the taskid's authorized to use this)
 #code=0 close taskid, code=1 bring taskid to top and reset its x & y values.
+
 PLUGINDUMMY=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'dummy.png'))
 
 pluglist=list()
@@ -99,17 +102,22 @@ def widlookup(namestring):
 	#	return taskman
 	if namestring=="LaunchConsole":
 		return launchconsole
+	if namestring=="fileman":
+		return fileman
 	if namestring=="shell":
 		return shell
 
 #standardized rect generation
-def getframes(x, y, widsurf):
-	y -= 21
+def getframes(x, y, widsurf, resizebar=0):
+	y -= hudoffset
 	x -= 1
 	widbox=widsurf.get_rect()
 	widbox.x=x+fpad
 	widbox.y=y+hudy+fpad
-	framebox=pygame.Rect(x, y, (widbox.w + fpad + fpad), (widbox.h + fpad + hudy + fpad))
+	if resizebar==1:
+		framebox=pygame.Rect(x, y, (widbox.w + fpad + fpad), (widbox.h + fpad + hudy + fpad + 10))
+	else:
+		framebox=pygame.Rect(x, y, (widbox.w + fpad + fpad), (widbox.h + fpad + hudy + fpad))
 	closebtnrect=pygame.Rect(x, y, hudy, hudy)
 	return (widbox, framebox, closebtnrect)
 	
@@ -123,6 +131,7 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
 		pygame.draw.line(screensurf, framebtntext, (closerect.x+14, closerect.y+4), (closerect.x+4, closerect.y+14), 3)
 		pygame.draw.rect(screensurf, framediv, closerect, 1)
 		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
+		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy+widbox.h+1), ((framerect.x + framerect.w - 1), framerect.y+hudy+widbox.h+1))
 		screensurf.blit(widsurf, widbox)
 		labtx=simplefont.render(title, True, titletext, titlebg)
 		screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
@@ -134,6 +143,8 @@ def drawframe(framerect, closerect, widbox, widsurf, screensurf, title, wo):
 		pygame.draw.line(screensurf, framebtntext, (closerect.x+14, closerect.y+4), (closerect.x+4, closerect.y+14), 3)
 		pygame.draw.rect(screensurf, framediv, closerect, 1)
 		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy), ((framerect.x + framerect.w - 1), framerect.y+hudy))
+		pygame.draw.line(screensurf, framediv, (framerect.x, framerect.y+hudy+widbox.h+1), ((framerect.x + framerect.w - 1), framerect.y+hudy+widbox.h+1))
+
 		screensurf.blit(widsurf, widbox)
 		labtx=simplefont.render(title, True, titleinacttext, titleinactbg)
 		screensurf.blit(labtx, ((framerect.x + 25), (framerect.y + 1)))
@@ -153,6 +164,80 @@ for plugcodefile in os.listdir(Plugpath):
 			print(traceback.format_exc())
 			for errline in vmui.listline(str(err)):
 				consolewrite(errline)
+				
+
+
+#pin typeids:
+#0=text (single string) (can be multiple lines)
+#1=image (pygame surface)
+#pin object class used in pinboard system.
+class pinobj:
+	def __init__(self, name, pindata, typeid, thumb=None):
+		self.name=name
+		self.pindata=pindata
+		self.typeid=typeid
+		self.pinid=None
+		self.thumb=thumb
+	#helper functions for type 0 (return None on other typeids)
+	def getstring(self):
+		if self.typeid==0:
+			return self.pindata
+		else:
+			return
+	def getlist(self):
+		if self.typeid==0:
+			return vmui.listline(self.pindata)
+		else:
+			return
+	#common functions. (should be usable with any data type.)
+	#used to get a thumbnail for the pin object.
+	def thumb(self):
+		if self.thumb==None:
+			if self.typeid==1:
+				self.thumb=pygame.transform.scale(self.pindata, (80, 40))
+			elif self.typeid==0:
+				self.thumb=pygame.Surface((80, 40))
+				self.thumb.fill(libthemeconf.textboxbg)
+				self.strtx=(vmui.listline(self.pindata)[0])[0:30]
+				self.rentx=simplefont.render(self.strtx, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+				self.thumb.blit(self.rentx, (0, 0))
+			else:
+				self.thumb=pygame.Surface((80, 40))
+				self.thumb.fill(libthemeconf.textboxbg)
+				self.rentx=simplefont.render("Unknown data type!", True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+				self.thumb.blit(self.rentx, (0, 0))
+		return self.thumb
+
+pinobjlist0=list()
+pinobjlist1=list()
+curpin0=None
+curpin1=None
+
+pinidcnt=0
+#note: this may return None in some cases!
+#use this with correct typeid to get current pin of that type.
+def getpin(typeid):
+	if typeid==0:
+		return curpin0
+	elif typeid==1:
+		return curpin1
+	else:
+		return None
+
+def addpin(pin):
+	global pinidcnt
+	consolewrite("Pinboard: added pin: \"" + pin.name + "\"")
+	pin.pinid=pinidcnt
+	pinidcnt += 1
+	if pin.typeid==0:
+		pinobjlist0.extend([pin])
+		curpin0=pin
+	if pin.typeid==1:
+		pinobjlist1.extend([pin])
+		curpin1=pin
+	return
+	
+
 
 #taskman is a special case. due to the nature of it.
 class taskman:
@@ -619,8 +704,254 @@ class shell:
 		if len(string)>60:
 			consolewrite("Shell: Warning: line of text too long... clipping...")
 
+#file browser code below:
 
+fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvstreg.png'))
+fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtrom.png'))
+fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdir.png'))
+fvup=pygame.transform.scale(pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvup.png')), (20, 20))
+fvimg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvimg.png'))
+fvtext=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtext.png'))
+fvtasm=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtasm.png'))
+fvall=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvall.png'))
+fvlog=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvlog.png'))
+fvdmp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdmp.png'))
+fvdummy=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdummy.png'))
+
+
+
+class filetyp:
+	def __init__(self, ext, typeicon, qxtype, filterflg):
+		self.ext=ext
+		#self.typeicon=pygame.transform.scale(typeicon, (20, 20))
+		self.typeicon=pygame.Surface((40, 25))
+		self.typeicon.fill((255, 255, 255))
+		self.typeiconfull=typeicon
+		self.typeicon.blit(self.typeiconfull, (0, 0))
+		self.qxtype=qxtype
+		self.filterflg=filterflg
+typ_png=filetyp("png", fvimg, "img", 2)
+typ_jpg=filetyp("jpg", fvimg, "img", 2)
+typ_jpeg=filetyp("jpeg", fvimg, "img", 2)
+typ_gif=filetyp("gif", fvimg, "img", 2)
+typ_streg=filetyp("streg", fvstreg, "streg", 3)
+typ_trom=filetyp("trom", fvtrom, "trom", 1)
+typ_tasm=filetyp("tasm", fvtasm, "tasm", 4)
+typ_txt=filetyp("txt", fvtext, "text", 5)
+typ_md=filetyp("md", fvtext, "text", 5)
+typ_log=filetyp("log", fvlog, "log", 6)
+typ_dmp=filetyp("dmp", fvdmp, "dmp", 7)
+typelist=[typ_png, typ_jpg, typ_jpeg, typ_gif, typ_streg, typ_trom, typ_tasm, typ_txt, typ_md, typ_log, typ_dmp]
+
+
+typ_up=filetyp(None, fvup, "dir", None)
+typ_dir=filetyp(None, fvdir, "dir", None)
+
+class fileclick:
+	def __init__(self, box, filename, ftype, pane=1):
+		self.box=box
+		self.filename=filename
+		self.ftype=ftype
+		self.pane=pane
+
+
+class fileman:
+	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
+		consolewrite("Fileman: running")
+		#screensurf is the surface to blit the window to
+		self.screensurf=screensurf
+		#wo is a sorting variable used to sort the windows in a list
+		self.wo=windoworder
+		#title is the name of the window
+		self.title="Fileman"
+		#taskid is set automatically
+		self.taskid=0
+		self.argument=argument
+		self.widx=500
+		self.widy=400
+		if self.argument==None or self.argument==list():
+			self.iterfiles="."
+			self.argument=list()
+		else:
+			self.iterfiles=os.path.join(self.argument)
+		self.title="Fileman: " + self.iterfiles
+		#x and y are required.
+		self.x=xpos
+		self.y=ypos
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill(framebg)
 		
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		#these rects are needed
+		#frame close button rect
+		self.closerect=self.frametoup[2]
+		#rect of window content
+		self.widbox=self.frametoup[0]
+		#frame rect
+		self.framerect=self.frametoup[1]
+		self.minibox=pygame.Surface((340, 25)).convert(self.screensurf)
+		self.minibox.fill(libthemeconf.tilecolor)
+		self.yoff=0
+		#self.closetasktx=simplefont.render("Close Task", True, framebg, frametext)
+		#self.bringtoptx=simplefont.render("Bring to top", True, framebg, frametext)
+		self.scup=1
+	def render(self):
+		if self.scup==1:
+			self.scup=0
+			self.texty=self.yoff
+			self.textx=150
+			self.taskdict=dict()
+			self.clicklist=list()
+			self.widsurf.fill(framebg)
+			#copy and sort raw tasklist given to taskman by host program
+			#tasklist parser
+			if self.iterfiles!='.':
+				self.labtx=simplefont.render((".."), True, libthemeconf.tiletext, libthemeconf.tilecolor)
+				self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
+				self.widsurf.blit(self.labtx, (self.textx+44, self.texty+4))
+				self.widsurf.blit(typ_up.typeicon, (self.textx, self.texty))
+				self.clickbx.x += self.x
+				self.clickbx.y += self.y
+				self.clicklist.extend([fileclick(self.clickbx, "..", "dir")])
+				self.texty += 30
+			for self.fileitm in sorted(os.listdir(self.iterfiles), key=str.lower):
+				self.fnamelo=self.fileitm.lower()
+				if os.path.isdir(os.path.join(self.iterfiles, self.fileitm)) and not self.fileitm.startswith(".git"):
+					if self.texty>=0 and self.texty<=self.widy:
+						self.labtx=simplefont.render((self.fileitm), True, libthemeconf.tiletext, libthemeconf.tilecolor)
+						self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
+						self.widsurf.blit(self.labtx, (self.textx+44, self.texty+4))
+						self.widsurf.blit(typ_dir.typeicon, (self.textx, self.texty))
+						self.clickbx.x += self.x
+						self.clickbx.y += self.y
+						self.clicklist.extend([fileclick(self.clickbx, self.fileitm, "dir")])
+						self.texty += 30
+					else:
+						self.texty += 30
+				else:
+					for self.typ in typelist:
+						if self.fnamelo.endswith((self.typ.ext)):
+							if self.texty>=0 and self.texty<=self.widy:
+								self.labtx=simplefont.render((self.fileitm), True, libthemeconf.tiletext, libthemeconf.tilecolor)
+								self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
+								self.widsurf.blit(self.labtx, (self.textx+44, self.texty+4))
+								self.widsurf.blit(self.typ.typeicon, (self.textx, self.texty))
+								self.clickbx.x += self.x
+								self.clickbx.y += self.y
+								self.clicklist.extend([fileclick(self.clickbx, self.fileitm, self.typ.qxtype)])
+								self.texty += 30
+							else:
+								self.texty += 30
+			self.texty += 30
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		#task commands
+		#self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
+		#self.topx=self.screensurf.blit(self.bringtoptx, (self.x+5+self.closetasktx.get_width(), self.y))
+	def movet(self, xoff, yoff):
+		self.x -= xoff
+		self.y -= yoff
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+		self.scup=1
+	def resizet(self, xoff, yoff):
+		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
+		self.widy -= yoff
+		#check the size to ensure it isn't too small (or invalid)
+		if self.widy<300:
+			self.widy=300
+		self.scup=1
+		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill(framebg)
+		#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	def click(self, event):
+		if event.button==4:
+			if event.pos[0]>150:
+				if self.yoff<0:
+					self.yoff += 30
+					#scupdate=1
+					self.scup=1
+				return
+		if event.button==5:
+			if event.pos[0]>150:
+				if self.texty>self.widy:
+					self.yoff -= 30
+					#scupdate=1
+					self.scup=1
+				if self.yoff>0:
+					self.yoff=0
+					#scupdate=1
+					self.scup=1
+				return
+		for self.f in self.clicklist:
+			if self.f.box.collidepoint(event.pos)==1 and event.button==1:
+				#program launchers
+				self.runexec=0
+				if self.runexec==0:
+					if self.f.ftype=="trom":
+						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(self.iterfiles, self.f.filename))])
+					if self.f.ftype=="streg":
+						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(self.iterfiles, self.f.filename))])
+				else:
+					if self.f.ftype=="trom":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+					if self.f.ftype=="streg":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+				if self.f.ftype=="tasm":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+				if self.f.ftype=="log":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+				if self.f.ftype=="dmp":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+				
+				if self.f.ftype=="img":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "imgview", (os.path.join(self.iterfiles, self.f.filename))])
+				if self.f.ftype=="text":
+					subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(self.iterfiles, self.f.filename))])
+				#special directory handler
+				if self.f.ftype=="dir":
+					#hudupdate=1
+					#listyoff=110
+					#scupdate=1
+					self.scup=1
+					self.yoff=0
+					#home directory (SBTCVM's repository root directory)
+					if self.f.filename=='.':
+						self.argument=list()
+						self.iterfiles='.'
+					#previous directory
+					if self.f.filename=='..':
+						self.argument.remove(self.argument[(len(self.argument) -1)])
+						if self.argument==list():
+							self.iterfiles='.'
+						else:
+							self.iterfiles=os.path.join(*self.argument)
+						#if normal subdirectory, add it to end of pathlist
+					else:
+						self.argument.extend([self.f.filename])
+						self.iterfiles=os.path.join(*self.argument)
+					self.title="Fileman: " + self.iterfiles
+					return
+	def clickup(self, event):
+		return
+	def keydown(self, event):
+		return
+	def keyup(self, event):
+		return
+	def close(self):
+		return
+	def hostquit(self):
+		return
+	def sig(self):
+		return
+	def que(self, signal):
+		return
 		
 
 

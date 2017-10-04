@@ -157,7 +157,7 @@ class launchtile:
 			pygame.draw.rect(self.tilesurf, libthemeconf.tiletext, self.plusrect2, 0)
 		
 	def render(self, xpos, ypos):
-		self.tilebox=screensurf.blit(self.tilesurf, (xpos, ypos))
+		self.tilebox=bg.blit(self.tilesurf, (xpos, ypos))
 	def act(self):
 		if self.ltype==4:
 			return "taskman"
@@ -200,6 +200,7 @@ pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=ShellSystem)
+LAUNCHFILE=launchtile("File Manager", DUMMY, 3, lref="fileman")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
@@ -209,7 +210,7 @@ maincat=[filet, calct, settingt, themet, helpt]
 gamescat=[gttt]
 welcomecat=[introt]
 democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
-ltoolcat=[TASKMAN, LAUNCHCON, LAUNCHSHELL]
+ltoolcat=[TASKMAN, LAUNCHCON, LAUNCHSHELL, LAUNCHFILE]
 plugincat=[]
 
 for plug in launchutils.pluglist:
@@ -275,6 +276,7 @@ resizeflg=0
 uptcat=1
 redrawhud=1
 taskidcnt=0
+fullredraw=0
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
 launchutils.consolewrite(">>SBTCVM Desktop v3.0")
@@ -290,6 +292,12 @@ while qflg==0:
 		resizeflg=0	
 		screeny=resh
 		screenx=resw
+		bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+		redrawhud=1
+	elif fullredraw==1:
+		fullredraw=0
+		bg=(libthemeconf.bgmake(None)).convert()
+		bg=pygame.transform.scale(bg, (screenx, screeny))
 		bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
 		redrawhud=1
 	#hud rendering. (draws onto bg)
@@ -309,10 +317,6 @@ while qflg==0:
 		catmx=bg.blit(fvcatmenu, (48, 3))
 		menulabel=catfont.render(catname, True, libthemeconf.btntext)
 		bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
-	#display drawing
-	if scupdate==1:
-		scupdate=0
-		screensurf.blit(bg, (0, 0))
 		tilex=10
 		tiley=60
 		tilejumpx=100
@@ -326,6 +330,11 @@ while qflg==0:
 			else:
 				tilex=10
 				tiley += tilejumpy
+	#display drawing
+	if scupdate==1:
+		scupdate=0
+		screensurf.blit(bg, (0, 0))
+		
 		#minitool render
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
@@ -356,6 +365,21 @@ while qflg==0:
 		yoff =(prevpos[1] - movepos[1])
 		try:
 			widtomove.movet(xoff, yoff)
+		except Exception as err:
+			errorreport(wid.title, "Window Move", err)
+			activewids.remove(widtomove)
+			movewid=0
+		scupdate=1
+		time.sleep(0.04)
+	elif movewid==2:
+		prevpos=movepos
+		movepos=pygame.mouse.get_pos()
+		xoff =(prevpos[0] - movepos[0])
+		yoff =(prevpos[1] - movepos[1])
+		try:
+			widtomove.resizet(xoff, yoff)
+		except AttributeError:
+			pass
 		except Exception as err:
 			errorreport(wid.title, "Window Move", err)
 			activewids.remove(widtomove)
@@ -482,6 +506,8 @@ while qflg==0:
 		if event.type==MOUSEBUTTONUP:
 			if movewid==1:
 				movewid=0
+			elif movewid==2:
+				movewid=0
 			else:
 				for wid in activewids:
 					if wid.wo==0:
@@ -510,6 +536,17 @@ while qflg==0:
 								errorreport(wid.title, "Close", err)
 							activewids.remove(wid)
 							scupdate=1
+							break
+						elif event.pos[1]>(wid.y + wid.widbox.h):
+							movewid=2
+							movepos=event.pos
+							widtomove=wid
+							if wid.wo!=0:
+								wid.wo=0
+								activewids.remove(wid)
+								for widd in activewids:
+									widd.wo += 1
+								activewids.extend([wid])
 							break
 						else:
 							movewid=1
@@ -657,34 +694,40 @@ while qflg==0:
 						catname="Main"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 					if menuret=="GAMES":
 						tilelist=gamescat
 						catid=1
 						catname="Games"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 					if menuret=="WELCOME":
 						tilelist=welcomecat
 						catid=2
 						catname="Welcome"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 					if menuret=="DEMOS":
 						tilelist=democat
 						catid=3
 						catname="Demos"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 					if menuret=="LTOOL":
 						tilelist=ltoolcat
 						catid=4
 						catname="Mini Tools"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 					if menuret=="PLUG":
 						tilelist=plugincat
 						catid=5
 						catname="Plugins"
 						scupdate=1
 						uptcat=1
+						fullredraw=1
 	
