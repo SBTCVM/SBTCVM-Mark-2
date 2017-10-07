@@ -66,17 +66,17 @@
      </g>
      <g class="com.sun.star.drawing.CustomShape">
       <g id="id6">
-       <path fill="rgb(0,0,0)" stroke="none" d="M 4437,6697 L 4797,10596 8353,6715 4437,6697 Z M 6215,4756 L 6215,4756 Z M 4797,10596 L 4797,10596 Z"/>
+       <path fill="rgb(0,0,0)" stroke="none" d="M 4435,6697 L 4795,10596 8351,6715 4435,6697 Z M 6213,4756 L 6213,4756 Z M 4795,10596 L 4795,10596 Z"/>
       </g>
      </g>
      <g class="com.sun.star.drawing.CustomShape">
       <g id="id7">
-       <path fill="rgb(102,102,255)" stroke="none" d="M 4688,6962 L 4961,10043 7779,6965 4688,6962 Z M 6097,5424 L 6097,5424 Z M 4961,10043 L 4961,10043 Z"/>
+       <path fill="rgb(102,102,255)" stroke="none" d="M 4683,6922 L 4961,10043 7815,6926 4683,6922 Z M 6110,5364 L 6110,5364 Z M 4961,10043 L 4961,10043 Z"/>
       </g>
      </g>
      <g class="com.sun.star.drawing.CustomShape">
       <g id="id8">
-       <path fill="rgb(255,153,153)" stroke="none" d="M 16364,6971 L 16156,9974 13356,6917 16364,6971 Z M 14965,5443 L 14965,5443 Z M 16156,9974 L 16156,9974 Z"/>
+       <path fill="rgb(255,153,153)" stroke="none" d="M 16372,6933 L 16126,9961 13346,6927 16372,6933 Z M 14988,5422 L 14988,5422 Z M 16126,9961 L 16126,9961 Z"/>
       </g>
      </g>
      <g class="com.sun.star.drawing.CustomShape">
@@ -152,7 +152,7 @@
      </g>
      <g class="com.sun.star.drawing.CustomShape">
       <g id="id22">
-       <path fill="rgb(255,255,255)" stroke="none" d="M 10583,12585 L 11345,11696 9821,11696 10583,12585 Z M 9821,12585 L 9821,12585 Z M 11346,11695 L 11346,11695 Z"/>
+       <path fill="rgb(255,255,255)" stroke="none" d="M 10583,12583 L 11345,11694 9821,11694 10583,12583 Z M 9821,12583 L 9821,12583 Z M 11346,11693 L 11346,11693 Z"/>
       </g>
      </g>
      <g class="com.sun.star.drawing.LineShape">
