@@ -260,7 +260,7 @@ class taskman:
 		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(framebg)
 		
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		#these rects are needed
 		#frame close button rect
 		self.closerect=self.frametoup[2]
@@ -283,9 +283,9 @@ class taskman:
 		#tasklist parser
 		for self.task in self.argumentcopy:
 			if self.seltask==self.task.taskid:
-				self.labtx=simplefont.render(("Name: " + self.task.title + " | Order: " + str(self.task.wo) + " | taskid: " + str(self.task.taskid)), True, framebg, frametext)
+				self.labtx=simplefont.render(("Order: " + str(self.task.wo) + " | taskid: " + str(self.task.taskid) + " | Name: " + self.task.title), True, framebg, frametext)
 			else:
-				self.labtx=simplefont.render(("Name: " + self.task.title + " | Order: " + str(self.task.wo) + " | taskid: " + str(self.task.taskid)), True, frametext, framebg)
+				self.labtx=simplefont.render(("Order: " + str(self.task.wo) + " | taskid: " + str(self.task.taskid) + " | Name: " + self.task.title), True, frametext, framebg)
 			self.clickbx=self.widsurf.blit(self.labtx, (self.textx, self.texty))
 			self.clickbx.x += self.x
 			self.clickbx.y += self.y
@@ -298,7 +298,24 @@ class taskman:
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	def resizet(self, xoff, yoff):
+		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
+		self.widx -= xoff
+		self.widy -= yoff
+		#check the size to ensure it isn't too small (or invalid)
+		if self.widx<300:
+			self.widx=300
+		if self.widy<200:
+			self.widy=200
+		
+		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		self.closerect=self.frametoup[2]
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
@@ -502,7 +519,7 @@ class shell:
 		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
 		self.widsurf.fill(shellbg)
 		self.shtext=([""] * 100)
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		#these rects are needed
 		#frame close button rect
 		self.closerect=self.frametoup[2]
@@ -516,6 +533,7 @@ class shell:
 		self.curcnt=0
 		self.curpoint=40
 		self.shellstart=1
+		self.vscaletmp=0
 		self.inputrect=pygame.Rect(0, (self.widy-self.yjump-4), self.widx, (self.yjump+4))
 		#print self.shtext[(len(self.shtext)-self.conscope+self.conoffset):(len(self.shtext)-self.conoffset)]
 		#print -self.conscope+self.conoffset
@@ -529,6 +547,7 @@ class shell:
 					for self.line in self.retlist:
 						self.shellwrite(self.line)
 		if self.argument!=None:
+			self.title="Shell - " + self.argument.title
 			self.retlist=self.argument.que([101])
 			if self.retlist!=None:
 				for self.line in self.retlist:
@@ -614,10 +633,41 @@ class shell:
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		self.closerect=self.frametoup[2]
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
+	def resizet(self, xoff, yoff):
+		self.vscaletmp -= yoff
+		
+		if self.vscaletmp<=-self.yjump:
+			self.conscope -= 1
+			if self.conscope<20:
+				self.conscope=20
+			self.vscaletmp += self.yjump
+			self.widy=(self.conscope * self.yjump) + self.yjump + 6
+			self.inputrect=pygame.Rect(0, (self.widy-self.yjump-4), self.widx, (self.yjump+4))
+			#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+			self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+			self.redraw=1
+			#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+			self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+			self.closerect=self.frametoup[2]
+			self.widbox=self.frametoup[0]
+			self.framerect=self.frametoup[1]
+		elif self.vscaletmp>=self.yjump:
+			self.conscope += 1
+			self.vscaletmp -= self.yjump
+			self.widy=(self.conscope * self.yjump) + self.yjump + 6
+			self.inputrect=pygame.Rect(0, (self.widy-self.yjump-4), self.widx, (self.yjump+4))
+			#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+			self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+			self.redraw=1
+			#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+			self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+			self.closerect=self.frametoup[2]
+			self.widbox=self.frametoup[0]
+			self.framerect=self.frametoup[1]
 	#click is given pygame MOUSEBUTTONDOWN events that fall within widbox
 	def click(self, event):
 		if self.partrect.collidepoint(((event.pos[0]-self.x), (event.pos[1]-self.y))) and event.button==1:
@@ -741,6 +791,7 @@ typ_txt=filetyp("txt", fvtext, "text", 5)
 typ_md=filetyp("md", fvtext, "text", 5)
 typ_log=filetyp("log", fvlog, "log", 6)
 typ_dmp=filetyp("dmp", fvdmp, "dmp", 7)
+#also needed by system shell!
 typelist=[typ_png, typ_jpg, typ_jpeg, typ_gif, typ_streg, typ_trom, typ_tasm, typ_txt, typ_md, typ_log, typ_dmp]
 
 

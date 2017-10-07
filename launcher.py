@@ -15,6 +15,8 @@ import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
 import VMSYSTEM.liblaunchutils2 as launchutils
+import VMSYSTEM.libfilevirtual as libfilevirtual
+
 import traceback
 
 print "SBTCVM Desktop v3.0"
@@ -59,6 +61,7 @@ introicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'intro.png'
 DUMMY=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'dummy.png')).convert()
 helpicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'help.png')).convert()
 fvicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fileview.png')).convert()
+filemanicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fileman.png')).convert()
 settingsicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'settings.png')).convert()
 themeicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'theme.png')).convert()
 
@@ -91,17 +94,24 @@ def errorreport(widtitle, area, err):
 
 #"fake" program class passed to shell for system shell.
 systemshellhelp="""SBTCVM Desktop - System Shell.
-help - this text
-shtest - test shell
-tasks - list tasks
-taskman - start task manager
-console - start console"""
+          help : this text
+           dir : list current directory
+            ls : list current directory
+cd [directory] : change to specified directory
+          cd.. : macro for moving up one directory.
+        shtest : test shell
+         tasks : list tasks
+       taskman : start task manager
+       console : start console"""
 class sysshellque:
 	def __init__(self):
 		self.title="SYSTEM"
 		#all system-level class objects have a taskid of -1.
 		self.taskid=-1
 		self.qstart=None
+		self.pathlist=['.']
+		self.pathstr='.'
+		self.title="SYSTEM - " + self.pathstr
 	def QSTART(self):
 		self.qstartX=self.qstart
 		self.qstart=None
@@ -112,7 +122,7 @@ class sysshellque:
 		if signal[0]==101:
 			return
 		if signal[0]==100:
-			self.cmd=(signal[1]).lower()
+			self.cmd=((signal[1]).split(" "))[0].lower()
 			if self.cmd=="taskman":
 				self.qstart="taskman"
 				return ["Launching Taskman"]
@@ -123,6 +133,26 @@ class sysshellque:
 				return ["Shell working."]
 			if self.cmd=="help":
 				return vmui.listline(systemshellhelp)
+			#directory navigation
+			if self.cmd=="dir" or self.cmd=="ls":
+				return libfilevirtual.dirlist(self.pathlist)
+			if self.cmd=="cd..":
+				self.pathlist=libfilevirtual.dir_cdup(self.pathlist)
+				self.pathstr=os.path.join(*self.pathlist)
+				self.title="SYSTEM - " + self.pathstr
+			if self.cmd=="cd":
+				try:
+					self.dirstr=((signal[1]).split(" "))[1]
+				except IndexError:
+					return ["Error: please specify path!"]
+				self.tmplist=libfilevirtual.dir_cd(self.pathlist, self.dirstr)
+				if self.tmplist==None:
+					return ["Error: Path Not Found"]
+				else:
+					self.pathlist=self.tmplist
+				self.pathstr=os.path.join(*self.pathlist)
+				self.title="SYSTEM - " + self.pathstr
+			#task listing
 			if self.cmd=="tasks":
 				self.retlist=[]
 				for self.task in activewids:
@@ -200,7 +230,7 @@ pixelpatt=launchtile("Pixel Patterns", romicon, 2, lref="pixelpat.streg")
 TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=ShellSystem)
-LAUNCHFILE=launchtile("File Manager", DUMMY, 3, lref="fileman")
+LAUNCHFILE=launchtile("File Manager", filemanicon, 3, lref="fileman")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 activewids=[]
