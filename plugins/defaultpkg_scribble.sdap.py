@@ -97,6 +97,7 @@ class PLUGIN_defaultpkg_scribble:
 		self.paintrect.y = (self.y)
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
+		self.newrect=pygame.Rect(self.x + 64, (self.y + self.widy - 38), 30, 30)
 	def resizet(self, xoff, yoff):
 		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
 		self.widx -= xoff

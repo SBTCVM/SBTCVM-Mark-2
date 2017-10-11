@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+	<!--Theme info... formatvers is the FORMAT VERSION NUMBER not the version of the theme..-->
+	<info formatvers="1.0" name="Green-ish" description="A green theme." />
+	<!--Used in UI "huds" and other utility-specific usage.  -->
+	<hud bg="#56665E" text="#FFFFFF" div="#000000" />
+	<!--used in places where a "desk" color is needed. such as calc and settings...-->
+	<desk bg="#287153" text="#FFFFFF" />
+	
+	<console bg="#000000" text="#FFFFFF"/>
+	
+	<titleact bg="#0F5E00" text="#FFFFFF" />
+	<titleinact bg="#B6E5B6" text="#000000" />
+	<!--controls the colors and alpha of tiles  in launcher and fileview (alpha is from  0-255)-->
+	<tile color="#FFFFFF" alpha="200" text="#000000" />
+	<!--Used by popup/dropdown menus and dialogs...-->
+	<diag bg="#56665E" line="#000000" inact="#969696" text="#FFFFFF" />
+	<!--Used in text boxes and textinput-->
+	<textbox bg="#FFFFFF" line="#505050" text="#000000" />
+	<!--Colors used for the claculator's pad and lock indicators (hud and desk are used for the background)-->
+	<calc padbg="#FFFFFF" padtext="#000000" padline="#000000" lockoff="#141414" lockon="#5F9BFF" />
+	<!--Colors used bt SBTCVM's helpviewer-->
+	<help bg="#FFFFFF" text="#000000" link="#0000FF" />
+	<!--colors used by textview and codeview.-->
+	<textview bg="#FFFFFF" text="#000000" textblock="#000096" hig1="#E6E6E6" comment="#960000" gotoref="#E6FFE6" gotolabel="#E6E6FF" />
+	<!--Controlls colors of vmui's UI button generators. the act* and inact* are for switches. ok and cancel are also used for yes/no-->
+	<btn bg1="#FFFFFF" bg2="#B8DEB3" ok="#26b522" cancel="#b50000" actbg="#FFFFFF" acttext="#000000" inactbg="#5B5B5B" inacttext="#A3A3A3" line="#000000" text="#000000"/>
+	<!--colors specific to VM interface-->
+	<vm bg="#456145" statbg="#000000" stattext="#FFFFFF" inst="#00FFFF" data="#00FF7F" curth="#7F00FF" reg1="#FF007F" reg2="#FF7F00" addr="#007FFF" rom="#FF00FF"/>
+	<!--Smooth-scrolling credits screen.-->
+	<credit bg="#FFFFFF" text="#000000"/>
+</theme>

@@ -354,6 +354,121 @@ class taskman:
 		return
 
 
+
+#hudswitch
+class hudswitch:
+	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
+		consolewrite("hudswitcher:")
+		#screensurf is the surface to blit the window to
+		self.screensurf=screensurf
+		#wo is a sorting variable used to sort the windows in a list
+		self.wo=windoworder
+		#title is the name of the window
+		self.title="SYS_HUDSWITCHER"
+		#taskid is set automatically
+		self.taskid=0
+		self.argument=argument
+		self.syswids=self.argument[1]
+		self.widx=(self.screensurf.get_width() - xpos)
+		self.widy=44
+		#x and y are required.
+		self.x=xpos
+		self.y=ypos
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill(framebg)
+		
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		#these rects are needed
+		#frame close button rect
+		self.closerect=pygame.Rect(0, 0, 0, 0)
+		#rect of window content
+		self.widbox=self.frametoup[0]
+		#frame rect
+		self.framerect=self.frametoup[0]
+		self.closetasktx=simplefont.render("Close Task", True, framebg, frametext)
+		self.bringtoptx=simplefont.render("Bring to top", True, framebg, frametext)
+		self.seltask=None
+		self.sigret=None
+		self.btnw=100
+		self.btn=pygame.Surface((100, 20)).convert(self.screensurf)
+	def render(self):
+		self.texty=2
+		self.textx=self.x
+		self.taskdict=dict()
+		#copy and sort raw tasklist given to taskman by host program
+		self.argumentcopy=list(self.argument[0])
+		self.argumentcopy.sort(key=lambda x: x.taskid, reverse=False)
+		#tasklist parser
+		for self.task in self.argumentcopy:
+			if self.task.taskid not in self.syswids and self.textx+self.btnw<(self.screensurf.get_width() - 120):
+				if self.task.wo!=0:
+					self.btn.fill(titleinactbg)
+					self.labtx=simplefont.render(self.task.title, True, titleinacttext, titleinactbg)
+					self.btn.blit(self.labtx, (2, 2))
+					
+				else:
+					self.btn.fill(titlebg)
+					self.labtx=simplefont.render(self.task.title, True, titletext, titlebg)
+					self.btn.blit(self.labtx, (2, 2))
+				self.clickbx=self.screensurf.blit(self.btn, (self.textx, self.texty))
+				pygame.draw.rect(self.screensurf, framediv, self.clickbx, 1)
+				self.textx += (self.btnw + 2)
+				self.taskdict[self.task.taskid]=self.clickbx
+			if self.texty==2 and self.textx+self.btnw>=(self.screensurf.get_width() - 120):
+				self.textx=self.x
+				self.texty += 21
+				
+		#drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		#task commands
+		#self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
+		#self.topx=self.screensurf.blit(self.bringtoptx, (self.x+5+self.closetasktx.get_width(), self.y))
+	def movet(self, xoff, yoff):
+		#self.x -= xoff
+		#self.y -= yoff
+		#self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		#self.closerect=self.frametoup[2]
+		#self.widbox=self.frametoup[0]
+		#self.framerect=self.frametoup[1]
+		return
+	def resizet(self, xoff, yoff):
+		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
+		#self.widy -= yoff
+		self.widx=(self.screensurf.get_width() - self.x)
+		#check the size to ensure it isn't too small (or invalid)
+		
+		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		#self.closerect=self.frametoup[0]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[0]
+	def click(self, event):
+		if self.seltask not in self.taskdict:
+			self.seltask=None
+		#task selector
+		for self.taskc in self.taskdict:
+			if self.taskdict[self.taskc].collidepoint(event.pos)==1:
+				#self.seltask=self.taskc
+				self.sigret=("TASKSWITCH", 0, self.taskc)
+				return
+	def clickup(self, event):
+		return
+	def keydown(self, event):
+		return
+	def keyup(self, event):
+		return
+	def close(self):
+		return
+	def hostquit(self):
+		return
+	def sig(self):
+		return self.sigret
+	def que(self, signal):
+		return
+
+
+
 class launchconsole:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
 		#screensurf is the surface to blit the window to

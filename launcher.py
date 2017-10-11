@@ -233,6 +233,7 @@ LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=Shel
 LAUNCHFILE=launchtile("File Manager", filemanicon, 3, lref="fileman")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
+
 activewids=[]
 
 #category lists
@@ -307,6 +308,18 @@ uptcat=1
 redrawhud=1
 taskidcnt=0
 fullredraw=0
+
+#wids hidden from task switcher bar
+hiddenwids=list()
+uptlist=list()
+
+hudtasksw=launchutils.hudswitch(screensurf, 0, 200, 0, [activewids, hiddenwids])
+hudtasksw.taskid=taskidcnt
+hudtaskswid=taskidcnt
+activewids.extend([hudtasksw])
+hiddenwids.extend([taskidcnt])
+taskidcnt += 1
+
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
 launchutils.consolewrite(">>SBTCVM Desktop v3.0")
@@ -323,6 +336,7 @@ while qflg==0:
 		screeny=resh
 		screenx=resw
 		bg.blit(bgoverlay, ((screenx - 250), (screeny - 250)))
+		hudtasksw.resizet(0, 0)
 		redrawhud=1
 	elif fullredraw==1:
 		fullredraw=0
@@ -467,27 +481,47 @@ while qflg==0:
 						wid.close()
 					activewids.remove(wid)
 					scupdate=1
+				elif widret[0]=="TASKSWITCH" and wid.taskid==hudtaskswid:
+					wid.sigret=None
+					if widret[1]==0:
+						for widq in activewids:
+							widq.wo += 1
+						for widd in activewids:
+							if widd.taskid==widret[2]:
+								#launchutils.consolewrite("Taskswitcher: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
+								widd.wo=0
+								scupdate=1	
 				elif widret[0]=="TASKMAN" and wid.taskid in taskmanlist:
 					#reset taskman's return variable.
 					wid.sigret=None
 					if widret[1]==0:
 						for widd in activewids:
 							if widd.taskid==widret[2]:
-								activewids.remove(widd)
-								widd.close()
-								scupdate=1
-								launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
+								if widret[2] not in hiddenwids:
+									activewids.remove(widd)
+									widd.close()
+									scupdate=1
+									launchutils.consolewrite("Taskman: Close task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\"")
+								else:
+									launchutils.consolewrite("Taskman: ERROR: CANNOT Close task: \"" + widd.title + "\"")
+									launchutils.consolewrite("Of TaskID: \"" + str(widd.taskid) + "\"")
+									launchutils.consolewrite("It is a protected task used by the system!")
 					if widret[1]==1:
 						for widq in activewids:
 							widq.wo += 1
 						for widd in activewids:
 							if widd.taskid==widret[2]:
-								launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
-								widd.wo=0
-								widd.x=40
-								widd.y=80
-								widd.movet(0, 0)
-								scupdate=1
+								if widret[2] not in hiddenwids:
+									launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
+									widd.wo=0
+									widd.x=40
+									widd.y=80
+									widd.movet(0, 0)
+									scupdate=1
+								else:
+									launchutils.consolewrite("Taskman: ERROR: CANNOT bring task: \"" + widd.title + "\"")
+									launchutils.consolewrite("Of TaskID: \"" + str(widd.taskid) + "\" To Front")
+									launchutils.consolewrite("It is a protected task used by the system!")
 				elif widret[0]=="TASKMAN":
 					launchutils.consolewrite(">>WARNING: Unauthorized use of TASKMAN signals was blocked.")
 					launchutils.consolewrite(">>Task name: \"" + wid.title + "\" TaskID: \"" + str(wid.taskid) + "\"")
