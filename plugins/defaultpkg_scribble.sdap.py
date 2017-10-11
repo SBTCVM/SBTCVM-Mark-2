@@ -39,12 +39,13 @@ class PLUGIN_defaultpkg_scribble:
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
 		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
+		self.newrect=pygame.Rect(self.x + 64, (self.y + self.widy - 38), 30, 30)
 		self.penlist=[1, 2, 3, 4, 5, 7, 9, 10, 15, 20, 30]
 		self.penindex=0
 		self.colorr=0
 		self.colorb=0
 		self.colorg=0
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		self.scrib=0
 		#these rects are needed
 		#frame close button rect
@@ -55,6 +56,7 @@ class PLUGIN_defaultpkg_scribble:
 		self.framerect=self.frametoup[1]
 		self.firstclick=1
 		self.redraw=0
+		self.labtx2=simplefont.render("size", True, framebg, frametext)
 	def render(self):
 		self.scribblecolor=(self.colorr, self.colorg, self.colorb)
 		if self.firstclick==2:
@@ -78,12 +80,16 @@ class PLUGIN_defaultpkg_scribble:
 		pygame.draw.rect(self.screensurf, self.scribblecolor, self.color1rect, 0)
 		pygame.draw.rect(self.screensurf, framediv, self.color1rect, 1)
 		pygame.draw.rect(self.screensurf, frametext, self.sizerect, 0)
+		pygame.draw.rect(self.screensurf, frametext, self.newrect, 0)
+		
 		self.labtx=simplefont.render(str(self.penlist[self.penindex]), True, framebg, frametext)
 		self.screensurf.blit(self.labtx, (self.x + 32, (self.y + self.widy - 38)))
+		
+		self.screensurf.blit(self.labtx2, (self.x + 64, (self.y + self.widy - 38)))
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
-		self.frametoup=getframes(self.x, self.y, self.widsurf)
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
 		self.closerect=self.frametoup[2]
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
@@ -91,10 +97,42 @@ class PLUGIN_defaultpkg_scribble:
 		self.paintrect.y = (self.y)
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
+	def resizet(self, xoff, yoff):
+		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
+		self.widx -= xoff
+		self.widy -= yoff
+		#check the size to ensure it isn't too small (or invalid)
+		if self.widx<140:
+			self.widx=140
+		if self.widy<140:
+			self.widy=140
+		self.redraw=1
+		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
+		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
+		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill(framebg)
+		self.newrect=pygame.Rect(self.x + 64, (self.y + self.widy - 38), 30, 30)
+		#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	def newpaintsurf(self):
+		self.paintsurf2=pygame.Surface((self.widx, self.widy-40)).convert(self.widsurf)
+		self.paintsurf2.fill((255, 255, 255))
+		self.paintsurf2.blit(self.paintsurf, (0, 0))
+		self.paintsurf=self.paintsurf2
+		self.paintrect=self.paintsurf.get_rect()
+		self.paintrect.x = (self.x)
+		self.paintrect.y = (self.y)
+		self.redraw=1
 	def click(self, event):
 		if self.firstclick==1:
 			self.firstclick=2
-			
+		elif self.newrect.collidepoint(event.pos) == 1:
+			self.newpaintsurf()
 		elif self.sizerect.collidepoint(event.pos) == 1:
 			if self.penindex==(len(self.penlist) - 1):
 				self.penindex=0

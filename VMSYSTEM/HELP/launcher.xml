@@ -4,12 +4,12 @@
 	<head title="SBTCVM Desktop"/>
 	<title>SBTCVM Desktop</title>
 	<!--the rest can appear-->
-	<text>The </text>
-	<title>Ghost programs</title>
+	<text>SBTCVM's desktop is a powerful, OS-agnostic multi-tasking enviornment.</text>
+	<!--<title>Ghost programs</title>
 	<text>Ghost programs are a phenominon related to the que cross-application signaling method.
 What a Ghost Program is, is a program that closes after starting another program,
 but continues to operate from that program.
 
 A practical use of this is with the shell builtin application, and its special
-que signals, in order to create CLI interfaces on the SBTCVM Desktop.</text>
+que signals, in order to create CLI interfaces on the SBTCVM Desktop.</text>-->
 </main>

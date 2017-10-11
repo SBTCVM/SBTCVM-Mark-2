@@ -4,10 +4,19 @@
 	<head title="SBTCVM Mark 2 VM overview"/>
 	<!--the rest can appear-->
 	<title>Overview</title>
-	<text>SBTCVM's virtual machine is what SBTCVM's utilities and backend
-revolve around. Naturally, it can seem a bit daunting at first.</text>
+	<text>SBTCVM's virtual machine, SBTCVM, is The project's namesake
+and what SBTCVM's utilities and backend revolve around.  Where even the
+computers SBTCVM runs on use binary, SBTCVM uses the rather obscure,
+yet elegant, Balanced Ternary.
+
+Naturally, it can seem a bit daunting at first.
+</text>
+	<title>SBTCVM Mark 2</title>
+	<text>SBTCVM Mark 2 is the first major revision of the architecture since
+the first prototype, and marks the System's move from 6-trit to 9-trit data,
+and from 4-trit to 6-trit instructions, but brings other major changes as well.</text>
 	<title>Controls</title>
-	<text>ESCAPE = pause menu. press while in pause menu to resume VM.
+	<text>ESCAPE = bring up file menu (click outside menu to return to execution.)
 F1 = launch helpviewer
 F2 = step-by-step debug
 F4 = toggle status display update

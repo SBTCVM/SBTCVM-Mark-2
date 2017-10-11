@@ -4,22 +4,58 @@
 	<head title="List Of programs"/>
 	<!--the rest can appear-->
 	<title>List Of programs. A quick reference:</title>
-	<text>
-MK2-CS.py : This is the SBTCVM command shell. The tutorial
-system has a section on this.
-MK2-RUN.py : this is the command shell command "run".
-It starts SBTCVM with much more control than the menu.
-MK2-GFX.py : This is a graphics conversion tool.
-MK2-TOOLS.py : This is a tools launcher/debugging tool.
-MK2-MENU.py : This is SBTCVM's graphical main menu.
-SBTCVM_MK2.py : This is the VM itself. though to run the VM,
-please use MK2-MENU.py and MK2-RUN.py or "run" in
-the command shell.
-SBTCVM-asm2.py : This is SBTCVM's assembler.
+	<text>SBTCVM is distributed as an Application Suite
+for working with Balanced Ternary on binary computers.
+Here is a quick overview of what the various main programs are:
+</text>
+	<title>Command Line programs:</title>
+	<div/>
+	<text>MK2-CS.py : This is the SBTCVM command shell. It provides
+a handy CLI for working with the more technical tools.</text>
+	<div/>
+	<text>MK2-RUN.py : this is the command shell command "run".
+It starts SBTCVM with fine control. This is the same
+utility used by other utilities to launch the VM.</text>
+	<div/>
+	<text>MK2-GFX.py : This is a graphics conversion tool.</text>
+	<div/>
+	<text>MK2-GAT.py : SBTCVM Graphics Adapter Toolkit.
+This provides various helper functions related to SBTGA programming.
+Such as generating framebuffer ranges from binary images (a PNG for example)</text>
+	<div/>
+	<text>MK2-TOOLS.py : This is a tools launcher/debugging tool.
+primarily used for testing, backend debugging,
+and wraps various backend functions as descrete programs.</text>
+	<div/>
+	<text>SBTCVM-asm2.py : This is SBTCVM's assembler.
 currently the best way to write SBTCVM programs.
 Unless of course you like Machine code.
-launcher.py : SBTCVM's central launcher
-fileview.py : SBTCVM's integrated file browser.
-settings.py : SBTCVM's Configuration Utility.
-helpview.py : SBTCVM's Integrated Help system (this program) </text>
+</text>
+	<title>Special</title>
+	<div/>
+	<text>SBTCVM_MK2.py : This is the VM itself. though to run the VM,
+please use MK2-RUN.py or "run" in
+the command shell.</text>
+	<lnk label="VM Overview">vmhelp.xml</lnk>
+	<title>GUI programs.</title>
+	<div/>
+	<text>launcher.py : SBTCVM's Desktop multitasking enviornment and launcher.</text>
+	<lnk label="SBTCVM Desktop">launcher.xml</lnk>
+	<div/>
+	<text>calc.py : A graphical Balanced Ternary Calculator. Complete with simultanious
+Decimal and Balanced ternary Representation, input in both base numbers, and
+automatic conversion among other features.</text>
+	<lnk label="SBTCVM Calculator">calc.xml</lnk>
+	<div/>
+	<text>fileview2.py : SBTCVM's integrated file browser.</text>
+	<lnk label="Fileview">fileview.xml</lnk>
+	<div/>
+	<text>settings.py : SBTCVM's Main Configuration Utility.</text>
+	<lnk label="Settings">settings.xml</lnk>
+	<div/>
+	<text>theme.py : SBTCVM's Theme Configuration Utility.</text>
+	<lnk label="Theme settings">theme.xml</lnk>
+	<div/>
+	<text>helpview.py : SBTCVM's Integrated Help system (this program) </text>
+	<lnk label="Help on Help">helponhelp.xml</lnk>
 </main>
