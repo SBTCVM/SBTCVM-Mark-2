@@ -272,6 +272,8 @@ class taskman:
 		self.bringtoptx=simplefont.render("Bring to top", True, framebg, frametext)
 		self.seltask=None
 		self.sigret=None
+		
+		self.fullupt=1
 	def render(self):
 		self.texty=20
 		self.textx=0
@@ -295,6 +297,11 @@ class taskman:
 		#task commands
 		self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
 		self.topx=self.screensurf.blit(self.bringtoptx, (self.x+5+self.closetasktx.get_width(), self.y))
+		if self.fullupt==1:
+			self.fullupt=0
+			return
+		else:
+			return [pygame.Rect(self.x, self.y, self.widx, self.texty + 18)]
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
@@ -358,7 +365,7 @@ class taskman:
 #hudswitch
 class hudswitch:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
-		consolewrite("hudswitcher:")
+		consolewrite("hudswitcher: running.")
 		#screensurf is the surface to blit the window to
 		self.screensurf=screensurf
 		#wo is a sorting variable used to sort the windows in a list
@@ -395,6 +402,7 @@ class hudswitch:
 		self.texty=2
 		self.textx=self.x
 		self.taskdict=dict()
+		self.rectlist=list()
 		#copy and sort raw tasklist given to taskman by host program
 		self.argumentcopy=list(self.argument[0])
 		self.argumentcopy.sort(key=lambda x: x.taskid, reverse=False)
@@ -414,10 +422,11 @@ class hudswitch:
 				pygame.draw.rect(self.screensurf, framediv, self.clickbx, 1)
 				self.textx += (self.btnw + 2)
 				self.taskdict[self.task.taskid]=self.clickbx
+				self.rectlist.extend([self.clickbx])
 			if self.texty==2 and self.textx+self.btnw>=(self.screensurf.get_width() - 120):
 				self.textx=self.x
 				self.texty += 21
-				
+		return self.rectlist
 		#drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		#task commands
 		#self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
@@ -451,6 +460,14 @@ class hudswitch:
 			if self.taskdict[self.taskc].collidepoint(event.pos)==1:
 				#self.seltask=self.taskc
 				self.sigret=("TASKSWITCH", 0, self.taskc)
+				return
+		#change to highest wo task (other than self) if none of the buttons were clicked.
+		self.argumentcopy2=list(self.argument[0])
+		self.argumentcopy2.sort(key=lambda x: x.wo, reverse=False)
+		for self.taskc in self.argumentcopy2:
+			if self.taskc.wo>=0 and self.taskid!=self.taskc.taskid:
+				self.sigret=("TASKSWITCH", 0, self.taskc.taskid)
+				#print "BEEP"
 				return
 	def clickup(self, event):
 		return
@@ -535,7 +552,7 @@ class launchconsole:
 		self.partrect=pygame.Rect((self.widx-19), (0 + (3 * self.scrloff)), 18, (3 * self.scrlb))
 		#rendering
 		if self.consbak!=constext:
-			self.constbak=list(constext)
+			self.consbak=list(constext)
 			self.texty=0
 			self.widsurf.fill(framebg)
 			for self.conline in constext[(len(constext)-(self.conscope+self.conoffset)):(len(constext)-self.conoffset)]:
@@ -654,17 +671,18 @@ class shell:
 		#print -self.conscope+self.conoffset
 		#print -self.conoffset
 	def render(self):
+		
 		if self.shellstart==1:
 			self.shellstart=0
 			if self.argument!=None:
 				self.retlist=self.argument.que([102])
-				if self.retlist!=None:
+				if self.retlist!=None and self.retlist!=list():
 					for self.line in self.retlist:
 						self.shellwrite(self.line)
 		if self.argument!=None:
 			self.title="Shell - " + self.argument.title
 			self.retlist=self.argument.que([101])
-			if self.retlist!=None:
+			if self.retlist!=None and self.retlist!=list():
 				for self.line in self.retlist:
 					self.shellwrite(self.line)
 		#scrollbar arithetic
@@ -710,8 +728,10 @@ class shell:
 		self.fullrect=pygame.Rect((self.widx-20), 0, 20, (self.scrlfull + 1))
 		self.partrect=pygame.Rect((self.widx-19), (0 + (3 * self.scrloff)), 18, (3 * self.scrlb))
 		#rendering
+		#print self.redraw
 		if self.consbak!=self.shtext:
-			self.constbak=list(self.shtext)
+			#print "ARG"
+			self.consbak=list(self.shtext)
 			self.texty=0
 			self.redraw=3
 			self.widsurf.fill(shellbg)
@@ -737,13 +757,20 @@ class shell:
 			pygame.draw.rect(self.widsurf, shellbg, self.inputrect, 0)
 			pygame.draw.rect(self.widsurf, shelltext, self.inputrect, 1)
 			self.widsurf.blit(self.labtx, ((self.inputrect.x + 2), (self.inputrect.y + 2)))
-		
+			
 		if self.redraw==3:
-			self.redraw=0
+			self.redraw=-1
 			pygame.draw.rect(self.widsurf, frametext, self.fullrect, 0)
 			pygame.draw.rect(self.widsurf, framediv, self.fullrect, 1)
 			pygame.draw.rect(self.widsurf, framebg, self.partrect, 0)
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		#print self.redraw
+		if self.redraw==0:
+			#print "u"
+			#return empty list on no updates.
+			return list()
+		if self.redraw<0:
+			self.redraw=0
 		
 	def movet(self, xoff, yoff):
 		self.x -= xoff

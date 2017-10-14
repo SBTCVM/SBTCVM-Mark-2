@@ -328,6 +328,10 @@ while qflg==0:
 	if resizeflg==1:
 		resizeflg=2
 	elif resizeflg==2:
+		if resw<300:
+			resw=300
+		if resh<300:
+			resh=300
 		screensurf=pygame.display.set_mode((resw, resh), pygame.RESIZABLE)
 		bg=(libthemeconf.bgmake(None)).convert()
 		bg=pygame.transform.scale(bg, (resw, resh))
@@ -395,8 +399,12 @@ while qflg==0:
 		activewids.sort(key=lambda x: x.wo, reverse=True)
 		for wid in activewids:
 			try:
-				wid.render()
-				uptlist.extend([wid.framerect])
+				#render should return either none or a list of updated areas.
+				widrectret=wid.render()
+				if widrectret==None:
+					uptlist.extend([wid.framerect])
+				else:
+					uptlist=uptlist + widrectret
 			except Exception as err:
 				errorreport(wid.title, "Render", err)
 				activewids.remove(wid)
@@ -635,6 +643,7 @@ while qflg==0:
 							
 						if wid.wo!=0:
 							wid.wo=0
+							scupdate=1
 							activewids.remove(wid)
 							for widd in activewids:
 								widd.wo += 1
@@ -652,6 +661,7 @@ while qflg==0:
 									widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
 									widx.taskid=taskidcnt
 									taskidcnt +=1
+									scupdate=1
 									#ctivewids=activewids + [widx]
 									for wid in activewids:
 										wid.wo += 1
@@ -665,6 +675,7 @@ while qflg==0:
 									widx=widis(screensurf, 0, 40, 80, argument=None)
 									widx.taskid=taskidcnt
 									taskidcnt +=1
+									scupdate=1
 									#ctivewids=activewids + [widx]
 									for wid in activewids:
 										wid.wo += 1
@@ -681,6 +692,7 @@ while qflg==0:
 									#ctivewids=activewids + [widx]
 									for wid in activewids:
 										wid.wo += 1
+									scupdate=1
 									activewids.extend([widx])
 									#activewids.sort(key=lambda x: x.wo, reverse=True)
 								except Exception as err:
@@ -721,6 +733,7 @@ while qflg==0:
 							widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
 							widx.taskid=taskidcnt
 							taskidcnt +=1
+							scupdate=1
 							for wid in activewids:
 								wid.wo += 1
 							activewids.extend([widx])
@@ -732,6 +745,7 @@ while qflg==0:
 							widx=launchutils.launchconsole(screensurf, 0, 40, 80)
 							widx.taskid=taskidcnt
 							taskidcnt +=1
+							scupdate=1
 							for wid in activewids:
 								wid.wo += 1
 							activewids.extend([widx])
@@ -742,6 +756,7 @@ while qflg==0:
 							widx=launchutils.shell(screensurf, 0, 40, 80, argument=ShellSystem)
 							widx.taskid=taskidcnt
 							taskidcnt +=1
+							scupdate=1
 							for wid in activewids:
 								wid.wo += 1
 							activewids.extend([widx])
