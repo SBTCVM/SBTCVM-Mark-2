@@ -17,9 +17,6 @@ pygame.font.init()
 #even the VM pause menu is in here.
 
 
-
-
-
 #fonts
 simplefont = pygame.font.SysFont(None, 16)
 simplefontA = pygame.font.SysFont(None, 20)
@@ -31,38 +28,6 @@ simplefontC = pygame.font.SysFont(None, 32)
 smldispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 lgdispfont = pygame.font.Font(os.path.join("VMSYSTEM", "SBTCVMreadout.ttf"), 16)
 
-
-#these use the same squarewave generator as SBTCVM's buzzer.
-#sound A
-#menusound1=pygame.mixer.Sound(libSBTCVM.autosquare(300, 0.1))
-#menu select sound
-#menusound2=pygame.mixer.Sound(libSBTCVM.autosquare(250, 0.1))
-#clock widget second sound
-#menusound3=pygame.mixer.Sound(libSBTCVM.autosquare(280, 0.1))
-
-#PAUSE MENU DATA
-#-----
-#Pause menu
-#visual menu item names:
-paumenulst=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM", "Quit Now"]
-paumenulstKIOSK=["Continue VM", "VM Help", "About", "Extras Menu", "Stop VM", "Quit Now"]
-#selection codes:
-paumenucode=["CONTINUE", "QHELP", "CREDIT", "EXTRAS", "VMSTOP", "QUICKQUIT"]
-paumenudesc=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extra stuff", "Stop VM", "Stop VM without wait at end"]
-paumenudescKIOSK=["Continue running VM", "Get Help On SBTCVM's VM", "About SBTCVM Mark 2", "Extras", "Stop VM", "Stop VM without wait at end"]
-#number of menu items:
-paumenucnt=6
-pmenudesc="Pause Menu"
-#-----
-#pause extras menu
-expaumenulst=["Pause Menu", "clock"]
-#selection codes:
-expaumenucode=["PAUSE", "CLOCK"]
-expaumenudesc=["Return To Pause Menu", "A balanced Ternary clock"]
-#number of menu items:
-expaumenucnt=2
-expmenudesc="Pause Menu | extras"
-#-----
 
 def makemenubtn(label, width=40, icon=None):
 	height=40
@@ -175,7 +140,6 @@ def toolsscreen(mode):
 	if mode==1:
 		screensurf.blit(vmbg, (0, 0))
 		screensurf.blit(vmtoolsbg, (0, 0))
-		dummyreadouts()
 		menulabel=simplefontC.render("Tools and Utilities", True, (0, 0, 0), (255, 255, 255))
 		screensurf.blit(menulabel, (158, 4))
 	if mode==2:
@@ -184,38 +148,16 @@ def toolsscreen(mode):
 		screensurf.blit(menulabel, (158, 4))
 	if mode==3:
 		screensurf.blit(vmbg, (0, 0))
-		dummyreadouts()
 	if mode==4:
 		screensurf.blit(vmbg, (0, 0))
 		screensurf.blit(vmlaunchbg, (0, 0))
-		dummyreadouts()
 		menulabel=simplefontC.render("Credits", True, (0, 0, 0), (255, 255, 255))
 		screensurf.blit(menulabel, (158, 4))
 	if mode==5:
 		screensurf.blit(vmbg, (0, 0))
 		screensurf.blit(vmlaunchbg, (0, 0))
-		dummyreadouts()
 		menulabel=simplefontC.render("Help", True, (0, 0, 0), (255, 255, 255))
 		screensurf.blit(menulabel, (158, 4))
-
-#used to show placeholder readouts.
-def dummyreadouts():
-	#screensurf.blit(CPULEDSTANDBY, (749, 505))
-	#screensurf.blit(LEDGREENOFF, (750, 512))
-	curROMtex=lgdispfont.render("A", True, (255, 0, 255), (0, 0, 0)).convert()
-	screensurf.blit(curROMtex, (126, 522))
-	ROMadrtex=lgdispfont.render("---------", True, (0, 127, 255), (0, 0, 0)).convert()
-	screensurf.blit(ROMadrtex, (425, 564))
-	reg2text=lgdispfont.render("000000000", True, (255, 127, 0), (0, 0, 0)).convert()
-	screensurf.blit(reg2text, (219, 564))
-	reg1text=lgdispfont.render("000000000", True, (255, 0, 127), (0, 0, 0)).convert()
-	screensurf.blit(reg1text, (219, 521))
-	datatext=smldispfont.render("000000000", True, (0, 255, 127), (0, 0, 0)).convert()
-	screensurf.blit(datatext, (8, 566))
-	insttext=smldispfont.render("000000", True, (0, 255, 255), (0, 0, 0)).convert()
-	screensurf.blit(insttext, (8, 522))
-	curthrtex=lgdispfont.render("--", True, (127, 0, 255), (0, 0, 0)).convert()
-	screensurf.blit(curthrtex, (170, 522))
 
 #SBTCVM pause menu.
 #called upon by SBTCVM_MK2.py when Escape is pressed.
@@ -254,210 +196,6 @@ See README.md for more information."""
 			return("s")
 		if menuret=="QUIT":
 			return("qs")
-	
-
-def pausemenuold():
-	global screensurf
-	print "------------------"
-	print "SBTCVM pause menu."
-	#print "------------------"
-	#print KIOSKMODE
-	curmenulst=paumenulst
-	curmenucnt=paumenucnt
-	curmenucode=paumenucode
-	menubtnrect=pygame.Rect(3, 3, 40, 40)
-	if KIOSKMODE==1:
-		curmenudesc=paumenudescKIOSK
-		curmenulst=paumenulstKIOSK
-	else:
-		curmenudesc=paumenudesc
-		curmenulst=paumenulst
-	menudesc=pmenudesc
-	scbak=screensurf.copy()
-	#vmlaunchbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-LAUNCH.png')).convert()
-	screensurf.blit(vmlaunchbg, (0, 0))
-	qflg=0
-	menuhighnum=1
-	ixreturn=0
-	retfromexec=0
-	while qflg!=1:
-		#if retfromexec==1:
-		#	print "----------------"
-		#	print "return from VM execution."
-		#	print "----------------"
-		#	retfromexec=0
-		#	pygame.display.set_caption("SBTCVM Mark 2 | Menu", "SBTCVM Mark 2 | Menu")
-		#starting point for menu
-		texhigcnt=2
-		#separation between each line of text's origin
-		texhigjump=22
-		#menu line count variable. should be set to 1 here.
-		indlcnt=1
-		screensurf.blit(vmlaunchbg, (0, 0))
-		datdict={}
-		for indx in curmenulst:
-			if indlcnt==menuhighnum:
-				textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
-			else:
-				textit=simplefontB.render(indx, True, (0, 0, 0))
-			gx=screensurf.blit(textit, (650, texhigcnt))
-			datdict[indlcnt]=gx
-			texhigcnt += texhigjump
-			indlcnt += 1
-		menulabel=simplefontC.render(menudesc, True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(menulabel, (158, 4))
-		itemlabel=simplefontB.render(curmenudesc[(menuhighnum - 1)], True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(itemlabel, (170, 34))
-		pygame.display.update()
-		pygame.event.pump()
-		pygame.event.clear()
-		#reads keyboard controlls, moves cursers when instructed by up/down arrow keys.
-		#sets ixreturn to 1 when return is pressed.
-		evhappenflg=0
-		while evhappenflg==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				texhigcnt=2
-				#separation between each line of text's origin
-				texhigjump=22
-				#menu line count variable. should be set to 1 here.
-				indlcnt=1
-				pos = pygame.mouse.get_pos()
-				for indx in curmenulst:
-					if indlcnt==menuhighnum:
-						if datdict[indlcnt].collidepoint(pos)==1:
-							textit=simplefontB.render(indx, True, (0, 0, 150), (255, 255, 255))
-							gx=screensurf.blit(textit, (650, texhigcnt))
-						else:
-							textit=simplefontB.render(indx, True, (0, 0, 0), (255, 255, 255))
-							gx=screensurf.blit(textit, (650, texhigcnt))
-					else:
-						
-						if datdict[indlcnt].collidepoint(pos)==1:
-							textit=simplefontB.render(indx, True, (0, 0, 150), (129, 173, 219))
-							gx=screensurf.blit(textit, (650, texhigcnt))
-						else:
-							textit=simplefontB.render(indx, True, (0, 0, 0), (129, 173, 219))
-							gx=screensurf.blit(textit, (650, texhigcnt))
-					pygame.display.update([gx])
-					texhigcnt += texhigjump
-					indlcnt += 1
-				if event.type == KEYDOWN and event.key == K_UP:
-					menuhighnum -= 1
-					evhappenflg=1
-					#menusound2.play()
-					break
-				if event.type == KEYDOWN and event.key == K_RIGHT:
-					menuhighnum += 1
-					evhappenflg=1
-					#menusound2.play()
-					break
-				if event.type == KEYDOWN and event.key == K_DOWN:
-					menuhighnum += 1
-					evhappenflg=1
-				#	menusound2.play()
-					break
-				if event.type == KEYDOWN and event.key == K_LEFT:
-					menuhighnum -= 1
-					evhappenflg=1
-					#menusound2.play()
-					break
-				if event.type == KEYDOWN and event.key == K_RETURN:
-					ixreturn=1
-					evhappenflg=1
-					#menusound2.play()
-					break
-				if event.type == MOUSEBUTTONDOWN:
-					mousexcnt=1
-					if menubtnrect.collidepoint(event.pos)==1 and event.button==1:
-						screensurf.blit(scbak, (0, 0))
-						pygame.display.update()
-						#print "------------------"
-						print "continue VM. "
-						print "------------------"
-						return("c")
-					for fxd in curmenulst:
-						if datdict[mousexcnt].collidepoint(event.pos)==1 and event.button==1:
-							menuhighnum=mousexcnt
-							ixreturn=1
-							evhappenflg=1
-							break
-						mousexcnt += 1
-					break
-				if event.type == KEYDOWN and event.key == K_ESCAPE:
-					screensurf.blit(scbak, (0, 0))
-					pygame.display.update()
-					#print "------------------"
-					print "continue VM. "
-					print "------------------"
-					return("c")
-				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-PAUSE.png')))
-					break
-				if event.type == QUIT:
-					sys.exit()
-					evhappenflg=1
-					break
-		#makes menus "roll over"
-		if menuhighnum<=0:
-			menuhighnum=curmenucnt
-		elif menuhighnum>curmenucnt:
-			menuhighnum=1
-		#print menuhighnum
-		#when a menu item is chosen (return) this section determines the action to preform based on the menuitem code for that menu item
-		if ixreturn==1:
-			ixreturn=0
-			if curmenucode[menuhighnum - 1]=="QHELP":
-				subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
-			if curmenucode[menuhighnum - 1]=="CREDIT":
-				creditsscroll()
-			if curmenucode[menuhighnum - 1]=="CLOCK":
-				#BTCLOCKDATE()
-				import VMSYSTEM.libbttools as bttool
-				bttool.initui(screensurf, 1)
-				bttool.BTCLOCKDATE()
-			if curmenucode[menuhighnum - 1]=="CONTINUE":
-				screensurf.blit(scbak, (0, 0))
-				pygame.display.update()
-				#print "------------------"
-				print "continue VM. "
-				print "------------------"
-				return("c")
-			if curmenucode[menuhighnum - 1]=="VMSTOP":
-				if KIOSKMODE==0:
-					screensurf.blit(scbak, (0, 0))
-					pygame.display.update()
-				#print "------------------"
-				print "stop VM. "
-				print "------------------"
-				return("s")
-			if curmenucode[menuhighnum - 1]=="QUICKQUIT":
-				if KIOSKMODE==0:
-					screensurf.blit(scbak, (0, 0))
-					pygame.display.update()
-				#print "------------------"
-				print "stop VM. "
-				print "------------------"
-				return("qs")
-			if curmenucode[menuhighnum - 1]=="EXTRAS":
-				menuhighnum=1
-				curmenulst=expaumenulst
-				curmenucnt=expaumenucnt
-				curmenucode=expaumenucode
-				curmenudesc=expaumenudesc
-				menudesc=expmenudesc
-			elif curmenucode[menuhighnum - 1]=="PAUSE":
-				menuhighnum=1
-				curmenulst=paumenulst
-				curmenucnt=paumenucnt
-				curmenucode=paumenucode
-				if KIOSKMODE==1:
-					curmenudesc=paumenudescKIOSK
-					curmenulst=paumenulstKIOSK
-				else:
-					curmenudesc=paumenudesc
-					curmenulst=paumenulst
-				menudesc=pmenudesc
 			
 			
 
@@ -511,66 +249,7 @@ def initui(scsurf, kiomode):
 	
 
 
-#used by pausemenu function.
-def textsciter_internal(flookup):
-	abt = open(os.path.join("VMSYSTEM", flookup))
-	pixcnt1=96
-	pixjmp=16
-	
-	for fnx in abt:
-		fnx=fnx.replace('\n', '')
-		abttextB=simplefontA.render(fnx, True, (255, 255, 255))
-		screensurf.blit(abttextB, (9, pixcnt1))
-		pixcnt1 += pixjmp
-	pixcnt1 += pixjmp
-	fnx="Press any key to continue"
-	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
-	screensurf.blit(abttextB, (9, pixcnt1))
-	pygame.display.update()
-	evhappenflg2=0
-	while evhappenflg2==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-PAUSE.png')))
-					break
-				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
-					evhappenflg2=1
-					#menusound2.play()
-					break
 
-#basic context help screen. called by programs through MK2-TOOLS.py
-def helpscreen(flookup):
-	abt = open(flookup)
-	pixcnt1=70
-	pixjmp=16
-	
-	for fnx in abt:
-		fnx=fnx.replace('\n', '')
-		abttextB=simplefontB.render(fnx, True, (255, 255, 255))
-		screensurf.blit(abttextB, (9, pixcnt1))
-		pixcnt1 += pixjmp
-	pixcnt1 += pixjmp
-	fnx="Press enter or click to close"
-	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
-	screensurf.blit(abttextB, (9, pixcnt1))
-	pygame.display.update()
-	evhappenflg2=0
-	while evhappenflg2==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-helpview.png')))
-					break
-				elif event.type == KEYDOWN and event.key == K_RETURN:
-					evhappenflg2=1
-					break
-				elif event.type == MOUSEBUTTONDOWN and event.button==1:
-					evhappenflg2=1
-					break
-				elif event.type == QUIT:
-					evhappenflg2=1
-					break
 
 #textinput can be used to input text graphically.
 #use the acceptchars argument to specify a string of permitted chars. ex "abc" would only allow a, b, and c
@@ -973,67 +652,6 @@ def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 						pygame.event.post(event)
 					return None
 
-
-def textsciter(flookup):
-	global screensurf
-	scbak=screensurf.copy()
-	screensurf.blit(vmlaunchbg, (0, 0))
-	abt = open(os.path.join("VMSYSTEM", flookup))
-	pixcnt1=96
-	pixjmp=16
-	
-	for fnx in abt:
-		fnx=fnx.replace('\n', '')
-		abttextB=simplefontA.render(fnx, True, (255, 255, 255), (0, 0, 127))
-		screensurf.blit(abttextB, (9, pixcnt1))
-		pixcnt1 += pixjmp
-	pixcnt1 += pixjmp
-	fnx="Press any key to continue"
-	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
-	screensurf.blit(abttextB, (9, pixcnt1))
-	pygame.display.update()
-	evhappenflg2=0
-	while evhappenflg2==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-OTHER.png')))
-					break
-				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
-					evhappenflg2=1
-					#menusound2.play()
-					break
-	screensurf.blit(scbak, (0, 0))
-	pygame.display.update()
-
-def textsciter_main(flookup):
-	abt = open(os.path.join("VMSYSTEM", flookup))
-	pixcnt1=96
-	pixjmp=16
-	
-	for fnx in abt:
-		fnx=fnx.replace('\n', '')
-		abttextB=simplefontA.render(fnx, True, (0, 0, 0))
-		screensurf.blit(abttextB, (9, pixcnt1))
-		pixcnt1 += pixjmp
-	pixcnt1 += pixjmp
-	fnx="Press any key to continue"
-	abttextB=simplefontB.render(fnx, True, (0, 0, 0), (255, 255, 255))
-	screensurf.blit(abttextB, (9, pixcnt1))
-	pygame.display.update()
-	evhappenflg2=0
-	while evhappenflg2==0:
-			time.sleep(.1)
-			for event in pygame.event.get():
-				if event.type == KEYDOWN and event.key == K_F8:
-					pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-MENU.png')))
-					break
-				elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
-					evhappenflg2=1
-					#menusound2.play()
-					break
-
-#
 
 
 #text viewer

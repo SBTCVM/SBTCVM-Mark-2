@@ -134,7 +134,6 @@ sysmenux=vmbg.blit(sysmenuicon, (sysmx, sysmy))
 screensurf.blit(vmbg, (0, 0))
 #init in non-kiosk mode for now, SBTCVM will re-init once it knows the kioskmode state.
 vmui.initui(screensurf, 0)
-#vmui.dummyreadouts()
 pygame.display.update()
 libSBTCVM.glyphoptim(screensurf)
 pygame.display.set_caption("SBTCVM Mark 2", "SBTCVM Mark 2")
