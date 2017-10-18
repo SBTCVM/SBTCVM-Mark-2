@@ -7,6 +7,7 @@ from pygame.locals import *
 import libSBTCVM
 import libbaltcalc
 import libvmconf
+import libthemeconf
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
 pygame.font.init()
 pygame.mixer.init(frequency=mixrate , size=-16)
@@ -60,7 +61,7 @@ def BTCLOCKDATE():
 	minY=227
 	secY=227
 	ttextY=204
-	helplab = simplefontB.render(('''Red=-, violet=0 blue=+'''), True, (255, 255, 255))
+	helplab = simplefontB.render(('''Red=-, violet=0 blue=+'''), True, libthemeconf.desktext, libthemeconf.deskcolor)
 	screensurf.blit(helplab, (3, 120))
 	prevtime=None
 	#quick fix to solve drawing glitches
@@ -90,7 +91,7 @@ def BTCLOCKDATE():
 		minbt=libSBTCVM.trunkto5(libbaltcalc.DECTOBT(mindec))
 		secbt=libSBTCVM.trunkto5(libbaltcalc.DECTOBT(secdec))
 		hourX=3
-		hourtext = simplefont.render(("Hr. " + str(hourdec) + ""), True, (255, 255, 255), (0, 0, 0))
+		hourtext = simplefont.render(("Hr. " + str(hourdec) + ""), True, libthemeconf.desktext, libthemeconf.deskcolor)
 		screensurf.blit(hourtext, (hourX, ttextY))
 		for fxg in hourbt:
 			if fxg=="0":
@@ -101,7 +102,7 @@ def BTCLOCKDATE():
 				screensurf.blit(NEGlamp, (hourX, hourY))
 			hourX += 9
 		minX=(hourX + 9)
-		mintext = simplefont.render(("Min. " + str(mindec) + ""), True, (255, 255, 255), (0, 0, 0))
+		mintext = simplefont.render(("Min. " + str(mindec) + ""), True, libthemeconf.desktext, libthemeconf.deskcolor)
 		screensurf.blit(mintext, (minX, ttextY))
 		for fxg in minbt:
 			if fxg=="0":
@@ -112,7 +113,7 @@ def BTCLOCKDATE():
 				screensurf.blit(NEGlamp, (minX, minY))
 			minX += 9
 		secX=(minX + 9)
-		sectext = simplefont.render(("Sec. " + str(secdec) + ""), True, (255, 255, 255), (0, 0, 0))
+		sectext = simplefont.render(("Sec. " + str(secdec) + ""), True, libthemeconf.desktext, libthemeconf.deskcolor)
 		screensurf.blit(sectext, (secX, ttextY))
 		for fxg in secbt:
 			if fxg=="0":
