@@ -32,14 +32,19 @@ elif cmd=="-l" or cmd=="--list":
 	print '''List of tools:
 [Toolname]  |  [Tool description]
 -----------------------------------------------
-about       :  show about screen shown in menus
 btclock     :  show a balanced ternary clock
 pause       :  test VM pause menu
+uicredits   :  scrolling credits window called by VM's file menu.
+yndiag      :  test yndiag function
+okdiag      :  test okdiag function
+menu        :  test graphical menu function.
+textinput   :  test text input function.
+
 imgview [image] : fileview's image viewer
 textview [file] : fileview's text viewer
 codeview [file] : fileview's code viewer
-helpview [file in HELP dir] : SBTCVM's (F1) context help viewer.
-namecrunch [string] : test namecrunch function'''
+namecrunch [string] : test namecrunch function
+timecodetest : test ternary Timecode encode/decode'''
 
 elif cmd=="-a" or cmd=="--about":
 	print '''#SBTCVM Mark 2 tool launcher
@@ -81,7 +86,7 @@ elif cmd=="namecrunch" or cmd=="timecodetest":
 			print BG
 			BQ=libSBTCVM.timedecode(BG)
 			print BQ
-elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="helpview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
+elif cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -94,8 +99,6 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 		pygame.display.set_caption("textview", "textview")
 	elif cmd=="codeview":
 		pygame.display.set_caption("codeview", "codeview")
-	elif cmd=="helpview":
-		pygame.display.set_caption("SBTCVM help", "SBTCVM help")
 	else:
 		pygame.display.set_caption("SBTCVM Mark 2 | Tools", "SBTCVM Mark 2 | Tools")
 	GLOBKIOSK=1
@@ -114,8 +117,6 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#screen fonts
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((600, 370))
-	elif cmd=="helpview":
-		screensurf=pygame.display.set_mode((648, 486))
 	elif cmd=="imgview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	elif cmd=="textview" or cmd=="codeview":
@@ -126,9 +127,6 @@ elif cmd=="about" or cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd==
 	#init VMUI library.
 	vmui.initui(screensurf, 1)
 	
-	if cmd=="about":
-		vmui.toolsscreen(1)
-		vmui.creditsscroll()
 	#uicredits is the special creditsscroll wrapper mode used by launcher.py
 	if cmd=="uicredits":
 		vmui.toolsscreen(4)
@@ -188,12 +186,6 @@ a function to create Yes/No dialogs.'''
 		menuret2=vmui.menuset(menulist2, 20, 210, reclick=0)
 		print "menu2 has returned:"
 		print menuret2
-	if cmd=="helpview":
-		vmui.toolsscreen(5)
-		try:
-			vmui.helpscreen(os.path.join("VMSYSTEM", "HELP", sys.argv[2]))
-		except IndexError:
-			print "MUST SPECIFY HELP FILENAME."
 	if cmd=="imgview":
 		vmui.toolsscreen(1)
 		try:

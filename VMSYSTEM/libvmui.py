@@ -137,28 +137,11 @@ def makeswitchbtn(toplabel, bottomlabel):
 	return (btna, btnb)
 #used by tools launcher to draw backgrounds as needed.
 def toolsscreen(mode):
-	if mode==1:
-		screensurf.blit(vmbg, (0, 0))
-		screensurf.blit(vmtoolsbg, (0, 0))
-		menulabel=simplefontC.render("Tools and Utilities", True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(menulabel, (158, 4))
-	if mode==2:
-		screensurf.blit(vmtoolsbgfull, (0, 0))
-		menulabel=simplefontC.render("Tools and Utilities", True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(menulabel, (158, 4))
-	if mode==3:
-		screensurf.blit(vmbg, (0, 0))
-	if mode==4:
-		screensurf.blit(vmbg, (0, 0))
-		screensurf.blit(vmlaunchbg, (0, 0))
-		menulabel=simplefontC.render("Credits", True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(menulabel, (158, 4))
-	if mode==5:
-		screensurf.blit(vmbg, (0, 0))
-		screensurf.blit(vmlaunchbg, (0, 0))
-		menulabel=simplefontC.render("Help", True, (0, 0, 0), (255, 255, 255))
-		screensurf.blit(menulabel, (158, 4))
-
+	screensurf.fill(libthemeconf.deskcolor)
+	hudrect=pygame.Rect(0, 0, screensurf.get_width(), 44)
+	pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+	screensurf.blit(sbtcvmbadge, ((screensurf.get_width()-120), 0))
+	
 #SBTCVM pause menu.
 #called upon by SBTCVM_MK2.py when Escape is pressed.
 def pausemenu(posthalt=0):
@@ -204,44 +187,17 @@ See README.md for more information."""
 def initui(scsurf, kiomode):
 	global screensurf
 	screensurf=scsurf
-	global vmlaunchbg
 	global KIOSKMODE
-	#global GNDlamp
-	#global POSlamp
-	#global NEGlamp
-	global CPULEDSTANDBY
-	global LEDGREENOFF
 	global GFXLOGO
-	global CREDITHBAR
-	global vmtoolsbg
-	global vmtoolsbgfull
-	global vmbg
 	global sbtccat
 	global diagbtnok
 	global diagbtnyes
 	global diagbtnno
+	global sbtcvmbadge
 	KIOSKMODE=kiomode
-	vmtoolsbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS.png')).convert_alpha()
-	vmtoolsbgfull=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-TOOLS_FULL.png')).convert()
-	vmbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VMBG.png')).convert()
-	vmlaunchbg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'VM-PAUSEMASK.png')).convert_alpha()
-	#GNDlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampGND.png')).convert()
-	#POSlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampPOS.png')).convert()
-	#NEGlamp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), '3lampNEG.png')).convert()
 	GFXLOGO=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'GFXLOGO-CAT.png')).convert()
-	CREDITHBAR=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'CREDITHBAR.png')).convert()
-	#indicator lamps
-	#GREEN
-	#LEDGREENON=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN.png')).convert()
-	LEDGREENOFF=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-GREEN-OFF.png')).convert()
-	#CPU
-	#CPULEDACT=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-BLUE.png')).convert()
-	CPULEDSTANDBY=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'LAMP-ORANGE.png')).convert()
 	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
-	
-	#diagbtnok=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnok.png')).convert()
-	#diagbtnyes=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnyes.png')).convert()
-	#diagbtnno=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'diagbtnno.png')).convert()
+	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 	diagbtnok=makediagbtn(1, "OK")
 	diagbtnno=makediagbtn(0, "NO")
 	diagbtnyes=makediagbtn(1, "YES")
@@ -669,7 +625,6 @@ def textview(textfile):
 	redraw=0
 	qflg=0
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 	fvfilemenu=makemenubtn("FILE", icon=fmicon)
 	fmhelp=menuitem("Help (F1)", "HELP")
 	fmquit=menuitem("Quit", "QUIT")
@@ -823,7 +778,6 @@ def codeview(textfile):
 	redraw=0
 	qflg=0
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 	fvfilemenu=makemenubtn("FILE", icon=fmicon)
 	fmhelp=menuitem("Help (F1)", "HELP")
 	fmquit=menuitem("Quit", "QUIT")
@@ -1004,7 +958,6 @@ def imgview(imgfile):
 	pygame.key.set_repeat(250, 50)
 	#get size of image
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
-	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 	fvfilemenu=makemenubtn("FILE", icon=fmicon)
 	fmhelp=menuitem("Help (F1)", "HELP")
 	fmquit=menuitem("Quit", "QUIT")
