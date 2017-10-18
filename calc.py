@@ -23,7 +23,7 @@ btnfont = pygame.font.SysFont(None, 21)
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 pygame.display.set_caption(("Ternary Calculator"), ("Ternary Calculator"))
 
-windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'icon.png'))
+windowicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'calc.png'))
 pygame.display.set_icon(windowicon)
 screensurf=pygame.display.set_mode((450, 450))
 
@@ -43,8 +43,8 @@ def makebtn(text, text2=None):
 
 #bg=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'bg.jpg')).convert()
 bg=pygame.Surface((450, 500))
-lockon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockon.png')).convert_alpha()
-lockoff=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockoff.png')).convert_alpha()
+#lockon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockon.png')).convert_alpha()
+#lockoff=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "calc", 'lockoff.png')).convert_alpha()
 lockon=pygame.Surface((60, 60), SRCALPHA)
 lockoff=pygame.Surface((60, 60), SRCALPHA)
 lockrect=pygame.Rect(0, 48, 60, 12)

@@ -47,9 +47,6 @@ vmui.initui(screensurf, 1)
 
 
 fvbadge=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvbadge.png')).convert_alpha()
-exitbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvquit.png')).convert()
-helpbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvhelp.png')).convert()
-newbtn=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvneww.png')).convert()
 fvstreg=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvstreg.png')).convert()
 fvtrom=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvtrom.png')).convert()
 fvdir=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdir.png')).convert()
@@ -61,13 +58,7 @@ fvall=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fva
 fvlog=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvlog.png')).convert()
 fvdmp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdmp.png')).convert()
 fvdummy=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdummy.png')).convert()
-fvrun=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvrun.png')).convert()
-fvview=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvview.png')).convert()
-fvswon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-on.png')).convert_alpha()
-fvswoff=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvsw-off.png')).convert_alpha()
 
-panefilter1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter1.png')).convert()
-panefilter2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'panefilter2.png')).convert()
 panefilter1=vmui.makerotbtn("Pane 1", "Filter")
 panefilter2=vmui.makerotbtn("Pane 2", "Filter")
 #fvfilemenu=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvfilemenu.png')).convert()

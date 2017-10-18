@@ -19,7 +19,7 @@ pygame.display.init()
 pygame.font.init()
 pygame.display.set_caption(("Theme"), ("Theme"))
 
-windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "settings"), 'settings64.png'))
+windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'settings64.png'))
 pygame.display.set_icon(windowicon)
 
 screensurf=pygame.display.set_mode((450, 300))
