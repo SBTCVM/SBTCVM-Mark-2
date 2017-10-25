@@ -398,35 +398,38 @@ class hudswitch:
 		self.seltask=None
 		self.sigret=None
 		self.btnw=100
+		self.acttask=None
 		self.btn=pygame.Surface((100, 20)).convert(self.screensurf)
 	def render(self):
 		self.texty=2
 		self.textx=self.x
 		self.taskdict=dict()
 		self.rectlist=list()
+		self.switchlist=list()
 		#copy and sort raw tasklist given to taskman by host program
 		self.argumentcopy=list(self.argument[0])
 		self.argumentcopy.sort(key=lambda x: x.taskid, reverse=False)
 		#tasklist parser
 		for self.task in self.argumentcopy:
-			if self.task.taskid not in self.syswids and self.textx+self.btnw<(self.screensurf.get_width() - 120):
-				if self.task.wo!=0:
-					self.btn.fill(titleinactbg)
-					self.labtx=simplefont.render(self.task.title, True, titleinacttext, titleinactbg)
-					self.btn.blit(self.labtx, (2, 2))
-					
-				else:
-					self.btn.fill(titlebg)
-					self.labtx=simplefont.render(self.task.title, True, titletext, titlebg)
-					self.btn.blit(self.labtx, (2, 2))
-				self.clickbx=self.screensurf.blit(self.btn, (self.textx, self.texty))
-				pygame.draw.rect(self.screensurf, framediv, self.clickbx, 1)
-				self.textx += (self.btnw + 2)
-				self.taskdict[self.task.taskid]=self.clickbx
-				self.rectlist.extend([self.clickbx])
-			if self.texty==2 and self.textx+self.btnw>=(self.screensurf.get_width() - 120):
-				self.textx=self.x
-				self.texty += 21
+			if self.task.taskid not in self.syswids:
+				if self.textx+self.btnw<(self.screensurf.get_width() - 120):
+					if self.task.wo!=0:
+						self.btn.fill(titleinactbg)
+						self.labtx=simplefont.render(self.task.title, True, titleinacttext, titleinactbg)
+						self.btn.blit(self.labtx, (2, 2))
+						
+					else:
+						self.btn.fill(titlebg)
+						self.labtx=simplefont.render(self.task.title, True, titletext, titlebg)
+						self.btn.blit(self.labtx, (2, 2))
+					self.clickbx=self.screensurf.blit(self.btn, (self.textx, self.texty))
+					pygame.draw.rect(self.screensurf, framediv, self.clickbx, 1)
+					self.textx += (self.btnw + 2)
+					self.taskdict[self.task.taskid]=self.clickbx
+					self.rectlist.extend([self.clickbx])
+				if self.texty==2 and self.textx+self.btnw>=(self.screensurf.get_width() - 120):
+					self.textx=self.x
+					self.texty += 21
 		return self.rectlist
 		#drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		#task commands
@@ -457,6 +460,22 @@ class hudswitch:
 		if self.seltask not in self.taskdict:
 			self.seltask=None
 		#task selector
+		if event.button==4 or event.button==5:
+			self.updatetasksel()
+		if event.button==4 and self.acttask!=None:
+			self.taskc=self.acttask-1
+			if self.taskc<0:
+				self.taskc=len(self.switchlist)-1
+			self.rettaskid=self.switchlist[self.taskc]
+			self.sigret=("TASKSWITCH", 0, self.rettaskid)
+			return
+		if event.button==5 and self.acttask!=None:
+			self.taskc=self.acttask+1
+			if self.taskc>len(self.switchlist)-1:
+				self.taskc=0
+			self.rettaskid=self.switchlist[self.taskc]
+			self.sigret=("TASKSWITCH", 0, self.rettaskid)
+			return
 		for self.taskc in self.taskdict:
 			if self.taskdict[self.taskc].collidepoint(event.pos)==1:
 				#self.seltask=self.taskc
@@ -466,7 +485,7 @@ class hudswitch:
 		self.argumentcopy2=list(self.argument[0])
 		self.argumentcopy2.sort(key=lambda x: x.wo, reverse=False)
 		for self.taskc in self.argumentcopy2:
-			if self.taskc.wo>=0 and self.taskid!=self.taskc.taskid:
+			if self.taskc.wo>=0 and self.taskc.taskid not in self.syswids:
 				self.sigret=("TASKSWITCH", 0, self.taskc.taskid)
 				#print "BEEP"
 				return
@@ -484,8 +503,24 @@ class hudswitch:
 		return self.sigret
 	def que(self, signal):
 		return
-
-
+	def updatetasksel(self):
+		self.switchlist=list()
+		self.argumentcopy3=list(self.argument[0])
+		self.argumentcopy3.sort(key=lambda x: x.taskid, reverse=False)
+		self.taskactcnt=-1
+		self.acttask=None
+		self.actnumer=None
+		for self.task in self.argumentcopy3:
+			
+			if self.task.taskid not in self.syswids:
+				self.taskactcnt += 1
+				self.switchlist.extend([self.task.taskid])
+				if self.actnumer==None:
+					self.acttask=self.taskactcnt
+					self.actnumer=self.task.wo
+				if self.task.wo<self.actnumer:
+					self.actnumer=self.task.wo
+					self.acttask=self.taskactcnt
 
 class launchconsole:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):

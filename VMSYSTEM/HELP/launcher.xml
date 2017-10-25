@@ -4,7 +4,8 @@
 	<head title="SBTCVM Desktop"/>
 	<title>SBTCVM Desktop</title>
 	<!--the rest can appear-->
-	<text>SBTCVM's desktop is a powerful, OS-agnostic multi-tasking enviornment.</text>
+	<text>SBTCVM's desktop is a powerful, OS-agnostic multi-tasking enviornment.
+</text>
 	<!--<title>Ghost programs</title>
 	<text>Ghost programs are a phenominon related to the que cross-application signaling method.
 What a Ghost Program is, is a program that closes after starting another program,
@@ -12,4 +13,20 @@ but continues to operate from that program.
 
 A practical use of this is with the shell builtin application, and its special
 que signals, in order to create CLI interfaces on the SBTCVM Desktop.</text>-->
+	<title>Managing Tasks &amp; Windows.</title>
+	<text>Each window visible in the SBTCVM Desktop is a task.
+
+To change windows, click within the desired window, or click the corrisponding
+task button in the taskbar. You can also use the mouse wheel over the taskbar to cycle windows.
+
+To close a window, click the "x" button in the top left corner of the window.
+
+To move a window click and drag the title bar.
+
+resizable windows have an extra bar at the bottom, that is the same color of the title bar.
+This bar can be clicked and dragged to resize that window.
+
+The task manager, taskman, can be found in the system menu.
+To use the task manager click a task in the list, then click either "Close Task" to close
+that task, or "Bring To Top" to bring that task's window to the top, and reset its position.</text>
 </main>
