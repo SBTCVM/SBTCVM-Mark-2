@@ -12,6 +12,7 @@ import os
 import subprocess
 import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libthemeconf as libthemeconf
+import VMSYSTEM.libfilevirtual as libfilevirtual
 
 from pygame.locals import *
 
@@ -20,8 +21,8 @@ pygame.display.init()
 pygame.font.init()
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
 
-pathlist=list()
-pathlist2=list()
+pathlist=["."]
+pathlist2=["."]
 windowicon=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fileview64.png'))
 pygame.display.set_icon(windowicon)
 
@@ -269,35 +270,26 @@ while quitflag==0:
 		listy=listyoff
 		#reset list of fileclick objects.
 		flist=list()
-		if iterfiles!='.' and listy>=listydef and listy<screeny:
-			textit=simplefontB.render("..", True, libthemeconf.tiletext)
-			#gxmask=pygame.Surface((410, 40))
-			gxmask.fill(tilebgcolor)
-			gxmask.blit(fvup, (iconx, 0))
-			gxmask.blit(textit, (labelx, 0))
-			gx=screensurf.blit(gxmask, (maskx, listy))
-			qx=fileclick(gx, "..", "dir")
-			flist.extend([qx])
-			listy += yjump
-		for fname in sorted(os.listdir(iterfiles), key=str.lower):
+		for fname in libfilevirtual.diriterate(pathlist):
 			fnamelo=fname.lower()
 			fileval=0
 			#directory check
-			if os.path.isdir(os.path.join(iterfiles, fname)):
-				#if check to hide hidden git directory. 
-				if not fname.endswith(".git"):
-					if listy<listydef or listy>screeny:
-						fileval=2
+			if libfilevirtual.isdir(fname, pathlist):
+				if listy<listydef or listy>screeny:
+					fileval=2
+				else:
+					textit=simplefontB.render(fname, True, libthemeconf.tiletext)
+					#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
+					gxmask.fill(tilebgcolor)
+					if fname=="..":
+						gxmask.blit(fvup, (iconx, 0))
 					else:
-						textit=simplefontB.render(fname, True, libthemeconf.tiletext)
-						#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
-						gxmask.fill(tilebgcolor)
 						gxmask.blit(fvdir, (iconx, 0))
-						gxmask.blit(textit, (labelx, 0))
-						gx=screensurf.blit(gxmask, (maskx, listy))
-						#filecheck class works as such: (pygame box, base filename, filetype string)
-						qx=fileclick(gx, fname, "dir")
-						fileval=1
+					gxmask.blit(textit, (labelx, 0))
+					gx=screensurf.blit(gxmask, (maskx, listy))
+					#filecheck class works as such: (pygame box, base filename, filetype string)
+					qx=fileclick(gx, fname, "dir")
+					fileval=1
 			for typ in typelist:
 				if fnamelo.endswith(("." + typ.ext)) and (filterflg==0 or filterflg==typ.filterflg): 
 					if listy<listydef or listy>screeny:
@@ -324,35 +316,26 @@ while quitflag==0:
 		if panemode==2:
 			listy2=listyoff2
 			#reset list of fileclick objects.
-			if iterfiles2!='.' and listy2>=listydef2 and listy2<screeny:
-				textit=simplefontB.render("..", True, libthemeconf.tiletext)
-				#gxmask=pygame.Surface((410, 40))
-				gxmask2.fill(tilebgcolor)
-				gxmask2.blit(fvup, (iconx, 0))
-				gxmask2.blit(textit, (labelx, 0))
-				gx=screensurf.blit(gxmask2, (maskx2, listy2))
-				qx=fileclick(gx, "..", "dir", 2)
-				flist.extend([qx])
-				listy2 += yjump
-			for fname in sorted(os.listdir(iterfiles2), key=str.lower):
+			for fname in libfilevirtual.diriterate(pathlist2):
 				fnamelo=fname.lower()
 				fileval=0
 				#directory check
-				if os.path.isdir(os.path.join(iterfiles2, fname)):
-					#if check to hide hidden git directory. 
-					if not fname.endswith(".git"):
-						if listy2<listydef2 or listy2>screeny:
-							fileval=2
+				if libfilevirtual.isdir(fname, pathlist2):
+					if listy2<listydef2 or listy2>screeny:
+						fileval=2
+					else:
+						textit=simplefontB.render(fname, True, libthemeconf.tiletext)
+						#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
+						gxmask2.fill(tilebgcolor)
+						if fname=="..":
+							gxmask2.blit(fvup, (iconx, 0))
 						else:
-							textit=simplefontB.render(fname, True, libthemeconf.tiletext)
-							#a small surface is used to create the "tiles" look of the file list. (it also simplifies the click areas to 1 per item)
-							gxmask2.fill(tilebgcolor)
 							gxmask2.blit(fvdir, (iconx, 0))
-							gxmask2.blit(textit, (labelx, 0))
-							gx=screensurf.blit(gxmask2, (maskx2, listy2))
-							#filecheck class works as such: (pygame box, base filename, filetype string)
-							qx=fileclick(gx, fname, "dir", 2)
-							fileval=1
+						gxmask2.blit(textit, (labelx, 0))
+						gx=screensurf.blit(gxmask2, (maskx2, listy2))
+						#filecheck class works as such: (pygame box, base filename, filetype string)
+						qx=fileclick(gx, fname, "dir", 2)
+						fileval=1
 				for typ in typelist:
 					if fnamelo.endswith(("." + typ.ext)) and (filterflg2==0 or filterflg2==typ.filterflg): 
 						if listy2<listydef2 or listy2>screeny:
@@ -564,41 +547,15 @@ while quitflag==0:
 						if f.pane==1:
 							listyoff=110
 							scupdate=1
-							#home directory (SBTCVM's repository root directory)
-							if f.filename=='.':
-								pathlist=list()
-								iterfiles='.'
-							#previous directory
-							if f.filename=='..':
-								pathlist.remove(pathlist[(len(pathlist) -1)])
-								if pathlist==list():
-									iterfiles='.'
-								else:
-									iterfiles=os.path.join(*pathlist)
-							#if normal subdirectory, add it to end of pathlist
-							else:
-								pathlist.extend([f.filename])
-								iterfiles=os.path.join(*pathlist)
+							pathlist=libfilevirtual.dir_cd(pathlist, f.filename)
+							iterfiles=os.path.join(*pathlist)
 							pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 							break
 						else:
 							listyoff2=110
 							scupdate=1
-							#home directory (SBTCVM's repository root directory)
-							if f.filename=='.':
-								pathlist2=list()
-								iterfiles2='.'
-							#previous directory
-							if f.filename=='..':
-								pathlist2.remove(pathlist2[(len(pathlist2) -1)])
-								if pathlist2==list():
-									iterfiles2='.'
-								else:
-									iterfiles2=os.path.join(*pathlist2)
-							#if normal subdirectory, add it to end of pathlist
-							else:
-								pathlist2.extend([f.filename])
-								iterfiles2=os.path.join(*pathlist2)
+							pathlist2=libfilevirtual.dir_cd(pathlist2, f.filename)
+							iterfiles2=os.path.join(*pathlist2)
 							#pygame.display.set_caption(("fileview - " + iterfiles), ("fileview - " + iterfiles))
 							break
 						

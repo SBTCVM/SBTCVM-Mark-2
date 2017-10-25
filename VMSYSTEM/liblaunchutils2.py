@@ -3,6 +3,7 @@ import VMSYSTEM.libvmui as vmui
 import VMSYSTEM.libvmconf as libvmconf
 import VMSYSTEM.libthemeconf as libthemeconf
 import VMSYSTEM.libbaltcalc as libbaltcalc
+import VMSYSTEM.libfilevirtual as libfilevirtual
 import pygame
 import time
 import copy
@@ -964,7 +965,7 @@ class fileman:
 		self.widy=400
 		if self.argument==None or self.argument==list():
 			self.iterfiles="."
-			self.argument=list()
+			self.argument=["."]
 		else:
 			self.iterfiles=os.path.join(self.argument)
 		self.title="Fileman: " + self.iterfiles
@@ -996,25 +997,18 @@ class fileman:
 			self.taskdict=dict()
 			self.clicklist=list()
 			self.widsurf.fill(framebg)
-			#copy and sort raw tasklist given to taskman by host program
-			#tasklist parser
-			if self.iterfiles!='.':
-				self.labtx=simplefont.render((".."), True, libthemeconf.tiletext, libthemeconf.tilecolor)
-				self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
-				self.widsurf.blit(self.labtx, (self.textx+44, self.texty+4))
-				self.widsurf.blit(typ_up.typeicon, (self.textx, self.texty))
-				self.clickbx.x += self.x
-				self.clickbx.y += self.y
-				self.clicklist.extend([fileclick(self.clickbx, "..", "dir")])
-				self.texty += 30
-			for self.fileitm in sorted(os.listdir(self.iterfiles), key=str.lower):
+			#filelist parser (uses libfilevirtual_
+			for self.fileitm in libfilevirtual.diriterate(self.argument):
 				self.fnamelo=self.fileitm.lower()
-				if os.path.isdir(os.path.join(self.iterfiles, self.fileitm)) and not self.fileitm.startswith(".git"):
+				if libfilevirtual.isdir(self.fileitm, self.argument):
 					if self.texty>=0 and self.texty<=self.widy:
 						self.labtx=simplefont.render((self.fileitm), True, libthemeconf.tiletext, libthemeconf.tilecolor)
 						self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
 						self.widsurf.blit(self.labtx, (self.textx+44, self.texty+4))
-						self.widsurf.blit(typ_dir.typeicon, (self.textx, self.texty))
+						if self.fileitm=="..":
+							self.widsurf.blit(typ_up.typeicon, (self.textx, self.texty))
+						else:
+							self.widsurf.blit(typ_dir.typeicon, (self.textx, self.texty))
 						self.clickbx.x += self.x
 						self.clickbx.y += self.y
 						self.clicklist.extend([fileclick(self.clickbx, self.fileitm, "dir")])
@@ -1109,26 +1103,11 @@ class fileman:
 					subprocess.Popen(["python", "MK2-TOOLS.py", "textview", (os.path.join(self.iterfiles, self.f.filename))])
 				#special directory handler
 				if self.f.ftype=="dir":
-					#hudupdate=1
-					#listyoff=110
-					#scupdate=1
 					self.scup=1
 					self.yoff=0
 					#home directory (SBTCVM's repository root directory)
-					if self.f.filename=='.':
-						self.argument=list()
-						self.iterfiles='.'
-					#previous directory
-					if self.f.filename=='..':
-						self.argument.remove(self.argument[(len(self.argument) -1)])
-						if self.argument==list():
-							self.iterfiles='.'
-						else:
-							self.iterfiles=os.path.join(*self.argument)
-						#if normal subdirectory, add it to end of pathlist
-					else:
-						self.argument.extend([self.f.filename])
-						self.iterfiles=os.path.join(*self.argument)
+					self.argument=libfilevirtual.dir_cd(self.argument, self.f.filename)
+					self.iterfiles=os.path.join(*self.argument)
 					self.title="Fileman: " + self.iterfiles
 					return
 	def clickup(self, event):

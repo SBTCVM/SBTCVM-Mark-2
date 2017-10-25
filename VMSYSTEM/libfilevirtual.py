@@ -26,6 +26,12 @@ def filevalid(filestr, pathlist):
 			return 1
 	return 0
 
+def isdir(filestr, pathlist):
+	pathstr=os.path.join(*pathlist)
+	pathjoin=os.path.join(pathstr, filestr)
+	if os.path.isdir(pathjoin):
+		return directorymask(pathstr, filestr)
+	return 0
 
 def diriterate(pathlist):
 	pathlistret=sorted(os.listdir(os.path.join(*pathlist)), key=str.lower)
