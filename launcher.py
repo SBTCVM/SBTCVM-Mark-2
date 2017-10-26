@@ -289,8 +289,9 @@ filemenu=[fmhelp, fmabout, fmabout2, fmbg, fmquit]
 sysyssh=vmui.menuitem("Shell", "SYSSHELL")
 sytask=vmui.menuitem("Task Manager", "TASKMAN")
 sycon=vmui.menuitem("Console", "CON")
+syfile=vmui.menuitem("Fileman", "FILEMAN")
 syscshot=vmui.menuitem("Screenshot", "SCSHOT")
-systemmenu=[sysyssh, sytask, sycon, syscshot]
+systemmenu=[sysyssh, syfile, sytask, sycon, syscshot]
 
 versnumgfx=simplefontB.render("v2.0.3", True, libthemeconf.hudtext)
 
@@ -515,21 +516,25 @@ while qflg==0:
 									launchutils.consolewrite("Of TaskID: \"" + str(widd.taskid) + "\"")
 									launchutils.consolewrite("It is a protected task used by the system!")
 					if widret[1]==1:
-						for widq in activewids:
-							widq.wo += 1
-						for widd in activewids:
-							if widd.taskid==widret[2]:
-								if widret[2] not in hiddenwids:
+						if widret[2] not in hiddenwids:
+							for widq in activewids:
+								widq.wo += 1
+							for widd in activewids:
+								if widd.taskid==widret[2]:
 									launchutils.consolewrite("Taskman: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
 									widd.wo=0
 									widd.x=40
 									widd.y=80
 									widd.movet(0, 0)
 									scupdate=1
-								else:
+						else:
+							for widd in activewids:
+								if widd.taskid==widret[2]:
 									launchutils.consolewrite("Taskman: ERROR: CANNOT bring task: \"" + widd.title + "\"")
-									launchutils.consolewrite("Of TaskID: \"" + str(widd.taskid) + "\" To Front")
+									launchutils.consolewrite("Of TaskID: \"" + str(widret[2]) + "\" To Front")
 									launchutils.consolewrite("It is a protected task used by the system!")
+									break
+
 				elif widret[0]=="TASKMAN":
 					launchutils.consolewrite(">>WARNING: Unauthorized use of TASKMAN signals was blocked.")
 					launchutils.consolewrite(">>Task name: \"" + wid.title + "\" TaskID: \"" + str(wid.taskid) + "\"")
@@ -559,6 +564,7 @@ while qflg==0:
 					except Exception as err:
 						errorreport(wid.title, "Keydown", err)
 						activewids.remove(wid)
+					break
 		if event.type == KEYUP:
 			for wid in activewids:
 				if wid.wo==0:
@@ -567,6 +573,7 @@ while qflg==0:
 					except Exception as err:
 						errorreport(wid.title, "Keyup", err)
 						activewids.remove(wid)
+					break
 		#screen resize code activation
 		if event.type==VIDEORESIZE:
 			resizeflg=1
@@ -589,6 +596,7 @@ while qflg==0:
 						except Exception as err:
 							errorreport(wid.title, "Clickup", err)
 							activewids.remove(wid)
+						break
 		if event.type==MOUSEBUTTONDOWN:
 			#minitool click processing
 			notile=0
@@ -762,6 +770,17 @@ while qflg==0:
 							activewids.extend([widx])
 						except Exception as err:
 								errorreport("Console", "Init (Shell)", err)
+					if menuret=="FILEMAN":
+						try:
+							widx=launchutils.fileman(screensurf, 0, 40, 80)
+							widx.taskid=taskidcnt
+							taskidcnt +=1
+							scupdate=1
+							for wid in activewids:
+								wid.wo += 1
+							activewids.extend([widx])
+						except Exception as err:
+								errorreport("Console", "Init (Fileman)", err)
 					if menuret=="SCSHOT":
 						pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
 				#category menu
