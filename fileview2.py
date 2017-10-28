@@ -410,7 +410,10 @@ while quitflag==0:
 					quitflag=1
 					break
 				if menuret=="ABOUT":
-					vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+					if panemode==2:
+						vmui.aboutdiag(diagabt, (screenx // 2), (screeny // 2))
+					else:
+						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
 				if menuret=="SETBG":
 					vmui.settheme(3, 45)
 					scupdate=1

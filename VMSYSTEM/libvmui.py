@@ -174,7 +174,7 @@ See README.md for more information."""
 		if menuret=="ABOUT":
 			subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 		if menuret=="PMABOUT":
-			okdiag(diagabt, (950 // 2), (600 // 2))
+			aboutdiag(diagabt, (950 // 2), (600 // 2))
 		if menuret=="STOP":
 			return("s")
 		if menuret=="QUIT":
@@ -194,13 +194,17 @@ def initui(scsurf, kiomode):
 	global diagbtnyes
 	global diagbtnno
 	global sbtcvmbadge
+	global icon140
+	global diagbtnREADME
 	KIOSKMODE=kiomode
 	GFXLOGO=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'GFXLOGO-CAT.png')).convert()
 	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
+	icon140=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'icon140.png')).convert_alpha()
 	sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')).convert()
 	diagbtnok=makediagbtn(1, "OK")
 	diagbtnno=makediagbtn(0, "NO")
 	diagbtnyes=makediagbtn(1, "YES")
+	diagbtnREADME=makediagbtn(1, "README")
 	
 	
 
@@ -339,6 +343,8 @@ class menuitem:
 # -reclick=1 returns and reposts upon click outside menu (default
 # -reclick=0 just returns upon click outside menu
 # -reclick=2 ignores click outside menu
+#if the menu encounters a videoresize event it will return the integer 0
+# (and keep the videoresize event in the event queue) so keep that in mind for resizable applications.
 # (menuset will return None upon returning due to click outside menu)
 def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unavcol=libthemeconf.diaginact, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20, scrndest='SCREENSHOT-vmuimenuset.png'):
 	global screensurf
@@ -413,6 +419,8 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unav
 	pygame.display.update()
 	while True:
 		time.sleep(0.1)
+		if pygame.event.peek(VIDEORESIZE):
+			return 0
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', scrndest)))
@@ -458,7 +466,7 @@ def listline(textstring):
 # -reclick=0 just returns upon click outside dialog
 # -reclick=2 ignores click outside dialog (default)
 # (okdiag will return None upon returning due to click outside dialog)
-#
+# (remember: all dialogs will return "VID" on videoresize, so the host application can process it.)
 #SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
 def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
 	global screensurf
@@ -510,6 +518,8 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 	pygame.display.update()
 	while True:
 		time.sleep(0.1)
+		if pygame.event.peek(VIDEORESIZE):
+			return "VID"
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiokdialog.png')))
@@ -524,7 +534,106 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 						pygame.event.clear()
 						pygame.event.post(event)
 					return None
-					
+#usage same as okdiag, special about dialog to present application-specific and suite about information.			
+def aboutdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
+	global screensurf
+	scbak=screensurf.copy()
+	btnw=100
+	btnh=30
+	textfnt = pygame.font.SysFont(None, fontsize)
+	textfnt2 = pygame.font.SysFont(None, fontsize + 2)
+	yjump=fontsize
+	textlist= ["SBTCVM Application Suite v2.0.3"] + listline(textstring)
+	textbodyh=(len(textlist)*yjump)
+	ypad=5
+	xpad=5
+	btnsep=20
+	btnoffset=(btnw+btnsep)
+	textbtnpad=10
+	dialogoffset1=(144 + yjump + 4 + (textbtnpad * 2) + btnh)
+	dialogh=(textbodyh + ypad + ypad + btnh + textbtnpad)
+	if dialogh<dialogoffset1:
+		dialogh=dialogoffset1
+	textwidest=0
+	minwid=(btnw)
+	for item in textlist:
+		itemsize=textfnt.size(item)[0]
+		if itemsize>textwidest:
+			textwidest=itemsize
+	if textwidest<minwid:
+		textwidest=minwid
+	dialogw=(textwidest + xpad + xpad + 144)
+	xpos -= (dialogw // 2)
+	ypos -= (dialogh // 2)
+	menubox=pygame.Surface((dialogw, dialogh))
+	menubox.fill(bgcol)
+	dropshadow=pygame.Surface((dialogw, dialogh))
+	menushad=dropshadow.get_rect()
+	menushad.x = (4 + xpos)
+	menushad.y = (4 + ypos)
+	dropshadow.set_alpha(80)
+	dropshadow.fill((0, 0, 0))
+	screensurf.blit(dropshadow, menushad)
+	menubox.blit(icon140, (2, (2 + yjump + 4)))
+	menugx=screensurf.blit(menubox, (xpos, ypos))
+	
+	titlerect=pygame.Rect(xpos, ypos, (dialogw), (yjump + 4))
+	pygame.draw.rect(screensurf, libthemeconf.titleactbg, titlerect, 0)
+	pygame.draw.rect(screensurf, linecol, menugx, 1)
+	pygame.draw.line(screensurf, linecol, (xpos, (ypos + yjump + 4)), ((xpos + dialogw - 1), (ypos + yjump + 4)), 1)
+	texty=(ypos+ypad)
+	firstitem=1
+	for item in textlist:
+		if firstitem==1:
+			itemtext=textfnt2.render(item, True, libthemeconf.titleacttext)
+			#itemxpos=((xpos + xpad)  (itemtext.get_width() // 2))
+			itembox=itemtext.get_rect()
+			itembox.centerx=menugx.centerx
+			itembox.y=texty
+			screensurf.blit(itemtext, itembox)
+			texty += yjump + 2
+			firstitem=0
+		else:
+			
+			itemtext=textfnt.render(item, True, textcol)
+			#itemxpos=((xpos + xpad)  (itemtext.get_width() // 2))
+			itembox=itemtext.get_rect()
+			itembox.centerx=menugx.centerx + (144 // 2)
+			itembox.y=texty
+			screensurf.blit(itemtext, itembox)
+			texty += yjump
+	dexhig=(ypos + yjump + 144 + 8)
+	if texty>dexhig:
+		dexhig=(texty + 4)
+	pygame.draw.line(screensurf, linecol, (xpos, (dexhig)), ((xpos + dialogw - 1), (dexhig)), 1)
+	btny=(ypos + dialogh - textbtnpad - btnh)
+	btnx1=((dialogw // 2)-(btnw // 2) + xpos - (btnoffset // 2))
+	btnx2=((dialogw // 2)-(btnw // 2) + xpos + (btnoffset // 2))
+	btnokx=screensurf.blit(diagbtnok, (btnx1, btny))
+	btnREADMEx=screensurf.blit(diagbtnREADME, (btnx2, btny))
+	pygame.display.update()
+	while True:
+		time.sleep(0.1)
+		if pygame.event.peek(VIDEORESIZE):
+			return "VID"
+		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiaboutdialog.png')))
+			if event.type == MOUSEBUTTONDOWN and event.button==1:
+				if menugx.collidepoint(event.pos):
+					if btnokx.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "OK"
+					if btnREADMEx.collidepoint(event.pos):
+						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
+				elif reclick!=2:
+					if reclick==1:
+						pygame.event.clear()
+						pygame.event.post(event)
+					return None
+	
+
 #textstring is a body of text, (can be multiple lines) that will show in the dialog
 #okdiag will return "YES" upon user clicking the "Yes" button.
 #okdiag will return "NO" upon user clicking the "No" button.
@@ -533,7 +642,7 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 # -reclick=0 just returns upon click outside dialog
 # -reclick=2 ignores click outside dialog (default)
 # (okdiag will return None upon returning due to click outside dialog)
-#
+## (remember: all dialogs will return "VID" on videoresize, so the host application can process it.)
 #SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
 def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
 	global screensurf
@@ -589,6 +698,8 @@ def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 	pygame.display.update()
 	while True:
 		time.sleep(0.1)
+		if pygame.event.peek(VIDEORESIZE):
+			return "VID"
 		for event in pygame.event.get():
 			if event.type == KEYDOWN and event.key == K_F8:
 				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiyndialog.png')))
@@ -743,7 +854,7 @@ See README.md for more information."""
 						qflg=1
 						break
 					if menuret=="ABOUT":
-						okdiag(diagabt, (screenw // 2), (screenh // 2))
+						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
 				if event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
@@ -914,7 +1025,7 @@ See README.md for more information."""
 						qflg=1
 						break
 					if menuret=="ABOUT":
-						okdiag(diagabt, (screenw // 2), (screenh // 2))
+						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
 				if event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
@@ -1090,7 +1201,7 @@ See README.md for more information."""
 						qflg=1
 						break
 					if menuret=="ABOUT":
-						okdiag(diagabt, (screenw // 2), (screenh // 2))
+						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
 				elif event.button==1 and not hudrect.collidepoint(event.pos):
 					followmouse=1
 					mpos=pygame.mouse.get_pos()

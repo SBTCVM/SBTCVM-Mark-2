@@ -311,7 +311,7 @@ while qflg==0:
 				if menuret=="ABOUT2":
 					subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 				if menuret=="ABOUT":
-					vmui.okdiag(diagabt, (screenw // 2), (screenh // 2))
+					vmui.aboutdiag(diagabt, (screenw // 2), (screenh // 2))
 				
 			#if helpq.collidepoint(event.pos)==1 and event.button==1:
 			#	pageref="helponhelp.xml"

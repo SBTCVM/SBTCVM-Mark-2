@@ -715,7 +715,7 @@ while qflg==0:
 					if menuret=="ABOUT2":
 						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
 					if menuret=="ABOUT":
-						vmui.okdiag(diagabt, (screenx // 2), (screeny // 2))
+						vmui.aboutdiag(diagabt, (screenx // 2), (screeny // 2))
 					if menuret=="SETBG":
 						vmui.settheme(3, 43)
 						scupdate=1
