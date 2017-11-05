@@ -620,7 +620,7 @@ dispmode="SB"
 #master valid mode list
 displist=["G0", "SB"]
 #all Modes that should disable TTY rendering need to be in here!
-dispttyover=["G0"]
+dispttyover=["G0", "G2"]
 #default SBTGA offset.
 dispoffset="000000000"
 updatedisp=0
@@ -876,7 +876,8 @@ while stopflag==0:
 			if curdata=="--0---+-+":
 				if REG1=="---------":
 					dispmode="G0"
-					
+				elif REG1=="--------+":
+					dispmode="G2"
 				else:
 					dispmode="SB"
 					ttyredraw=1
@@ -897,6 +898,8 @@ while stopflag==0:
 			if curdata=="--0---+-+":
 				if REG2=="---------":
 					dispmode="G0"
+				elif REG2=="--------+":
+					dispmode="G2"
 				else:
 					dispmode="SB"
 					ttyredraw=1

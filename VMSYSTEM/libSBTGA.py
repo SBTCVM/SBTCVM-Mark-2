@@ -83,6 +83,59 @@ class buffdisplay:
 					self.pixx += 1
 				self.pixy += 1
 			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 486)), (x, y))
+		if self.mode=="G2":
+			self.pixy=0
+			self.pixx=0
+			self.chunkcnt=0
+			self.addr=self.offset
+			while self.pixy!=81:
+				self.pixx=0
+				while self.pixx!=114:
+					if self.chunkcnt==0:
+						self.chunkcnt=1
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[6]))
+					elif self.chunkcnt==1:
+						self.chunkcnt=2
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[7]))
+					elif self.chunkcnt==2:
+						self.chunkcnt=3
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[8]))
+					elif self.chunkcnt==3:
+						self.chunkcnt=4
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[9]))
+					elif self.chunkcnt==4:
+						self.chunkcnt=5
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[10]))
+					elif self.chunkcnt==5:
+						self.chunkcnt=6
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[11]))
+					elif self.chunkcnt==6:
+						self.chunkcnt=7
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[12]))
+					elif self.chunkcnt==7:
+						self.chunkcnt=8
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[13]))
+					elif self.chunkcnt==8:
+						self.chunkcnt=0
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						self.part=((self.chunk[14]))
+						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
+					self.GREY=shadlook0(self.part)
+					dispsurf0.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
+					print self.chunkcnt
+					print self.pixx
+					print self.pixy
+					self.pixx += 1
+				self.pixy += 1
+			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 486)), (x, y))
 	def setoffset(self, offset):
 		self.offset=offset
 	def setmode(self, mode):
