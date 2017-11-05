@@ -130,9 +130,9 @@ class buffdisplay:
 						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
 					self.GREY=shadlook0(self.part)
 					dispsurf0.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
-					print self.chunkcnt
-					print self.pixx
-					print self.pixy
+					#print self.chunkcnt
+					#print self.pixx
+					#print self.pixy
 					self.pixx += 1
 				self.pixy += 1
 			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 486)), (x, y))
