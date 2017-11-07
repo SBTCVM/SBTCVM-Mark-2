@@ -618,7 +618,7 @@ dispmembus=libtrom.AROM
 #SBTGA display mode SB should be default
 dispmode="SB"
 #master valid mode list
-displist=["G0", "SB"]
+displist=["G0", "G2", "SB"]
 #all Modes that should disable TTY rendering need to be in here!
 dispttyover=["G0", "G2"]
 #default SBTGA offset.
