@@ -476,13 +476,16 @@ pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN])
 libSBTCVMsurf=pygame.Surface((648, 486)).convert()
 libSBTCVMsurf.fill(TTYBGCOL)
 libSBTCVM.glyphoptim(libSBTCVMsurf)
+libSBTCVMsurfshort=pygame.Surface((648, 90)).convert(libSBTCVMsurf)
+libSBTCVMsurfshort.fill(TTYBGCOL)
 #RAMBANK startup begin
 RAMbank = {}
 
 #calmlst = open("ORDEREDLIST6.txt")
 #screensurf.fill((0,127,255))
 
-
+shortttybgfix=pygame.Surface((648, 96)).convert()
+shortttybgfix.fill(libthemeconf.vmbg)
 
 #build IObus dictionary.
 IOdumplist=list()
@@ -880,8 +883,10 @@ while stopflag==0:
 					dispmode="G2"
 				else:
 					dispmode="SB"
-					ttyredraw=1
-					ttyredrawfull=1
+				ttyredraw=1
+				ttyredrawfull=1
+				upt=screensurf.blit(shortttybgfix, (0, 504))
+				updtblits.extend([upt])
 				SBTGADEV.setmode(dispmode)
 			if curdata=="--0---+0-":
 				dispoffset=REG1
@@ -902,8 +907,10 @@ while stopflag==0:
 					dispmode="G2"
 				else:
 					dispmode="SB"
-					ttyredraw=1
-					ttyredrawfull=1
+				ttyredraw=1
+				ttyredrawfull=1
+				upt=screensurf.blit(shortttybgfix, (0, 504))
+				updtblits.extend([upt])
 				SBTGADEV.setmode(dispmode)
 			if curdata=="--0---+0-":
 				dispoffset=REG2

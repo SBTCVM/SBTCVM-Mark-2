@@ -82,7 +82,7 @@ class buffdisplay:
 					dispsurf0.set_at((self.pixx, self.pixy),(self.R1, self.G1, self.B1))
 					self.pixx += 1
 				self.pixy += 1
-			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 486)), (x, y))
+			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 460)), (x, y))
 		if self.mode=="G2":
 			self.pixy=0
 			self.pixx=0
@@ -135,7 +135,7 @@ class buffdisplay:
 					#print self.pixy
 					self.pixx += 1
 				self.pixy += 1
-			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 486)), (x, y))
+			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 460)), (x, y))
 	def setoffset(self, offset):
 		self.offset=offset
 	def setmode(self, mode):
