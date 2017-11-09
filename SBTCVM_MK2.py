@@ -621,9 +621,9 @@ dispmembus=libtrom.AROM
 #SBTGA display mode SB should be default
 dispmode="SB"
 #master valid mode list
-displist=["G0", "G2", "SB"]
+displist=["G0", "G2", "SB", "G3", "G4"]
 #all Modes that should disable TTY rendering need to be in here!
-dispttyover=["G0", "G2"]
+dispttyover=["G0", "G2", "G3", "G4"]
 #default SBTGA offset.
 dispoffset="000000000"
 updatedisp=0
@@ -881,6 +881,10 @@ while stopflag==0:
 					dispmode="G0"
 				elif REG1=="--------+":
 					dispmode="G2"
+				elif REG1=="-------0-":
+					dispmode="G3"
+				elif REG1=="-------00":
+					dispmode="G4"
 				else:
 					dispmode="SB"
 				ttyredraw=1
@@ -905,6 +909,10 @@ while stopflag==0:
 					dispmode="G0"
 				elif REG2=="--------+":
 					dispmode="G2"
+				elif REG2=="-------0-":
+					dispmode="G3"
+				elif REG2=="-------00":
+					dispmode="G4"
 				else:
 					dispmode="SB"
 				ttyredraw=1
