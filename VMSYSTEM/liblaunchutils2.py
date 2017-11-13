@@ -363,6 +363,129 @@ class taskman:
 
 
 
+
+
+class catsel:
+	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
+		consolewrite("catsel: running")
+		#screensurf is the surface to blit the window to
+		self.screensurf=screensurf
+		#wo is a sorting variable used to sort the windows in a list
+		self.wo=windoworder
+		#title is the name of the window
+		self.argument=argument
+		self.title=self.argument[0]
+		self.tilelist=list()
+		for self.q in self.argument[1]:
+			self.tilbak=self.q.tilesurf.copy()
+			self.tilcopy=copy.deepcopy(self.q)
+			self.tilcopy.tilesurf=self.tilbak
+			self.tilelist.extend([self.tilcopy])
+		#taskid is set automatically
+		self.taskid=0
+		
+		self.widx=500
+		self.widy=300
+		#x and y are required.
+		self.x=xpos
+		self.y=ypos
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		self.widsurf.fill(framebg)
+		
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		#these rects are needed
+		#frame close button rect
+		self.closerect=self.frametoup[2]
+		#rect of window content
+		self.widbox=self.frametoup[0]
+		#frame rect
+		self.framerect=self.frametoup[1]
+		self.closetasktx=simplefont.render("Close Task", True, framebg, frametext)
+		self.bringtoptx=simplefont.render("Bring to top", True, framebg, frametext)
+		self.seltask=None
+		self.sigret=None
+		self.tileoff=0
+		self.fullupt=1
+	def render(self):
+		if self.fullupt==1:
+			self.fullupt=0
+			self.widsurf.fill(framebg)
+			self.tilex=5
+			self.tiley=5+self.tileoff
+			self.tilejumpx=100
+			self.tilejumpy=95
+			
+			#tile render
+			for self.tile in self.tilelist:
+				self.tile.render(self.tilex, self.tiley, surf=self.widsurf)
+				#self.tile.tilebox.x += self.x
+				#self.tile.tilebox.y += self.y
+				if self.tilex+self.tilejumpx+90<self.widx:
+					self.tilex += self.tilejumpx
+				else:
+					self.tilex=5
+					self.tiley += self.tilejumpy
+		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		
+	def movet(self, xoff, yoff):
+		
+		self.x -= xoff
+		self.y -= yoff
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	def resizet(self, xoff, yoff):
+		self.fullupt=1
+		#manipulate your window surface x and y sizes like so: if want only x or only y, manipulate only that.
+		self.widx -= xoff
+		self.widy -= yoff
+		#check the size to ensure it isn't too small (or invalid)
+		if self.widx<200:
+			self.widx=200
+		if self.widy<200:
+			self.widy=200
+		self.tileoff=0
+		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
+		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
+		#TO SHOW THE RESIZEBAR AT THE BOTTOM OF WINDOW YOU MUST SPECIFY resizebar=1 !!!
+		self.frametoup=getframes(self.x, self.y, self.widsurf, resizebar=1)
+		self.closerect=self.frametoup[2]
+		self.widbox=self.frametoup[0]
+		self.framerect=self.frametoup[1]
+	def click(self, event):
+		self.localpos=((event.pos[0] - self.x), (event.pos[1] - self.y))
+		
+		if event.button==4:
+			if self.tileoff<0:
+				self.tileoff += self.tilejumpy
+				self.fullupt=1
+				return
+		if event.button==5:
+			if (self.tiley + self.tilejumpy) >= self.widy:
+				self.tileoff -= self.tilejumpy
+				self.fullupt=1
+				return
+		for self.tile in self.tilelist:
+			if self.tile.tilebox.collidepoint(self.localpos)==1 and event.button==1:
+				self.sigret=["CATSEL", self.tile.act()]
+	def clickup(self, event):
+		return
+	def keydown(self, event):
+		return
+	def keyup(self, event):
+		return
+	def close(self):
+		return
+	def hostquit(self):
+		return
+	def sig(self):
+		return self.sigret
+	def que(self, signal):
+		return
+
+
+
 #hudswitch
 class hudswitch:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
@@ -946,7 +1069,10 @@ fvlog=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvl
 fvdmp=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdmp.png'))
 fvdummy=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX', "fv"), 'fvdummy.png'))
 
-
+fvrunview=vmui.makeswitchbtn("RUN", "VIEW")
+fvrunsw=fvrunview[0]
+fvviewsw=fvrunview[1]
+typefilter1=vmui.makerotbtn("Type", "Filter")
 
 class filetyp:
 	def __init__(self, ext, typeicon, qxtype, filterflg):
@@ -971,8 +1097,18 @@ typ_log=filetyp("log", fvlog, "log", 6)
 typ_dmp=filetyp("dmp", fvdmp, "dmp", 7)
 #also needed by system shell!
 typelist=[typ_png, typ_jpg, typ_jpeg, typ_gif, typ_streg, typ_trom, typ_tasm, typ_txt, typ_md, typ_log, typ_dmp]
+iconlist=[fvall, fvtrom, fvimg, fvstreg, fvtasm, fvtext, fvlog, fvdmp]
 
+fil0=vmui.menuitem("All", 0)
+fil1=vmui.menuitem("Trom", 1)
+fil2=vmui.menuitem("Image", 2)
+fil3=vmui.menuitem("Streg", 3)
+fil4=vmui.menuitem("Tasm", 4)
+fil5=vmui.menuitem("Text", 5)
+fil6=vmui.menuitem("Log", 6)
+fil7=vmui.menuitem("Dmp", 7)
 
+filtermenu=[fil0, fil1, fil2, fil3, fil4, fil5, fil6, fil7]
 typ_up=filetyp(None, fvup, "dir", None)
 typ_dir=filetyp(None, fvdir, "dir", None)
 
@@ -1024,14 +1160,30 @@ class fileman:
 		#self.closetasktx=simplefont.render("Close Task", True, framebg, frametext)
 		#self.bringtoptx=simplefont.render("Bring to top", True, framebg, frametext)
 		self.scup=1
+		self.runexec=0
+		self.filterflg=0
+		self.filmenu=0
 	def render(self):
 		if self.scup==1:
+			self.widsurf.fill(framebg)
+			if self.runexec==0:	
+				self.sw1bx=self.widsurf.blit(fvrunsw, ((2), (2)))
+			else:
+				self.sw1bx=self.widsurf.blit(fvviewsw, ((2), (2)))
+			#ui
+			self.filbtn=self.widsurf.blit(typefilter1, ((42 + 2), (2)))
+			self.filbtn.x += self.x
+			self.filbtn.y += self.y
+			self.sw1bx.x += self.x
+			self.sw1bx.y += self.y
+			self.widsurf.blit(iconlist[self.filterflg], ((82 + 3), (3)))
 			self.scup=0
 			self.texty=self.yoff
 			self.textx=150
 			self.taskdict=dict()
 			self.clicklist=list()
-			self.widsurf.fill(framebg)
+			
+			
 			#filelist parser (uses libfilevirtual_
 			for self.fileitm in libfilevirtual.diriterate(self.argument):
 				self.fnamelo=self.fileitm.lower()
@@ -1052,7 +1204,7 @@ class fileman:
 						self.texty += 30
 				else:
 					for self.typ in typelist:
-						if self.fnamelo.endswith((self.typ.ext)):
+						if self.fnamelo.endswith((self.typ.ext)) and (self.filterflg==0 or self.filterflg==self.typ.filterflg):
 							if self.texty>=0 and self.texty<=self.widy:
 								self.labtx=simplefont.render((self.fileitm), True, libthemeconf.tiletext, libthemeconf.tilecolor)
 								self.clickbx=self.widsurf.blit(self.minibox, (self.textx, self.texty))
@@ -1066,6 +1218,12 @@ class fileman:
 								self.texty += 30
 			self.texty += 30
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+		
+		#filter menu render
+		if self.filmenu==1:
+			self.filret=vmui.passivemenu(filtermenu, (self.x + 42 + 2), (self.y + 42), fontsize=24)
+			self.filmenubx=self.filret[1]
+			self.filmenulist=self.filret[0]
 		#task commands
 		#self.clx=self.screensurf.blit(self.closetasktx, (self.x, self.y))
 		#self.topx=self.screensurf.blit(self.bringtoptx, (self.x+5+self.closetasktx.get_width(), self.y))
@@ -1093,6 +1251,18 @@ class fileman:
 		self.widbox=self.frametoup[0]
 		self.framerect=self.frametoup[1]
 	def click(self, event):
+		#filter menu click processing
+		if self.filmenu==1:
+			if event.button==1:
+				if self.filmenubx.collidepoint(event.pos):
+					for self.itm in self.filmenulist:
+						if self.itm.box.collidepoint(event.pos):
+							self.filterflg=self.itm.retstring
+							self.filmenu=0
+							self.scup=1
+							return
+				else:
+					self.filmenu=0
 		if event.button==4:
 			if event.pos[0]>150:
 				if self.yoff<0:
@@ -1111,10 +1281,21 @@ class fileman:
 					#scupdate=1
 					self.scup=1
 				return
+		#run view switch
+		if self.sw1bx.collidepoint(event.pos)==1 and event.button==1:
+			self.scup=1
+			if self.runexec==0:
+				self.runexec=1
+			else:
+				self.runexec=0
+		#filter button click processing
+		if self.filbtn.collidepoint(event.pos)==1 and event.button==1:
+			self.filmenu=1
+		#tile click processor
 		for self.f in self.clicklist:
 			if self.f.box.collidepoint(event.pos)==1 and event.button==1:
 				#program launchers
-				self.runexec=0
+				
 				if self.runexec==0:
 					if self.f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(self.iterfiles, self.f.filename))])

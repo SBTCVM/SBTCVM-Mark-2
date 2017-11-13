@@ -445,6 +445,80 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unav
 					screensurf.blit(scbak, (0, 0))
 					pygame.display.update()
 					return None
+
+def passivemenu(menulist, xpos, ypos, drawsurf=None, textcol=libthemeconf.diagtext, unavcol=libthemeconf.diaginact, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg, fontsize=20):
+	textfnt = pygame.font.SysFont(None, fontsize)
+	if drawsurf==None:
+		drawsurf=screensurf
+	yjump=fontsize
+	#menuh=(len(menulist) * yjump)
+	menuw=0
+	menuh=0
+	for item in menulist:
+		if item.icon==None:
+			itemsize=(textfnt.size(item.label)[0])
+			if itemsize>menuw:
+				menuw=itemsize
+			menuh += yjump
+		else:
+			iconwidth=(item.icon).get_width()
+			iconheight=((item.icon).get_height() + 4)
+			itemsize=(textfnt.size(item.label)[0] + iconwidth + 2)
+			if itemsize>menuw:
+				menuw=itemsize
+			if iconheight>yjump:
+				menuh += iconheight
+			else:
+				menuh += yjump
+			
+	menuw += 4
+	menubox=pygame.Surface((menuw, menuh))
+	dropshadow=pygame.Surface((menuw, menuh))
+	menushad=dropshadow.get_rect()
+	menushad.x = (4 + xpos)
+	menushad.y = (4 + ypos)
+	dropshadow.set_alpha(80)
+	dropshadow.fill((0, 0, 0))
+	drawsurf.blit(dropshadow, menushad)
+	#pygame.draw.rect(screensurf, (0, 0, 0, 50), menushad, 0)
+	#itembox=pygame.Surface((menuw, yjump))
+	menubox.fill(bgcol)
+	menugx=drawsurf.blit(menubox, (xpos, ypos))
+	pygame.draw.rect(drawsurf, linecol, menugx, 1)
+	menuy=ypos
+	menux=xpos + 2
+	for item in menulist:
+		if item.labelsurf==None:
+			if item.noclick==0:
+				itemtext=textfnt.render(item.label, True, textcol)
+				item.labelsurf=itemtext
+			else:
+				itemtext=textfnt.render(item.label, True, unavcol)
+				item.labelsurf=itemtext
+		else:
+			itemtext=item.labelsurf
+		if item.icon==None:
+			drawsurf.blit(itemtext, (menux, menuy))
+			gx=Rect(xpos, menuy, menuw, yjump)
+			menuy += yjump
+		elif (item.icon).get_height()>yjump:
+			drawsurf.blit(item.icon, (menux, (menuy + 2)))
+			drawsurf.blit(itemtext, ((menux + 2 + (item.icon).get_width()), menuy))
+			gx=Rect(xpos, menuy, menuw, (item.icon).get_height())
+			menuy += ((item.icon).get_height() + 2)
+		else:
+			drawsurf.blit(item.icon, (menux, (menuy + 2)))
+			drawsurf.blit(itemtext, ((menux + 2 + (item.icon).get_width()), menuy))
+			gx=Rect(xpos, menuy, menuw, yjump)
+			menuy += yjump
+		#pygame.draw.rect(screensurf, (255, 0, 0), gx, 1)
+		
+		
+		item.box=gx
+		pygame.draw.line(drawsurf, linecol, ((0 + xpos), menuy), ((menuw + xpos - 1), menuy))
+	pygame.display.update()
+	return [menulist, menugx]
+
 		
 #returns list of lines contained in textstring)
 def listline(textstring):

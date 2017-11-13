@@ -73,6 +73,7 @@ romicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'ROM.png')).
 taskmanicn=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'taskman.png')).convert()
 consoleicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'console.png')).convert()
 sysshellicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'sysshell.png')).convert()
+genericcaticon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'genericcat.png')).convert()
 
 #fvfilemenu=pygame.image.load(os.path.join("VMSYSTEM", "GFX", "launch", 'fvfilemenu.png')).convert()
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
@@ -186,8 +187,8 @@ class launchtile:
 			pygame.draw.rect(self.tilesurf, libthemeconf.tiletext, self.plusrect1, 0)
 			pygame.draw.rect(self.tilesurf, libthemeconf.tiletext, self.plusrect2, 0)
 		
-	def render(self, xpos, ypos):
-		self.tilebox=bg.blit(self.tilesurf, (xpos, ypos))
+	def render(self, xpos, ypos, surf=bg):
+		self.tilebox=surf.blit(self.tilesurf, (xpos, ypos))
 	def act(self):
 		if self.ltype==4:
 			return "taskman"
@@ -208,6 +209,8 @@ class launchtile:
 				subprocess.Popen(["python", "MK2-RUN.py", "-k", self.lref])
 			if self.ltype==2:
 				subprocess.Popen(["python", "MK2-RUN.py", self.lref])
+			if self.ltype==6:
+				return (self.lref, self.lref2)
 			
 #create launchtile objects
 helpt=launchtile("Help", helpicn, 0, lref="helpview.py")
@@ -232,11 +235,13 @@ LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=ShellSystem)
 LAUNCHFILE=launchtile("File Manager", filemanicon, 3, lref="fileman")
 
+
 #testwid=launchutils.testwid(screensurf, 40, 40)
 
 activewids=[]
 
 #category lists
+
 maincat=[filet, calct, settingt, themet, helpt]
 gamescat=[gttt]
 welcomecat=[introt]
@@ -257,9 +262,15 @@ for plug in launchutils.pluglist:
 		democat.extend([PLUGTILE])
 	if 4 in plug.catid:
 		ltoolcat.extend([PLUGTILE])
-
+plugcatt=launchtile("Plugins", genericcaticon, 6, lref="Plugins", lref2=plugincat)
+maincatt=launchtile("Main", genericcaticon, 6, lref="main", lref2=maincat)
+welcomet=launchtile("Welcome", genericcaticon, 6, lref="Welcome", lref2=welcomecat)
+demot=launchtile("Demos", genericcaticon, 6, lref="Demos", lref2=democat)
+gamest=launchtile("Games", genericcaticon, 6, lref="Games", lref2=gamescat)
+ltoolt=launchtile("Desk Apps", genericcaticon, 6, lref="Desk Applications", lref2=ltoolcat)
+deskcat=[maincatt, welcomet, demot, gamest, ltoolt, plugcatt]
 #category definitions
-tilelist=maincat
+tilelist=deskcat
 catid=0
 catname="Main"
 
@@ -314,12 +325,14 @@ fullredraw=0
 hiddenwids=list()
 uptlist=list()
 
-hudtasksw=launchutils.hudswitch(screensurf, 0, 200, 0, [activewids, hiddenwids])
+hudtasksw=launchutils.hudswitch(screensurf, 0, 114, 0, [activewids, hiddenwids])
 hudtasksw.taskid=taskidcnt
 hudtaskswid=taskidcnt
 activewids.extend([hudtasksw])
 hiddenwids.extend([taskidcnt])
 taskidcnt += 1
+
+catsellist=list()
 
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
@@ -358,14 +371,15 @@ while qflg==0:
 		bg.blit(versnumgfx, ((screenx - versnumgfx.get_width() - 10), 30))
 		#
 		filemx=bg.blit(fvfilemenu, (3, 3))
-		sysmx=bg.blit(fvsystemmenu, (133, 3))
+		#sysmx=bg.blit(fvsystemmenu, (133, 3))
+		sysmx=bg.blit(fvsystemmenu, (48, 3))
 		uptcat=1
 	#category button redraw (avoid full hud redraw on cat change
 	if uptcat==1:
 		uptcat=0
-		catmx=bg.blit(fvcatmenu, (48, 3))
-		menulabel=catfont.render(catname, True, libthemeconf.btntext)
-		bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
+		#catmx=bg.blit(fvcatmenu, (48, 3))
+		#menulabel=catfont.render(catname, True, libthemeconf.btntext)
+		#bg.blit(menulabel, ((48+40-(menulabel.get_width() // 2)), 5))
 		tilex=10
 		tiley=60
 		tilejumpx=100
@@ -373,7 +387,7 @@ while qflg==0:
 		
 		#tile render
 		for tile in tilelist:
-			tile.render(tilex, tiley)
+			tile.render(tilex, tiley, surf=bg)
 			if tilex+tilejumpx+90<screenx:
 				tilex += tilejumpx
 			else:
@@ -499,7 +513,53 @@ while qflg==0:
 							if widd.taskid==widret[2]:
 								#launchutils.consolewrite("Taskswitcher: bring task: \"" + widd.title + "\" Of TaskID: \"" + str(widd.taskid) + "\" To Front")
 								widd.wo=0
-								scupdate=1	
+								scupdate=1
+				elif widret[0]=="CATSEL" and wid.taskid in catsellist:
+					wid.sigret=None
+					actret=widret[1]
+					if actret!=None:
+						if actret=="taskman":
+							#widis=launchutils.widlookup("taskman")
+							try:
+								widx=launchutils.taskman(screensurf, 0, 40, 80, argument=activewids)
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								scupdate=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
+								taskmanlist.extend([widx.taskid])
+							except Exception as err:
+								errorreport("Taskman", "Init (TASKMAN)", err)
+						elif len(actret)==3:
+							widis=actret[0]
+							try:
+								widx=widis(screensurf, 0, 40, 80, argument=None)
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								scupdate=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
+							except Exception as err:
+								errorreport("<INIT ERROR, SEE TRACEBACK>", "Init (plugin)", err)
+							
+						else:
+							widis=launchutils.widlookup(actret[0])
+							try:
+								widx=widis(screensurf, 0, 40, 80, argument=actret[1])
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								scupdate=1
+								activewids.extend([widx])
+								#activewids.sort(key=lambda x: x.wo, reverse=True)
+							except Exception as err:
+								errorreport("<INIT ERROR, SEE TRACEBACK>", "Init (internal)", err)
 				elif widret[0]=="TASKMAN" and wid.taskid in taskmanlist:
 					#reset taskman's return variable.
 					wid.sigret=None
@@ -677,6 +737,20 @@ while qflg==0:
 									taskmanlist.extend([widx.taskid])
 								except Exception as err:
 									errorreport("Taskman", "Init (TASKMAN)", err)
+							elif tile.ltype==6:
+								#widis=launchutils.widlookup("taskman")
+								try:
+									widx=launchutils.catsel(screensurf, 0, 40, 80, argument=[actret[0], actret[1]])
+									widx.taskid=taskidcnt
+									taskidcnt +=1
+									scupdate=1
+									#ctivewids=activewids + [widx]
+									for wid in activewids:
+										wid.wo += 1
+									activewids.extend([widx])
+									catsellist.extend([widx.taskid])
+								except Exception as err:
+									errorreport("Catsel", "Init (CATSEL)", err)
 							elif len(actret)==3:
 								widis=actret[0]
 								try:
@@ -734,7 +808,7 @@ while qflg==0:
 						break
 				#system menu
 				if sysmx.collidepoint(event.pos)==1 and event.button==1:
-					menuret=vmui.menuset(systemmenu, 133, 43, reclick=0, fontsize=26)
+					menuret=vmui.menuset(systemmenu, 48, 43, reclick=0, fontsize=26)
 					if menuret=="TASKMAN":
 						try:
 							#widis=launchutils.widlookup("taskman")
@@ -783,49 +857,4 @@ while qflg==0:
 								errorreport("Console", "Init (Fileman)", err)
 					if menuret=="SCSHOT":
 						pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-launcher.png')))
-				#category menu
-				if catmx.collidepoint(event.pos)==1 and event.button==1:
-					menuret=vmui.menuset(catmenu, 48, 43, reclick=0, fontsize=26)
-					if menuret=="MAIN":
-						tilelist=maincat
-						catid=0
-						catname="Main"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
-					if menuret=="GAMES":
-						tilelist=gamescat
-						catid=1
-						catname="Games"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
-					if menuret=="WELCOME":
-						tilelist=welcomecat
-						catid=2
-						catname="Welcome"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
-					if menuret=="DEMOS":
-						tilelist=democat
-						catid=3
-						catname="Demos"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
-					if menuret=="LTOOL":
-						tilelist=ltoolcat
-						catid=4
-						catname="Mini Tools"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
-					if menuret=="PLUG":
-						tilelist=plugincat
-						catid=5
-						catname="Plugins"
-						scupdate=1
-						uptcat=1
-						fullredraw=1
 	
