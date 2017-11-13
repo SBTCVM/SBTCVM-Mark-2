@@ -17,7 +17,7 @@
 	<div/>
 	<text>configuration</text>
 	<lnk label="Settings">settings.xml</lnk>
-	<lnk label="Theme Settings">Theme.xml</lnk>
+	<lnk label="Theme Settings">theme.xml</lnk>
 	<div/>
 	<text>Other Context Help</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>

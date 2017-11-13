@@ -265,10 +265,11 @@ for plug in launchutils.pluglist:
 plugcatt=launchtile("Plugins", genericcaticon, 6, lref="Plugins", lref2=plugincat)
 maincatt=launchtile("Main", genericcaticon, 6, lref="main", lref2=maincat)
 welcomet=launchtile("Welcome", genericcaticon, 6, lref="Welcome", lref2=welcomecat)
-demot=launchtile("Demos", genericcaticon, 6, lref="Demos", lref2=democat)
+maincat.extend([welcomet])
+demot=launchtile("VM Apps", genericcaticon, 6, lref="VM Apps", lref2=democat)
 gamest=launchtile("Games", genericcaticon, 6, lref="Games", lref2=gamescat)
 ltoolt=launchtile("Desk Apps", genericcaticon, 6, lref="Desk Applications", lref2=ltoolcat)
-deskcat=[maincatt, welcomet, demot, gamest, ltoolt, plugcatt]
+deskcat=[LAUNCHFILE, maincatt, demot, gamest, ltoolt, plugcatt]
 #category definitions
 tilelist=deskcat
 catid=0
@@ -532,6 +533,20 @@ while qflg==0:
 								taskmanlist.extend([widx.taskid])
 							except Exception as err:
 								errorreport("Taskman", "Init (TASKMAN)", err)
+						elif widret[2]==6:
+							#widis=launchutils.widlookup("taskman")
+							try:
+								widx=launchutils.catsel(screensurf, 0, 40, 80, argument=[actret[0], actret[1]])
+								widx.taskid=taskidcnt
+								taskidcnt +=1
+								scupdate=1
+								#ctivewids=activewids + [widx]
+								for wid in activewids:
+									wid.wo += 1
+								activewids.extend([widx])
+								catsellist.extend([widx.taskid])
+							except Exception as err:
+								errorreport("Catsel", "Init (CATSEL)", err)
 						elif len(actret)==3:
 							widis=actret[0]
 							try:

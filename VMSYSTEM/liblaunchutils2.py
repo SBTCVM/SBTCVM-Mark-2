@@ -376,10 +376,15 @@ class catsel:
 		self.argument=argument
 		self.title=self.argument[0]
 		self.tilelist=list()
+		#fix for deepcopy breaking python surfaces.
 		for self.q in self.argument[1]:
+			if self.q.ltype==6:
+				self.lrbak=self.q.lref2
 			self.tilbak=self.q.tilesurf.copy()
 			self.tilcopy=copy.deepcopy(self.q)
 			self.tilcopy.tilesurf=self.tilbak
+			if self.q.ltype==6:
+				self.tilcopy.lref2=self.lrbak
 			self.tilelist.extend([self.tilcopy])
 		#taskid is set automatically
 		self.taskid=0
@@ -468,7 +473,7 @@ class catsel:
 				return
 		for self.tile in self.tilelist:
 			if self.tile.tilebox.collidepoint(self.localpos)==1 and event.button==1:
-				self.sigret=["CATSEL", self.tile.act()]
+				self.sigret=["CATSEL", self.tile.act(), self.tile.ltype]
 	def clickup(self, event):
 		return
 	def keydown(self, event):
