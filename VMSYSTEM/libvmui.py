@@ -1369,8 +1369,10 @@ def creditsscroll(topleft=0):
 mbg0=menuitem("Blue Gradient", "BG0")
 mbg1=menuitem("Flower", "BG1")
 mbg2=menuitem("Clouds", "BG2")
-
-bgmenu=[mbg0, mbg1, mbg2]
+mbg3=menuitem("Green Gradient", "BG3")
+mbg4=menuitem("Grey Gradient", "BG4")
+mbg5=menuitem("Beach", "BG5")
+bgmenu=[mbg0, mbg4, mbg3, mbg1, mbg2, mbg5]
 
 def getbgname(bgnum):
 	if bgnum==0:
@@ -1379,7 +1381,12 @@ def getbgname(bgnum):
 		return "Flower"
 	if bgnum==2:
 		return "Clouds"
-	
+	if bgnum==3:
+		return "Green Gradient"
+	if bgnum==4:
+		return "Grey Gradient"
+	if bgnum==5:
+		return "Beach"
 
 def settheme(xpos, ypos, nosave=0):
 	bgret=menuset(bgmenu, xpos, ypos, reclick=0, fontsize=26)
@@ -1395,6 +1402,18 @@ def settheme(xpos, ypos, nosave=0):
 			#return "Flower"
 	if bgret=="BG2":
 		libthemeconf.setconf("desk", "bgtheme", "2")
+		if nosave==0:
+			libthemeconf.saveconf()
+	if bgret=="BG3":
+		libthemeconf.setconf("desk", "bgtheme", "3")
+		if nosave==0:
+			libthemeconf.saveconf()
+	if bgret=="BG4":
+		libthemeconf.setconf("desk", "bgtheme", "4")
+		if nosave==0:
+			libthemeconf.saveconf()
+	if bgret=="BG5":
+		libthemeconf.setconf("desk", "bgtheme", "5")
 		if nosave==0:
 			libthemeconf.saveconf()
 			#return "clouds"

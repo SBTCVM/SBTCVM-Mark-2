@@ -83,6 +83,9 @@ def bgmake(programbgoverlay=None):
 	themebg0=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG0.jpg'))
 	themebg1=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG1.jpg'))
 	themebg2=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG2.jpg'))
+	themebg3=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG3.jpg'))
+	themebg4=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG4.jpg'))
+	themebg5=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'THEME-BG5.jpg'))
 	BGNUM=int(getconf("desk", "bgtheme"))
 	if BGNUM==0:
 		bg=themebg0
@@ -90,6 +93,12 @@ def bgmake(programbgoverlay=None):
 		bg=themebg1
 	if BGNUM==2:
 		bg=themebg2
+	if BGNUM==3:
+		bg=themebg3
+	if BGNUM==4:
+		bg=themebg4
+	if BGNUM==5:
+		bg=themebg5
 	if programbgoverlay!=None:
 		bg.blit(programbgoverlay, (0, 0))
 	return bg

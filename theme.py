@@ -41,7 +41,7 @@ swoff=swn[1]
 
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
-bgbtn=vmui.makemenubtn("BACKGROUND", width=89)
+bgbtn=vmui.makemenubtn("BACKGROUND", width=120)
 themebtn=vmui.makemenubtn("THEME", width=120)
 
 simplefontC = pygame.font.SysFont(None, 28)
