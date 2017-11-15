@@ -61,7 +61,15 @@ def dir_cd(pathlist, dirstr):
 		return dir_cdup(pathlist)
 	elif dirstr=="/":
 		return ['.']
-	elif os.path.isdir(os.path.join(os.path.join(*pathlist), dirstr)):
+	elif dirstr=="../":
+		return dir_cdup(pathlist)
+	elif dirstr=="./":
+		return pathlist
+	elif '/' in dirstr:
+		return pathlist
+	elif '\\' in dirstr:
+		return pathlist
+	elif isdir(dirstr, pathlist):
 		pathlist.extend([dirstr])
 		return pathlist
 	return None

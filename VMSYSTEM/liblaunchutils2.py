@@ -367,7 +367,6 @@ class taskman:
 
 class catsel:
 	def __init__(self, screensurf, windoworder, xpos=0, ypos=0, argument=None):
-		consolewrite("catsel: running")
 		#screensurf is the surface to blit the window to
 		self.screensurf=screensurf
 		#wo is a sorting variable used to sort the windows in a list
@@ -375,17 +374,7 @@ class catsel:
 		#title is the name of the window
 		self.argument=argument
 		self.title=self.argument[0]
-		self.tilelist=list()
-		#fix for deepcopy breaking python surfaces.
-		for self.q in self.argument[1]:
-			if self.q.ltype==6:
-				self.lrbak=self.q.lref2
-			self.tilbak=self.q.tilesurf.copy()
-			self.tilcopy=copy.deepcopy(self.q)
-			self.tilcopy.tilesurf=self.tilbak
-			if self.q.ltype==6:
-				self.tilcopy.lref2=self.lrbak
-			self.tilelist.extend([self.tilcopy])
+		self.tilelist=self.argument[1]
 		#taskid is set automatically
 		self.taskid=0
 		
@@ -419,19 +408,25 @@ class catsel:
 			self.tiley=5+self.tileoff
 			self.tilejumpx=100
 			self.tilejumpy=95
-			
+			self.tilerects=dict()
+			self.tilecnt=0
 			#tile render
 			for self.tile in self.tilelist:
 				self.tile.render(self.tilex, self.tiley, surf=self.widsurf)
+				self.tilerects[self.tilecnt]=self.tile.tilebox
 				#self.tile.tilebox.x += self.x
 				#self.tile.tilebox.y += self.y
+				self.tilecnt += 1
 				if self.tilex+self.tilejumpx+90<self.widx:
 					self.tilex += self.tilejumpx
 				else:
 					self.tilex=5
 					self.tiley += self.tilejumpy
-		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
-		
+			drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+			return [self.framerect]
+		else:
+			drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+			return []
 	def movet(self, xoff, yoff):
 		
 		self.x -= xoff
@@ -471,9 +466,11 @@ class catsel:
 				self.tileoff -= self.tilejumpy
 				self.fullupt=1
 				return
+		self.tilecnt=0
 		for self.tile in self.tilelist:
-			if self.tile.tilebox.collidepoint(self.localpos)==1 and event.button==1:
+			if self.tilerects[self.tilecnt].collidepoint(self.localpos)==1 and event.button==1:
 				self.sigret=["CATSEL", self.tile.act(), self.tile.ltype]
+			self.tilecnt += 1
 	def clickup(self, event):
 		return
 	def keydown(self, event):

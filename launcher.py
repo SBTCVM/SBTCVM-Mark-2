@@ -234,7 +234,9 @@ TASKMAN=launchtile("Task Manager", taskmanicn, 4)
 LAUNCHCON=launchtile("Console", consoleicon, 3, lref="LaunchConsole")
 LAUNCHSHELL=launchtile("System Shell", sysshellicon, 3, lref="shell", lref2=ShellSystem)
 LAUNCHFILE=launchtile("File Manager", filemanicon, 3, lref="fileman")
-
+#prevent rect problems with desk category
+DESKFILE=launchtile("File Manager", filemanicon, 3, lref="fileman")
+DESKHELP=launchtile("Help", helpicn, 0, lref="helpview.py")
 
 #testwid=launchutils.testwid(screensurf, 40, 40)
 
@@ -269,7 +271,8 @@ maincat.extend([welcomet])
 demot=launchtile("VM Apps", genericcaticon, 6, lref="VM Apps", lref2=democat)
 gamest=launchtile("Games", genericcaticon, 6, lref="Games", lref2=gamescat)
 ltoolt=launchtile("Desk Apps", genericcaticon, 6, lref="Desk Applications", lref2=ltoolcat)
-deskcat=[LAUNCHFILE, maincatt, demot, gamest, ltoolt, plugcatt]
+#note: these should be unique class instances, (create duplicates if needed)
+deskcat=[DESKFILE, DESKHELP, maincatt, demot, gamest, ltoolt, plugcatt]
 #category definitions
 tilelist=deskcat
 catid=0
