@@ -400,16 +400,27 @@ class catsel:
 		self.sigret=None
 		self.tileoff=0
 		self.fullupt=1
+		#first render flag
+		self.firstrender=1
+		self.tilejumpx=100
+		self.tilejumpy=95
+		self.vscrollbtns=vmui.makevscroll()
+		#first render size check hight value
+		self.tileyprev=0
+		#vertical autosize limit
+		self.autovertlimit = (5 + (self.tilejumpy * 4))
+		#print self.autovertlimit
 	def render(self):
 		if self.fullupt==1:
 			self.fullupt=0
 			self.widsurf.fill(framebg)
 			self.tilex=5
 			self.tiley=5+self.tileoff
-			self.tilejumpx=100
-			self.tilejumpy=95
+			self.tileyscrollcheck=self.tiley
 			self.tilerects=dict()
 			self.tilecnt=0
+			self.tilerollover=1
+			self.firstrow=1
 			#tile render
 			for self.tile in self.tilelist:
 				self.tile.render(self.tilex, self.tiley, surf=self.widsurf)
@@ -418,12 +429,34 @@ class catsel:
 				#self.tile.tilebox.y += self.y
 				self.tilecnt += 1
 				if self.tilex+self.tilejumpx+90<self.widx:
+					#rollover check
+					if self.tilerollover==1:
+						self.tilerollover=0
+						self.tileyprev += self.tilejumpy
+						self.tileyscrollcheck=self.tiley + self.tilejumpy - 5
 					self.tilex += self.tilejumpx
 				else:
+					self.firstrow=0
 					self.tilex=5
 					self.tiley += self.tilejumpy
-			drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
-			return [self.framerect]
+					self.tilerollover=1
+			if self.tileoff<0:
+				self.widsurf.blit(self.vscrollbtns[0], (self.widx-40, 0))
+			if (self.tileyscrollcheck) >= self.widy:
+				self.widsurf.blit(self.vscrollbtns[1], (self.widx-40, self.widy-20))
+			#first render check
+			if self.firstrender==1:
+				self.firstrender=0
+				self.widy=(self.tileyprev + 5)
+				if self.widy>self.autovertlimit:
+					self.widy=self.autovertlimit
+				if self.firstrow==1:
+					self.widx=self.tilex
+				self.resizet(0, 0)
+				self.render()
+			else:
+				drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
+				return [self.framerect]
 		else:
 			drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 			return []
@@ -443,8 +476,8 @@ class catsel:
 		#check the size to ensure it isn't too small (or invalid)
 		if self.widx<200:
 			self.widx=200
-		if self.widy<200:
-			self.widy=200
+		if self.widy<100:
+			self.widy=100
 		self.tileoff=0
 		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
 		self.widsurf=pygame.Surface((self.widx, self.widy)).convert(self.screensurf)
@@ -462,7 +495,7 @@ class catsel:
 				self.fullupt=1
 				return
 		if event.button==5:
-			if (self.tiley + self.tilejumpy) >= self.widy:
+			if (self.tileyscrollcheck) >= self.widy:
 				self.tileoff -= self.tilejumpy
 				self.fullupt=1
 				return
@@ -1165,6 +1198,7 @@ class fileman:
 		self.runexec=0
 		self.filterflg=0
 		self.filmenu=0
+		self.vscrollbtns=vmui.makevscroll()
 	def render(self):
 		if self.scup==1:
 			self.widsurf.fill(framebg)
@@ -1219,6 +1253,10 @@ class fileman:
 							else:
 								self.texty += 30
 			self.texty += 30
+			if self.yoff<0:
+				self.widsurf.blit(self.vscrollbtns[0], (self.widx-40, 0))
+			if self.texty>self.widy:
+				self.widsurf.blit(self.vscrollbtns[1], (self.widx-40, self.widy-20))
 		drawframe(self.framerect, self.closerect, self.widbox, self.widsurf, self.screensurf, self.title, self.wo)
 		
 		#filter menu render

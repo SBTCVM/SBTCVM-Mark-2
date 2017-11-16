@@ -39,6 +39,7 @@ yndiag      :  test yndiag function
 okdiag      :  test okdiag function
 menu        :  test graphical menu function.
 textinput   :  test text input function.
+scrollbtn   :  test scroll buttons.
 
 imgview [image] : fileview's image viewer
 textview [file] : fileview's text viewer
@@ -86,7 +87,7 @@ elif cmd=="namecrunch" or cmd=="timecodetest":
 			print BG
 			BQ=libSBTCVM.timedecode(BG)
 			print BQ
-elif cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
+elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -133,6 +134,17 @@ elif cmd=="btclock" or cmd=="pause" or cmd=="uicredits" or cmd=="imgview" or cmd
 		vmui.creditsscroll(topleft=1)
 	if cmd=="textinput":
 		vmui.toolsscreen(1)
+		textinpout=vmui.textinput(4, 210)
+		print "Input has returned:"
+		print textinpout
+	if cmd=="scrollbtn":
+		vmui.toolsscreen(1)
+		hscroll=vmui.makehscroll()
+		screensurf.blit(hscroll[0], (20, 20))
+		screensurf.blit(hscroll[1], (20, 60))
+		vscroll=vmui.makevscroll()
+		screensurf.blit(vscroll[0], (60, 20))
+		screensurf.blit(vscroll[1], (60, 60))
 		textinpout=vmui.textinput(4, 210)
 		print "Input has returned:"
 		print textinpout

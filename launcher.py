@@ -163,15 +163,21 @@ ShellSystem=sysshellque()
 class launchtile:
 	def __init__(self, label, icon, ltype, lref=None, lref2=None):
 		self.label=label
-		self.textren=tilefont.render(self.label, True, libthemeconf.tiletext)
-		self.icon=icon
-		self.ltype=ltype
-		self.lref=lref
-		self.lref2=lref2
 		self.tileh=90
 		self.tilew=90
 		self.iconw=60
 		self.iconh=60
+		self.textren2=None
+		self.textren=tilefont.render(self.label, True, libthemeconf.tiletext)
+		if self.textren.get_width()>self.tilew:
+			self.label1, self.label2 = self.label[:len(self.label)//2], self.label[len(self.label)//2:]
+			self.textren=tilefont.render(self.label1, True, libthemeconf.tiletext)
+			self.textren2=tilefont.render(self.label2, True, libthemeconf.tiletext)
+		self.icon=icon
+		self.ltype=ltype
+		self.lref=lref
+		self.lref2=lref2
+		
 		self.tilebox=pygame.Rect(0, 0, self.tileh, self.tilew)
 		self.tilesurf=pygame.Surface((self.tilew, self.tileh), SRCALPHA).convert_alpha()
 		self.tilesurf.fill(libthemeconf.tilecolor)
@@ -180,7 +186,13 @@ class launchtile:
 		self.icony=3
 		self.texty=(self.icony+self.iconh+3)
 		self.tilesurf.blit(self.icon, (self.iconx, self.icony))
-		self.tilesurf.blit(self.textren, (self.textx, self.texty))
+		
+		if self.textren2!=None:
+			self.textx2=((self.tileh // 2) - (self.textren2.get_width() // 2))
+			self.tilesurf.blit(self.textren2, (self.textx2, self.texty + 8))
+			self.tilesurf.blit(self.textren, (self.textx, self.texty - 10))
+		else:
+			self.tilesurf.blit(self.textren, (self.textx, self.texty))
 		if ltype==5:
 			self.plusrect1=pygame.Rect(6, 2, 4, 12)
 			self.plusrect2=pygame.Rect(2, 6, 12, 4)
@@ -251,6 +263,18 @@ democat=[introt, starryt, rayburstt, dazzlet, pixelpatt]
 ltoolcat=[TASKMAN, LAUNCHCON, LAUNCHSHELL, LAUNCHFILE]
 plugincat=[]
 
+myvmcat=[]
+mytromscat=[]
+otherromscat=[]
+for vmuserfile in libfilevirtual.diriterate(["VMUSER"]):
+	if (vmuserfile.lower()).endswith(".trom"):
+		mytromscat.extend([launchtile((vmuserfile.rsplit('.', 1)[0]), romicon, 2, lref=os.path.join("VMUSER", vmuserfile))])
+
+for romfile in libfilevirtual.diriterate(["ROMS"]):
+	if (romfile.lower()).endswith(".trom"):
+		otherromscat.extend([launchtile((romfile.rsplit('.', 1)[0]), romicon, 2, lref=os.path.join("ROMS", romfile))])
+
+
 for plug in launchutils.pluglist:
 	PLUGTILE=launchtile(plug.label, plug.icon, 5, lref=plug.classref)
 	plugincat.extend([PLUGTILE])
@@ -268,11 +292,18 @@ plugcatt=launchtile("Plugins", genericcaticon, 6, lref="Plugins", lref2=pluginca
 maincatt=launchtile("Main", genericcaticon, 6, lref="main", lref2=maincat)
 welcomet=launchtile("Welcome", genericcaticon, 6, lref="Welcome", lref2=welcomecat)
 maincat.extend([welcomet])
-demot=launchtile("VM Apps", genericcaticon, 6, lref="VM Apps", lref2=democat)
+maincat.extend([plugcatt])
+myvmt=launchtile("My VM", genericcaticon, 6, lref="My VM", lref2=myvmcat)
+mytromst=launchtile("My TROMs", genericcaticon, 6, lref="My TROMs", lref2=mytromscat)
+myvmcat.extend([mytromst])
+moreromst=launchtile("More TROMs", genericcaticon, 6, lref="More TROMs", lref2=otherromscat)
+
+demot=launchtile("VM Apps", genericcaticon, 6, lref="VM Applications", lref2=democat)
+democat.extend([moreromst])
 gamest=launchtile("Games", genericcaticon, 6, lref="Games", lref2=gamescat)
 ltoolt=launchtile("Desk Apps", genericcaticon, 6, lref="Desk Applications", lref2=ltoolcat)
 #note: these should be unique class instances, (create duplicates if needed)
-deskcat=[DESKFILE, DESKHELP, maincatt, demot, gamest, ltoolt, plugcatt]
+deskcat=[DESKFILE, DESKHELP, maincatt, demot, gamest, ltoolt, myvmt]
 #category definitions
 tilelist=deskcat
 catid=0

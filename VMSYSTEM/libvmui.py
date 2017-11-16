@@ -74,7 +74,37 @@ def makediagbtn(btnmark, label):
 	menulabel=btnfontdialog.render(label, True, libthemeconf.btntext)
 	btn.blit(menulabel, (((tahalf) - (menulabel.get_width() // 2)), 4))
 	return btn
+def makevscroll():
+	height=20
+	width=40
+	btn=pygame.Surface((width, height))
+	btn2=pygame.Surface((width, height))
+	btnrect=pygame.Rect(0, 0, width, height)
+	uplist=[(2, 17), (19, 2), (20, 2), (37, 17)]
+	downlist=[(2, 2), (19, 17), (20, 17), (37, 2)]
+	pygame.draw.rect(btn, libthemeconf.btnbg2, btnrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btn2, libthemeconf.btnbg2, btnrect, 0)
+	pygame.draw.rect(btn2, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.polygon(btn, libthemeconf.btntext, uplist)
+	pygame.draw.polygon(btn2, libthemeconf.btntext, downlist)
+	return (btn, btn2)
 
+def makehscroll():
+	height=40
+	width=20
+	btn=pygame.Surface((width, height))
+	btn2=pygame.Surface((width, height))
+	btnrect=pygame.Rect(0, 0, width, height)
+	leftlist=[(17, 2), (17, 37), (2, 20), (2, 19)]
+	rightlist=[(2, 2), (2, 37), (17, 20), (17, 19)]
+	pygame.draw.rect(btn, libthemeconf.btnbg2, btnrect, 0)
+	pygame.draw.rect(btn, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.rect(btn2, libthemeconf.btnbg2, btnrect, 0)
+	pygame.draw.rect(btn2, libthemeconf.btnline, btnrect, 1)
+	pygame.draw.polygon(btn, libthemeconf.btntext, leftlist)
+	pygame.draw.polygon(btn2, libthemeconf.btntext, rightlist)
+	return (btn, btn2)
 def makerotbtn(toplabel, bottomlabel):
 	height=42
 	width=82
