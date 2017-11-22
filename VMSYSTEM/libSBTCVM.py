@@ -357,7 +357,7 @@ def foobsin(num):
 	
 
 def autosquare2(freq):
-	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(mixrate))])
+	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(mixrate/freq))])
 	return temparray
 
 def autosquare(freq, lenth):
