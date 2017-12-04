@@ -175,6 +175,7 @@ def toolsscreen(mode):
 #SBTCVM pause menu.
 #called upon by SBTCVM_MK2.py when Escape is pressed.
 def pausemenu(posthalt=0):
+	pygame.mixer.pause()
 	pmpause=menuitem("(paused)", "PAUSE", noclick=1)
 	pmhalted=menuitem("(System halted)", "SYSHLT", noclick=1)
 	pmcont=menuitem("continue", "CONT")
@@ -196,6 +197,7 @@ See README.md for more information."""
 	while True:
 		menuret=menuset(pmmenu, 3, 43, reclick=0, scrndest='SCREENSHOT.png', fontsize=26)
 		if menuret=="CONT" or menuret==None:
+			pygame.mixer.unpause()
 			return("c")
 		if menuret=="HELP":
 			subprocess.Popen(["python", "helpview.py", "vmhelp.xml"])
@@ -206,8 +208,10 @@ See README.md for more information."""
 		if menuret=="PMABOUT":
 			aboutdiag(diagabt, (950 // 2), (600 // 2))
 		if menuret=="STOP":
+			pygame.mixer.unpause()
 			return("s")
 		if menuret=="QUIT":
+			pygame.mixer.unpause()
 			return("qs")
 			
 			

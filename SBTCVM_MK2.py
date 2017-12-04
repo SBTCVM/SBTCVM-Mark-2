@@ -357,6 +357,7 @@ sysmcapplot=vmui.menuitem("Capture plotters", "DISPDMP")
 sysmcapscr=vmui.menuitem("Capture screenshot", "SCSHOT")
 sysmhalted=vmui.menuitem("(System halted)", "SYSHLT", noclick=1)
 def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
+	pygame.mixer.pause()
 	global disablereadouts
 	global stepbystep
 	global ttystyle
@@ -406,6 +407,7 @@ def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
 		for threaddex in BTSTACK:
 			print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
 		libtrom.manualdumptroms()
+	pygame.mixer.unpause()
 	return
 		
 		

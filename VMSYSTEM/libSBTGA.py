@@ -35,6 +35,8 @@ def getcolor0(string):
 		bluere=255
 	return (redre, greenre, bluere)
 
+
+
 #1-trit mono channel conversion. (used with 3-trit RGB)
 def shadlook0(string):
 	if string=="-":
@@ -44,8 +46,41 @@ def shadlook0(string):
 	if string=="+":
 		return 255
 
+
+
+
 dispsurf0=pygame.Surface((114, 81))
 dispsurf1=pygame.Surface((54, 38))
+dispsurf0pixarray=pygame.PixelArray(dispsurf0)
+dispsurf1pixarray=pygame.PixelArray(dispsurf1)
+
+#precompute mono display mapped values
+g0m1=dispsurf1.map_rgb((127, 127, 127))
+gnm1=dispsurf1.map_rgb((0, 0, 0))
+gpm1=dispsurf1.map_rgb((255, 255, 255))
+
+g0m0=dispsurf0.map_rgb((127, 127, 127))
+gnm0=dispsurf0.map_rgb((0, 0, 0))
+gpm0=dispsurf0.map_rgb((255, 255, 255))
+
+#mapped lookup functions for 1-trit mono display modes.
+def shadlook0mapped1(string):
+	if string=="-":
+		return gnm1
+	if string=="0":
+		return g0m1
+	if string=="+":
+		return gpm1
+
+def shadlook0mapped0(string):
+	if string=="-":
+		return gnm0
+	if string=="0":
+		return g0m0
+	if string=="+":
+		return gpm0
+
+	
 
 cubedisprect0=pygame.Rect(0, 0, 570, 405)
 cubedisprect1=pygame.Rect(0, 0, 648, 456)
@@ -68,27 +103,30 @@ class buffdisplay:
 			self.pixx=0
 			self.chunkcnt=0
 			self.addr=self.offset
+			self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 			while self.pixy!=81:
 				self.pixx=0
 				while self.pixx!=114:
 					if self.chunkcnt==0:
 						self.chunkcnt=1
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[6]) + (self.chunk[7]) + (self.chunk[8]))
 					elif self.chunkcnt==1:
 						self.chunkcnt=2
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[9]) + (self.chunk[10]) + (self.chunk[11]))
 					elif self.chunkcnt==2:
 						self.chunkcnt=0
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						
 						self.part=((self.chunk[12]) + (self.chunk[13]) + (self.chunk[14]))
 						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 					self.R1=shadlook0(self.part[0])
 					self.G1=shadlook0(self.part[1])
 					self.B1=shadlook0(self.part[2])
 					#print (self.R1, self.G1, self.B1)
-					dispsurf0.set_at((self.pixx, self.pixy),(self.R1, self.G1, self.B1))
+					#dispsurf0.set_at((self.pixx, self.pixy),(self.R1, self.G1, self.B1))
+					dispsurf0pixarray[self.pixx, self.pixy] = (self.R1, self.G1, self.B1)
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf0.unlock()
@@ -99,48 +137,51 @@ class buffdisplay:
 			self.pixx=0
 			self.chunkcnt=0
 			self.addr=self.offset
+			self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 			while self.pixy!=81:
 				self.pixx=0
 				while self.pixx!=114:
 					if self.chunkcnt==0:
 						self.chunkcnt=1
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[6]))
 					elif self.chunkcnt==1:
 						self.chunkcnt=2
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[7]))
 					elif self.chunkcnt==2:
 						self.chunkcnt=3
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[8]))
 					elif self.chunkcnt==3:
 						self.chunkcnt=4
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[9]))
 					elif self.chunkcnt==4:
 						self.chunkcnt=5
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[10]))
 					elif self.chunkcnt==5:
 						self.chunkcnt=6
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[11]))
 					elif self.chunkcnt==6:
 						self.chunkcnt=7
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[12]))
 					elif self.chunkcnt==7:
 						self.chunkcnt=8
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[13]))
 					elif self.chunkcnt==8:
 						self.chunkcnt=0
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						
 						self.part=((self.chunk[14]))
 						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
-					self.GREY=shadlook0(self.part)
-					dispsurf0.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+					self.GREY=shadlook0mapped0(self.part)
+					#dispsurf0.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
+					dispsurf0pixarray[self.pixx, self.pixy] = self.GREY
 					#print self.chunkcnt
 					#print self.pixx
 					#print self.pixy
@@ -154,27 +195,30 @@ class buffdisplay:
 			self.pixx=0
 			self.chunkcnt=0
 			self.addr=self.offset
+			self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 			while self.pixy!=38:
 				self.pixx=0
 				while self.pixx!=54:
 					if self.chunkcnt==0:
 						self.chunkcnt=1
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[6]) + (self.chunk[7]) + (self.chunk[8]))
 					elif self.chunkcnt==1:
 						self.chunkcnt=2
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[9]) + (self.chunk[10]) + (self.chunk[11]))
 					elif self.chunkcnt==2:
 						self.chunkcnt=0
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						
 						self.part=((self.chunk[12]) + (self.chunk[13]) + (self.chunk[14]))
 						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 					self.R1=shadlook0(self.part[0])
 					self.G1=shadlook0(self.part[1])
 					self.B1=shadlook0(self.part[2])
 					#print (self.R1, self.G1, self.B1)
-					dispsurf1.set_at((self.pixx, self.pixy),(self.R1, self.G1, self.B1))
+					#dispsurf1.set_at((self.pixx, self.pixy),(self.R1, self.G1, self.B1))
+					dispsurf1pixarray[self.pixx, self.pixy] = (self.R1, self.G1, self.B1)
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf1.unlock()
@@ -185,48 +229,50 @@ class buffdisplay:
 			self.pixx=0
 			self.chunkcnt=0
 			self.addr=self.offset
+			self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 			while self.pixy!=38:
 				self.pixx=0
 				while self.pixx!=54:
 					if self.chunkcnt==0:
 						self.chunkcnt=1
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[6]))
 					elif self.chunkcnt==1:
 						self.chunkcnt=2
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[7]))
 					elif self.chunkcnt==2:
 						self.chunkcnt=3
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[8]))
 					elif self.chunkcnt==3:
 						self.chunkcnt=4
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[9]))
 					elif self.chunkcnt==4:
 						self.chunkcnt=5
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[10]))
 					elif self.chunkcnt==5:
 						self.chunkcnt=6
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[11]))
 					elif self.chunkcnt==6:
 						self.chunkcnt=7
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[12]))
 					elif self.chunkcnt==7:
 						self.chunkcnt=8
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+						#self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[13]))
 					elif self.chunkcnt==8:
 						self.chunkcnt=0
-						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
 						self.part=((self.chunk[14]))
 						self.addr=libSBTCVM.trunkto6(libbaltcalc.btadd(self.addr, "+"))
-					self.GREY=shadlook0(self.part)
-					dispsurf1.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
+						self.chunk=self.membus[libSBTCVM.numstruct(self.addr)]
+					self.GREY=shadlook0mapped1(self.part)
+					#dispsurf1.set_at((self.pixx, self.pixy),(self.GREY, self.GREY, self.GREY))
+					dispsurf1pixarray[self.pixx, self.pixy] = self.GREY
 					#print self.chunkcnt
 					#print self.pixx
 					#print self.pixy
@@ -239,6 +285,7 @@ class buffdisplay:
 		self.offset=offset
 	def setmode(self, mode):
 		self.mode=mode
+
 
 #Cube matrix approx method
 class buffdisplaycubematrix:
