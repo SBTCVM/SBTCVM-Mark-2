@@ -208,7 +208,7 @@ See README.md for more information."""
 		if menuret=="PMABOUT":
 			aboutdiag(diagabt, (950 // 2), (600 // 2))
 		if menuret=="STOP":
-			pygame.mixer.unpause()
+			pygame.mixer.stop()
 			return("s")
 		if menuret=="QUIT":
 			pygame.mixer.unpause()

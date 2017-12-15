@@ -47,7 +47,7 @@ def shadlook0(string):
 		return 255
 
 
-
+dispscale=pygame.Surface((648, 460))
 
 dispsurf0=pygame.Surface((114, 81))
 dispsurf1=pygame.Surface((54, 38))
@@ -91,11 +91,20 @@ cubeblocksurf1=pygame.Surface((12, 12))
 #SBTGA v1
 class buffdisplay:
 	def __init__(self, screensurf, membus, offset, mode="G0"):
+		global dispscale
+		global dispsurf0
+		global dispsurf1
+		global dispsurf0pixarray
+		global dispsurf1pixarray
 		self.screensurf=screensurf
 		self.membus=membus
 		self.offset=offset
 		self.mode=mode
-		
+		dispscale=dispscale.convert(screensurf)
+		dispsurf0=dispsurf0.convert(screensurf)
+		dispsurf1=dispsurf1.convert(screensurf)
+		dispsurf0pixarray=pygame.PixelArray(dispsurf0)
+		dispsurf1pixarray=pygame.PixelArray(dispsurf1)
 	def render(self, x=0, y=0):
 		if self.mode=="G0":
 			dispsurf0.lock()
@@ -130,7 +139,8 @@ class buffdisplay:
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf0.unlock()
-			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 460)), (x, y))
+			pygame.transform.scale(dispsurf0, (648, 460), dispscale)
+			return self.screensurf.blit(dispscale, (x, y))
 		if self.mode=="G2":
 			dispsurf0.lock()
 			self.pixy=0
@@ -188,7 +198,8 @@ class buffdisplay:
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf0.unlock()
-			return self.screensurf.blit(pygame.transform.scale(dispsurf0, (648, 460)), (x, y))
+			pygame.transform.scale(dispsurf0, (648, 460), dispscale)
+			return self.screensurf.blit(dispscale, (x, y))
 		if self.mode=="G3":
 			dispsurf1.lock()
 			self.pixy=0
@@ -222,7 +233,8 @@ class buffdisplay:
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf1.unlock()
-			return self.screensurf.blit(pygame.transform.scale(dispsurf1, (648, 460)), (x, y))
+			pygame.transform.scale(dispsurf1, (648, 460), dispscale)
+			return self.screensurf.blit(dispscale, (x, y))
 		if self.mode=="G4":
 			dispsurf1.lock()
 			self.pixy=0
@@ -279,7 +291,8 @@ class buffdisplay:
 					self.pixx += 1
 				self.pixy += 1
 			dispsurf1.unlock()
-			return self.screensurf.blit(pygame.transform.scale(dispsurf1, (648, 460)), (x, y))
+			pygame.transform.scale(dispsurf1, (648, 460), dispscale)
+			return self.screensurf.blit(dispscale, (x, y))
 			return self.screensurf.blit(dispsurf1, (x, y))
 	def setoffset(self, offset):
 		self.offset=offset
