@@ -236,7 +236,7 @@ gxmask=pygame.Surface((410, 40), SRCALPHA)
 gxmask2=pygame.Surface((390, 40), SRCALPHA)
 box1rect=pygame.Rect(433, 17, 349, 23)
 box2rect=pygame.Rect(433, 71, 349, 23)
-
+engtimer=pygame.time.Clock()
 while quitflag==0:
 	#check to save needlessly redrawing display
 	if scupdate==1:
@@ -385,8 +385,8 @@ while quitflag==0:
 		screensurf.blit(iconlist[filterflg], (43, 57))
 		screensurf.blit(iconlist[filterflg2], (135, 57))
 		pygame.display.update(uptlist)
-	time.sleep(0.05)
-	
+	#time.sleep(0.05)
+	engtimer.tick(30)
 	#event handler
 	for event in pygame.event.get():
 		if event.type == QUIT:

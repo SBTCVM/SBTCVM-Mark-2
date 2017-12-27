@@ -180,6 +180,7 @@ resblock=0
 docopy=0
 #inputtextcol=(0, 0, 0)
 #bgcol=(255, 255, 255)
+engtimer=pygame.time.Clock()
 while qflg==0:
 	if scupdate==1:
 		scupdate=0
@@ -210,8 +211,8 @@ while qflg==0:
 			screensurf.blit(lockoff, (resbx, resby))
 		
 		pygame.display.update()
-	time.sleep(0.1)
-		
+	#time.sleep(0.1)
+	engtimer.tick(30)	
 	#event handler
 	for event in pygame.event.get():
 		keymods=pygame.key.get_mods()

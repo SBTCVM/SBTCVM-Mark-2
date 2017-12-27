@@ -230,6 +230,7 @@ def initui(scsurf, kiomode):
 	global sbtcvmbadge
 	global icon140
 	global diagbtnREADME
+	global diagbtncon
 	KIOSKMODE=kiomode
 	GFXLOGO=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'GFXLOGO-CAT.png')).convert()
 	sbtccat=pygame.image.load(os.path.join(os.path.join('VMSYSTEM', 'GFX'), 'SBTCCAT34.png')).convert()
@@ -239,6 +240,7 @@ def initui(scsurf, kiomode):
 	diagbtnno=makediagbtn(0, "NO")
 	diagbtnyes=makediagbtn(1, "YES")
 	diagbtnREADME=makediagbtn(1, "README")
+	diagbtncon=makediagbtn(1, "CONTRIB")
 	
 	
 
@@ -278,8 +280,10 @@ def textinput(xpos, ypos, textcol=libthemeconf.textboxtext, bgcol=libthemeconf.t
 	redraw=1
 	curoffset=len(textstring)
 	pygame.key.set_repeat(250, 50)
+	engtimer=pygame.time.Clock()
 	while True:
-		time.sleep(.03)
+		#time.sleep(.03)
+		engtimer.tick(30)
 		screensurf.blit(scbak, (0, 0))
 		#cursor blinking counter
 		if curcnt<curpoint:
@@ -451,8 +455,10 @@ def menuset(menulist, xpos, ypos, reclick=1, textcol=libthemeconf.diagtext, unav
 		item.box=gx
 		pygame.draw.line(screensurf, linecol, ((0 + xpos), menuy), ((menuw + xpos - 1), menuy))
 	pygame.display.update()
+	engtimer=pygame.time.Clock()
 	while True:
-		time.sleep(0.1)
+		#time.sleep(0.1)
+		engtimer.tick(30)
 		if pygame.event.peek(VIDEORESIZE):
 			return 0
 		for event in pygame.event.get():
@@ -624,8 +630,10 @@ def okdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 	btnx1=((dialogw // 2)-(btnw // 2) + xpos)
 	btnokx=screensurf.blit(diagbtnok, (btnx1, btny))
 	pygame.display.update()
+	engtimer=pygame.time.Clock()
 	while True:
-		time.sleep(0.1)
+		#time.sleep(0.1)
+		engtimer.tick(30)
 		if pygame.event.peek(VIDEORESIZE):
 			return "VID"
 		for event in pygame.event.get():
@@ -656,7 +664,7 @@ def aboutdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, 
 	ypad=5
 	xpad=5
 	btnsep=20
-	btnoffset=(btnw+btnsep)
+	btnoffset=(btnw+btnw+btnsep)
 	textbtnpad=10
 	dialogoffset1=(144 + yjump + 4 + (textbtnpad * 2) + btnh)
 	dialogh=(textbodyh + ypad + ypad + btnh + textbtnpad)
@@ -716,12 +724,16 @@ def aboutdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, 
 	pygame.draw.line(screensurf, linecol, (xpos, (dexhig)), ((xpos + dialogw - 1), (dexhig)), 1)
 	btny=(ypos + dialogh - textbtnpad - btnh)
 	btnx1=((dialogw // 2)-(btnw // 2) + xpos - (btnoffset // 2))
+	btnx0=((dialogw // 2)-(btnw // 2) + xpos)
 	btnx2=((dialogw // 2)-(btnw // 2) + xpos + (btnoffset // 2))
 	btnokx=screensurf.blit(diagbtnok, (btnx1, btny))
 	btnREADMEx=screensurf.blit(diagbtnREADME, (btnx2, btny))
+	btncredx=screensurf.blit(diagbtncon, (btnx0, btny))
 	pygame.display.update()
+	engtimer=pygame.time.Clock()
 	while True:
-		time.sleep(0.1)
+		#time.sleep(0.1)
+		engtimer.tick(30)
 		if pygame.event.peek(VIDEORESIZE):
 			return "VID"
 		for event in pygame.event.get():
@@ -735,6 +747,8 @@ def aboutdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, 
 						return "OK"
 					if btnREADMEx.collidepoint(event.pos):
 						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "README.md"])
+					if btncredx.collidepoint(event.pos):
+						subprocess.Popen(["python", "MK2-TOOLS.py", "textview", "contributors.md"])
 				elif reclick!=2:
 					if reclick==1:
 						pygame.event.clear()
@@ -804,8 +818,10 @@ def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 	btnyesx=screensurf.blit(diagbtnyes, (btnx1, btny))
 	btnnox=screensurf.blit(diagbtnno, (btnx2, btny))
 	pygame.display.update()
+	engtimer=pygame.time.Clock()
 	while True:
-		time.sleep(0.1)
+		#time.sleep(0.1)
+		engtimer.tick(30)
 		if pygame.event.peek(VIDEORESIZE):
 			return "VID"
 		for event in pygame.event.get():
@@ -859,15 +875,17 @@ See README.md for more information."""
 	screenh=screensurf.get_height()
 	#resizeflg is set to 1 upon a window resize event.
 	resizeflg=0
-	
+	followmouse=0
 	#open file
 	abt = open(textfile)
 	#set key repeat.
 	pygame.key.set_repeat(250, 50)
+	engtimer=pygame.time.Clock()
 	while qflg==0:
 		#set texty to yoff offset
 		texty=yoff
-		time.sleep(0.05)
+		#time.sleep(0.05)
+		engtimer.tick(30)
 		#resize operations
 		if resizeflg==1:
 			resizeflg=2	
@@ -901,6 +919,16 @@ See README.md for more information."""
 			pygame.display.update()
 			#store a copy of texty for use in scrolling handling.
 			qtexty=texty
+		if followmouse==1:
+			ppos=mpos
+			mpos=pygame.mouse.get_pos()
+			#xoff -=(ppos[0] - mpos[0])
+			fmoffset=(ppos[1] - mpos[1])
+			if fmoffset<44 or (qtexty + 30)>screenh:
+				yoff -=fmoffset
+			if yoff>44:
+				yoff=44
+			scupdate=1
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				qflg=1
@@ -963,17 +991,24 @@ See README.md for more information."""
 						break
 					if menuret=="ABOUT":
 						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
-				if event.button==5:
+				elif event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
-				if event.button==4:
+				elif event.button==4:
 					yoff += yjump
 					if yoff>44:
 						yoff=44
-				if event.button==3:
+				elif event.button==3:
 					yoff=44
 					textx=0
 					redraw=1
+				elif event.button==1:
+					followmouse=1
+					mpos=pygame.mouse.get_pos()
+			if event.type==MOUSEBUTTONUP:
+				#sets followmouse to 0 to stop image moving
+				if event.button==1:
+					followmouse=0
 			if event.type==VIDEORESIZE:
 				resizeflg=1
 				resw=event.w
@@ -1017,9 +1052,12 @@ See README.md for more information."""
 	resizeflg=0
 	abt = open(textfile)
 	pygame.key.set_repeat(250, 50)
+	engtimer=pygame.time.Clock()
+	followmouse=0
 	while qflg==0:
 		texty=yoff
-		time.sleep(0.05)
+		#time.sleep(0.05)
+		engtimer.tick(30)
 		if resizeflg==1:
 			resizeflg=2	
 		elif resizeflg==2:
@@ -1072,6 +1110,16 @@ See README.md for more information."""
 			screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 			pygame.display.update()
 			qtexty=texty
+		if followmouse==1:
+			ppos=mpos
+			mpos=pygame.mouse.get_pos()
+			#xoff -=(ppos[0] - mpos[0])
+			fmoffset=(ppos[1] - mpos[1])
+			if fmoffset<44 or (qtexty + 30)>screenh:
+				yoff -=fmoffset
+			if yoff>44:
+				yoff=44
+			scupdate=1
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				qflg=1
@@ -1134,17 +1182,24 @@ See README.md for more information."""
 						break
 					if menuret=="ABOUT":
 						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
-				if event.button==5:
+				elif event.button==5:
 					if qtexty>(yjump + yjump):
 						yoff -= yjump
-				if event.button==4:
+				elif event.button==4:
 					yoff += yjump
 					if yoff>44:
 						yoff=44
-				if event.button==3:
+				elif event.button==3:
 					yoff=44
 					textx=0
 					redraw=1
+				elif event.button==1:
+					followmouse=1
+					mpos=pygame.mouse.get_pos()
+			if event.type==MOUSEBUTTONUP:
+				#sets followmouse to 0 to stop image moving
+				if event.button==1:
+					followmouse=0
 			if event.type==VIDEORESIZE:
 				resizeflg=1
 				resw=event.w
@@ -1200,6 +1255,7 @@ See README.md for more information."""
 	defscale=scalefact
 	#main loop
 	scupdate=1
+	engtimer=pygame.time.Clock()
 	while qflg==0:
 		#resize logic. (the extra loop before resizing is to keep resizing smooth on certain window managers that "stop" resizing operations when set_mode is called.
 		if resizeflg==1:
@@ -1231,7 +1287,8 @@ See README.md for more information."""
 			fmx=screensurf.blit(fvfilemenu, ((3, 3)))
 			screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 			pygame.display.update()
-		time.sleep(0.05)
+		#time.sleep(0.05)
+		engtimer.tick(30)
 		#move image in relation to mouse when followmouse is set to 1 (see event handler below)
 		if followmouse==1:
 			ppos=mpos
@@ -1334,7 +1391,7 @@ def creditsscroll(topleft=0):
 	scrollsurfwid=24
 	if topleft==1:
 		scrollsurfwid=0
-	
+	engtimer=pygame.time.Clock()
 	texttable=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
 	GFXLOGOCRED=GFXLOGO.copy()
 	while True:
@@ -1383,7 +1440,8 @@ def creditsscroll(topleft=0):
 				screensurf.blit(scrollmask, (scrollsurfwid, scrollmaskyaw))
 				scrollsurfyaw -= 1
 				slidecnt += 1
-				time.sleep(.05)
+				#time.sleep(.05)
+				engtimer.tick(30)
 				pygame.display.update()
 			scrollmask.blit(scrollsurf, (0, scrollsurfyaw))
 			screensurf.blit(scrollmask, (scrollsurfwid, scrollmaskyaw))

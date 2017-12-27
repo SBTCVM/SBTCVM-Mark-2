@@ -129,7 +129,7 @@ fmabout=vmui.menuitem("About Helpview", "ABOUT")
 fmabout2=vmui.menuitem("About SBTCVM", "ABOUT2")
 
 filemenu=[fmhelp, fmindex, fmabout, fmabout2, fmquit]
-
+engtimer=pygame.time.Clock()
 while qflg==0:
 	#handles resize operations when videoresize events are detected.
 	if resizeflg==1:
@@ -235,7 +235,8 @@ while qflg==0:
 		if yoff>44:
 			yoff=44
 		scupdate=1
-	time.sleep(0.05)
+	#time.sleep(0.05)
+	engtimer.tick(30)
 	#event parser
 	for event in pygame.event.get():
 		if event.type == QUIT:

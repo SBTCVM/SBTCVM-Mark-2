@@ -87,8 +87,10 @@ qflg=0
 scupdate=1
 
 stcolor=libthemeconf.desktext
+engtimer=pygame.time.Clock()
 while qflg==0:
-	time.sleep(0.05)
+	#time.sleep(0.05)
+	engtimer.tick(30)
 	if scupdate==1:
 		scupdate=0
 		hudrect=pygame.Rect(0, 0, screenx, 60)

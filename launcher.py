@@ -368,7 +368,7 @@ hiddenwids.extend([taskidcnt])
 taskidcnt += 1
 
 catsellist=list()
-
+engtimer=pygame.time.Clock()
 #keep track of taskman taskids. (to prevent sneaky programs from messing with things...)
 taskmanlist=list()
 launchutils.consolewrite(">>SBTCVM Desktop v3.0")
@@ -472,7 +472,7 @@ while qflg==0:
 			activewids.remove(widtomove)
 			movewid=0
 		scupdate=1
-		time.sleep(0.04)
+		#time.sleep(0.04)
 	elif movewid==2:
 		prevpos=movepos
 		movepos=pygame.mouse.get_pos()
@@ -487,9 +487,10 @@ while qflg==0:
 			activewids.remove(widtomove)
 			movewid=0
 		scupdate=1
-		time.sleep(0.04)
-	else:
-		time.sleep(0.04)
+	#	time.sleep(0.04)
+	#else:
+	#	time.sleep(0.04)
+	engtimer.tick(30)
 	#ShellSystem processor
 	shsysret=ShellSystem.QSTART()
 	if shsysret=="taskman":
