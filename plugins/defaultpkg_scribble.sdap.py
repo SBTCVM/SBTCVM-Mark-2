@@ -37,6 +37,9 @@ class PLUGIN_defaultpkg_scribble:
 		self.paintrect.y = (self.y)
 		self.pensize=1
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		self.colorRrect=pygame.Rect(self.x + 96, (self.y + self.widy - 38), 50, 30)
+		self.colorGrect=pygame.Rect(self.x + 148, (self.y + self.widy - 38), 50, 30)
+		self.colorBrect=pygame.Rect(self.x + 200 , (self.y + self.widy - 38), 50, 30)
 		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
 		self.newrect=pygame.Rect(self.x + 64, (self.y + self.widy - 38), 30, 30)
@@ -57,6 +60,9 @@ class PLUGIN_defaultpkg_scribble:
 		self.firstclick=1
 		self.redraw=0
 		self.labtx2=simplefont.render("size", True, framebg, frametext)
+		self.labtx3=simplefont.render("RD (a)", True, framebg, frametext)
+		self.labtx4=simplefont.render("GN (s)", True, framebg, frametext)
+		self.labtx5=simplefont.render("BL (d)", True, framebg, frametext)
 	def render(self):
 		self.scribblecolor=(self.colorr, self.colorg, self.colorb)
 		if self.firstclick==2:
@@ -81,11 +87,20 @@ class PLUGIN_defaultpkg_scribble:
 		pygame.draw.rect(self.screensurf, framediv, self.color1rect, 1)
 		pygame.draw.rect(self.screensurf, frametext, self.sizerect, 0)
 		pygame.draw.rect(self.screensurf, frametext, self.newrect, 0)
+		pygame.draw.rect(self.screensurf, (self.colorr, 0, 0), self.colorRrect, 0)
+		pygame.draw.rect(self.screensurf, (0, self.colorg, 0), self.colorGrect, 0)
+		pygame.draw.rect(self.screensurf, (0, 0, self.colorb), self.colorBrect, 0)
 		
+		pygame.draw.rect(self.screensurf, (255, 0, 0), self.colorRrect, 1)
+		pygame.draw.rect(self.screensurf, (0, 255, 0), self.colorGrect, 1)
+		pygame.draw.rect(self.screensurf, (0, 0, 255), self.colorBrect, 1)
 		self.labtx=simplefont.render(str(self.penlist[self.penindex]), True, framebg, frametext)
 		self.screensurf.blit(self.labtx, (self.x + 32, (self.y + self.widy - 38)))
 		
 		self.screensurf.blit(self.labtx2, (self.x + 64, (self.y + self.widy - 38)))
+		self.screensurf.blit(self.labtx3, (self.x + 96 + 2, (self.y + 2 + self.widy - 38)))
+		self.screensurf.blit(self.labtx4, (self.x + 148 + 2, (self.y + 2 + self.widy - 38)))
+		self.screensurf.blit(self.labtx5, (self.x + 200 + 2, (self.y + 2 + self.widy - 38)))
 	def movet(self, xoff, yoff):
 		self.x -= xoff
 		self.y -= yoff
@@ -96,6 +111,9 @@ class PLUGIN_defaultpkg_scribble:
 		self.paintrect.x = (self.x)
 		self.paintrect.y = (self.y)
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		self.colorRrect=pygame.Rect(self.x + 96, (self.y + self.widy - 38), 50, 30)
+		self.colorGrect=pygame.Rect(self.x + 148, (self.y + self.widy - 38), 50, 30)
+		self.colorBrect=pygame.Rect(self.x + 200 , (self.y + self.widy - 38), 50, 30)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
 		self.newrect=pygame.Rect(self.x + 64, (self.y + self.widy - 38), 30, 30)
 	def resizet(self, xoff, yoff):
@@ -109,6 +127,9 @@ class PLUGIN_defaultpkg_scribble:
 			self.widy=140
 		self.redraw=1
 		self.color1rect=pygame.Rect(self.x, (self.y + self.widy - 38), 30, 30)
+		self.colorRrect=pygame.Rect(self.x + 96, (self.y + self.widy - 38), 50, 30)
+		self.colorGrect=pygame.Rect(self.x + 148, (self.y + self.widy - 38), 50, 30)
+		self.colorBrect=pygame.Rect(self.x + 200 , (self.y + self.widy - 38), 50, 30)
 		#self.sizesmall=pygame.Rect(self.x + 30, (self.y + self.widy - 40), self.pensize, self.pensize)
 		self.sizerect=pygame.Rect(self.x + 32, (self.y + self.widy - 38), 30, 30)
 		#redefine your widsurf, and refresh rects, also do any needed sdap-specific operations.
@@ -134,11 +155,58 @@ class PLUGIN_defaultpkg_scribble:
 			self.firstclick=2
 		elif self.newrect.collidepoint(event.pos) == 1:
 			self.newpaintsurf()
-		elif self.sizerect.collidepoint(event.pos) == 1:
+		elif self.sizerect.collidepoint(event.pos) == 1 and (event.button==1 or event.button==4):
 			if self.penindex==(len(self.penlist) - 1):
 				self.penindex=0
 			else:
 				self.penindex += 1
+		elif self.sizerect.collidepoint(event.pos) == 1 and event.button==5:
+			if self.penindex==0:
+				self.penindex=len(self.penlist) - 1
+			else:
+				self.penindex -= 1
+		elif self.colorRrect.collidepoint(event.pos) == 1 and (event.button==1 or event.button==4):
+			if self.colorr==0:
+				self.colorr=127
+			elif self.colorr==127:
+				self.colorr=255
+			elif self.colorr==255:
+				self.colorr=0
+		elif self.colorGrect.collidepoint(event.pos) == 1 and (event.button==1 or event.button==4):
+			if self.colorg==0:
+				self.colorg=127
+			elif self.colorg==127:
+				self.colorg=255
+			elif self.colorg==255:
+				self.colorg=0
+		elif self.colorBrect.collidepoint(event.pos) == 1 and (event.button==1 or event.button==4):
+			if self.colorb==0:
+				self.colorb=127
+			elif self.colorb==127:
+				self.colorb=255
+			elif self.colorb==255:
+				self.colorb=0
+		elif self.colorBrect.collidepoint(event.pos) == 1 and event.button==5:
+			if self.colorb==255:
+				self.colorb=127
+			elif self.colorb==127:
+				self.colorb=0
+			elif self.colorb==0:
+				self.colorb=255
+		elif self.colorRrect.collidepoint(event.pos) == 1 and event.button==5:
+			if self.colorr==255:
+				self.colorr=127
+			elif self.colorr==127:
+				self.colorr=0
+			elif self.colorr==0:
+				self.colorr=255
+		elif self.colorGrect.collidepoint(event.pos) == 1 and event.button==5:
+			if self.colorg==255:
+				self.colorg=127
+			elif self.colorg==127:
+				self.colorg=0
+			elif self.colorg==0:
+				self.colorg=255
 		elif self.color1rect.collidepoint(event.pos) == 1:
 			if self.colorr==0:
 				self.colorr=127

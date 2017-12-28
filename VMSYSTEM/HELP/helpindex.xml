@@ -12,6 +12,9 @@
 	<lnk label="SBTCVM Mark 2 VM overview">vmhelp.xml</lnk>
 	<lnk label="Overview Of VM User Interface">uiov.xml</lnk>
 	<div/>
+	<text>SBTCVM Desktop (launcher)</text>
+	<lnk label="Overview">launcher.xml</lnk>
+	<div/>
 	<text>Command Shell</text>
 	<lnk label="Overview">csintro.xml</lnk>
 	<div/>
@@ -22,7 +25,7 @@
 	<text>Other Context Help</text>
 	<lnk label="How to use SBTCVM help">helponhelp.xml</lnk>
 	<lnk label="Calculator">calc.xml</lnk>
-	<lnk label="Launcher">launcher.xml</lnk>
+	<!--<lnk label="Launcher">launcher.xml</lnk>-->
 	<lnk label="Fileview">fileview.xml</lnk>
 	<lnk label="imageview">imgview.xml</lnk>
 	<lnk label="codeview">codeview.xml</lnk>
