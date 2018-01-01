@@ -22,7 +22,7 @@ print "SBTCVM Mark 2 Starting up..."
 #
 #v2.0.3
 #
-# Copyright (c) 2016-2017 Thomas Leathers and Contributors
+# Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 #
 #  SBTCVM Mark 2 is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

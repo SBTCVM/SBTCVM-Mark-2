@@ -39,7 +39,7 @@ elif cmd=="-a" or cmd=="--about":
 
 v2.0.3
 
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
   SBTCVM Mark 2 helpview is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ followmouse=0
 
 diagabt="""Helpview v2.0.3
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 

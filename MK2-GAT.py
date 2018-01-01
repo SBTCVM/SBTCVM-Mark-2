@@ -127,7 +127,7 @@ elif cmd=="-a" or cmd=="--about":
 
 v1.0.0
 
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
   SBTCVM Mark 2 GAT toolkit is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

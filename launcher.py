@@ -40,7 +40,7 @@ vmui.initui(screensurf, 1)
 
 diagabt="""SBTCVM Desktop v3.0
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 

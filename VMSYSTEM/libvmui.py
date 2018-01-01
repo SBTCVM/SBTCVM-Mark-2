@@ -191,7 +191,7 @@ def pausemenu(posthalt=0):
 		pmmenu=[pmhelp, pmcredit, pmabout, pmstop, pmquit]
 	diagabt="""SBTCVM Mark 2 v2.0.3
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 	while True:
@@ -867,7 +867,7 @@ def textview(textfile):
 	filemenu=[fmhelp, fmabout, fmquit]
 	diagabt="""Textview v2.0.3
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 	#get screen width and height
@@ -1039,7 +1039,7 @@ def codeview(textfile):
 	filemenu=[fmhelp, fmabout, fmquit]
 	diagabt="""Codeview v2.0.3
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 	
@@ -1239,7 +1239,7 @@ def imgview(imgfile):
 	filemenu=[fmhelp, fmabout, fmquit]
 	diagabt="""Imageview v2.0.3
 Part of the SBTCVM Project
-Copyright (c) 2016-2017 Thomas Leathers and Contributors
+Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 	imgx=img.get_width()
