@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-from . import libSBTCVM
+import libSBTCVM
 import os
 import sys
-from . import libvmconf
+import libvmconf
 TROMA="intro.trom"
 TROMB=("DEFAULT.TROM")
 TROMC=("DEFAULT.TROM")
@@ -177,7 +177,7 @@ def redefF(filenameq):
 		tromlog1.write("TROMF:" + TROMF + "\n")
 
 #load TROMS from TROM files to respective dictionaries
-print("libtrom: parsing TROMs into dictionaries...")
+print "libtrom: parsing TROMs into dictionaries..."
 if tromlogging==1:
 	tromlog1.write("Load TROMs into dictionaries... \n")
 AROM= {}
@@ -237,7 +237,7 @@ if tromlogging==1:
 	tromlog1.write("TROME:" + TROME + "\n")
 	tromlog1.write("TROMF:" + TROMF + "\n")
 else:
-	print("done.")
+	print "done."
 
 
 ROMDICT={TROMA: AROM, TROMB: BROM, TROMC: CROM, TROME: EROM, TROMF: FROM}

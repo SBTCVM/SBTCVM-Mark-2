@@ -347,9 +347,9 @@ def textinput(xpos, ypos, textcol=libthemeconf.textboxtext, bgcol=libthemeconf.t
 				break
 			#character input processing (also see charinsert function)
 			elif event.type == KEYDOWN and event.key != K_TAB:
-				if str(event.str) in acceptchars or len(acceptchars)==0:
+				if str(event.unicode) in acceptchars or len(acceptchars)==0:
 					curoffset += 1
-					textstring=charinsert(textstring, str(event.str), curoffset)
+					textstring=charinsert(textstring, str(event.unicode), curoffset)
 					redraw=1
 				break
 			elif event.type == MOUSEBUTTONDOWN and event.button==1:

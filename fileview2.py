@@ -16,7 +16,7 @@ import VMSYSTEM.libfilevirtual as libfilevirtual
 
 from pygame.locals import *
 
-print("SBTCVM FileView file browser. v2.0")
+print "SBTCVM FileView file browser. v2.0"
 pygame.display.init()
 pygame.font.init()
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])

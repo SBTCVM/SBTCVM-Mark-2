@@ -12,7 +12,7 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print('''This is MK2-RUN.py, a command line launcher for SBTCVM Mark 2
+	print '''This is MK2-RUN.py, a command line launcher for SBTCVM Mark 2
 commands:
 MK2-RUN.py -h (--help) (help): this text
 MK2-RUN.py -v (--version)
@@ -28,11 +28,11 @@ note:
 MK2-RUN.py is equipped with a searching capacity. 
 trying to run "example" wopuld match "example.streg" and "example.trom"
 also the subdirectories: "VMUSER", "VMSYSTEM", and "ROMS" are searched as well.
-''')
+'''
 elif cmd=="-v" or cmd=="--version":
-	print("SBTCVM MK2-RUN launcher v2.0.3")
+	print "SBTCVM MK2-RUN launcher v2.0.3"
 elif cmd=="-a" or cmd=="--about":
-	print('''#SBTCVM Mark 2 commandline launcher
+	print '''#SBTCVM Mark 2 commandline launcher
 
 
 v2.0.3
@@ -51,15 +51,15 @@ Copyright (c) 2016-2018 Thomas Leathers and Contributors
  
   You should have received a copy of the GNU General Public License
   along with SBTCVM Mark 2 commandline launcher. If not, see <http://www.gnu.org/licenses/>
-''')
+'''
 elif cmd==None:
-	print("tip: use MK2-RUN.py -h for help.")
+	print "tip: use MK2-RUN.py -h for help."
 elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-k" or cmd=="-le" or cmd=="--log_exec" or cmd=="-tos":
 	if cmd[0]!="-":
 		arg=sys.argv[1]
 	else:
 		arg=sys.argv[2]
-		print(arg)
+		print arg
 	if cmd=="-le" or cmd=="--log_exec":
 		GLOBLOGEXEC=1
 	if cmd=="-tos":
@@ -72,29 +72,29 @@ elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-k" or cmd=="-le" or cmd=
 	for extq in ["", ".streg", ".STREG", ".TROM", ".trom"]:
 		qarg=(arg + extq)
 		qlowarg=(lowarg + extq.lower())
-		print("searching for: \"" + qarg + "\"...")
+		print "searching for: \"" + qarg + "\"..."
 		if os.path.isfile(qarg):
 			argisfile=1
-			print("found: " + qarg)
+			print "found: " + qarg
 		elif os.path.isfile(os.path.join("VMSYSTEM", qarg)):
 			qarg=os.path.join("VMSYSTEM", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join(VMSYSROMS, qarg)):
 			qarg=os.path.join(VMSYSROMS, qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join("VMUSER", qarg)):
 			qarg=os.path.join("VMUSER", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join("ROMS", qarg)):
 			qarg=os.path.join("ROMS", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		if argisfile==1:
 			if qlowarg.endswith(".trom") and os.path.isfile(qarg):
-				print("SBTCVM TROM file detected.")
+				print "SBTCVM TROM file detected."
 				GLOBRUNFLG=qarg
 				VMFILE=open('SBTCVM_MK2.py', 'r')
 				EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
@@ -103,7 +103,7 @@ elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-k" or cmd=="-le" or cmd=
 				break
 			
 			elif qlowarg.endswith(".streg") and os.path.isfile(qarg):
-				print("SBTCVM trom execution group file, detected.")
+				print "SBTCVM trom execution group file, detected."
 				GLOBSTREG=qarg
 				VMFILE=open('SBTCVM_MK2.py', 'r')
 				EXECVM=compile(VMFILE.read(), 'SBTCVM_MK2.py', 'exec')
@@ -111,11 +111,11 @@ elif cmd=="-r" or cmd=="--run" or cmd[0]!="-" or cmd=="-k" or cmd=="-le" or cmd=
 				qfilewasvalid=1
 				break
 			else:
-				print("not valid.")
+				print "not valid."
 				argisfile=0
 				
 	if qfilewasvalid==0:
-		print("File not found.")
+		print "File not found."
 
 			
 			

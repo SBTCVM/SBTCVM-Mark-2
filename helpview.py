@@ -21,20 +21,20 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print('''This is helpview.py, SBTCVM's integrated help system
+	print '''This is helpview.py, SBTCVM's integrated help system
 commands:
 helpview.py -h (--help) (help): this text
 helpview.py -v (--version)    : version information.
 helpview.py -a (--about)      : about helpview.py
 helpview.py [pagexml]         : xml page to view (for use with context help)
-''')
+'''
 	sys.exit()
 elif cmd=="-v" or cmd=="--version":
-	print("SBTCVM Helpview help system v2.0.3")
+	print "SBTCVM Helpview help system v2.0.3"
 	sys.exit()
 
 elif cmd=="-a" or cmd=="--about":
-	print('''#SBTCVM Mark 2 helpview
+	print '''#SBTCVM Mark 2 helpview
 
 
 v2.0.3
@@ -53,7 +53,7 @@ Copyright (c) 2016-2018 Thomas Leathers and Contributors
  
   You should have received a copy of the GNU General Public License
   along with SBTCVM Mark 2 helpview. If not, see <http://www.gnu.org/licenses/>
-''')
+'''
 	sys.exit()
 elif cmd!=None:
 	pageref=cmd

@@ -47,7 +47,7 @@ def consolewrite(string):
 	constext.pop(0)
 	constext.append(string)
 	#consfull.append(string)
-	print(("Con: " + string))
+	print ("Con: " + string)
 
 #que method:
 #que is a system of inter-application communication.
@@ -162,7 +162,7 @@ for plugcodefile in os.listdir(Plugpath):
 			consolewrite("Load plugin: " + SDAPNAME + " (" + plugcodefile + ")")
 		except SyntaxError as err:
 			consolewrite("Plugin failure: SyntaxError on " + plugcodefile)
-			print((traceback.format_exc()))
+			print(traceback.format_exc())
 			for errline in vmui.listline(str(err)):
 				consolewrite(errline)
 				
@@ -1069,7 +1069,7 @@ class shell:
 				self.redraw=2
 		elif event.type == pygame.KEYDOWN and event.key != pygame.K_TAB:
 			self.curoffset += 1
-			self.textin=vmui.charinsert(self.textin, str(event.str), self.curoffset)
+			self.textin=vmui.charinsert(self.textin, str(event.unicode), self.curoffset)
 			self.redraw=2
 		return
 	def keyup(self, event):

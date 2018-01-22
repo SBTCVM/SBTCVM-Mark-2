@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-from . import libbaltcalc
+import libbaltcalc
 import pygame
 import array
 import math
 import time
 import os
-from . import libvmconf
-from . import libthemeconf
+import libvmconf
+import libthemeconf
 
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
 
@@ -357,11 +357,11 @@ def foobsin(num):
 	
 
 def autosquare2(freq):
-	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in range(0, int(mixrate/freq))])
+	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(mixrate/freq))])
 	return temparray
 
 def autosquare(freq, lenth):
-	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in range(0, int(lenth * mixrate))])
+	temparray=array.array('f', [(foobsin(2.0 * math.pi * freq * t / mixrate)) for t in xrange(0, int(lenth * mixrate))])
 	return temparray
 
 #SBTC Graphics operations (currently just TUI routines, future plans include actual graphics modes.
@@ -378,10 +378,10 @@ fondir2=os.path.join("VMSYSTEM", font1)
 def abtslackline(receveabt, linetext):
 	interx=[(receveabt[1]), (receveabt[2]),(receveabt[3]), (receveabt[4]), (receveabt[5]), (receveabt[6]), (receveabt[7]), (receveabt[8]), (receveabt[9]), (receveabt[10]), (receveabt[11]), (receveabt[12]), (receveabt[13]), (receveabt[14]), (receveabt[15]), (receveabt[16]), (receveabt[17]), (receveabt[18]), (receveabt[19]), (receveabt[20]), (receveabt[21]), (receveabt[22]), (receveabt[23]), (receveabt[24]), (receveabt[25]), (receveabt[26]), (receveabt[27]), (receveabt[28]), (receveabt[29]), (receveabt[30]), (receveabt[31]), (receveabt[32]), (receveabt[33]), (receveabt[34]), (receveabt[35]), (receveabt[36]), (receveabt[37]), (receveabt[38]), (receveabt[39]), (receveabt[40]), (receveabt[41]), (receveabt[42]), (receveabt[43]), (receveabt[44]), (receveabt[45]), (receveabt[46]), (receveabt[47]), (receveabt[48]), (receveabt[49]), (receveabt[50]), (receveabt[51]), (receveabt[52]), (receveabt[53]), (linetext)]
 	if linetext=="":
-		print(("TTY|" + receveabt[53]))
+		print ("TTY|" + receveabt[53])
 	else:
 		#print ("TTYL|" + linetext)
-		print(("TTY|" + receveabt[53]))
+		print ("TTY|" + receveabt[53])
 	return interx
 newl=1
 def abtcharblit(receveabtb, charblit):

@@ -4,10 +4,10 @@ import os
 import sys
 import pygame
 from pygame.locals import *
-from . import libSBTCVM
-from . import libbaltcalc
-from . import libvmconf
-from . import libthemeconf
+import libSBTCVM
+import libbaltcalc
+import libvmconf
+import libthemeconf
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
 pygame.font.init()
 pygame.mixer.init(frequency=mixrate , size=-16)

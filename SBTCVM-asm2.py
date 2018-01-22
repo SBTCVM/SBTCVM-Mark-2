@@ -58,7 +58,7 @@ except:
 if "GLOBASMFLG" in globals():
 	cmd=GLOBASMFLG
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print('''This is SBTCVM-asm2.py, SBTCVM Mark 2's assembler.
+	print '''This is SBTCVM-asm2.py, SBTCVM Mark 2's assembler.
 commands:
 SBTCVM-asm2.py -h (--help) (help): this text
 SBTCVM-asm2.py -v (--version)
@@ -66,11 +66,11 @@ SBTCVM-asm2.py -a (--about): about SBTCVM-asm2.py
 SBTCVM-asm2.py -c (--compile) [sourcefile]: build a tasm source into a trom
 SBTCVM-asm2.py -t (--tracecompile) [sourcefile]: same as -c but logs the compiling process in detail in the CAP directory.
 SBTCVM-asm2.py [sourcefile]: build a tasm source into a trom
-''')
+'''
 elif cmd=="-v" or cmd=="--version":
-	print(("SBTCVM Assember" + compvers))
+	print ("SBTCVM Assember" + compvers)
 elif cmd=="-a" or cmd=="--about":
-	print('''SBTCVM Assembler 2
+	print '''SBTCVM Assembler 2
 
 
 ''' + compvers + '''
@@ -89,11 +89,11 @@ Copyright (c) 2016-2018 Thomas Leathers and Contributors
  
   You should have received a copy of the GNU General Public License
   along with SBTCVM Assembler 2. If not, see <http://www.gnu.org/licenses/>
-''')
+'''
 elif cmd==None:
-	print("tip: use SBTCVM-asm2.py -h for help.")
+	print "tip: use SBTCVM-asm2.py -h for help."
 elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracecompile":
-	print(("SBTCVM-asm " + compvers + " starting"))
+	print("SBTCVM-asm " + compvers + " starting")
 	if "GLOBASMFLG" in globals():
 		arg=GLOBASMFLG
 	else:
@@ -101,7 +101,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			arg=sys.argv[1]
 		else:
 			arg=sys.argv[2]
-	print(arg)
+	print arg
 	lowarg=arg.lower()
 	argisfile=0
 	argistasm=0
@@ -109,36 +109,36 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	for extq in ["", ".tasm", ".TASM"]:
 		qarg=(arg + extq)
 		qlowarg=(lowarg + extq.lower())
-		print("searching for: \"" + qarg + "\"...")
+		print "searching for: \"" + qarg + "\"..."
 		argisfile
 		if os.path.isfile(qarg):
 			argisfile=1
-			print("found: " + qarg)
+			print "found: " + qarg
 		elif os.path.isfile(os.path.join("VMSYSTEM", qarg)):
 			qarg=os.path.join("VMSYSTEM", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join(VMSYSROMS, qarg)):
 			qarg=os.path.join(VMSYSROMS, qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join("VMUSER", qarg)):
 			qarg=os.path.join("VMUSER", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		elif os.path.isfile(os.path.join("ROMS", qarg)):
 			qarg=os.path.join("ROMS", qarg)
-			print("found: " + qarg)
+			print "found: " + qarg
 			argisfile=1
 		if argisfile==1:
 			if qlowarg.endswith(".tasm") and os.path.isfile(qarg):
-				print("tasm source found.")
+				print "tasm source found."
 				arg=qarg
 				argistasm=1
 				break
 			
 			else:
-				print("Not valid.")
+				print "Not valid."
 				argisfile=0
 	if argisfile==0 or argistasm==0:
 		#print "ERROR: file not found, or is not a tasm file STOP"
@@ -166,7 +166,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	#open(arg, 'r') as sourcefile
 	gotoreflist=list()
 	#first pass (detects goto refrence labels and preps them to be used by second pass)
-	print("preforming prescan & prep pass")
+	print "preforming prescan & prep pass"
 	complog("preforming prescan & prep pass\n")
 	srcline=0
 	for linen in sourcefile:
@@ -392,7 +392,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			gotoreflist.extend([gtox])
 			
 			
-			print(("found gotoref: \"" + linelist[2] + "\", at instruction:\"" + str((instcnt - 1)) + "\", Source line:\"" + str(srcline) + "\""))
+			print ("found gotoref: \"" + linelist[2] + "\", at instruction:\"" + str((instcnt - 1)) + "\", Source line:\"" + str(srcline) + "\"")
 			complog("found gotoref: \"" + linelist[2] + "\", at instruction:\"" + str((instcnt - 1)) + "\", Source line:\"" + str(srcline) + "\"\n")
 			if instword=="textstart":
 				instcnt -= 1
@@ -404,7 +404,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	for linen in sourcefileB:
 		srcline += 1
 		if firstloop==1:
-			print("preforming compileloop startup...")
+			print "preforming compileloop startup..."
 			complog("\n\npreforming compileloop startup...\n")
 			assmflename=arg
 			complog("source file: \"" + assmflename + "\"\n")
@@ -413,7 +413,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			complog("output file: \"" + outfile + "\"\n")
 			outn = open(outfile, 'w')
 			firstloop=0
-			print("done. begin compile.")
+			print "done. begin compile."
 			complog("done. begin compile.\n")
 		lined=linen
 		
@@ -433,7 +433,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			instdat="000000000"
 		if instdat=="":
 			instdat="000000000"
-			print("NOTICE: data portion at source line:\"" + str(srcline) + "\" blank, defaulting to ground...")
+			print "NOTICE: data portion at source line:\"" + str(srcline) + "\" blank, defaulting to ground..."
 			complog("NOTICE: data portion at source line:\"" + str(srcline) + "\" blank, defaulting to ground...\n")
 		#if len(instdat)==6 and instdat[0]!=">" and instdat[0]!=":":
 		#	print "Mark 1.x legacy NOTICE: instruction \"" + instword + "\" at \"" + str(srcline) + "\"  did not have 9 trits data. it has been padded far from radix. please pad any legacy instructions manually."
@@ -1169,7 +1169,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 			sys.exit("ERROR!: assembler has exceded rom size limit of 19683!")
 	
 	if txtblk==1:
-		print("WARNING: unclosed Text block!")
+		print "WARNING: unclosed Text block!"
 		complog("WARNING: unclosed Text block!\n")
 	
 	if instcnt==0:
@@ -1177,7 +1177,7 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 		complog("ERROR: No instructions found. nothing to compile. /n")
 		sys.exit("ERROR: No instructions found. nothing to compile.")
 	if autostpflg==0 and instcnt<19683:
-		print("NOTICE: no explicit goto or stop instruction at end of program.  SBTCVM-asm will add a stop automatically.")
+		print "NOTICE: no explicit goto or stop instruction at end of program.  SBTCVM-asm will add a stop automatically."
 		complog("NOTICE: no explicit goto or stop instruction at end of program.  SBTCVM-asm will add a stop automatically.\n")
 		outn.write("--000-" + "000000000" + "\n")
 		instcnt += 1
@@ -1189,13 +1189,13 @@ elif cmd=="-c" or cmd=="--compile" or cmd[0]!="-" or cmd=="-t" or cmd=="--tracec
 	outn.close()
 	
 	instextra=(instpad - instcnt)
-	print(("SBTCVM Mk 2 assembly file \"" + assmflename + "\" has been compiled into: \"" + outfile + "\""))
+	print ("SBTCVM Mk 2 assembly file \"" + assmflename + "\" has been compiled into: \"" + outfile + "\"")
 	complog("SBTCVM Mk 2 assembly file \"" + assmflename + "\" has been compiled into: \"" + outfile + "\"\n")
 	if tracecomp==1:
-		print("tracelog enabled. log file: \"" + (os.path.join('CAP', logsub)) + "\"")
-	print(("total instructions: " + str(instcnt)))
+		print "tracelog enabled. log file: \"" + (os.path.join('CAP', logsub)) + "\""
+	print ("total instructions: " + str(instcnt))
 	complog("total instructions: " + str(instcnt) + "\n")
-	print(("extra space: " + str(instextra)))
+	print ("extra space: " + str(instextra))
 	complog ("extra space: " + str(instextra) + "\n")
 else:
-	print("tip: use SBTCVM-asm2.py -h for help.")
+	print "tip: use SBTCVM-asm2.py -h for help."

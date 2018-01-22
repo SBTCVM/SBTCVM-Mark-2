@@ -18,18 +18,18 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print('''This is MK2-TOOLS.py, a command line tools launcher for SBTCVM Mark 2
+	print '''This is MK2-TOOLS.py, a command line tools launcher for SBTCVM Mark 2
 commands:
 MK2-RUN.py -h (--help) (help): this text
 MK2-RUN.py -v (--version)    : version information.
 MK2-RUN.py -a (--about)      : about MK2-RUN.py
 MK2-RUN.py -l (--list)       : list all tools and their toolnames.
 MK2-RUN.py [toolname]        : run tool
-''')
+'''
 elif cmd=="-v" or cmd=="--version":
-	print("SBTCVM MK2-TOOLS tool launcher v2.0.3")
+	print "SBTCVM MK2-TOOLS tool launcher v2.0.3"
 elif cmd=="-l" or cmd=="--list":
-	print('''List of tools:
+	print '''List of tools:
 [Toolname]  |  [Tool description]
 -----------------------------------------------
 btclock     :  show a balanced ternary clock
@@ -45,10 +45,10 @@ imgview [image] : fileview's image viewer
 textview [file] : fileview's text viewer
 codeview [file] : fileview's code viewer
 namecrunch [string] : test namecrunch function
-timecodetest : test ternary Timecode encode/decode''')
+timecodetest : test ternary Timecode encode/decode'''
 
 elif cmd=="-a" or cmd=="--about":
-	print('''#SBTCVM Mark 2 tool launcher
+	print '''#SBTCVM Mark 2 tool launcher
 
 
 v2.0.3
@@ -67,9 +67,9 @@ Copyright (c) 2016-2018 Thomas Leathers and Contributors
  
   You should have received a copy of the GNU General Public License
   along with SBTCVM Mark 2 tool launcher. If not, see <http://www.gnu.org/licenses/>
-''')
+'''
 elif cmd==None:
-	print("tip: use MK2-TOOLS.py -h for help.")
+	print "tip: use MK2-TOOLS.py -h for help."
 elif cmd=="namecrunch" or cmd=="timecodetest":
 	if cmd=="namecrunch":
 		import VMSYSTEM.libSBTCVM as libSBTCVM
@@ -77,16 +77,16 @@ elif cmd=="namecrunch" or cmd=="timecodetest":
 			ncruncharg=sys.argv[2]
 		except IndexError:
 			ncruncharg="thisisatest"
-		print(ncruncharg)
-		print(libSBTCVM.namecrunch(ncruncharg, "-tools-test.log"))
+		print ncruncharg
+		print libSBTCVM.namecrunch(ncruncharg, "-tools-test.log")
 	if cmd=="timecodetest":
 		import VMSYSTEM.libSBTCVM as libSBTCVM
 		for BI in [19.682, 10.000, 0]:
-			print(BI)
+			print BI
 			BG=libSBTCVM.timeencode(BI)
-			print(BG)
+			print BG
 			BQ=libSBTCVM.timedecode(BG)
-			print(BQ)
+			print BQ
 elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
@@ -135,8 +135,8 @@ elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or c
 	if cmd=="textinput":
 		vmui.toolsscreen(1)
 		textinpout=vmui.textinput(4, 210)
-		print("Input has returned:")
-		print(textinpout)
+		print "Input has returned:"
+		print textinpout
 	if cmd=="scrollbtn":
 		vmui.toolsscreen(1)
 		hscroll=vmui.makehscroll()
@@ -146,8 +146,8 @@ elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or c
 		screensurf.blit(vscroll[0], (60, 20))
 		screensurf.blit(vscroll[1], (60, 60))
 		textinpout=vmui.textinput(4, 210)
-		print("Input has returned:")
-		print(textinpout)
+		print "Input has returned:"
+		print textinpout
 	if cmd=="okdiag":
 		vmui.toolsscreen(1)
 		#note: to center dialog in a pygame window use half the window width as xpos,
@@ -160,11 +160,11 @@ elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or c
 of vmui.okdiag()
 a function to create OK dialogs.'''
 		diagout=vmui.okdiag(diagtext, xpos, ypos)
-		print("ok dialog has returned:")
-		print(diagout)
+		print "ok dialog has returned:"
+		print diagout
 		diagout=vmui.okdiag("test", xpos, ypos)
-		print("ok dialog 2 has returned:")
-		print(diagout)
+		print "ok dialog 2 has returned:"
+		print diagout
 	if cmd=="yndiag":
 		vmui.toolsscreen(1)
 		#note: to center dialog in a pygame window use half the window width as xpos,
@@ -177,11 +177,11 @@ a function to create OK dialogs.'''
 of vmui.yndiag()
 a function to create Yes/No dialogs.'''
 		diagout=vmui.yndiag(diagtext, xpos, ypos)
-		print("yes/no dialog has returned:")
-		print(diagout)
+		print "yes/no dialog has returned:"
+		print diagout
 		diagout=vmui.yndiag("test", xpos, ypos)
-		print("yes/no dialog 2 has returned:")
-		print(diagout)
+		print "yes/no dialog 2 has returned:"
+		print diagout
 	if cmd=="menu":
 		vmui.toolsscreen(1)
 		mi1=vmui.menuitem("Testing", "ITEM1", icon=windowicon)
@@ -193,29 +193,29 @@ a function to create Yes/No dialogs.'''
 		menulist2=[mi0b, mi1, mi2, mi3]
 		menuret=vmui.menuset(menulist, 4, 210, reclick=2)
 		vmui.toolsscreen(1)
-		print("menu has returned:")
-		print(menuret)
+		print "menu has returned:"
+		print menuret
 		menuret2=vmui.menuset(menulist2, 20, 210, reclick=0)
-		print("menu2 has returned:")
-		print(menuret2)
+		print "menu2 has returned:"
+		print menuret2
 	if cmd=="imgview":
 		vmui.toolsscreen(1)
 		try:
 			vmui.imgview(sys.argv[2])
 		except IndexError:
-			print("MUST SPECIFY IMAGE FILENAME.")
+			print "MUST SPECIFY IMAGE FILENAME."
 	if cmd=="textview":
 		vmui.toolsscreen(1)
 		try:
 			vmui.textview(sys.argv[2])
 		except IndexError:
-			print("MUST SPECIFY TEXT FILENAME.")
+			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="codeview":
 		vmui.toolsscreen(1)
 		try:
 			vmui.codeview(sys.argv[2])
 		except IndexError:
-			print("MUST SPECIFY TEXT FILENAME.")
+			print "MUST SPECIFY TEXT FILENAME."
 	if cmd=="btclock":
 		pygame.mixer.init(frequency=mixrate , size=-16)
 		import VMSYSTEM.libbttools as bttool
@@ -224,11 +224,11 @@ a function to create Yes/No dialogs.'''
 		bttool.BTCLOCKDATE()
 	if cmd=="pause":
 		pygame.mixer.init(frequency=mixrate , size=-16)
-		print("launching SBTCVM VM pause menu.")
+		print "launching SBTCVM VM pause menu."
 		#pause menu needs readouts area to be drawn.
 		vmui.toolsscreen(3)
 		pmenret=vmui.pausemenu()
 		if pmenret=="c":
-			print("Pause menu reports a continue VM")
+			print "Pause menu reports a continue VM"
 		else:
-			print('Pause menu reports a Stop VM / Exit to Main Menu')
+			print 'Pause menu reports a Stop VM / Exit to Main Menu'

@@ -19,7 +19,7 @@ import VMSYSTEM.libfilevirtual as libfilevirtual
 
 import traceback
 
-print("SBTCVM Desktop v3.0")
+print "SBTCVM Desktop v3.0"
 pygame.display.init()
 pygame.font.init()
 
@@ -86,7 +86,7 @@ def errorreport(widtitle, area, err):
 	global scupdate
 	launchutils.consolewrite(">>ERROR in: \"" + widtitle + "\" terminating")
 	launchutils.consolewrite(">>Area: " + area)
-	print((traceback.format_exc()))
+	print(traceback.format_exc())
 	errdiagtxt=("Error In: \"" + widtitle + "\" terminating... \n Area: " + area + " \n see Standard output for traceback. \n\"" + str(err) + "\"")
 	vmui.okdiag(errdiagtxt, (screenx // 2), (screeny // 2))
 	for errline in vmui.listline(str(err)):
