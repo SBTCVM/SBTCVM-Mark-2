@@ -4,8 +4,8 @@ import os
 import sys
 import pygame
 from pygame.locals import *
-import libSBTCVM
-import libbaltcalc
+from . import libSBTCVM
+from . import libbaltcalc
 #import libtrom
 #import libvmconf
 #mixrate=int(libvmconf.getconf("audio", "mixrate"))

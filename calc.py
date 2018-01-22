@@ -377,7 +377,7 @@ while qflg==0:
 				try:
 					DA=int(vmui.textinput(22, 121, fontsize=22, textstring=str(DA), acceptchars="0987654321-"))
 				except ValueError:
-					print "SYNTAX ERROR IN DECIMAL INPUT A"
+					print("SYNTAX ERROR IN DECIMAL INPUT A")
 					STAT="SYNTAX ERROR IN DECIMAL INPUT A"
 				scupdate=1
 				TA=libbaltcalc.DECTOBT(DA)
@@ -393,7 +393,7 @@ while qflg==0:
 				try:
 					DB=int(vmui.textinput(22, 186, fontsize=22, textstring=str(DB), acceptchars="0987654321-"))
 				except ValueError:
-					print "SYNTAX ERROR IN DECIMAL INPUT B"
+					print("SYNTAX ERROR IN DECIMAL INPUT B")
 					STAT="SYNTAX ERROR IN DECIMAL INPUT B"
 				scupdate=1
 				TB=libbaltcalc.DECTOBT(DB)

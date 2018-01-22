@@ -218,7 +218,7 @@ while qflg==0:
 					ttystyle=int(libvmconf.getconf("video", "ttystyle"))
 					mixrate=int(libvmconf.getconf("audio", "mixrate"))
 					#frameskip selector code
-					print "dxreset"
+					print("dxreset")
 					scupdate=1
 				if menuret=="QUIT":
 					qflg=1

@@ -157,7 +157,7 @@ while qflg==0:
 					curbg=int(libthemeconf.getconf("desk", "bgtheme"))
 					curbgname=vmui.getbgname(curbg)
 					#frameskip selector code
-					print "dxreset"
+					print("dxreset")
 					scupdate=1
 				if menuret=="QUIT":
 					qflg=1

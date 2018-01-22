@@ -17,25 +17,25 @@ def gfxargfind(arg):
 	for extq in ["", ".png", ".PNG", ".gif", ".GIF"]:
 		qarg=(arg + extq)
 		qlowarg=(lowarg + extq.lower())
-		print "searching for: \"" + qarg + "\"..."
+		print("searching for: \"" + qarg + "\"...")
 		if os.path.isfile(qarg):
 			argisfile=1
-			print "found: " + qarg
+			print("found: " + qarg)
 		elif os.path.isfile(os.path.join("VMSYSTEM", qarg)):
 			qarg=os.path.join("VMSYSTEM", qarg)
-			print "found: " + qarg
+			print("found: " + qarg)
 			argisfile=1
 		elif os.path.isfile(os.path.join(VMSYSROMS, qarg)):
 			qarg=os.path.join(VMSYSROMS, qarg)
-			print "found: " + qarg
+			print("found: " + qarg)
 			argisfile=1
 		elif os.path.isfile(os.path.join("VMUSER", qarg)):
 			qarg=os.path.join("VMUSER", qarg)
-			print "found: " + qarg
+			print("found: " + qarg)
 			argisfile=1
 		elif os.path.isfile(os.path.join("ROMS", qarg)):
 			qarg=os.path.join("ROMS", qarg)
-			print "found: " + qarg
+			print("found: " + qarg)
 			argisfile=1
 		if argisfile==1:
 			if os.path.isfile(qarg):
@@ -44,11 +44,11 @@ def gfxargfind(arg):
 				return(qarg)
 			
 			else:
-				print "not valid."
+				print("not valid.")
 				argisfile=0
 				
 	if qfilewasvalid==0:
-		print "File not found."
+		print("File not found.")
 		sys.exit()
 	
 
@@ -107,7 +107,7 @@ try:
 except:
 	cmd=None
 if cmd=="-h" or cmd=="--help" or cmd=="help":
-	print '''This is SBTCVM Mark 2's GAT toolkit.
+	print('''This is SBTCVM Mark 2's GAT toolkit.
 commands:
 MK2-GAT.py -h (--help) (help): this text
 MK2-GAT.py -v (--version)
@@ -117,13 +117,13 @@ MK2-GAT.py -g0 (--modegfx0) [imagefile]: convert an (exactly) 114x81 pixel
  3-trit RGB screen mode.
 MK2-GAT.py -g2 (--modegfx2) [imagefile]: full framebuffer: G2 (114x81 1-trit monochrome)
 MK2-GAT.py -g3 (--modegfx3) [imagefile]: full framebuffer: G3 (54x38 3-trit RGB)
-MK2-GAT.py -g4 (--modegfx4) [imagefile]: full framebuffer: G4 (54x38 1-trit monochrome)'''
+MK2-GAT.py -g4 (--modegfx4) [imagefile]: full framebuffer: G4 (54x38 1-trit monochrome)''')
 elif cmd=="-v" or cmd=="--version":
-	print "SBTCVM Mark 2 GAT toolkit v1.0.0"
+	print("SBTCVM Mark 2 GAT toolkit v1.0.0")
 elif cmd==None:
-	print "tip: use MK2-GAT.py -h for help."
+	print("tip: use MK2-GAT.py -h for help.")
 elif cmd=="-a" or cmd=="--about":
-	print '''#SBTCVM Mark 2 GAT toolkit
+	print('''#SBTCVM Mark 2 GAT toolkit
 
 v1.0.0
 
@@ -141,7 +141,7 @@ Copyright (c) 2016-2018 Thomas Leathers and Contributors
  
   You should have received a copy of the GNU General Public License
   along with SBTCVM Mark 2 GAT toolkit. If not, see <http://www.gnu.org/licenses/>
-'''
+''')
 elif cmd=="-g0" or cmd=="--modegfx0":
 	arg=sys.argv[2]
 	arg=gfxargfind(arg)
@@ -211,13 +211,13 @@ userwait
 					tasmout.write(terR + terG + terB + "\n")
 			WPIX += 1
 			time.sleep(0.0001)
-		print ("line: " + str(HPIX) + " done")
+		print(("line: " + str(HPIX) + " done"))
 		
 		screensurf.blit(IMGSOURCE, (0, 0))
 		pygame.display.update()
 		HPIX += 1
 	#tasmout.write("userwait")
-	print ("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G0 (full)")
+	print(("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G0 (full)"))
 	#pygame.image.save(IMGSOURCE, ("imgfilter-out.png"))
 			
 	#print(IMGSOURCE.get_at((639, 479)))
@@ -282,13 +282,13 @@ userwait
 					tasmout.write(ter + "\n")
 			WPIX += 1
 			time.sleep(0.0001)
-		print ("line: " + str(HPIX) + " done")
+		print(("line: " + str(HPIX) + " done"))
 		
 		screensurf.blit(IMGSOURCE, (0, 0))
 		pygame.display.update()
 		HPIX += 1
 	#tasmout.write("userwait")
-	print ("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G2 (full)")
+	print(("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G2 (full)"))
 	#pygame.image.save(IMGSOURCE, ("imgfilter-out.png"))
 			
 	#print(IMGSOURCE.get_at((639, 479)))
@@ -362,13 +362,13 @@ userwait
 					tasmout.write(terR + terG + terB + "\n")
 			WPIX += 1
 			time.sleep(0.0001)
-		print ("line: " + str(HPIX) + " done")
+		print(("line: " + str(HPIX) + " done"))
 		
 		screensurf.blit(IMGSOURCE, (0, 0))
 		pygame.display.update()
 		HPIX += 1
 	#tasmout.write("userwait")
-	print ("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G3 (full)")
+	print(("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G3 (full)"))
 	#pygame.image.save(IMGSOURCE, ("imgfilter-out.png"))
 			
 	#print(IMGSOURCE.get_at((639, 479)))
@@ -433,16 +433,16 @@ userwait
 					tasmout.write(ter + "\n")
 			WPIX += 1
 			time.sleep(0.0001)
-		print ("line: " + str(HPIX) + " done")
+		print(("line: " + str(HPIX) + " done"))
 		
 		screensurf.blit(IMGSOURCE, (0, 0))
 		pygame.display.update()
 		HPIX += 1
 	#tasmout.write("userwait")
-	print ("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G4 (full)")
+	print(("image: \"" + arg + "\" converted to: \"" + tasmfile + "\" for SBTCVM SBTGA mode G4 (full)"))
 	#pygame.image.save(IMGSOURCE, ("imgfilter-out.png"))
 			
 	#print(IMGSOURCE.get_at((639, 479)))
 else:
-	print "see MK2-GAT.py -h for help."
-	print cmd
+	print("see MK2-GAT.py -h for help.")
+	print(cmd)

@@ -15,7 +15,7 @@ import VMSYSTEM.libSBTGA as libSBTGA
 from random import randint
 pygame.display.init()
 
-print "SBTCVM Mark 2 Starting up..."
+print("SBTCVM Mark 2 Starting up...")
 
 #SBTCVM Mark 2
 #Simple Balanced Ternary Computer Virtual Machine
@@ -273,7 +273,7 @@ btstopthread=0
 TTYrenderflg="0"
 
 if 'GLOBKIOSK' in globals():
-	print "RUNNING IN KIOSK MODE."
+	print("RUNNING IN KIOSK MODE.")
 	KIOSKMODE=GLOBKIOSK
 else:
 	KIOSKMODE=0
@@ -289,7 +289,7 @@ if 'GLOBRUNFLG' in globals():
 	libtrom.redefA(TROMA)
 	runtype=0
 	LOGBASE=TROMA
-	print ("GLOBRUNFLG found... \n running trom: \"" + TROMA + "\" as TROMA")
+	print(("GLOBRUNFLG found... \n running trom: \"" + TROMA + "\" as TROMA"))
 
 
 
@@ -301,7 +301,7 @@ elif 'GLOBSTREG' in globals():
 	exstreg=compile(scstreg.read(), ncstreg, 'exec')
 	exec(exstreg)
 	scstreg.close()
-	print ("streg program title:" + streg_subtitle)
+	print(("streg program title:" + streg_subtitle))
 	libtrom.redefA(TROMA)
 	libtrom.redefB(TROMB)
 	libtrom.redefC(TROMC)
@@ -311,7 +311,7 @@ elif 'GLOBSTREG' in globals():
 	runtype=1
 	LOGBASE=GLOBSTREG
 	pygame.display.set_caption("SBTCVM Mark 2 | " + streg_subtitle, "SBTCVM Mark 2 | " + streg_subtitle)
-	print ("GLOBSTREG found... \n Starting SBTCVM with setup in streg file: \"" + GLOBSTREG + "\"")
+	print(("GLOBSTREG found... \n Starting SBTCVM with setup in streg file: \"" + GLOBSTREG + "\""))
 else:
 	streg_subtitle="Unnamed"
 	#scstreg=open(DEFAULTSTREG, 'r')
@@ -319,7 +319,7 @@ else:
 	scstreg=open(ncstreg, 'r')
 	exstreg=compile(scstreg.read(), ncstreg, 'exec')
 	exec(exstreg)
-	print ("streg program title:" + streg_subtitle)
+	print(("streg program title:" + streg_subtitle))
 	libtrom.redefA(TROMA)
 	libtrom.redefB(TROMA)
 	libtrom.redefC(TROMA)
@@ -329,7 +329,7 @@ else:
 	runtype=1
 	LOGBASE=DEFAULTSTREG
 	pygame.display.set_caption("SBTCVM Mark 2 | " + streg_subtitle, "SBTCVM Mark 2 | " + streg_subtitle)
-	print ("nither GLOBSTREG or GLOBRUNFLG have been found... \nStarting SBTCVM with setup in default streg file: \"" + DEFAULTSTREG + "\"")
+	print(("nither GLOBSTREG or GLOBRUNFLG have been found... \nStarting SBTCVM with setup in default streg file: \"" + DEFAULTSTREG + "\""))
 if vmexeclogflg==1:
 	vmexlogf=open(os.path.join("CAP", libSBTCVM.namecrunch(LOGBASE, "-vmexeclog.log")), "w")
 
@@ -405,7 +405,7 @@ def sysmenu(x=sysmx, y=(sysmy+40), posthalt=0):
 			ramdmp.write(RAMbank[IOitm] + "\n")
 		ramdmp.close()
 		for threaddex in BTSTACK:
-			print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+			print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 		libtrom.manualdumptroms()
 	pygame.mixer.unpause()
 	return
@@ -456,7 +456,7 @@ if 'GLOBKIOSK' in globals():
 	if KIOSKMODE==1:
 		disablereadouts=0
 		ttystyle=0
-		print "Kiosk mode active... enabling readouts and TTY mode 0..."
+		print("Kiosk mode active... enabling readouts and TTY mode 0...")
 
 #if disablereadouts==1:
 	#screensurf=pygame.display.set_mode((950, 600))
@@ -544,7 +544,7 @@ updtrandport=1
 #updtblits.extend([upt])
 #upt=screensurf.blit(STEPLED, (750, 512))
 #updtblits.extend([upt])
-print "Prep threading system..."
+print("Prep threading system...")
 threadref="00"
 #vmexeclog("Preping threading system...")
 
@@ -648,7 +648,7 @@ sv3bak=svoice3sam
 #	print str(BTSTACK[f].qxtact) + " " + f
 #for f in BTSTACK:
 #	print str(BTSTACK[f].qxtact) + " " + f	
-print "SBTCVM Mark 2 Ready. the VM will now begin."
+print("SBTCVM Mark 2 Ready. the VM will now begin.")
 #vmexeclog("SBTCVM Mark 2 Ready. the VM will now begin.")
 initaltime=time.time()
 
@@ -900,7 +900,7 @@ while stopflag==0:
 			if curdata=="--0---+00":
 				updatedisp=1
 		else:
-			print "address \"" + curdata + "\" is read-only."
+			print("address \"" + curdata + "\" is read-only.")
 	#IO WRITE REG2
 	elif curinst=="----0+":
 		if curdata not in IOreadonly:
@@ -928,7 +928,7 @@ while stopflag==0:
 			if curdata=="--0---+00":
 				updatedisp=1
 		else:
-			print "address \"" + curdata + "\" is read-only."
+			print("address \"" + curdata + "\" is read-only.")
 	#swap primary Registers
 	elif curinst=="----+-":
 		REGTEMP = REG1
@@ -1882,15 +1882,15 @@ while stopflag==0:
 					ramdmp.close()
 					
 					for threaddex in BTSTACK:
-						print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+						print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 					libtrom.manualdumptroms()
 					break
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						print "readouts enabled"
+						print("readouts enabled")
 					elif disablereadouts==0:
-						print "readouts disabled"
+						print("readouts disabled")
 						disablereadouts=1
 					updtcdisp=1
 					ttyredraw=1
@@ -1973,15 +1973,15 @@ while stopflag==0:
 						ramdmp.write(RAMbank[IOitm] + "\n")
 					ramdmp.close()
 					for threaddex in BTSTACK:
-						print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+						print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 					libtrom.manualdumptroms()
 					break
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						print "readouts enabled"
+						print("readouts enabled")
 					elif disablereadouts==0:
-						print "readouts disabled"
+						print("readouts disabled")
 						disablereadouts=1
 					updtcdisp=1
 					ttyredraw=1
@@ -2069,9 +2069,9 @@ while stopflag==0:
 				if event.type == KEYDOWN and event.key == K_F4:
 					if disablereadouts==1:
 						disablereadouts=0
-						print "readouts enabled"
+						print("readouts enabled")
 					elif disablereadouts==0:
-						print "readouts disabled"
+						print("readouts disabled")
 						disablereadouts=1
 					updtcdisp=1
 					ttyredraw=1
@@ -2083,7 +2083,7 @@ while stopflag==0:
 					for IOitm in IOdumplist:
 						ramdmp.write(RAMbank[IOitm] + "\n")
 					for threaddex in BTSTACK:
-						print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+						print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 					ramdmp.close()
 					libtrom.manualdumptroms()
 					break
@@ -2149,7 +2149,7 @@ while stopflag==0:
 					ramdmp.write(RAMbank[IOitm] + "\n")
 				ramdmp.close()
 				for threaddex in BTSTACK:
-					print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+					print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 				libtrom.manualdumptroms()
 				break
 			if event.type == KEYDOWN and event.key == K_F2:
@@ -2158,9 +2158,9 @@ while stopflag==0:
 			if event.type == KEYDOWN and event.key == K_F4:
 				if disablereadouts==1:
 					disablereadouts=0
-					print "readouts enabled"
+					print("readouts enabled")
 				elif disablereadouts==0:
-					print "readouts disabled"
+					print("readouts disabled")
 					disablereadouts=1
 				updtcdisp=1
 				ttyredraw=1
@@ -2561,11 +2561,11 @@ while stopflag==0:
 
 #print "foobar"
 if logromexit==1:
-	print "logging TROM MEMORY into CAP dir..."
+	print("logging TROM MEMORY into CAP dir...")
 	libtrom.dumptroms()
 #print "postlog"
 if logIOexit==1:
-	print "logging final IObus state into CAP dir..."
+	print("logging final IObus state into CAP dir...")
 	ramdmp=open((os.path.join('CAP', 'IOBUS.dmp')),  'w')
 	for IOitm in IOdumplist:
 		ramdmp.write(RAMbank[IOitm] + "\n")
@@ -2577,8 +2577,8 @@ if vmexeclogflg==1:
 	vmexeclog("aprox operations/second: " + format((exlogclockticnum / exlogcurtime), '.11f'))
 	vmexlogf.close()
 if trackopsec==1:
-	print ("final clock tic: " + str(exlogclockticnum) + " |final time passed: " + format((exlogcurtime), '.11f'))
-	print ("aprox operations/second: " + format((exlogclockticnum / exlogcurtime), '.11f'))
+	print(("final clock tic: " + str(exlogclockticnum) + " |final time passed: " + format((exlogcurtime), '.11f')))
+	print(("aprox operations/second: " + format((exlogclockticnum / exlogcurtime), '.11f')))
 #if vmexeclogflg==1:
 	#exlogclockticnum += 1
 	#exlogcurtime=time.time()
@@ -2617,7 +2617,7 @@ if quickquit==0:
 					ramdmp.write(RAMbank[IOitm] + "\n")
 				ramdmp.close()
 				for threaddex in BTSTACK:
-					print (str(BTSTACK[threaddex].qxtact) + " " + threaddex)
+					print((str(BTSTACK[threaddex].qxtact) + " " + threaddex))
 				libtrom.manualdumptroms()
 
 
