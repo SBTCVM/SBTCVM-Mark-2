@@ -491,12 +491,12 @@ class catsel:
 		
 		if event.button==4:
 			if self.tileoff<0:
-				self.tileoff += self.tilejumpy
+				self.tileoff += self.tilejumpy//4
 				self.fullupt=1
 				return
 		if event.button==5:
 			if (self.tileyscrollcheck) >= self.widy:
-				self.tileoff -= self.tilejumpy
+				self.tileoff -= self.tilejumpy//4
 				self.fullupt=1
 				return
 		self.tilecnt=0
