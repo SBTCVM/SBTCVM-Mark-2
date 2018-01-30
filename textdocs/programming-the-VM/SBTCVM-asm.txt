@@ -79,6 +79,7 @@ on certain instructions you may point to a pointer as such:
 'setinst|>thisisanexample'
 'romread1|>thisisanexample'
 'romread2|>thisisanexample'
+'setreg1|>thisisanexample'
 
 similar shortcuts exist for various IOaddress points:
 "random" | random integer port "--0------" (read only)
@@ -89,13 +90,16 @@ similar shortcuts exist for various IOaddress points:
 
 "romread1"
 ------
-ROMread 1
-(first register)
+read data from rom address into register 1.
+example:
+	romread1|>tromval1
+	...
+	null|+++++++++|tromval1
+see also: setdata
 
 "romread2"
 -----0
-ROMread 2
-(second register)
+read data from rom address into register 2.
 
 "IOread1"
 -----+
@@ -139,7 +143,7 @@ invert register 2
 
 "add"
 ---0-+
-add
+add registers 1 and 2, storing the result in register 1.
 
 "subtract"
 ---00-
@@ -147,7 +151,8 @@ subtract
 
 "multiply"
 ---000
-multiply
+multiply register 1 by register 2, storing the result in register 1.
+on overflow, the result will be mpi or mni.
 
 "divide"
 ---00+
@@ -155,7 +160,13 @@ integer division
 
 "setreg1"
 ---0+-
-set register 1
+set register 1. example:
+	setreg1;0000000+0
+-supports pointer referencing (see above)
+example:
+	setreg1;>foo
+	# store it somewhere, load it later, then:
+	gotoreg1
 
 "setreg2"
 ---0+0
@@ -170,10 +181,20 @@ set instruction of rom address DATA using register 1 [IIIIII???]
 ---+--
 set data of rom address DATA using register 1 [DDDDDDDDD]
 -supports pointer referencing (see above)
+example:
+	setdata;>reg1bak
+	...
+	null;000000000;reg1bak
+see also: romread1
 
 "continue"
 ---+++
 go to instruction following last goto instruction.
+only one address is remembered. 
+if you try to use continue twice with no goto in between, 
+behaviour is undefined.
+
+
 >>>basic color display commands<<<
 
 "colorpixel"
@@ -202,8 +223,8 @@ draw color line ???XXXYYY
 --0-0+
 draw color filled rectangle ???XXXYYY
 
->>>basic Mono Display commands<<<
 
+>>>basic Mono Display commands<<<
 
 "monopixel"
 --0-+-
@@ -238,8 +259,9 @@ where MM is a 2 trit greyscale color value.
 stop (shuts down VM)
 
 "null"
---0000
+000000
 null command
+(--0000 may be a valid alternate, but the assembler generates 000000.)
 
 "gotodata"
 --000+
@@ -263,8 +285,11 @@ goto data specified ROM address IF REG 1 is greater than REG 2.
 
 "wait"
 --00++
-wait 0.1, 0.2, or 0.3
-(????????+ = 3 ????????0= 2 ????????- = 1)
+wait a specified time.
+example:
+	wait|:0.2
+the time is encoded as a fixed point number 
+between 0 and 19.683 inclusive.
 
 "YNgoto"
 --0+--
@@ -280,11 +305,12 @@ user wait.
 --0+-+
 TTY clear
 
+
 >>>Rom switching GOTOs<<<
 
 (the following gotos switch TROMS! make sure config setup is done properly! also note that none of these gotos support pointer referencing!)
 
-"gotoA
+"gotoA"
 --+---
 A mandatory goto  
 
@@ -334,6 +360,7 @@ F reg equal goto
 
 >>>end Rom switching GOTOs<<<
 
+
 "dumpreg1"
 --++0+
 dump register 1 to TTY
@@ -342,11 +369,22 @@ dump register 1 to TTY
 --+++-
 dump register 2 to TTY
 
+
+"setregset"
+-0-000
+set minor system register. see regset.txt
+
+"regset"
+-0-00+
+set minor system register. see regset.txt
+
+
 "TTYwrite"
 --+++0
 tty write port (direct) (???CCCCCC) where CCCCCC is the SBTCVMtext 6-trit character code.
 or you can use 
 TTYwrite|:? where ?=single character (or "space" for a space or "enter" for a newline)
+
 "buzzer"
 --++++
 buzzer port (direct)
@@ -356,23 +394,18 @@ buzzer port (direct)
 	0   0.2 seconds
 	-   0.1 seconds
 
-"setregset" (see regset.txt)
--0-000
-
-
-"regset" (see regset.txt)
--0-00+
-
 "TTYlinedraw"
 toggles The regset flag controlling wether the tty updates on each character,
 or just on newlines. (SBTCVM Mark 2 defaults this flag to per character)
 use 
 TTYlinedraw|on to enable and TTYlinedraw|off to disable.
+(macro using the regset mechanism; expands to 2 instructions.)
 
 "TTYbg"
 set TTY background color through regset.
 SET using data ???CCCCCC where C is a 6-trit RGB color :D
 (6-trit color enhanced)
+(macro using the regset mechanism; expands to 2 instructions.)
 
 "setkeyint"
 -0-+++
@@ -405,6 +438,3 @@ see offsetlength.txt for more information.
 (see keyboard-inter.txt)
 clear key interrupt| ????????0=clear keyinterrupt chosen by ketinterrupt,
  ????????+=clear all keyinterrupts.
-
-"TTYbg" 6-trit-color-instruction-enhanced shortcut for setting the TTY background color register.
-
