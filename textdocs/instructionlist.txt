@@ -107,7 +107,7 @@
 -0-++0|readwrite offset length. control. (see offsetlength.txt)
 -0-+++|set keyinterrupt register. (used to select a key interrupt to activate.) ?????DDDD=4-trit scancode (see keyboard-inter.txt)
 -00---|keyboard interrupt. (data)DDDDDDDDD=rom address to goto on interrupt. (see keyboard-inter.txt)
--00--0|clear key interrupt| ????????0=clear keyinterrupt chosen by ketinterrupt, ????????+=clear all keyinterrupts.
+-00--0|clear key interrupt| ????????0=clear keyinterrupt chosen by keyinterrupt, ????????+=clear all keyinterrupts.
 -00--+
 -00-0-
 -00-00

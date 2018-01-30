@@ -381,9 +381,11 @@ set minor system register. see regset.txt
 
 "TTYwrite"
 --+++0
-tty write port (direct) (???CCCCCC) where CCCCCC is the SBTCVMtext 6-trit character code.
+tty write port (direct) (???CCCCCC) where CCCCCC is the 
+SBTCVMtext 6-trit character code.
 or you can use 
-TTYwrite|:? where ?=single character (or "space" for a space or "enter" for a newline)
+TTYwrite|:? where ?=single character 
+(or "space" for a space or "enter" for a newline)
 
 "buzzer"
 --++++
@@ -419,6 +421,12 @@ you can use setkeyint|:? where ?=codelabel (see list in keyboard-inter.txt)
 (see keyboard-inter.txt)
 keyboard interrupt. (data)DDDDDDDDD=rom address to goto on interrupt.
 
+"clearkeyint"
+-00--0
+(see keyboard-inter.txt)
+clear key interrupt| ????????0=clear keyinterrupt chosen by ketinterrupt,
+ ????????+=clear all keyinterrupts.
+
 
 "offsetlen"
 -0-++0
@@ -432,9 +440,3 @@ C is 1-9 and controls the offset length trit length. (default is 9)
 offsetlen|A,B,C
 
 see offsetlength.txt for more information.
-
-"clearkeyint"
--00--0
-(see keyboard-inter.txt)
-clear key interrupt| ????????0=clear keyinterrupt chosen by ketinterrupt,
- ????????+=clear all keyinterrupts.
