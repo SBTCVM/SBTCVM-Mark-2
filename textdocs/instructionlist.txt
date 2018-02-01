@@ -94,7 +94,7 @@
 -0-00-
 -0-000|regset pointer (see regset.txt)
 -0-00+|regset operation (DDDDDDDDD) (data) (see regset.txt)
--0-0+-|memory point control
+-0-0+-|memory point control - operation depends on data OO???????
 -0-0+0|read to reg 1 using memory pointer
 -0-0++|write to memory location using memory pointer and reg1 
 -0-+--|write to memory location using memory pointer and data portion of word.
