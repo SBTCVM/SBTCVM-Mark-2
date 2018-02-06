@@ -8,12 +8,15 @@ Graphics and UI:
 
 Utilities and systems programming:
   Thomas Leathers
+  eekee
 
 STREG and TROM programming:
   Thomas Leathers
+  eekee
 
 VM architecture and system design:
   Thomas Leathers
+  eekee
 
 Research:
   eekee
