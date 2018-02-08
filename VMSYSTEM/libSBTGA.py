@@ -105,7 +105,9 @@ class buffdisplay:
 		dispsurf1=dispsurf1.convert(screensurf)
 		dispsurf0pixarray=pygame.PixelArray(dispsurf0)
 		dispsurf1pixarray=pygame.PixelArray(dispsurf1)
-	def render(self, x=0, y=0):
+	def render(self, x=0, y=0, membus=None):
+		if membus!=None:
+			self.membus=membus
 		if self.mode=="G0":
 			dispsurf0.lock()
 			self.pixy=0
