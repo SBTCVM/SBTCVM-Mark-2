@@ -44,16 +44,19 @@ Wyatt Huckaby
 
 Utilities and systems programming:
 Thomas Leathers
+eekee
 
 -<HBAR>-
 
 STREG and TROM programming:
 Thomas Leathers
+eekee
 
 -<HBAR>-
 
 VM architecture and system design:
 Thomas Leathers
+eekee
 
 -<HBAR>-
 

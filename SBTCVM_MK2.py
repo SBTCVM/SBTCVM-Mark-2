@@ -1708,7 +1708,20 @@ while stopflag==0:
 	
 	if updatedisp==1:
 		updatedisp=0
-		upt=SBTGADEV.render(x=0, y=ttyyoffset)
+		#determine what TROM bank the current thread is on, and pass that bus dict as the membus argument.
+		if ROMFILE==TROMA:
+			SBTGABUS=libtrom.AROM
+		elif ROMFILE==TROMB:
+			SBTGABUS=libtrom.BROM
+		elif ROMFILE==TROMC:
+			SBTGABUS=libtrom.CROM
+		elif ROMFILE==TROMD:
+			SBTGABUS=libtrom.DROM
+		elif ROMFILE==TROME:
+			SBTGABUS=libtrom.EROM
+		elif ROMFILE==TROMF:
+			SBTGABUS=libtrom.FROM
+		upt=SBTGADEV.render(x=0, y=ttyyoffset, membus=SBTGABUS)
 		updtblits.extend([upt])
 	#needed by user quering opcodes such as 0+--	
 	if extradraw==1:
