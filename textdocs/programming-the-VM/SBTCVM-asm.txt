@@ -309,7 +309,8 @@ TTY clear
 
 >>>Rom switching GOTOs<<<
 
-(the following gotos switch TROMS! make sure config setup is done properly! also note that none of these gotos support pointer referencing!)
+the following gotos switch TROMS! make sure config setup is done properly! 
+address is required, but none of these gotos support pointer referencing.
 
 "gotoA"
 --+---
