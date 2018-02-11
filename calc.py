@@ -18,6 +18,7 @@ import VMSYSTEM.libthemeconf as libthemeconf
 pygame.display.init()
 pygame.font.init()
 
+bigfont = pygame.font.SysFont(None, 30)
 simplefont = pygame.font.SysFont(None, 22)
 btnfont = pygame.font.SysFont(None, 21)
 pygame.event.set_allowed([QUIT, MOUSEBUTTONDOWN, KEYDOWN])
@@ -162,6 +163,13 @@ dlab=simplefont.render("D", True, libthemeconf.desktext)
 bg.blit(dlab, (2, 60))
 bg.blit(dlab, (2, 121))
 bg.blit(dlab, (2, 186))
+
+
+Alab=bigfont.render("A", True, libthemeconf.desktext)
+Blab=bigfont.render("B", True, libthemeconf.desktext)
+
+bg.blit(Alab, (430, 111))
+bg.blit(Blab, (430, 176))
 
 #inital register values
 TA="0"
