@@ -10,7 +10,11 @@ import VMSYSTEM.libthemeconf as libthemeconf
 import VMSYSTEM.libvmui as vmui
 import subprocess
 
-
+searchtemp='''<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<head title="Search"/>
+</main>'''
+searchstring=""
 clicklist=list()
 
 datapath=os.path.join("VMSYSTEM", "HELP")
@@ -94,6 +98,7 @@ sbtcvmbadge=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'SBTCVMbadge.png')
 
 fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 fvfilemenu=vmui.makemenubtn("FILE", icon=fmicon)
+fvsearch=vmui.makemenubtn("Search")
 
 pygame.display.set_caption(("SBTCVM Help"), ("SBTCVM Help"))
 
@@ -119,6 +124,34 @@ Part of the SBTCVM Project
 Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
+
+def finder():
+	pathlist=sorted(os.listdir(os.path.join("VMSYSTEM", "HELP")), key=str.lower)
+	droot = ET.fromstring(searchtemp)
+	newelem=ET.Element("title")
+	newelem.text="Search: " + searchstring
+	droot.append(newelem)
+	for path in pathlist:
+		#print("fun")
+		if path.lower().endswith(".xml"):
+			#print("fun2")
+			xtree = ET.parse(os.path.join(os.path.join("VMSYSTEM", "HELP"), path))
+			xroot = xtree.getroot()
+			matches=0
+			for line in xroot.findall("*"):
+				if line.tag=="title" or line.tag=="text":
+					if any(item in line.text for item in list(searchstring.split(" "))):
+						matches+=1
+			if matches>0:
+				#print("fun3")
+				xheadtag=xroot.find('head')
+				xpagename=xheadtag.attrib.get("title", "")
+				newelem=ET.Element("lnk", attrib={"label": xpagename + " [" + str(matches) + "]"})
+				newelem.text=path
+				droot.append(newelem)
+						
+	pygame.display.set_caption(("SBTCVM Help - Search:" + searchstring), ("SBTCVM Help - Search:" + searchstring))
+	return droot
 
 pygame.key.set_repeat(250, 50)
 
@@ -212,7 +245,12 @@ while qflg==0:
 			#add a 4-pixel margin between elements.
 			yval += 4
 		hudrect=pygame.Rect(0, 0, screenw, 44)
+		findrect=pygame.Rect(100, 5, 300, 34)
 		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
+		pygame.draw.rect(screensurf, libthemeconf.textboxbg, findrect, 0)
+		pygame.draw.rect(screensurf, libthemeconf.textboxline, findrect, 1)
+		texgfx=simplefont.render(searchstring, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+		screensurf.blit(texgfx, (110, 7))
 		screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 		#if screenw>=640 and screenh>=480:
 			#screensurf.blit(logooverlay, (((screenw - 200), (screenh - 200))))
@@ -221,7 +259,7 @@ while qflg==0:
 		#quitq=screensurf.blit(iconquit, (((screenw - 44), (88))))
 		#indexq=screensurf.blit(iconindex, (((screenw - 44), (44))))
 		fmx=screensurf.blit(fvfilemenu, ((3, 3)))
-		
+		searchx=screensurf.blit(fvsearch, ((46, 3)))
 		pygame.display.update()
 		qtexty=yval
 	#handles "click and drag" scrolling
@@ -296,6 +334,18 @@ while qflg==0:
 			titlefont = pygame.font.SysFont(None, (fontsize + 10))
 			scupdate=1
 		if event.type==MOUSEBUTTONDOWN:
+			if searchx.collidepoint(event.pos)==1 and event.button==1:
+				if searchstring!="" and searchstring!=None:
+					root=finder()
+					#print(ET.tostring(root))
+					scupdate=1
+					break
+			if findrect.collidepoint(event.pos)==1 and event.button==1:
+				texgfx=simplefont.render(searchstring, True, libthemeconf.textboxbg, libthemeconf.textboxbg)
+				screensurf.blit(texgfx, (110, 7))
+				searchstring=vmui.textinput(110, 7, fontsize=22, textstring=searchstring)
+				
+				break
 			if fmx.collidepoint(event.pos)==1 and event.button==1:
 				menuret=vmui.menuset(filemenu, 3, 43, reclick=0, fontsize=26)
 				if menuret=="HELP":
