@@ -112,6 +112,7 @@ xoff=5
 yjump=22
 fontsize=21
 simplefont = pygame.font.SysFont(None, fontsize)
+searchfont = pygame.font.SysFont(None, 28)
 titlefont = pygame.font.SysFont(None, (fontsize + 10))
 qflg=0
 resizeflg=0
@@ -140,7 +141,7 @@ def finder():
 			matches=0
 			for line in xroot.findall("*"):
 				if line.tag=="title" or line.tag=="text":
-					if any(item in line.text for item in list(searchstring.split(" "))):
+					if any(item in line.text.lower() for item in list(searchstring.lower().split(" "))):
 						matches+=1
 			if matches>0:
 				#print("fun3")
@@ -249,7 +250,7 @@ while qflg==0:
 		pygame.draw.rect(screensurf, libthemeconf.hudbg, hudrect, 0)
 		pygame.draw.rect(screensurf, libthemeconf.textboxbg, findrect, 0)
 		pygame.draw.rect(screensurf, libthemeconf.textboxline, findrect, 1)
-		texgfx=simplefont.render(searchstring, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
+		texgfx=searchfont.render(searchstring, True, libthemeconf.textboxtext, libthemeconf.textboxbg)
 		screensurf.blit(texgfx, (110, 7))
 		screensurf.blit(sbtcvmbadge, ((screenw-120), 0))
 		#if screenw>=640 and screenh>=480:
@@ -341,9 +342,9 @@ while qflg==0:
 					scupdate=1
 					break
 			if findrect.collidepoint(event.pos)==1 and event.button==1:
-				texgfx=simplefont.render(searchstring, True, libthemeconf.textboxbg, libthemeconf.textboxbg)
+				texgfx=searchfont.render(searchstring, True, libthemeconf.textboxbg, libthemeconf.textboxbg)
 				screensurf.blit(texgfx, (110, 7))
-				searchstring=vmui.textinput(110, 7, fontsize=22, textstring=searchstring)
+				searchstring=vmui.textinput(110, 7, fontsize=28, textstring=searchstring)
 				
 				break
 			if fmx.collidepoint(event.pos)==1 and event.button==1:
