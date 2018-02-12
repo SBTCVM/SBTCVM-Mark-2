@@ -151,7 +151,7 @@ def finder():
 				newelem.text=path
 				droot.append(newelem)
 						
-	pygame.display.set_caption(("SBTCVM Help - Search:" + searchstring), ("SBTCVM Help - Search:" + searchstring))
+	pygame.display.set_caption(("SBTCVM Help - Search: " + searchstring), ("SBTCVM Help - Search: " + searchstring))
 	return droot
 
 pygame.key.set_repeat(250, 50)
@@ -340,6 +340,7 @@ while qflg==0:
 					root=finder()
 					#print(ET.tostring(root))
 					scupdate=1
+					yoff=44
 					break
 			if findrect.collidepoint(event.pos)==1 and event.button==1:
 				texgfx=searchfont.render(searchstring, True, libthemeconf.textboxbg, libthemeconf.textboxbg)
