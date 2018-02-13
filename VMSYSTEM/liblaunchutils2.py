@@ -1199,7 +1199,14 @@ class fileman:
 		self.filterflg=0
 		self.filmenu=0
 		self.vscrollbtns=vmui.makevscroll()
+		self.updcnt=0
+		self.updint=30
 	def render(self):
+		if self.updcnt==self.updint:
+			self.updcnt=0
+			self.scup=1
+		else:
+			self.updcnt+=1
 		if self.scup==1:
 			self.widsurf.fill(framebg)
 			if self.runexec==0:	

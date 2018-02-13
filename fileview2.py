@@ -238,7 +238,15 @@ gxmask2=pygame.Surface((390, 40), SRCALPHA)
 box1rect=pygame.Rect(433, 17, 349, 23)
 box2rect=pygame.Rect(433, 71, 349, 23)
 engtimer=pygame.time.Clock()
+updint=30
+updcnt=0
 while quitflag==0:
+	#update dispay once every 30 frames
+	if updcnt==updint:
+		updcnt=0
+		scupdate=1
+	else:
+		updcnt+=1
 	#check to save needlessly redrawing display
 	if scupdate==1:
 		scupdate=0
