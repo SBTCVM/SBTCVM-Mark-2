@@ -158,7 +158,19 @@ def finder():
 				newelem=ET.Element("lnk", attrib={"label": xpagename + " [" + str(matches) + "]"})
 				newelem.text=path
 				droot.append(newelem)
-	#update window caption.			
+	#add glossary results.
+	newelem=ET.Element("title")
+	newelem.text="From The Glossary:"
+	droot.append(newelem)
+	xtree = ET.parse(os.path.join(os.path.join("VMSYSTEM", "HELP"), "glossary.xml"))
+	xroot = xtree.getroot()
+	#iterate through glossary.xml and add special word elements that match.
+	for line in xroot.findall("*"):
+			if line.tag=="word":
+				if any(item in line.text.lower() for item in list(searchstring.lower().split(" "))):
+					droot.append(line)
+					
+	#update window caption.
 	pygame.display.set_caption(("SBTCVM Help - Search: " + searchstring), ("SBTCVM Help - Search: " + searchstring))
 	return droot
 
@@ -203,7 +215,7 @@ while qflg==0:
 		screensurf.blit(logooverlay, (((screenw - 250), (screenh - 250))))
 		for itmtype in root.findall("*"):
 			#Text parser
-			if itmtype.tag=="text":
+			if itmtype.tag=="text" or itmtype.tag=="word":
 				textcont=(itmtype.text + "\n")
 				textchunk=""
 				#this draws the text body line-per-line

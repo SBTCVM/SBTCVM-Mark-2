@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+	<!--Head should appear only once, and at the top-->
+	<head title="Glossary"/>
+	<!--the rest can appear-->
+	<title>Glossary</title>
+	<!--word is a synonym of text that is for use only in glossary.xml used by search to show glossary results-->
+	<word>trit - A single balanced ternary digit.</word>
+	<word>Tryte (T) - 6 balanced ternary digits (6 trits).</word>
+	<word>KiloTryte (KT) - 1093 Trytes.</word>
+	<word>SBTCVM - Acronym; Simple Balanced Ternary Computer Virtual Machine.</word>
+</main>

@@ -5,6 +5,7 @@
 	<head title="index"/>
 	<!--the rest can appear-->
 	<title>SBTCVM Help Index</title>
+	<lnk label="Glossary">glossary.xml</lnk>
 	<lnk label="List Of SBTCVM Utilities">proglist.xml</lnk>
 	<lnk label="File types">ftype.xml</lnk>
 	<div/>
