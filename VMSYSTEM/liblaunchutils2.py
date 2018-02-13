@@ -1341,13 +1341,15 @@ class fileman:
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(self.iterfiles, self.f.filename))])
 					if self.f.ftype=="streg":
 						subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(self.iterfiles, self.f.filename))])
+					if self.f.ftype=="tasm":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "guiasm", (os.path.join(self.iterfiles, self.f.filename))])
 				else:
 					if self.f.ftype=="trom":
 						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
 					if self.f.ftype=="streg":
 						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
-				if self.f.ftype=="tasm":
-					subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
+					if self.f.ftype=="tasm":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
 				if self.f.ftype=="log":
 					subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(self.iterfiles, self.f.filename))])
 				if self.f.ftype=="dmp":

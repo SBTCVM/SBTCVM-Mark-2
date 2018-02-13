@@ -1206,6 +1206,24 @@ See README.md for more information."""
 				resh=event.h
 				time.sleep(0.1)
 				break
+#GUI assembler wrapper
+def guiasm(asmfile):
+	global screensurf
+	pygame.display.set_caption(("GUIasm - " + asmfile), ("GUIasm - " + asmfile))
+	while True:
+		if yndiag("Assemble '" + asmfile + "'? \n choose NO to exit.\nIf error, GUIasm will open a log in textview.", screensurf.get_width()//2, screensurf.get_height()//2)=="NO":
+			sys.exit()
+		try:
+			outp=subprocess.check_output(["python", "SBTCVM-asm2.py", asmfile], stderr=subprocess.STDOUT)
+			okdiag("Assembly successful.", screensurf.get_width()//2, screensurf.get_height()//2)
+		except subprocess.CalledProcessError as err:
+			dumpfile=open(os.path.join("CAP", "guiasm.log"), "w")
+			dumpfile.write("GUIasm Log of assembler output:\n")
+			dumpfile.write(err.output)
+			dumpfile.close()
+			subprocess.Popen(["python", "MK2-TOOLS.py", "textview", os.path.join("CAP", "guiasm.log")])
+			okdiag("Assembly Failure.\nSee Newly-opened textview window.", screensurf.get_width()//2, screensurf.get_height()//2)
+			
 
 
 #image viewer

@@ -44,6 +44,7 @@ scrollbtn   :  test scroll buttons.
 imgview [image] : fileview's image viewer
 textview [file] : fileview's text viewer
 codeview [file] : fileview's code viewer
+guiasm [tasm file] : GUI wrapper for SBTCVM-asm2.py
 namecrunch [string] : test namecrunch function
 timecodetest : test ternary Timecode encode/decode'''
 
@@ -87,7 +88,7 @@ elif cmd=="namecrunch" or cmd=="timecodetest":
 			print BG
 			BQ=libSBTCVM.timedecode(BG)
 			print BQ
-elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
+elif cmd=="btclock" or cmd=="guiasm" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or cmd=="imgview" or cmd=="textview" or cmd=="codeview" or cmd=="textinput" or cmd=="menu"  or cmd=="okdiag" or cmd=="yndiag":
 	#print "SBTCVM Graphical Tools launcher starting..."
 	pygame.display.init()
 	pygame.font.init()
@@ -118,6 +119,8 @@ elif cmd=="btclock" or cmd=="pause" or cmd=="scrollbtn" or cmd=="uicredits" or c
 	#screen fonts
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((600, 370))
+	if cmd=="guiasm":
+		screensurf=pygame.display.set_mode((640, 480))
 	elif cmd=="imgview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	elif cmd=="textview" or cmd=="codeview":
@@ -204,6 +207,12 @@ a function to create Yes/No dialogs.'''
 			vmui.imgview(sys.argv[2])
 		except IndexError:
 			print "MUST SPECIFY IMAGE FILENAME."
+	if cmd=="guiasm":
+		vmui.toolsscreen(1)
+		try:
+			vmui.guiasm(sys.argv[2])
+		except IndexError:
+			print "MUST SPECIFY TASM FILENAME."
 	if cmd=="textview":
 		vmui.toolsscreen(1)
 		try:

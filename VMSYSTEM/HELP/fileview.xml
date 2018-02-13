@@ -18,7 +18,8 @@ The filetype icon with the active light shows the current state of the filter.
 	<text>
 
 The View and Run icons on the far right control whether to run troms and stregs,
-or view them.
+or view them. When set to run, tasm files will open in the GUIasm assembly tool,
+and when set to view, they will open in codeview.
 </text>
 	<img>fvrunview.jpg</img>
 	<text>

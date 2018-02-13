@@ -528,13 +528,15 @@ while quitflag==0:
 							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
 						if f.ftype=="streg":
 							subprocess.Popen(["python", "MK2-RUN.py", (os.path.join(iterfilesq, f.filename))])
+						if f.ftype=="tasm":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "guiasm", (os.path.join(iterfilesq, f.filename))])
 					else:
 						if f.ftype=="trom":
 							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
 						if f.ftype=="streg":
 							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
-					if f.ftype=="tasm":
-						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
+						if f.ftype=="tasm":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
 					if f.ftype=="log":
 						subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
 					if f.ftype=="dmp":
