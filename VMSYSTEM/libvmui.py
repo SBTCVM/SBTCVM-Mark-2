@@ -1031,22 +1031,26 @@ def codeview(textfile):
 	ptexty=1
 	redraw=0
 	qflg=0
+	if (textfile.lower()).endswith(".tasm"):
+		tasmflg=1
+		fmasm=menuitem("Assemble (GUIasm)", "ASM")
+	else:
+		tasmflg=0
+		fmasm=menuitem("Assemble (GUIasm)", "ASM", noclick=1)
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 	fvfilemenu=makemenubtn("FILE", icon=fmicon)
 	fmhelp=menuitem("Help (F1)", "HELP")
 	fmquit=menuitem("Quit", "QUIT")
+	
 	fmabout=menuitem("About Codeview", "ABOUT")
-	filemenu=[fmhelp, fmabout, fmquit]
+	filemenu=[fmhelp, fmabout, fmasm, fmquit]
 	diagabt="""Codeview v2.0.3
 Part of the SBTCVM Project
 Copyright (c) 2016-2018 Thomas Leathers and Contributors 
 
 See README.md for more information."""
 	
-	if (textfile.lower()).endswith(".tasm"):
-		tasmflg=1
-	else:
-		tasmflg=0
+	
 	screenw=screensurf.get_width()
 	screenh=screensurf.get_height()
 	resizeflg=0
@@ -1177,6 +1181,8 @@ See README.md for more information."""
 					menuret=menuset(filemenu, 3, 43, reclick=0, fontsize=26)
 					if menuret=="HELP":
 						subprocess.Popen(["python", "helpview.py", "codeview.xml"])
+					if menuret=="ASM":
+						subprocess.Popen(["python", "MK2-TOOLS.py", "guiasm", textfile])
 					if menuret=="QUIT":
 						qflg=1
 						break

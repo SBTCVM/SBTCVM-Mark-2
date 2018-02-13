@@ -162,6 +162,7 @@ filemenu=[fmnew, fmhelp, fmabout, fmbg, fmquit]
 #create gxmask only once. just reuse it.
 
 menuitrun=vmui.menuitem("Run", "RUN")
+menuitasm=vmui.menuitem("Assemble", "RUN")
 menuitview=vmui.menuitem("View", "VIEW")
 menuitinfo=vmui.menuitem("Info", "INFO")
 menuittrom=vmui.menuitem("Trom file", "TROM", noclick=1, icon=fvtrom)
@@ -188,7 +189,7 @@ iconlist=[fvall, fvtrom, fvimg, fvstreg, fvtasm, fvtext, fvlog, fvdmp]
 trommenu=[menuittrom, menuitrun, menuitview, menuitinfo]
 stregmenu=[menuitstreg, menuitrun, menuitview, menuitinfo]
 imgmenu=[menuitimage, menuitview, menuitinfo]
-tasmmenu=[menuittasm, menuitview, menuitinfo]
+tasmmenu=[menuittasm, menuitasm, menuitview, menuitinfo]
 textmenu=[menuittext, menuitview, menuitinfo]
 logmenu=[menuitlog, menuitview, menuitinfo]
 dmpmenu=[menuitdmp, menuitview, menuitinfo]
@@ -493,6 +494,8 @@ while quitflag==0:
 							vmui.okdiag(getdesc("streg", f.filename, iterfilesq), (screenx // 2), (screeny // 2))
 					if f.ftype=="tasm":
 						menuret=vmui.menuset(tasmmenu, event.pos[0], event.pos[1], reclick=0, fontsize=25)
+						if menuret=="RUN":
+							subprocess.Popen(["python", "MK2-TOOLS.py", "guiasm", (os.path.join(iterfilesq, f.filename))])
 						if menuret=="VIEW":
 							subprocess.Popen(["python", "MK2-TOOLS.py", "codeview", (os.path.join(iterfilesq, f.filename))])
 						if menuret=="INFO":
