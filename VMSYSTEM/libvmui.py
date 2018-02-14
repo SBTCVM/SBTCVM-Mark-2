@@ -1015,9 +1015,69 @@ See README.md for more information."""
 				resh=event.h
 				time.sleep(0.1)
 				break
-				
-#code viewer
 
+class mapview:
+	def __init__(self, memfile, drawrect, surface):
+		self.mem=open(memfile, "r")
+		self.drawrect=drawrect
+		self.surface=surface
+		self.drawsurf=pygame.Surface((drawrect.w, drawrect.h))
+		self.yoff=0
+		self.addr=-9841
+	def render(self):
+		self.addrlabel=simplefont.render("address offset: " + str(self.addr) + " (line: " + str(self.addr+9842) + ")", True, libthemeconf.textvtext, libthemeconf.textvbg)
+		self.surface.blit(self.addrlabel, (self.drawrect.x, self.drawrect.y-20))
+		self.ypos=self.yoff
+		self.drawsurf.fill((0, 0, 0))
+		#self.drawsurf.lock()
+		self.mem.seek(0)
+		for line in self.mem:
+			self.xpos=0
+			if self.ypos>=0:
+				for char in line.replace("\n", ""):
+					if char=="+":
+						#self.drawmap[self.xpos, self.ypos]=(0, 0, 255)
+						#pygame.draw.line(self.drawsurf, (0, 0, 255), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
+						#pygame.draw.line(self.drawsurf, (0, 0, 255), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
+						pygame.draw.rect(self.drawsurf, (0, 0, 255), pygame.Rect(self.xpos, self.ypos, 17, 5))
+					elif char=="0":
+						#self.drawmap[self.xpos, self.ypos]=(255, 0, 255)
+						#pygame.draw.line(self.drawsurf, (255, 0, 255), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
+						#pygame.draw.line(self.drawsurf, (255, 0, 255), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
+						pygame.draw.rect(self.drawsurf, (255, 0, 255), pygame.Rect(self.xpos, self.ypos, 17, 5))
+					elif char=="-":
+						#self.drawmap[self.xpos, self.ypos]=(255, 0, 0)
+						#pygame.draw.line(self.drawsurf, (255, 0, 0), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
+						#pygame.draw.line(self.drawsurf, (255, 0, 0), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
+						pygame.draw.rect(self.drawsurf, (255, 0, 0), pygame.Rect(self.xpos, self.ypos, 17, 5))
+					else:
+						#self.drawmap[self.xpos, self.ypos]=(0, 255, 0)
+						#pygame.draw.line(self.drawsurf, (0, 255, 0), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
+						#pygame.draw.line(self.drawsurf, (0, 255, 0), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
+						pygame.draw.rect(self.drawsurf, (0, 255, 0), pygame.Rect(self.xpos, self.ypos, 17, 5))
+					self.xpos+=17
+			self.ypos+=6
+			if self.ypos>self.drawrect.h:
+				break
+		#self.drawsurf.unlock()
+		for line in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]:
+			if line==6:
+				pygame.draw.line(self.drawsurf, (255, 255, 255), (line*17, 0), (line*17, self.drawrect.h), 2)
+			else:
+				pygame.draw.line(self.drawsurf, (0, 255, 0), (line*17, 0), (line*17, self.drawrect.h))
+		self.surface.blit(self.drawsurf, self.drawrect)
+	def scrolldown(self):
+		self.yoff+=12
+		self.addr-=2
+		if self.yoff==12:
+			self.yoff=0
+			self.addr+=2
+	def scrollup(self):
+		self.yoff-=12
+		self.addr+=2
+						
+						
+#code viewer
 
 def codeview(textfile):
 	global screensurf
@@ -1037,6 +1097,11 @@ def codeview(textfile):
 	else:
 		tasmflg=0
 		fmasm=menuitem("Assemble (GUIasm)", "ASM", noclick=1)
+	if (textfile.lower()).endswith(".trom") or (textfile.lower()).endswith(".dmp"):
+		memflag=1
+		memobj=mapview(textfile, pygame.Rect(400, 110, 260, 400), screensurf)
+	else:
+		memflag=0
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
 	fvfilemenu=makemenubtn("FILE", icon=fmicon)
 	fmhelp=menuitem("Help (F1)", "HELP")
@@ -1076,7 +1141,8 @@ See README.md for more information."""
 				redraw=0
 			abt.seek(0)
 			screensurf.fill(libthemeconf.textvbg)
-			
+			if memflag:
+				memobj.render()
 			linecnt=1
 			textblk=0
 			for f in abt:
@@ -1153,6 +1219,21 @@ See README.md for more information."""
 			if event.type == KEYDOWN and event.key == K_RIGHT:
 				textx -= yjump
 				redraw=1
+			if memflag:
+				if event.type == KEYDOWN and event.key == K_s:
+					memobj.scrollup()
+					redraw=1
+				if event.type == KEYDOWN and event.key == K_w:
+					memobj.scrolldown()
+					redraw=1
+				if event.type == KEYDOWN and event.key == K_d:
+					for f in [""]*10:
+						memobj.scrollup()
+					redraw=1
+				if event.type == KEYDOWN and event.key == K_e:
+					for f in [""]*10:
+						memobj.scrolldown()
+					redraw=1
 			if event.type == KEYDOWN and event.key == K_F1:
 				subprocess.Popen(["python", "helpview.py", "codeview.xml"])
 			if event.type == KEYDOWN and (event.key == K_PLUS or event.key == K_EQUALS or event.key == K_KP_PLUS):
@@ -1189,12 +1270,29 @@ See README.md for more information."""
 					if menuret=="ABOUT":
 						aboutdiag(diagabt, (screenw // 2), (screenh // 2))
 				elif event.button==5:
-					if qtexty>(yjump + yjump):
-						yoff -= yjump
+					if memflag:
+						if memobj.drawrect.collidepoint(event.pos):
+							memobj.scrollup()
+							redraw=1
+						else:
+							if qtexty>(yjump + yjump):
+								yoff -= yjump
+					else:
+						if qtexty>(yjump + yjump):
+							yoff -= yjump
 				elif event.button==4:
-					yoff += yjump
-					if yoff>44:
-						yoff=44
+					if memflag:
+						if memobj.drawrect.collidepoint(event.pos):
+							memobj.scrolldown()
+							redraw=1
+						else:
+							yoff += yjump
+							if yoff>44:
+								yoff=44
+					else:
+						yoff += yjump
+						if yoff>44:		
+							yoff=44
 				elif event.button==3:
 					yoff=44
 					textx=0

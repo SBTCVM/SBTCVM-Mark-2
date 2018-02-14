@@ -13,7 +13,25 @@ F8: save screenshot in "CAP" directory.
 Pageup: jump up 20 lines.
 Pagedown: jump down 20 lines.
 </text>
-<title>Syntax Highlighting:</title>
+<title>Memory Map Viewer</title>
+<text>
+When viewing .DMP and .TROM files, codeview will show a color coded memory map viewer.
+block key: (1 block=1 trit)
+purple=0
+blue=+
+red=-
+green=fault/invalid.
+
+the wider white line marks the division between the instruction and data in non-IObus maps.
+</text>
+<title>Memory Viewer Controls</title>
+<text>
+w or scroll up over map: move memory map view up.
+s or scroll down over map: move memory map view down.
+d: same as s but x10
+e: same as w but x10
+</text>
+<title>TASM Syntax Highlighting:</title>
 <text>
 text blocks are in blue.
 comments are in red.
