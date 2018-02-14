@@ -120,7 +120,7 @@ elif cmd=="btclock" or cmd=="guiasm" or cmd=="pause" or cmd=="scrollbtn" or cmd=
 	if cmd=="uicredits":
 		screensurf=pygame.display.set_mode((600, 370))
 	elif cmd=="guiasm":
-		screensurf=pygame.display.set_mode((640, 480))
+		screensurf=pygame.display.set_mode((800, 600))
 	elif cmd=="imgview":
 		screensurf=pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 	elif cmd=="textview" or cmd=="codeview":

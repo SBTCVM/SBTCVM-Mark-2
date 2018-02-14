@@ -843,7 +843,99 @@ def yndiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, lin
 						pygame.event.post(event)
 					return None
 
-
+#textstring is a body of text, (can be multiple lines) that will show in the dialog
+#okdiag will return "YES" upon user clicking the "Yes" button.
+#okdiag will return "NO" upon user clicking the "No" button.
+#reclick controls wether to repost a click outside the dialog area:
+# -reclick=1 returns and reposts upon click outside dialog
+# -reclick=0 just returns upon click outside dialog
+# -reclick=2 ignores click outside dialog (default)
+# (okdiag will return None upon returning due to click outside dialog)
+## (remember: all dialogs will return "VID" on videoresize, so the host application can process it.)
+#SPECIAL NOTE ABOUT DIALOGS: they will CENTER on xpos, ypos!
+def guiasmdiag(textstring, xpos, ypos, reclick=2, textcol=libthemeconf.diagtext, linecol=libthemeconf.diagline, bgcol=libthemeconf.diagbg,  fontsize=20):
+	global screensurf
+	scbak=screensurf.copy()
+	btnw=100
+	btnh=30
+	textfnt = pygame.font.SysFont(None, fontsize)
+	yjump=fontsize
+	textlist=listline(textstring)
+	textbodyh=(len(textlist)*yjump)
+	ypad=5
+	xpad=5
+	btnsep=20
+	btnoffset=(btnw+btnsep+btnw)
+	textbtnpad=10
+	dialogh=(textbodyh + ypad + ypad + btnh + textbtnpad)
+	textwidest=0
+	minwid=(btnw + btnw + btnw + btnsep)
+	for item in textlist:
+		itemsize=textfnt.size(item)[0]
+		if itemsize>textwidest:
+			textwidest=itemsize
+	if textwidest<minwid:
+		textwidest=minwid
+	dialogw=(textwidest + xpad + xpad)
+	xpos -= (dialogw // 2)
+	ypos -= (dialogh // 2)
+	menubox=pygame.Surface((dialogw, dialogh))
+	menubox.fill(bgcol)
+	dropshadow=pygame.Surface((dialogw, dialogh))
+	menushad=dropshadow.get_rect()
+	menushad.x = (4 + xpos)
+	menushad.y = (4 + ypos)
+	dropshadow.set_alpha(80)
+	dropshadow.fill((0, 0, 0))
+	screensurf.blit(dropshadow, menushad)
+	menugx=screensurf.blit(menubox, (xpos, ypos))
+	pygame.draw.rect(screensurf, linecol, menugx, 1)
+	diagbtnlog=makediagbtn(1, "LOG")
+	texty=(ypos+ypad)
+	for item in textlist:
+		itemtext=textfnt.render(item, True, textcol)
+		#itemxpos=((xpos + xpad)  (itemtext.get_width() // 2))
+		itembox=itemtext.get_rect()
+		itembox.centerx=menugx.centerx
+		itembox.y=texty
+		screensurf.blit(itemtext, itembox)
+		texty += yjump
+	btny=(texty + textbtnpad)
+	btnx1=((dialogw // 2)-(btnw // 2) + xpos - (btnoffset // 2))
+	btnx3=((dialogw // 2)-(btnw // 2) + xpos)
+	btnx2=((dialogw // 2)-(btnw // 2) + xpos + (btnoffset // 2))
+	btnyesx=screensurf.blit(diagbtnyes, (btnx1, btny))
+	btnnox=screensurf.blit(diagbtnno, (btnx2, btny))
+	btnlogx=screensurf.blit(diagbtnlog, (btnx3, btny))
+	pygame.display.update()
+	engtimer=pygame.time.Clock()
+	while True:
+		#time.sleep(0.1)
+		engtimer.tick(30)
+		if pygame.event.peek(VIDEORESIZE):
+			return "VID"
+		for event in pygame.event.get():
+			if event.type == KEYDOWN and event.key == K_F8:
+				pygame.image.save(screensurf, (os.path.join('CAP', 'SCREENSHOT-vmuiyndialog.png')))
+			if event.type == MOUSEBUTTONDOWN and event.button==1:
+				if menugx.collidepoint(event.pos):
+					if btnyesx.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "YES"
+					if btnnox.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "NO"
+					if btnlogx.collidepoint(event.pos):
+						screensurf.blit(scbak, (0, 0))
+						pygame.display.update()
+						return "LOG"
+				elif reclick!=2:
+					if reclick==1:
+						pygame.event.clear()
+						pygame.event.post(event)
+					return None
 
 #text viewer
 
@@ -1332,19 +1424,50 @@ See README.md for more information."""
 def guiasm(asmfile):
 	global screensurf
 	pygame.display.set_caption(("GUIasm - " + asmfile), ("GUIasm - " + asmfile))
+	outlist=[""]*20
+	textx=2
+	yjump=18
+	screenh=500
 	while True:
-		if yndiag("Assemble '" + asmfile + "'? \n choose NO to exit.\nIf error, GUIasm will open a log in textview.", screensurf.get_width()//2, screensurf.get_height()//2)=="NO":
+		texty=48
+		toolsscreen(1)
+		for f in outlist:
+			abttext=simplefontB.render(f.replace("\n", ""), True, libthemeconf.desktext, libthemeconf.deskcolor)
+			screensurf.blit(abttext, (textx, texty))
+			texty += yjump
+			if texty>screenh:
+				break
+		pygame.display.update()
+		diagret=guiasmdiag("Assemble '" + asmfile + "'? \n choose NO to exit.\nChoose Log to open most recent log.", screensurf.get_width()//2, screensurf.get_height()//2+200)
+		if diagret=="NO":
 			sys.exit()
-		try:
-			outp=subprocess.check_output(["python", "SBTCVM-asm2.py", asmfile], stderr=subprocess.STDOUT)
-			okdiag("Assembly successful.", screensurf.get_width()//2, screensurf.get_height()//2)
-		except subprocess.CalledProcessError as err:
-			dumpfile=open(os.path.join("CAP", "guiasm.log"), "w")
-			dumpfile.write("GUIasm Log of assembler output:\n")
-			dumpfile.write(err.output)
-			dumpfile.close()
-			subprocess.Popen(["python", "MK2-TOOLS.py", "textview", os.path.join("CAP", "guiasm.log")])
-			okdiag("Assembly Failure.\nSee Newly-opened textview window.", screensurf.get_width()//2, screensurf.get_height()//2)
+		if diagret=="LOG":
+			if os.path.isfile(os.path.join("CAP", "guiasm.log")):
+				subprocess.Popen(["python", "MK2-TOOLS.py", "textview", os.path.join("CAP", "guiasm.log")])
+		else:
+			try:
+				outp=subprocess.check_output(["python", "SBTCVM-asm2.py", asmfile], stderr=subprocess.STDOUT)
+				for line in listline(outp):
+					outlist.pop(0)
+					outlist.append(line)
+				outlist.pop(0)
+				outlist.append("-SUCCESS-")
+				dumpfile=open(os.path.join("CAP", "guiasm.log"), "w")
+				dumpfile.write("GUIasm Log of assembler output:\n(success)\n")
+				dumpfile.write(outp)
+				dumpfile.close()
+				#okdiag("Assembly successful.", screensurf.get_width()//2, screensurf.get_height()//2)
+			except subprocess.CalledProcessError as err:
+				dumpfile=open(os.path.join("CAP", "guiasm.log"), "w")
+				dumpfile.write("GUIasm Log of assembler output:\n(failure)\n")
+				dumpfile.write(err.output)
+				dumpfile.close()
+				for line in listline(err.output):
+					outlist.pop(0)
+					outlist.append(line)
+				outlist.pop(0)
+				outlist.append("-FAILURE-")
+				#okdiag("Assembly Failure.\nSee Newly-opened textview window.", screensurf.get_width()//2, screensurf.get_height()//2)
 			
 
 
