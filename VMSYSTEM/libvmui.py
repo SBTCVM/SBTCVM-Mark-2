@@ -1024,11 +1024,25 @@ class mapview:
 		self.drawsurf=pygame.Surface((drawrect.w, drawrect.h))
 		self.yoff=0
 		self.addr=-9841
+		#color pallette
+		self.poscolor=(0, 0, 255)
+		self.zerocolor=(255, 0, 255)
+		self.negcolor=(255, 0, 0)
+		self.fillcolor=(0, 0, 0)
+		self.divline=(255, 0, 0)
+		self.worddiv=(255, 255, 255)
+		#contrast pallette
+		self.poscolor=(255, 255, 255)
+		self.zerocolor=(127, 127, 127)
+		self.negcolor=(0, 0, 0)
+		self.fillcolor=(0, 100, 100)
+		self.worddiv=(0, 200, 255)
+		self.divline=(0, 160, 200)
 	def render(self):
 		self.addrlabel=simplefont.render("address offset: " + str(self.addr) + " (line: " + str(self.addr+9842) + ")", True, libthemeconf.textvtext, libthemeconf.textvbg)
 		self.surface.blit(self.addrlabel, (self.drawrect.x, self.drawrect.y-20))
 		self.ypos=self.yoff
-		self.drawsurf.fill((0, 0, 0))
+		self.drawsurf.fill(self.fillcolor)
 		#self.drawsurf.lock()
 		self.mem.seek(0)
 		for line in self.mem:
@@ -1039,22 +1053,22 @@ class mapview:
 						#self.drawmap[self.xpos, self.ypos]=(0, 0, 255)
 						#pygame.draw.line(self.drawsurf, (0, 0, 255), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
 						#pygame.draw.line(self.drawsurf, (0, 0, 255), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
-						pygame.draw.rect(self.drawsurf, (0, 0, 255), pygame.Rect(self.xpos, self.ypos, 17, 5))
+						pygame.draw.rect(self.drawsurf, self.poscolor, pygame.Rect(self.xpos, self.ypos, 17, 5))
 					elif char=="0":
 						#self.drawmap[self.xpos, self.ypos]=(255, 0, 255)
 						#pygame.draw.line(self.drawsurf, (255, 0, 255), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
 						#pygame.draw.line(self.drawsurf, (255, 0, 255), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
-						pygame.draw.rect(self.drawsurf, (255, 0, 255), pygame.Rect(self.xpos, self.ypos, 17, 5))
+						pygame.draw.rect(self.drawsurf, self.zerocolor, pygame.Rect(self.xpos, self.ypos, 17, 5))
 					elif char=="-":
 						#self.drawmap[self.xpos, self.ypos]=(255, 0, 0)
 						#pygame.draw.line(self.drawsurf, (255, 0, 0), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
 						#pygame.draw.line(self.drawsurf, (255, 0, 0), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
-						pygame.draw.rect(self.drawsurf, (255, 0, 0), pygame.Rect(self.xpos, self.ypos, 17, 5))
+						pygame.draw.rect(self.drawsurf, self.negcolor, pygame.Rect(self.xpos, self.ypos, 17, 5))
 					else:
 						#self.drawmap[self.xpos, self.ypos]=(0, 255, 0)
 						#pygame.draw.line(self.drawsurf, (0, 255, 0), (self.xpos, self.ypos), (self.xpos+16, self.ypos))
 						#pygame.draw.line(self.drawsurf, (0, 255, 0), (self.xpos, self.ypos+1), (self.xpos+16, self.ypos+1))
-						pygame.draw.rect(self.drawsurf, (0, 255, 0), pygame.Rect(self.xpos, self.ypos, 17, 5))
+						pygame.draw.rect(self.drawsurf, (255, 0, 0), pygame.Rect(self.xpos, self.ypos, 17, 5))
 					self.xpos+=17
 			self.ypos+=6
 			if self.ypos>self.drawrect.h:
@@ -1062,9 +1076,9 @@ class mapview:
 		#self.drawsurf.unlock()
 		for line in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]:
 			if line==6:
-				pygame.draw.line(self.drawsurf, (255, 255, 255), (line*17, 0), (line*17, self.drawrect.h), 2)
+				pygame.draw.line(self.drawsurf, self.worddiv, (line*17, 0), (line*17, self.drawrect.h), 2)
 			else:
-				pygame.draw.line(self.drawsurf, (0, 255, 0), (line*17, 0), (line*17, self.drawrect.h))
+				pygame.draw.line(self.drawsurf, self.divline, (line*17, 0), (line*17, self.drawrect.h))
 		self.surface.blit(self.drawsurf, self.drawrect)
 	def scrolldown(self):
 		self.yoff+=12
@@ -1075,7 +1089,9 @@ class mapview:
 	def scrollup(self):
 		self.yoff-=12
 		self.addr+=2
-						
+	def changeheight(self, height):
+		self.drawrect.h=height
+		self.drawsurf=pygame.Surface((self.drawrect.w, self.drawrect.h))			
 						
 #code viewer
 
@@ -1099,7 +1115,7 @@ def codeview(textfile):
 		fmasm=menuitem("Assemble (GUIasm)", "ASM", noclick=1)
 	if (textfile.lower()).endswith(".trom") or (textfile.lower()).endswith(".dmp"):
 		memflag=1
-		memobj=mapview(textfile, pygame.Rect(400, 110, 260, 400), screensurf)
+		memobj=mapview(textfile, pygame.Rect(400, 90, 260, screensurf.get_height()-120), screensurf)
 	else:
 		memflag=0
 	fmicon=pygame.image.load(os.path.join("VMSYSTEM", "GFX", 'filemenuicon.png')).convert_alpha()
@@ -1135,6 +1151,8 @@ See README.md for more information."""
 			resizeflg=0	
 			screenh=resh
 			screenw=resw
+			if memflag:
+				memobj.changeheight(screensurf.get_height()-120)
 		if texty!=ptexty or redraw==1:
 			ptexty=texty
 			if redraw==1:

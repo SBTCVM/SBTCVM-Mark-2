@@ -17,12 +17,12 @@ Pagedown: jump down 20 lines.
 <text>
 When viewing .DMP and .TROM files, codeview will show a color coded memory map viewer.
 block key: (1 block=1 trit)
-purple=0
-blue=+
-red=-
-green=fault/invalid.
+grey=0
+white=+
+black=-
+red=fault/invalid.
 
-the wider white line marks the division between the instruction and data in non-IObus maps.
+the wider blue line marks the division between the instruction and data in non-IObus maps.
 </text>
 <title>Memory Viewer Controls</title>
 <text>
