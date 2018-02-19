@@ -49,8 +49,56 @@ SBTGA IO Points.
 
 --0--0-+0 [764]
 [sprite 3] {RFI}
- 
- 
+
+
+#sample channel 1
+--0--0000 [770] sam1play (these are the IOBUS assembler keywords)
+[sampleplay1]
+--0--000+ [771] sam1stop
+[samplestop1]
+--0--00+- [772] sam1off
+[sampleoffset1]
+--0--00+0 [773] sam1len
+[samplelength1]
+--0--00++ [774] sam1freq   (replace 1 with channel number for others)
+[frequency1]
+
+#sample channel 2
+--0--0+-- [775]
+[sampleplay2]
+--0--0+-0 [776]
+[samplestop2]
+--0--0+-+ [777]
+[sampleoffset2]
+--0--0+0- [778]
+[samplelength2]
+--0--0+00 [779]
+[frequency2]
+
+#sample channel 3
+--0--0+0+ [780]
+[sampleplay3]
+--0--0++- [781
+[samplestop3]
+--0--0++0 [782]
+[sampleoffset3]
+--0--0+++ [783]
+[samplelength3]
+--0--+--- [784]
+[frequency3]
+
+
+#sample channel 4
+--0--+--0 [785]
+[sampleplay4]
+--0--+--+ [786]
+[samplestop4]
+--0--+-0- [787
+[sampleoffset4]
+--0--+-00 [788]
+[samplelength4]
+--0--+-0+ [789]
+[frequency4]
 
 
 

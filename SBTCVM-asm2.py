@@ -16,7 +16,11 @@ compvers="v2.3.0"
 outfile="assmout.trom"
 #define IOmaps
 IOmapread={"random": "--0------"}
-IOmapwrite={"dispmode": "--0---+-+", "dispoffset": "--0---+0-", "dispupdate": "--0---+00"}
+IOmapwrite={"dispmode": "--0---+-+", "dispoffset": "--0---+0-", "dispupdate": "--0---+00",
+	"sam1play": "--0--0000", "sam1stop": "--0--000+", "sam1off": "--0--00+-", "sam1len": "--0--00+0", "sam1freq": "--0--00++",
+	"sam2play": "--0--0+--", "sam2stop": "--0--0+-0", "sam2off": "--0--0+-+", "sam2len": "--0--0+0-", "sam2freq": "--0--0+00",
+	"sam3play": "--0--0+0+", "sam3stop": "--0--0++-", "sam3off": "--0--0++0", "sam3len": "--0--0+++", "sam3freq": "--0--+---",
+	"sam4play": "--0--+--0", "sam4stop": "--0--+--+", "sam4off": "--0--+-0-", "sam4len": "--0--+-00", "sam4freq": "--0--+-0+"}
 #populate IOmaps with memory pointers
 scratchmap={}
 scratchstart="---------"

@@ -14,6 +14,7 @@ import VMSYSTEM.libthemeconf as libthemeconf
 import VMSYSTEM.libSBTGA as libSBTGA
 from random import randint
 pygame.display.init()
+import VMSYSTEM.libTSAM as TSAM
 
 print "SBTCVM Mark 2 Starting up..."
 
@@ -178,7 +179,7 @@ abtclear=["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
 TTYMODE=0
 TTYSIZE=1
 mixrate=int(libvmconf.getconf("audio", "mixrate"))
-pygame.mixer.init(frequency=mixrate , size=-16)
+pygame.mixer.init(frequency=mixrate , size=-16, channels=2)
 
 extradraw=0
 
@@ -450,7 +451,8 @@ def tritlen(srcdata, destdata):
 		destdataout=(destdataout + destdict[f])
 	#print destdataout
 	return destdataout
-		
+
+	
 #def stactdebug1():
 if 'GLOBKIOSK' in globals():	
 	if KIOSKMODE==1:
@@ -630,6 +632,79 @@ dispttyover=["G0", "G2", "G3", "G4"]
 dispoffset="000000000"
 updatedisp=0
 SBTGADEV=libSBTGA.buffdisplay(screensurf, dispmembus, dispoffset, mode=dispmode)
+
+
+
+#init sample channel class objects.
+samchan1=TSAM.SampleChannnel(1, TROMA)
+samchan2=TSAM.SampleChannnel(1, TROMA)
+samchan3=TSAM.SampleChannnel(1, TROMA)
+samchan4=TSAM.SampleChannnel(1, TROMA)
+
+#to do: migrate rest of IO notify conditionals to this function.
+#used by IOwrite
+def IOnotify(curdatax, REGQ):
+	if ROMFILE==TROMA:
+		RBUS=libtrom.AROM
+	elif ROMFILE==TROMB:
+		RBUS=libtrom.BROM
+	elif ROMFILE==TROMC:
+		RBUS=libtrom.CROM
+	elif ROMFILE==TROMD:
+		RBUS=libtrom.DROM
+	elif ROMFILE==TROME:
+		RBUS=libtrom.EROM
+	elif ROMFILE==TROMF:
+		RBUS=libtrom.FROM
+	#sample chan 1
+	if curdatax=="--0--0000":
+		samchan1.play()
+	if curdatax=="--0--000+":
+		samchan1.stop()
+	if curdatax=="--0--00+-":
+		samchan1.setoffset(REGQ, RBUS)
+	if curdatax=="--0--00+0":
+		samchan1.setlen(REGQ)
+	if curdatax=="--0--00++":
+		samchan1.setfreq(REGQ)
+	#sample chan 2
+	if curdatax=="--0--0+--":
+		samchan2.play()
+	if curdatax=="--0--0+-0":
+		samchan2.stop()
+	if curdatax=="--0--0+-+":
+		samchan2.setoffset(REGQ, RBUS)
+	if curdatax=="--0--0+0-":
+		samchan2.setlen(REGQ)
+	if curdatax=="--0--0+00":
+		samchan2.setfreq(REGQ)
+	#sample chan 3
+	if curdatax=="--0--0+0+":
+		samchan3.play()
+	if curdatax=="--0--0++-":
+		samchan3.stop()
+	if curdatax=="--0--0++0":
+		samchan3.setoffset(REGQ, RBUS)
+	if curdatax=="--0--0+++":
+		samchan3.setlen(REGQ)
+	if curdatax=="--0--+---":
+		samchan3.setfreq(REGQ)
+	#sample chan 4
+	if curdata=="--0--+--0":
+		samchan4.play()
+	if curdata=="--0--+--+":
+		samchan4.stop()
+	if curdata=="--0--+-0-":
+		samchan4.setoffset(REGQ, RBUS)
+	if curdata=="--0--+-00":
+		samchan4.setlen(REGQ)
+	if curdata=="--0--+-0+":
+		samchan4.setfreq(REGQ)
+	return
+	
+
+
+
 
 
 #3 voice sound gen volume control (fine tune to prevent clipping!)
@@ -899,6 +974,7 @@ while stopflag==0:
 				SBTGADEV.setoffset(dispoffset)
 			if curdata=="--0---+00":
 				updatedisp=1
+			IOnotify(curdata, REG1)
 		else:
 			print "address \"" + curdata + "\" is read-only."
 	#IO WRITE REG2
@@ -927,6 +1003,7 @@ while stopflag==0:
 				SBTGADEV.setoffset(dispoffset)
 			if curdata=="--0---+00":
 				updatedisp=1
+			IOnotify(curdata, REG2)
 		else:
 			print "address \"" + curdata + "\" is read-only."
 	#swap primary Registers
