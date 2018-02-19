@@ -17,6 +17,40 @@ searchtemp='''<?xml version="1.0" encoding="UTF-8"?>
 searchstring=""
 clicklist=list()
 
+#wordwrap-aware text rendering function. does cause a slightly longer underline on links.
+def textren(text, xfont, qjump, textcolx):
+	global yval
+	xpos=xoff
+	
+	rectlist=[]
+	words=text.split(" ")
+	if True:
+		buffstring=""
+		for word in words+[" ", None]:
+			#print buffstring
+			if word==None:
+				namelabel=xfont.render(buffstring, True, textcolx, bgcol)
+				rectlist.extend([screensurf.blit(namelabel, (xpos, yval))])
+				yval+=qjump
+			elif word=="><><><":
+				namelabel=xfont.render(buffstring, True, textcolx, bgcol)
+				rectlist.extend([screensurf.blit(namelabel, (xpos, yval))])
+				yval+=qjump
+				buffstring=""
+			elif xfont.size(buffstring+word+" ")[0]<=screensurf.get_width():
+				buffstring+=word+" "
+			
+			else:
+				namelabel=xfont.render(buffstring, True, textcolx, bgcol)
+				rectlist.extend([screensurf.blit(namelabel, (xpos, yval))])
+				yval+=qjump
+				buffstring=word+" "
+	if len(rectlist)>0:
+		return rectlist[0].unionall(rectlist)
+	else:
+		return pygame.Rect(0, 0, 0, 0)
+
+
 datapath=os.path.join("VMSYSTEM", "HELP")
 pageref="helpindex.xml"
 
@@ -216,40 +250,19 @@ while qflg==0:
 		for itmtype in root.findall("*"):
 			#Text parser
 			if itmtype.tag=="text" or itmtype.tag=="word":
-				textcont=(itmtype.text + "\n")
-				textchunk=""
-				#this draws the text body line-per-line
-				for texch in textcont:
-					if texch=="\n":
-						texgfx=simplefont.render(textchunk, True, textcol, bgcol)
-						screensurf.blit(texgfx, (xoff, yval))
-						yval += yjump
-						textchunk=""
-					else:
-						#if not at a newline yet, keep building textchunk.
-						textchunk=(textchunk + texch)
+				textcont=(itmtype.text).replace("\n", " ><><>< ")
+				textren(textcont, simplefont, yjump, textcol)
 			#text parser for "title" text
 			if itmtype.tag=="title":
-				textcont=(itmtype.text + "\n")
-				textchunk=""
-				#this draws the text body line-per-line
-				for texch in textcont:
-					if texch=="\n":
-						texgfx=titlefont.render(textchunk, True, textcol, bgcol)
-						screensurf.blit(texgfx, (xoff, yval))
-						yval += (yjump + 10)
-						textchunk=""
-					else:
-						#if not at a newline yet, keep building textchunk.
-						textchunk=(textchunk + texch)
+				textcont=(itmtype.text).replace("\n", " ><><>< ")
+				textren(textcont, titlefont, yjump, textcol)
 			#link parser
 			if itmtype.tag=="lnk":
 				lnkref=itmtype.text
+				textcont=(itmtype.attrib.get("label")).replace("\n", " ><><>< ")
 				simplefont.set_underline(1)
-				texgfx=simplefont.render(itmtype.attrib.get("label"), True, linkcol, bgcol)
+				lnkbx=textren(textcont, simplefont, yjump, linkcol)
 				simplefont.set_underline(0)
-				lnkbx=screensurf.blit(texgfx, (xoff, yval))
-				yval += yjump
 				#create clicktab instance and add it to clicklist
 				clickobj=clicktab(lnkbx, lnkref)
 				clicklist.extend([clickobj])
