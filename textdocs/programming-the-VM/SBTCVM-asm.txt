@@ -477,3 +477,21 @@ write register 1 into location addressed by mempoint.
 write data into location addressed by mempoint.
 supports pointer referencing (see above); example:
 	ptwridat|>thisisanexample
+
+
+"threadref"
+--+00-
+set a thread id for use by threadstart and threadkill.
+
+"threadstart"
+--+000
+start a thread with id previously given by threadref, 
+at address given by data.
+
+threadstop
+--+00+
+stop the current thread.
+
+threadkill
+--+0+-
+kill a thread with id previously given by threadref.
