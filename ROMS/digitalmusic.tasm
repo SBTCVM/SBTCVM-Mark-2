@@ -14,6 +14,7 @@ setreg1|---------
 IOwrite1|>sam1freq
 IOwrite1|>sam1play
 userwait
+stop
 null|000000000|wavhead
 null|000000000
 null|000000000

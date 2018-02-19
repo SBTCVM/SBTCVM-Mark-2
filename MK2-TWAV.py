@@ -134,6 +134,7 @@ setreg1|'''+ freqnumxxx +'''
 IOwrite1|>sam1freq
 IOwrite1|>sam1play
 userwait
+stop
 ''')
 	outfile.write("null|")
 	#outfile=open("outdata.twav", "w")
