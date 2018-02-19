@@ -24,7 +24,7 @@ To close a window, click the "x" button in the top left corner of the window.
 
 To move a window click and drag the title bar.
 
-resizable windows have an extra bar at the bottom, that is the same color of the title bar.
+Resizable windows have an extra bar at the bottom, that is the same color as the title bar.
 This bar can be clicked and dragged to resize that window. Note that some windows will
 only resize on one axis.
 

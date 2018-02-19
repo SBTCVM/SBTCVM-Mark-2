@@ -4,7 +4,7 @@
 	<head title="SBTCVM Mark 2 VM overview"/>
 	<!--the rest can appear-->
 	<title>Overview</title>
-	<text>SBTCVM's virtual machine, SBTCVM, is The project's namesake
+	<text>SBTCVM's virtual machine, SBTCVM, is the project's namesake
 and what SBTCVM's utilities and backend revolve around.  Where even the
 computers SBTCVM runs on use binary, SBTCVM uses the rather obscure,
 yet elegant, Balanced Ternary.
