@@ -8,7 +8,7 @@
 
 setreg1|>wavhead
 IOwrite1|>sam1off
-setreg1|0000-0-0+
+setreg1|--0000-00
 IOwrite1|>sam1len
 setreg1|---------
 IOwrite1|>sam1freq

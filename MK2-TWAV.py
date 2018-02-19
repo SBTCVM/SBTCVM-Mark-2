@@ -120,6 +120,7 @@ elif cmd=="-2k" or cmd=="-4k":
 	length = waveFile.getnframes()
 	#write information comments and add functional test routine.
 	#notice how the length is linear-bias encoded (length-9841). this lets the length be much larger.
+	#I know the length is a rough guess, and it may be off by a word or two.
 	outfile.write('''
 #tip: replace the 1s with 2s, 3s, or 4s to change the sample channel.
 #MK2-TWAV.py automatically calculates sample length for you. 
@@ -128,7 +129,7 @@ elif cmd=="-2k" or cmd=="-4k":
 
 setreg1|>wavhead
 IOwrite1|>sam1off
-setreg1|''' + libSBTCVM.trunkto6(libbaltcalc.DECTOBT(length-9841)) + '''
+setreg1|''' + libSBTCVM.trunkto6(libbaltcalc.DECTOBT((length//9+1)-9841)) + '''
 IOwrite1|>sam1len
 setreg1|'''+ freqnumxxx +'''
 IOwrite1|>sam1freq
