@@ -5,23 +5,18 @@
 	<!--the rest can appear-->
 	<title>Overview: SBTCVM's integrated help viewer.</title>
 	<text>
-controls:
-
-scroll page: up/down keys or mouse wheel.
-    You can click and drag non-link areas of the help viewer's window to scroll as well.
-scroll left/right: left/right keys
-change font size: -/+ keys
+Controls:
+Scroll page: up/down keys, mouse wheel, or click and drag non-link areas of the help viewer's window.
+Scroll left/right: left/right keys
+Change font size: -/+ keys
 Escape: quit
 F8: save screenshot in "CAP" directory.
 Pageup: jump up 20 lines.
 Pagedown: jump down 20 lines.
 
 Links:
-Links are in blue. and they point to other help pages.
-Much like a link on the web, they are activated via clicking on them.
+Links are in blue. and they point to other help pages. Much like a link on the web, they are activated via clicking on them.
 
 Search:
-To use search, enter a query consisting of space-separated keywords
-into the search box at the top, then click the "search" button.
-To return to the search list, click the "search" button again.</text>
+To use search, enter a query consisting of space-separated keywords into the search box at the top, then click the "search" button. To return to the search list, click the "search" button again.</text>
 </main>

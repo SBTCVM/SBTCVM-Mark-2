@@ -14,13 +14,10 @@ TTY (Virtual text display):
 enables/disables rendering of SBTCVM's TTY.
 
 Step By Step debug mode: 
-Controls The state of SBTCVM's Step by step debug mode.
-This lets the user manually increment the CPU clock by pressing enter. 
-(can also be toggled with F2)
+Controls The state of SBTCVM's Step by step debug mode. This lets the user manually increment the CPU clock by pressing enter. (Can also be toggled with F2)
 
 Log Execution Process:
-same effect as the -log argument of the run command in SBTCVM's command shell.
-causes SBTCVM to generate a log of key information every clock cycle.
+Same effect as the -log argument of the run command in SBTCVM's command shell. Causes SBTCVM to generate a log of key information every clock cycle.
 (please use run -tos for benchmarking as execution logging may cause slowdown.)
 
 Dump IObus on exit:
@@ -41,7 +38,7 @@ arrows to cycle through the available options.
 	<img>setselect.jpg</img>
 	<text>
 Frameskip: 
-sets frame skip interval for VM
+Sets frame skip interval for VM
 
 Sound Mixer Rate:
 Sets the mixing rate for SBTCVM's sound.</text>
@@ -51,8 +48,7 @@ To change the CPU speed preset, click on the desired option.
 </text>
 	<img>setcpu.jpg</img>
 	<text>
-To reset settings to standard defaults, click "reset". (you must
-save for this to take effect!)
+To reset settings to standard defaults, click "reset". (you must save for this to take effect!)
 
 To save settings, click "save"
 To quit, click "quit"

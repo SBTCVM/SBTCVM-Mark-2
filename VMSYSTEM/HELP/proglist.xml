@@ -10,41 +10,28 @@ Here is a quick overview of what the various main programs are:
 </text>
 	<title>Command Line programs:</title>
 	<div/>
-	<text>MK2-CS.py : This is the SBTCVM command shell. It provides
-a handy CLI for working with the more technical tools.</text>
+	<text>MK2-CS.py : This is the SBTCVM command shell. It provides a handy CLI for working with the more technical tools.</text>
 	<div/>
-	<text>MK2-RUN.py : this is the command shell command "run".
-It starts SBTCVM with fine control. This is the same
-utility used by other utilities to launch the VM.</text>
+	<text>MK2-RUN.py : this is the command shell command "run". It starts SBTCVM with fine control. This is the same utility used by other utilities to launch the VM.</text>
 	<div/>
 	<text>MK2-GFX.py : This is a graphics conversion tool.</text>
 	<div/>
-	<text>MK2-GAT.py : SBTCVM Graphics Adapter Toolkit.
-This provides various helper functions related to SBTGA programming.
-Such as generating framebuffer ranges from binary images (a PNG for example)</text>
+	<text>MK2-GAT.py : SBTCVM Graphics Adapter Toolkit. This provides various helper functions related to SBTGA programming, such as generating framebuffer ranges from binary images (a PNG for example)</text>
 	<div/>
-	<text>MK2-TOOLS.py : This is a tools launcher/debugging tool.
-primarily used for testing, backend debugging,
-and wraps various backend functions as descrete programs.</text>
+	<text>MK2-TOOLS.py : This is a tools launcher/debugging tool. It's primarily used for testing, backend debugging, and wraps various backend functions as descrete programs.</text>
 	<div/>
-	<text>SBTCVM-asm2.py : This is SBTCVM's assembler.
-currently the best way to write SBTCVM programs.
-Unless of course you like Machine code.
+	<text>SBTCVM-asm2.py : This is SBTCVM's assembler. It's currently the best way to write SBTCVM programs, unless of course you like Machine code.
 </text>
 	<title>Special</title>
 	<div/>
-	<text>SBTCVM_MK2.py : This is the VM itself. though to run the VM,
-please use MK2-RUN.py or "run" in
-the command shell.</text>
+	<text>SBTCVM_MK2.py : This is the VM itself, though to run the VM, please use MK2-RUN.py or "run" in the command shell.</text>
 	<lnk label="VM Overview">vmhelp.xml</lnk>
 	<title>GUI programs.</title>
 	<div/>
-	<text>launcher.py : SBTCVM's Desktop multitasking enviornment and launcher.</text>
+	<text>launcher.py : SBTCVM's Desktop multitasking environment and launcher.</text>
 	<lnk label="SBTCVM Desktop">launcher.xml</lnk>
 	<div/>
-	<text>calc.py : A graphical Balanced Ternary Calculator. Complete with simultanious
-Decimal and Balanced ternary Representation, input in both base numbers, and
-automatic conversion among other features.</text>
+	<text>calc.py : A graphical Balanced Ternary Calculator, complete with simultanious decimal and balanced ternary representation, input in both base numbers, and automatic conversion among other features.</text>
 	<lnk label="SBTCVM Calculator">calc.xml</lnk>
 	<div/>
 	<text>fileview2.py : SBTCVM's integrated file browser.</text>
