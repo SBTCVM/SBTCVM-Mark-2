@@ -415,7 +415,7 @@ SET using data ???CCCCCC where C is a 6-trit RGB color :D
 -0-+++
 (see keyboard-inter.txt)
 set keyinterrupt register. (used to select a key interrupt to activate.)
- ?????DDDD=4-trit scancode
+ ???DDDDDD=6-trit scancode
 you can use setkeyint|:? where ?=codelabel (see list in keyboard-inter.txt)
 
 "keyint"
